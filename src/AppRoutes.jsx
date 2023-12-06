@@ -1,25 +1,25 @@
-//App.jsx
-import { useContext } from "react";
+import { createBrowserRouter,RouterProvider } from "react-router-dom";
+import AppLayout from './layouts/AppLayout.jsx';
 
-import Context_db from "./client_db/Context_db";
-import { Actions } from "./client_db/Reducer_db";
-
-export default function App() {
-	const [state, dispatch] = useContext(Context_db);
-
-	const handleClick = () => {
-		dispatch({
-			actionType: Actions.TOGGLE_MENU,
-
-			payload: !state.isOpen,
-		});
-	};
-
-	return (
-		<div>
-			<h1>App :{`${state.isOpen}`}</h1>
-
-			<button onClick={handleClick}>toggle</button>
-		</div>
-	);
+import Home from "./pages/home/Home.jsx";
+export default function AppRoutes() {
+	const Routes = createBrowserRouter([
+		{
+            path: '/',
+            element: <AppLayout />,
+            children: [
+				{
+                    index: true,
+                    element: <Home />,
+                },
+                {
+                    path: '/about',
+                    element: "<About />",
+                },
+			]
+		}
+	])
+	return(
+		<RouterProvider router={Routes} />
+	)
 }
