@@ -1,6 +1,6 @@
-//Main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./global.css"
 
 import ContextProvider_db from "./client_db/ContextProvider_db";
 import AppRoutes from "./AppRoutes";

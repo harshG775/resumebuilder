@@ -1,5 +1,5 @@
 const ResumeDataObject = {
-	basic: {
+	basicInfo: {
 		name: "Harsh",
 		headline: "Software Engineer",
 		phone: "9876543210",
