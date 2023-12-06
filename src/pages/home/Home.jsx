@@ -1,4 +1,4 @@
-import ResumeBuilder from "../../pageSections/resumeBuilder/ResumeBuilder";
+import ResumeBuilder from "../resumeBuilder/ResumeBuilder";
 import ResumeDataObject from "../../ResumeDataObject";
 export default function Home() {
     console.log(ResumeDataObject)
