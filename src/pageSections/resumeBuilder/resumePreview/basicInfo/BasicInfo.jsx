@@ -1,4 +1,4 @@
-import ResumeDataObject from "../../../ResumeDataObject"
+import ResumeDataObject from "../../../../ResumeDataObject"
 export default function BasicInfo() {
 	const {name} = ResumeDataObject.basicInfo
 	return (
