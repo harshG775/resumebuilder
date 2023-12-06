@@ -4,7 +4,7 @@ import BasicInfo_editor from "./basicInfo_editor/BasicInfo_editor";
 
 export default function ResumeEditor() {
 	return (
-		<div>
+		<div className="h-screen overflow-y-scroll border border-gray-600">
 			<h1>Resume Editor</h1>
 			<div className="grid gap-y-2">
 				<BasicInfo_editor data={ResumeDataObject.basic_info} />
