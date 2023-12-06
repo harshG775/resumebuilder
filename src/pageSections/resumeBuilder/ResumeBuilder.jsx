@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TransformWrapper, TransformComponent, useControls } from "react-zoom-pan-pinch";
 
 import BasicInfo from "../home/basicInfo/BasicInfo";
 import Summary from "../home/summary/Summary";
@@ -14,39 +15,51 @@ import CustomSection from "../home/customsection/CustomSection.jsx";
 
 
 export default function ResumeBuilder() {
-    const [isLeftBarOpen, setIsLeftBarOpen] = useState(false);
-    const [isRightBarOpen, setIsRightBarOpen] = useState(false);
-    const handleLeftBar =()=>{
-        setIsLeftBarOpen(!isLeftBarOpen)
-    }
-    const handleRightBar =()=>{
-        setIsRightBarOpen(!isRightBarOpen)
-    }
+    const Controls = () => {
+        const { zoomIn, zoomOut, resetTransform } = useControls();
+        return (
+            <>
+                <button onClick={() => zoomIn()}>Zoom In</button>
+                <button onClick={() => zoomOut()}>Zoom Out</button>
+                <button onClick={() => resetTransform()}>Reset</button>
+            </>
+        );
+    };
+    
 	return (
-        <div className="grid grid-cols-[10rem_1fr_10rem]">
-            <div>
-                <button onClick={handleLeftBar}>toggle</button>
-                right side
-            </div>
-            <main className="overflow-scroll ">
-                <div className=" w-[210mm] h-[297mm] m-4 mx-auto shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
-                    <BasicInfo />
-                    <Summary />
-                    <Skills />
-                    <Education />
-                    <Experience />
-                    <Projects />
-                    <Certifications />
-                    <Languages />
-                    <Interests />
-                    <CustomSection/>
-                    <Declaration />
+        <TransformWrapper
+                initialScale={1}
+                // initialPositionX={200}
+                // initialPositionY={100}
+            >
+            <main className="grid grid-cols-[10rem_1fr_10rem]">
+                <div>
+                    <h1>left</h1>
+                    <Controls />
+                </div>
+                <TransformComponent>
+                    <div className="mx-auto grid place-content-center h-screen w-[100vw-10rem]">
+                        <div className="scale-50 w-a4 h-a4 m-4 mx-auto shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
+
+                            <BasicInfo />
+                            <Summary />
+                            <Skills />
+                            <Education />
+                            <Experience />
+                            <Projects />
+                            <Certifications />
+                            <Languages />
+                            <Interests />
+                            <CustomSection/>
+                            <Declaration />
+                        </div>
+                    </div>
+                </TransformComponent>
+                <div>
+                    <h1>right</h1>
                 </div>
             </main>
-            <div>
-                <button onClick={handleRightBar}>toggle</button>
-                right side
-            </div>
-        </div>
+        </TransformWrapper>
+
 	);
 }
