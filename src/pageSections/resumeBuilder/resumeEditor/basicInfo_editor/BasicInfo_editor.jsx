@@ -1,7 +1,8 @@
 
-export default function BasicInfo({data}) {
+export default function BasicInfo_editor ({data}) {
 	return(
 		<div className="mt-4">
+			<h4>Basic Info</h4>
 			<ul>
 				<li>
 					<div>{data?.name}</div>

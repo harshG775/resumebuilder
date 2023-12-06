@@ -1,5 +1,5 @@
 const ResumeDataObject = {
-	basicInfo: {
+	basic_info: {
 		name: "Harsh",
 		headline: "Software Engineer",
 		phone: "9876543210",
@@ -20,8 +20,8 @@ const ResumeDataObject = {
 		picture: {
 			url: "https://example.com/profile-picture.jpg",
 			size: 64,
-			aspectRatio: 1,
-			borderRadius: 50,
+			aspect_ratio: 1,
+			border_radius: 50,
 			effects: {
 				hidden: false,
 				border: false,
@@ -30,8 +30,37 @@ const ResumeDataObject = {
 		},
 	},
 	sections: {
-		summary: {},
-		skills: {},
+		summary: {
+			name: "Summary",
+			column: 1,
+			visible: true,
+			id: "summary",
+			content: "",
+		},
+		skills: {
+			name: "Skills",
+			column: 1,
+			visible: true,
+			id: "skills",
+			items: [
+				{
+					id: "randomSkill_id_1",
+					visible: true,
+					name: "HTML",
+					description: "",
+					level: 0,
+					keyword: [],
+				},
+				{
+					id: "randomSkill_id_2",
+					visible: true,
+					name: "CSS",
+					description: "",
+					level: 0,
+					keyword: [],
+				},
+			],
+		},
 		education: {},
 		experience: {},
 		projects: {},
@@ -47,8 +76,8 @@ const ResumeDataObject = {
 			margin: 16,
 			formate: "a4",
 			options: {
-				breakLine: true,
-				pageNumber: true,
+				break_line: true,
+				page_number: true,
 			},
 		},
 	},
