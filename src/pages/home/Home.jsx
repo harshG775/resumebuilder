@@ -1,7 +1,7 @@
 import ResumeBuilder from "../resumeBuilder/ResumeBuilder";
 import ResumeDataObject from "../../ResumeDataObject";
 export default function Home() {
-    console.log(ResumeDataObject)
+    // console.log(ResumeDataObject)
 	return (
 		<div>
 			<ResumeBuilder />
