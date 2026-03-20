@@ -41,7 +41,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 <HeadContent />
             </head>
             <body className="font-sans antialiased wrap-anywhere selection:bg-teal-500/20">
-                <ThemeToggle />
+                <div className="border-b p-1">
+                    <ThemeToggle />
+                </div>
                 {children}
                 <TanStackDevtools
                     config={{

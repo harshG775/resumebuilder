@@ -9,27 +9,51 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResumesResumeIndexRouteImport } from './routes/resumes/$resume/index'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const ResumesResumeIndexRoute = ResumesResumeIndexRouteImport.update({
+  id: '/resumes/$resume/',
+  path: '/resumes/$resume/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/resumes/$resume/': typeof ResumesResumeIndexRoute
+}
+export interface FileRoutesByTo {
+  '/resumes/$resume': typeof ResumesResumeIndexRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/resumes/$resume/': typeof ResumesResumeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths: '/resumes/$resume/'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to: '/resumes/$resume'
+  id: '__root__' | '/resumes/$resume/'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  ResumesResumeIndexRoute: typeof ResumesResumeIndexRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/resumes/$resume/': {
+      id: '/resumes/$resume/'
+      path: '/resumes/$resume'
+      fullPath: '/resumes/$resume/'
+      preLoaderRoute: typeof ResumesResumeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  ResumesResumeIndexRoute: ResumesResumeIndexRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
