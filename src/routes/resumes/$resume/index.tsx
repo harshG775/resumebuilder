@@ -32,9 +32,9 @@ type Resume = {
 
 const resumeData: Resume = {
     metadata: {
-        title: "Harsh_WebDeveloper_Resume",
+        title: "Harsh_Gaur_Frontend_Engineer_Resume",
         description:
-            "ATS-optimized resume of Harsh Gaur for Frontend / Full Stack Developer roles.",
+            "ATS-optimized resume of Harsh Gaur - Frontend Engineer specializing in React, Next.js, TanStack, and SaaS platforms.",
     },
 
     sections: [
@@ -45,7 +45,7 @@ const resumeData: Resume = {
             content: {
                 name: "Harsh Gaur",
                 headline:
-                    "Frontend / Full Stack Developer - React.js | Next.js | MERN Stack",
+                    "Frontend Engineer (Full Stack Capable) - React, Next.js, TypeScript, TanStack",
                 email: "hgaur491@gmail.com",
                 phone: "+91 9310745921",
                 location: "Delhi, India",
@@ -64,7 +64,7 @@ const resumeData: Resume = {
             type: "summary",
             order: 1,
             content: {
-                text: `Frontend-focused Full Stack Developer with 2+ years of hands-on experience building scalable, high-performing SaaS and AI-powered platforms using Next.js, React.js, and the MERN stack. Skilled in UI development, performance optimization, and building accessible, maintainable interfaces. Also experienced in guiding and mentoring two frontend interns.`,
+                text: `Frontend Engineer with 2+ years of experience building scalable SaaS platforms and AI-powered applications using React, Next.js, TypeScript, and TanStack ecosystem. Strong focus on performance, maintainability, and clean architecture. Experienced in multi-tenant systems, real-time features, and production-grade UI systems. Comfortable working across frontend and backend (Node.js, Express, Flask).`,
             },
         },
 
@@ -76,45 +76,48 @@ const resumeData: Resume = {
                 items: [
                     {
                         role: "Frontend Developer",
-                        company: "Prabhubhakti (Spiritual SaaS Platform)",
+                        company: "Prabhubhakti Pvt. Ltd.",
                         location: "Gurugram",
                         startDate: "2025-06",
                         endDate: null,
                         links: [
-                            "http://prabhubhakti.io",
-                            "http://prabhubhakti.com",
+                            "https://prabhubhakti.io",
+                            "https://prabhubhakti.com",
                         ],
                         points: [
-                            "Built Prabhubhakti's landing and SaaS website using Next.js, Tailwind CSS, and Framer Motion, achieving 95+ SEO scores and a 40% increase in organic traffic.",
-                            "Contributed to a multi-tenant SaaS platform with domain/subdomain routing, wallet system, and Razorpay integration.",
-                            "Launched 2 astrologer storefronts within 2 months, reducing onboarding time by 70%.",
-                            "Guided and supported two frontend interns to maintain code quality.",
+                            "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing and tenant isolation.",
+                            "Built high-performance UI using Next.js, TypeScript, Tailwind CSS, and ShadCN with focus on scalability and reusability.",
+                            "Implemented booking, payment (Razorpay), and wallet systems used across multiple tenant platforms.",
+                            "Improved SEO and performance (95+ Lighthouse scores) leading to increased organic traffic.",
+                            "Reduced onboarding time for new tenants by ~70% by standardizing tenant templates.",
+                            "Mentored and guided 2 frontend interns, ensuring code quality and best practices.",
                         ],
                     },
 
                     {
                         role: "Freelance Frontend Developer",
                         company: "Kalpi Capital",
-                        location: "Freelance",
+                        location: "Remote",
                         startDate: "2025-05",
                         endDate: "2025-06",
                         links: ["https://kalpicapital.com"],
                         points: [
-                            "Delivered SEO-first landing page using Next.js, ShadCN, Tailwind CSS.",
+                            "Built SEO-optimized landing page using Next.js, Tailwind CSS, and ShadCN.",
                             "Improved Lighthouse SEO score from 68 to 97.",
                         ],
                     },
 
                     {
-                        role: "Frontend Developer SDE",
-                        company: "Metis Eduventures Pvt. Ltd (Adda247)",
+                        role: "Frontend Developer SDE Trainee",
+                        company: "Metis Eduventures Pvt. Ltd. (Adda247)",
                         location: "Gurugram",
                         startDate: "2024-08",
                         endDate: "2025-02",
                         links: ["https://adda247.com"],
                         points: [
-                            "Built 5+ AI chatbot features using React.js, Zustand, OpenAI APIs.",
-                            "Improved page load speed by 25%.",
+                            "Built AI-powered chatbot features using React, Zustand, and OpenAI APIs.",
+                            "Developed real-time communication features using SSE/WebSockets.",
+                            "Improved application performance resulting in ~25% faster load times.",
                         ],
                     },
 
@@ -126,8 +129,8 @@ const resumeData: Resume = {
                         endDate: "2024-05",
                         links: ["https://itaxeasy.com"],
                         points: [
-                            "Revamped UI reducing bounce rate by 22%.",
-                            "Implemented route-based lazy loading.",
+                            "Revamped UI/UX leading to ~22% reduction in bounce rate.",
+                            "Implemented route-based code splitting and lazy loading for performance optimization.",
                         ],
                     },
                 ],
@@ -141,28 +144,44 @@ const resumeData: Resume = {
             content: {
                 items: [
                     {
-                        name: "SupportDesk - AI-Powered Customer Support Tool",
+                        name: "SupportDesk - AI Customer Support Platform",
                         stack: [
-                            "React.js",
+                            "React",
                             "Zustand",
                             "Flask",
-                            "OpenAI API",
                             "WebSockets",
+                            "OpenAI API",
                         ],
                         links: ["https://supportdesk.adda247.com/"],
                         points: [
-                            "Saved ₹2L+/year by replacing third-party tools.",
-                            "Built real-time fallback chat system.",
+                            "Built real-time chat system with AI + human handover.",
+                            "Reduced dependency on third-party tools, saving ~₹2L/year.",
                         ],
                     },
 
                     {
-                        name: "AiDoubtSolver - EdTech Voice Chatbot",
-                        stack: ["React.js", "SSE", "Whisper API"],
+                        name: "AiDoubtSolver - Voice AI Chatbot",
+                        stack: ["React", "SSE", "Whisper API"],
                         links: ["https://aidoubtsolverdev.adda247.com/"],
                         points: [
-                            "Voice-based AI chatbot using Whisper.",
-                            "Handled 150+ concurrent sessions.",
+                            "Implemented voice-to-voice AI doubt solving using Whisper.",
+                            "Handled 150+ concurrent sessions with streaming responses.",
+                        ],
+                    },
+
+                    {
+                        name: "Astrologer SaaS Platform",
+                        stack: [
+                            "Next.js",
+                            "TypeScript",
+                            "TanStack",
+                            "Node.js",
+                            "Razorpay",
+                        ],
+                        links: [],
+                        points: [
+                            "Built multi-tenant astrologer platform with booking and payment flows.",
+                            "Implemented tenant-specific UI and routing system.",
                         ],
                     },
                 ],
@@ -178,12 +197,13 @@ const resumeData: Resume = {
                     {
                         title: "Frontend",
                         items: [
-                            "React.js",
+                            "React",
                             "Next.js",
                             "TypeScript",
+                            "TanStack (Query, Router)",
                             "Zustand",
                             "Tailwind CSS",
-                            "ShadCN",
+                            "ShadCN UI",
                         ],
                     },
                     {
@@ -195,8 +215,8 @@ const resumeData: Resume = {
                         items: ["MongoDB", "PostgreSQL", "Prisma"],
                     },
                     {
-                        title: "Tools",
-                        items: ["Git", "Docker", "Postman"],
+                        title: "Tools & Systems",
+                        items: ["Git", "Docker", "Postman", "Linux", "pnpm"],
                     },
                 ],
             },
@@ -209,14 +229,14 @@ const resumeData: Resume = {
             content: {
                 items: [
                     {
-                        degree: "Master of Computer Applications",
+                        degree: "Master of Computer Applications (MCA)",
                         institution:
-                            "Indra Gandhi National Open University (IGNOU)",
+                            "Indira Gandhi National Open University (IGNOU)",
                         startDate: "2025",
-                        endDate: "present",
+                        endDate: "Present",
                     },
                     {
-                        degree: "Bachelor of Arts - English Honours",
+                        degree: "Bachelor of Arts (English Honours)",
                         institution: "Prof. Rajendra Singh University",
                         startDate: "2020",
                         endDate: "2023",
@@ -238,112 +258,191 @@ const resumeData: Resume = {
         },
     ],
 }
+
 const sectionRenderers: Record<SectionType, (content: any) => JSX.Element> = {
     basics: (data) => (
         <header className="mb-6">
             <h1 className="text-2xl font-bold">{data.name}</h1>
-            <p className="text-sm text-gray-600">{data.headline}</p>
 
-            <div className="text-xs mt-2 flex flex-wrap gap-2">
-                <span>{data.email}</span>
-                <span>•</span>
-                <span>{data.phone}</span>
-                <span>•</span>
-                <span>{data.location}</span>
+            <p className="text-sm text-muted-foreground">{data.headline}</p>
+
+            <div className="text-xs mt-2 flex flex-wrap gap-2 text-muted-foreground">
+                {data.email && <span>{data.email}</span>}
+                {data.phone && <span>• {data.phone}</span>}
+                {data.location && <span>• {data.location}</span>}
             </div>
 
-            <div className="text-xs mt-1 flex gap-3">
-                {data.links?.map((link: any, i: number) => (
-                    <a
-                        key={i}
-                        href={link.url}
-                        target="_blank"
-                        className="underline"
-                    >
-                        {link.label}
-                    </a>
-                ))}
-            </div>
+            {data.links?.length > 0 && (
+                <div className="text-xs mt-2 flex flex-wrap gap-3">
+                    {data.links.map((link: any, i: number) => (
+                        <a
+                            key={i}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline text-primary"
+                        >
+                            {link.label}
+                        </a>
+                    ))}
+                </div>
+            )}
         </header>
     ),
 
     summary: (data) => (
         <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-1">Summary</h2>
-            <p className="text-sm">{data.text}</p>
+            <h2 className="text-lg font-semibold mb-2">Summary</h2>
+            <p className="text-sm leading-relaxed">{data.text}</p>
         </section>
     ),
 
     experience: (data) => (
         <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-1">Experience</h2>
+            <h2 className="text-lg font-semibold mb-2">Experience</h2>
 
-            {data.items?.map((item: any, i: number) => (
-                <div key={i} className="mb-3">
-                    <h3 className="font-medium">{item.role}</h3>
-                    <p className="text-sm text-gray-600">{item.company}</p>
+            <div className="space-y-4">
+                {data.items?.map((item: any, i: number) => (
+                    <div key={i} className="border-l-2 pl-3">
+                        <div className="flex justify-between flex-wrap text-sm">
+                            <div>
+                                <span className="font-semibold">
+                                    {item.role}
+                                </span>{" "}
+                                at {item.company}
+                            </div>
 
-                    <ul className="list-disc ml-5 text-sm mt-1">
-                        {item.points?.map((p: string, idx: number) => (
-                            <li key={idx}>{p}</li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
+                            <div className="text-xs text-muted-foreground">
+                                {item.startDate} - {item.endDate || "Present"}
+                            </div>
+                        </div>
+
+                        {item.location && (
+                            <div className="text-xs text-muted-foreground">
+                                {item.location}
+                            </div>
+                        )}
+
+                        {item.links?.length > 0 && (
+                            <div className="text-xs mt-1">
+                                {item.links.map((link: string, idx: number) => (
+                                    <a
+                                        key={idx}
+                                        href={link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="underline text-primary mr-2"
+                                    >
+                                        Link
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+
+                        <ul className="list-disc ml-5 text-sm mt-1 space-y-0.5">
+                            {item.points?.map((p: string, idx: number) => (
+                                <li key={idx}>{p}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
         </section>
     ),
 
     education: (data) => (
         <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-1">Education</h2>
+            <h2 className="text-lg font-semibold mb-2">Education</h2>
 
-            {data.items?.map((item: any, i: number) => (
-                <div key={i} className="text-sm">
-                    {item.degree} - {item.institution}
-                </div>
-            ))}
+            <div className="space-y-3">
+                {data.items?.map((item: any, i: number) => (
+                    <div key={i} className="text-sm">
+                        <div className="flex justify-between flex-wrap">
+                            <span className="font-medium">{item.degree}</span>
+
+                            <span className="text-xs text-muted-foreground">
+                                {item.startDate} - {item.endDate}
+                            </span>
+                        </div>
+
+                        <div className="text-xs text-muted-foreground">
+                            {item.institution}
+                        </div>
+                    </div>
+                ))}
+            </div>
         </section>
     ),
 
     projects: (data) => (
         <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-1">Projects</h2>
+            <h2 className="text-lg font-semibold mb-2">Projects</h2>
 
-            {data.items?.map((item: any, i: number) => (
-                <div key={i} className="text-sm">
-                    <strong>{item.name}</strong> - {item.description}
-                </div>
-            ))}
+            <div className="space-y-4">
+                {data.items?.map((item: any, i: number) => (
+                    <div key={i} className="border-l-2 pl-3 text-sm">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-semibold">{item.name}</span>
+
+                            {item.links?.[0] && (
+                                <a
+                                    href={item.links[0]}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-primary underline text-xs"
+                                >
+                                    Live
+                                </a>
+                            )}
+                        </div>
+
+                        {item.stack?.length > 0 && (
+                            <div className="text-xs text-muted-foreground">
+                                <span className="font-medium">Tech:</span>{" "}
+                                {item.stack.join(", ")}
+                            </div>
+                        )}
+
+                        <ul className="list-disc ml-4 mt-1 space-y-0.5">
+                            {item.points?.map((point: string, idx: number) => (
+                                <li key={idx}>{point}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
         </section>
     ),
 
     skills: (data) => (
         <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-1">Skills</h2>
+            <h2 className="text-lg font-semibold mb-2">Skills</h2>
 
-            {data.groups?.map((group: any, i: number) => (
-                <div key={i} className="text-sm">
-                    <strong>{group.title}:</strong> {group.items.join(", ")}
-                </div>
-            ))}
+            <div className="space-y-2 text-sm">
+                {data.groups?.map((group: any, i: number) => (
+                    <div key={i}>
+                        <span className="font-medium">{group.title}:</span>{" "}
+                        <span className="text-muted-foreground">
+                            {group.items.join(", ")}
+                        </span>
+                    </div>
+                ))}
+            </div>
         </section>
     ),
 
     custom: (data) => (
         <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-1">{data.title}</h2>
-            {data.items?.map((item: string, i: number) => (
-                <div key={i} className="text-sm">
-                    {item}
-                </div>
-            ))}
+            <h2 className="text-lg font-semibold mb-2">{data.title}</h2>
+
+            <ul className="list-disc ml-5 text-sm space-y-0.5">
+                {data.items?.map((item: string, i: number) => (
+                    <li key={i}>{item}</li>
+                ))}
+            </ul>
         </section>
     ),
 }
-
-// ----------------------
-// MAIN COMPONENT
-// ----------------------
 
 function RouteComponent() {
     const sections = [...resumeData.sections]
@@ -351,12 +450,11 @@ function RouteComponent() {
         .sort((a, b) => a.order - b.order)
 
     return (
-        <div className="p-4 bg-gray-200 min-h-screen">
-            <div className="aspect-8.5/11 w-full max-w-200 mx-auto bg-white shadow p-6">
+        <div className="min-h-screen bg-muted py-6">
+            <div className="mx-auto w-full max-w-3xl bg-background text-foreground shadow-sm p-6 print:shadow-none print:p-4">
                 <main>
                     {sections.map((section) => {
                         const renderer = sectionRenderers[section.type]
-
                         if (!renderer) return null
 
                         return (
