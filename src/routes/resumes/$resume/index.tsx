@@ -23,10 +23,15 @@ const resumeData: Data = {
                 name: "Harsh Gaur",
                 headline: "Frontend Engineer | React.js | Next.js | MERN Stack",
                 email: "hgaur491@gmail.com",
-                phone: "+91 9310745921",
+                phone: "(+91) 9310745921",
                 location: "Delhi, India",
                 links: [
-                    { id: "link-1", order: 0, label: "github.com/harshG775", url: "https://github.com/harshG775" },
+                    {
+                        id: "link-1",
+                        order: 0,
+                        label: "github.com/harshG775",
+                        url: "https://github.com/harshG775",
+                    },
                     {
                         id: "link-2",
                         order: 1,
@@ -58,19 +63,17 @@ const resumeData: Data = {
                         title: "Frontend Developer",
                         organization: "Prabhubhakti Pvt. Ltd.",
                         location: "Gurugram",
-                        startDate: "2025-06",
+                        startDate: "2025-06-01",
                         endDate: null,
                         links: [
                             { id: "exp-link-1", label: "learn.prabhubhakti.io", url: "https://learn.prabhubhakti.io" },
                             { id: "exp-link-2", label: "prabhubhakti.io", url: "https://prabhubhakti.io" },
                         ],
                         points: [
-                            "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing and tenant isolation.",
+                            "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing",
                             "Built high-performance UI using Next.js, TypeScript, Tailwind CSS, and ShadCN with focus on scalability and reusability.",
-                            "Implemented booking, payment (Razorpay), and wallet systems used across multiple tenant platforms.",
-                            "Improved SEO and performance (95+ Lighthouse scores) leading to increased organic traffic.",
+                            "Implemented booking, payment (Razorpay), and wallet systems on Frontend used across multiple tenant platforms.",
                             "Reduced onboarding time for new tenants by ~70% by standardizing tenant templates.",
-                            "Mentored and guided 2 frontend interns, ensuring code quality and best practices.",
                         ],
                     },
                     {
@@ -79,8 +82,8 @@ const resumeData: Data = {
                         title: "Frontend Developer SDE Trainee",
                         organization: "Metis Eduventures Pvt. Ltd. (Adda247)",
                         location: "Gurugram",
-                        startDate: "2024-08",
-                        endDate: "2025-02",
+                        startDate: "2024-08-01",
+                        endDate: "2025-02-01",
                         links: [{ id: "exp-link-3", label: "adda247.com", url: "https://adda247.com" }],
                         points: [
                             "Built AI-powered chatbot features using React, Zustand, and OpenAI APIs.",
@@ -94,11 +97,11 @@ const resumeData: Data = {
                         title: "Frontend Developer",
                         organization: "ItaxEasy",
                         location: "Remote",
-                        startDate: "2023-10",
-                        endDate: "2024-05",
+                        startDate: "2023-11-01",
+                        endDate: "2024-05-01",
                         links: [{ id: "exp-link-4", label: "itaxeasy.com", url: "https://itaxeasy.com" }],
                         points: [
-                            "Revamped UI/UX leading to ~22% reduction in bounce rate.",
+                            "Migrated from React.js to Next.js adding better SEO And Revamped UI of a legacy tax-filing platform using React.js and Tailwind CSS",
                             "Implemented route-based code splitting and lazy loading for performance optimization.",
                         ],
                     },
@@ -242,13 +245,24 @@ const resumeData: Data = {
     ],
 }
 
-function RouteComponent() {
-    // const components = [...resumeData.components].filter((s) => s.visible !== false).sort((a, b) => a.order - b.order)
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 
+function RouteComponent() {
     return (
-        <div>
+        <div className="flex">
             {/* <div className="bg-red-100 w-96"></div> */}
-            <Render config={basicConfig} data={resumeData} />
+            <TransformWrapper initialScale={1} minScale={0.5} maxScale={2} limitToBounds={false} centerOnInit={true}>
+                <TransformComponent>
+                    <div className="h-screen w-screen">
+                        <div className="relative w-[8.5in]  mx-auto p-4 bg-white text-black ">
+                            <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
+                            <main className="bg-zinc-50 text-zinc-950">
+                                <Render config={basicConfig} data={resumeData} />
+                            </main>
+                        </div>
+                    </div>
+                </TransformComponent>
+            </TransformWrapper>
         </div>
     )
 }
