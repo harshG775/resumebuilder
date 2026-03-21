@@ -128,13 +128,7 @@ const resumeData: ResumeDataType = {
                 items: [
                     {
                         name: "SupportDesk - AI Customer Support Platform",
-                        stack: [
-                            "React",
-                            "Zustand",
-                            "Flask",
-                            "WebSockets",
-                            "OpenAI API",
-                        ],
+                        stack: ["React", "Zustand", "Flask", "WebSockets", "OpenAI API"],
                         links: [
                             {
                                 label: "Live Demo",
@@ -164,13 +158,7 @@ const resumeData: ResumeDataType = {
 
                     {
                         name: "Astrologer SaaS Platform",
-                        stack: [
-                            "Next.js",
-                            "TypeScript",
-                            "TanStack",
-                            "Node.js",
-                            "Razorpay",
-                        ],
+                        stack: ["Next.js", "TypeScript", "TanStack", "Node.js", "Razorpay"],
                         links: [],
                         points: [
                             "Built multi-tenant astrologer platform with booking and payment flows.",
@@ -223,8 +211,7 @@ const resumeData: ResumeDataType = {
                 items: [
                     {
                         degree: "Master of Computer Applications (MCA)",
-                        institution:
-                            "Indira Gandhi National Open University (IGNOU)",
+                        institution: "Indira Gandhi National Open University (IGNOU)",
                         startDate: "2025",
                         endDate: "Present",
                     },
@@ -244,38 +231,37 @@ const resumeData: ResumeDataType = {
             order: 6,
             content: {
                 title: "Certifications",
-                items: [
-                    "Web Development Certification - MyCodeLearning (2023)",
-                ],
+                items: ["Web Development Certification - MyCodeLearning (2023)"],
             },
         },
     ],
 }
 
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
+
 function RouteComponent() {
-    const components = [...resumeData.components]
-        .filter((s) => s.visible !== false)
-        .sort((a, b) => a.order - b.order)
+    const components = [...resumeData.components].filter((s) => s.visible !== false).sort((a, b) => a.order - b.order)
 
     return (
-        <div className="min-h-screen h-full bg-muted">
-            <div className="relative mx-auto w-[8.5in] p-4  bg-white text-black ">
-                <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed  pointer-events-none"></div>
+        <div className="flex">
+            <div className="bg-red-100 w-96"></div>
+            <TransformWrapper initialScale={1} minScale={0.5} maxScale={2} limitToBounds={false} centerOnInit={true}>
+                <TransformComponent>
+                    <div className="h-screen w-screen">
+                        <div className="relative w-[8.5in]  mx-auto p-4 bg-white text-black ">
+                            <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
+                            <main className="bg-zinc-50 text-zinc-950">
+                                {components.map((component) => {
+                                    const renderer = basicConfig.components[component.type]
+                                    if (!renderer) return null
 
-                <main>
-                    {components.map((component) => {
-                        const renderer =
-                            basicConfig.components[component.type]
-                        if (!renderer) return null
-
-                        return (
-                            <div key={component.id}>
-                                {renderer(component.content)}
-                            </div>
-                        )
-                    })}
-                </main>
-            </div>
+                                    return <div key={component.id}>{renderer(component.content)}</div>
+                                })}
+                            </main>
+                        </div>
+                    </div>
+                </TransformComponent>
+            </TransformWrapper>
         </div>
     )
 }
