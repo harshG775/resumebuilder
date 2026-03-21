@@ -45,14 +45,14 @@ const resumeData: Resume = {
             content: {
                 name: "Harsh Gaur",
                 headline:
-                    "Frontend Engineer (Full Stack Capable) - React, Next.js, TypeScript, TanStack",
+                    "Frontend Engneer | React.js | Next.js | MERN Stack",
                 email: "hgaur491@gmail.com",
                 phone: "+91 9310745921",
                 location: "Delhi, India",
                 links: [
-                    { label: "GitHub", url: "https://github.com/harshG775" },
+                    { label: "github.com/harshG775", url: "https://github.com/harshG775" },
                     {
-                        label: "LinkedIn",
+                        label: "linkedin.com/in/harshg775",
                         url: "https://linkedin.com/in/harshg775",
                     },
                 ],
@@ -75,14 +75,22 @@ const resumeData: Resume = {
             content: {
                 items: [
                     {
+                        order: 1,
                         role: "Frontend Developer",
                         company: "Prabhubhakti Pvt. Ltd.",
                         location: "Gurugram",
                         startDate: "2025-06",
                         endDate: null,
                         links: [
-                            "https://prabhubhakti.io",
-                            "https://prabhubhakti.com",
+                            {
+                                label: "learn.prabhubhakti.io",
+                                url: "https://learn.prabhubhakti.io",
+                            },
+                            {
+                                label: "prabhubhakti.io",
+                                url: "https://prabhubhakti.io",
+                            },
+                           
                         ],
                         points: [
                             "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing and tenant isolation.",
@@ -95,25 +103,15 @@ const resumeData: Resume = {
                     },
 
                     {
-                        role: "Freelance Frontend Developer",
-                        company: "Kalpi Capital",
-                        location: "Remote",
-                        startDate: "2025-05",
-                        endDate: "2025-06",
-                        links: ["https://kalpicapital.com"],
-                        points: [
-                            "Built SEO-optimized landing page using Next.js, Tailwind CSS, and ShadCN.",
-                            "Improved Lighthouse SEO score from 68 to 97.",
-                        ],
-                    },
-
-                    {
+                        order: 3,
                         role: "Frontend Developer SDE Trainee",
                         company: "Metis Eduventures Pvt. Ltd. (Adda247)",
                         location: "Gurugram",
                         startDate: "2024-08",
                         endDate: "2025-02",
-                        links: ["https://adda247.com"],
+                        links: [
+                            { label: "adda247.com", url: "https://adda247.com" },
+                        ],
                         points: [
                             "Built AI-powered chatbot features using React, Zustand, and OpenAI APIs.",
                             "Developed real-time communication features using SSE/WebSockets.",
@@ -122,12 +120,15 @@ const resumeData: Resume = {
                     },
 
                     {
+                        order: 4,
                         role: "Frontend Developer",
                         company: "ItaxEasy",
                         location: "Remote",
                         startDate: "2023-10",
                         endDate: "2024-05",
-                        links: ["https://itaxeasy.com"],
+                        links: [
+                            { label: "itaxeasy.com", url: "https://itaxeasy.com" },
+                        ],
                         points: [
                             "Revamped UI/UX leading to ~22% reduction in bounce rate.",
                             "Implemented route-based code splitting and lazy loading for performance optimization.",
@@ -152,7 +153,12 @@ const resumeData: Resume = {
                             "WebSockets",
                             "OpenAI API",
                         ],
-                        links: ["https://supportdesk.adda247.com/"],
+                        links: [
+                            {
+                                label: "Live Demo",
+                                url: "https://supportdesk.adda247.com/",
+                            },
+                        ],
                         points: [
                             "Built real-time chat system with AI + human handover.",
                             "Reduced dependency on third-party tools, saving ~₹2L/year.",
@@ -162,7 +168,12 @@ const resumeData: Resume = {
                     {
                         name: "AiDoubtSolver - Voice AI Chatbot",
                         stack: ["React", "SSE", "Whisper API"],
-                        links: ["https://aidoubtsolverdev.adda247.com/"],
+                        links: [
+                            {
+                                label: "Live Demo",
+                                url: "https://aidoubtsolverdev.adda247.com/",
+                            },
+                        ],
                         points: [
                             "Implemented voice-to-voice AI doubt solving using Whisper.",
                             "Handled 150+ concurrent sessions with streaming responses.",
@@ -259,7 +270,7 @@ const resumeData: Resume = {
     ],
 }
 
-const sectionRenderers: Record<SectionType, (content: any) => JSX.Element> = {
+const resumeTemplate: Record<SectionType, (content: any) => JSX.Element> = {
     basics: (data) => (
         <header className="mb-6">
             <h1 className="text-2xl font-bold">{data.name}</h1>
@@ -302,8 +313,8 @@ const sectionRenderers: Record<SectionType, (content: any) => JSX.Element> = {
             <h2 className="text-lg font-semibold mb-2">Experience</h2>
 
             <div className="space-y-4">
-                {data.items?.map((item: any, i: number) => (
-                    <div key={i} className="border-l-2 pl-3">
+                {data.items?.map((item: any) => (
+                    <div key={item.order} className="border-l-2 pl-3">
                         <div className="flex justify-between flex-wrap text-sm">
                             <div>
                                 <span className="font-semibold">
@@ -325,15 +336,15 @@ const sectionRenderers: Record<SectionType, (content: any) => JSX.Element> = {
 
                         {item.links?.length > 0 && (
                             <div className="text-xs mt-1">
-                                {item.links.map((link: string, idx: number) => (
+                                {item.links.map((link: any, idx: number) => (
                                     <a
                                         key={idx}
-                                        href={link}
+                                        href={link.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="underline text-primary mr-2"
                                     >
-                                        Link
+                                        {link.label}
                                     </a>
                                 ))}
                             </div>
@@ -384,16 +395,18 @@ const sectionRenderers: Record<SectionType, (content: any) => JSX.Element> = {
                         <div className="flex flex-wrap items-center gap-2">
                             <span className="font-semibold">{item.name}</span>
 
-                            {item.links?.[0] && (
-                                <a
-                                    href={item.links[0]}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-primary underline text-xs"
-                                >
-                                    Live
-                                </a>
-                            )}
+                            {item.links.length > 0 &&
+                                item.links.map((link: any, idx: number) => (
+                                    <a
+                                        key={idx}
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary underline text-xs"
+                                    >
+                                        {link.label ? link.label : "Live"}
+                                    </a>
+                                ))}
                         </div>
 
                         {item.stack?.length > 0 && (
@@ -450,11 +463,12 @@ function RouteComponent() {
         .sort((a, b) => a.order - b.order)
 
     return (
-        <div className="min-h-screen bg-muted py-6">
-            <div className="mx-auto w-full max-w-3xl bg-background text-foreground shadow-sm p-6 print:shadow-none print:p-4">
+        <div className="min-h-screen h-full bg-muted">
+            <div className="relative mx-auto w-[8.5in] p-4  bg-white text-black ">
+                <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed  pointer-events-none"></div>
                 <main>
                     {sections.map((section) => {
-                        const renderer = sectionRenderers[section.type]
+                        const renderer = resumeTemplate[section.type]
                         if (!renderer) return null
 
                         return (

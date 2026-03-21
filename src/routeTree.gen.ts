@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResumesResumeIndexRouteImport } from './routes/resumes/$resume/index'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResumesResumeIndexRoute = ResumesResumeIndexRouteImport.update({
   id: '/resumes/$resume/',
   path: '/resumes/$resume/',
@@ -18,29 +24,40 @@ const ResumesResumeIndexRoute = ResumesResumeIndexRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/resumes/$resume/': typeof ResumesResumeIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/resumes/$resume': typeof ResumesResumeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/resumes/$resume/': typeof ResumesResumeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/resumes/$resume/'
+  fullPaths: '/' | '/resumes/$resume/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/resumes/$resume'
-  id: '__root__' | '/resumes/$resume/'
+  to: '/' | '/resumes/$resume'
+  id: '__root__' | '/' | '/resumes/$resume/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   ResumesResumeIndexRoute: typeof ResumesResumeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resumes/$resume/': {
       id: '/resumes/$resume/'
       path: '/resumes/$resume'
@@ -52,6 +69,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   ResumesResumeIndexRoute: ResumesResumeIndexRoute,
 }
 export const routeTree = rootRouteImport

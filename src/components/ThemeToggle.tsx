@@ -1,83 +1,88 @@
-import { useEffect, useState } from "react"
+import { type ReactNode } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
 type ThemeMode = "light" | "dark" | "auto"
 
+interface ThemeContextType {
+    mode: ThemeMode
+    toggleMode: () => void
+    setMode: (mode: ThemeMode) => void
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+
 function getInitialMode(): ThemeMode {
-    if (typeof window === "undefined") {
-        return "auto"
-    }
-
+    if (typeof window === "undefined") return "auto"
     const stored = window.localStorage.getItem("theme")
-    if (stored === "light" || stored === "dark" || stored === "auto") {
-        return stored
-    }
-
-    return "auto"
+    return stored === "light" || stored === "dark" || stored === "auto"
+        ? stored
+        : "auto"
 }
 
 function applyThemeMode(mode: ThemeMode) {
+    if (typeof window === "undefined") return
+
     const prefersDark = window.matchMedia(
         "(prefers-color-scheme: dark)",
     ).matches
     const resolved = mode === "auto" ? (prefersDark ? "dark" : "light") : mode
 
-    document.documentElement.classList.remove("light", "dark")
-    document.documentElement.classList.add(resolved)
+    const root = document.documentElement
+    root.classList.remove("light", "dark")
+    root.classList.add(resolved)
+    root.style.colorScheme = resolved
 
     if (mode === "auto") {
-        document.documentElement.removeAttribute("data-theme")
+        root.removeAttribute("data-theme")
     } else {
-        document.documentElement.setAttribute("data-theme", mode)
+        root.setAttribute("data-theme", mode)
     }
-
-    document.documentElement.style.colorScheme = resolved
 }
 
-export default function ThemeToggle() {
-    const [mode, setMode] = useState<ThemeMode>("auto")
+// --- Provider Component ---
 
+export function ThemeProvider({ children }: { children: ReactNode }) {
+    const [mode, setModeState] = useState<ThemeMode>("auto") // Start with auto to avoid hydration mismatch
+
+    // Initialize theme on mount
     useEffect(() => {
         const initialMode = getInitialMode()
-        setMode(initialMode)
-        applyThemeMode(initialMode)
+        setModeState(initialMode)
     }, [])
 
+    // Update DOM and LocalStorage whenever mode changes
     useEffect(() => {
-        if (mode !== "auto") {
-            return
-        }
+        applyThemeMode(mode)
+        window.localStorage.setItem("theme", mode)
 
-        const media = window.matchMedia("(prefers-color-scheme: dark)")
-        const onChange = () => applyThemeMode("auto")
-
-        media.addEventListener("change", onChange)
-        return () => {
-            media.removeEventListener("change", onChange)
+        // If auto, listen for system changes
+        if (mode === "auto") {
+            const media = window.matchMedia("(prefers-color-scheme: dark)")
+            const onChange = () => applyThemeMode("auto")
+            media.addEventListener("change", onChange)
+            return () => media.removeEventListener("change", onChange)
         }
     }, [mode])
 
-    function toggleMode() {
-        const nextMode: ThemeMode =
-            mode === "light" ? "dark" : mode === "dark" ? "auto" : "light"
-        setMode(nextMode)
-        applyThemeMode(nextMode)
-        window.localStorage.setItem("theme", nextMode)
+    const toggleMode = () => {
+        setModeState((prev) =>
+            prev === "light" ? "dark" : prev === "dark" ? "auto" : "light",
+        )
     }
 
-    const label =
-        mode === "auto"
-            ? "Theme mode: auto (system). Click to switch to light mode."
-            : `Theme mode: ${mode}. Click to switch mode.`
+    const setMode = (newMode: ThemeMode) => setModeState(newMode)
 
     return (
-        <button
-            type="button"
-            onClick={toggleMode}
-            aria-label={label}
-            title={label}
-            className="rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1.5 text-sm font-semibold text-[var(--sea-ink)] shadow-[0_8px_22px_rgba(30,90,72,0.08)] transition hover:-translate-y-0.5"
-        >
-            {mode === "auto" ? "Auto" : mode === "dark" ? "Dark" : "Light"}
-        </button>
+        <ThemeContext.Provider value={{ mode, toggleMode, setMode }}>
+            {children}
+        </ThemeContext.Provider>
     )
+}
+
+export function useTheme() {
+    const context = useContext(ThemeContext)
+    if (context === undefined) {
+        throw new Error("useTheme must be used within a ThemeProvider")
+    }
+    return context
 }
