@@ -1,56 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router"
-import type { JSX } from "react"
+import { basicConfig, type ResumeDataType } from "./-components/configs/basic"
 
 export const Route = createFileRoute("/resumes/$resume/")({
     component: RouteComponent,
 })
 
-type SectionType =
-    | "basics"
-    | "summary"
-    | "experience"
-    | "education"
-    | "projects"
-    | "skills"
-    | "custom"
-
-type Section<T = any> = {
-    id: string
-    type: SectionType
-    order: number
-    visible?: boolean
-    content: T
-}
-
-type Resume = {
-    metadata: {
-        title: string
-        description: string
-    }
-    sections: Section[]
-}
-
-const resumeData: Resume = {
+const resumeData: ResumeDataType = {
     metadata: {
         title: "Harsh_Gaur_Frontend_Engineer_Resume",
         description:
             "ATS-optimized resume of Harsh Gaur - Frontend Engineer specializing in React, Next.js, TanStack, and SaaS platforms.",
     },
 
-    sections: [
+    components: [
         {
             id: "basics",
             type: "basics",
             order: 0,
             content: {
                 name: "Harsh Gaur",
-                headline:
-                    "Frontend Engneer | React.js | Next.js | MERN Stack",
+                headline: "Frontend Engneer | React.js | Next.js | MERN Stack",
                 email: "hgaur491@gmail.com",
                 phone: "+91 9310745921",
                 location: "Delhi, India",
                 links: [
-                    { label: "github.com/harshG775", url: "https://github.com/harshG775" },
+                    {
+                        label: "github.com/harshG775",
+                        url: "https://github.com/harshG775",
+                    },
                     {
                         label: "linkedin.com/in/harshg775",
                         url: "https://linkedin.com/in/harshg775",
@@ -90,7 +67,6 @@ const resumeData: Resume = {
                                 label: "prabhubhakti.io",
                                 url: "https://prabhubhakti.io",
                             },
-                           
                         ],
                         points: [
                             "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing and tenant isolation.",
@@ -110,7 +86,10 @@ const resumeData: Resume = {
                         startDate: "2024-08",
                         endDate: "2025-02",
                         links: [
-                            { label: "adda247.com", url: "https://adda247.com" },
+                            {
+                                label: "adda247.com",
+                                url: "https://adda247.com",
+                            },
                         ],
                         points: [
                             "Built AI-powered chatbot features using React, Zustand, and OpenAI APIs.",
@@ -127,7 +106,10 @@ const resumeData: Resume = {
                         startDate: "2023-10",
                         endDate: "2024-05",
                         links: [
-                            { label: "itaxeasy.com", url: "https://itaxeasy.com" },
+                            {
+                                label: "itaxeasy.com",
+                                url: "https://itaxeasy.com",
+                            },
                         ],
                         points: [
                             "Revamped UI/UX leading to ~22% reduction in bounce rate.",
@@ -270,195 +252,8 @@ const resumeData: Resume = {
     ],
 }
 
-const resumeTemplate: Record<SectionType, (content: any) => JSX.Element> = {
-    basics: (data) => (
-        <header className="mb-6">
-            <h1 className="text-2xl font-bold">{data.name}</h1>
-
-            <p className="text-sm text-muted-foreground">{data.headline}</p>
-
-            <div className="text-xs mt-2 flex flex-wrap gap-2 text-muted-foreground">
-                {data.email && <span>{data.email}</span>}
-                {data.phone && <span>• {data.phone}</span>}
-                {data.location && <span>• {data.location}</span>}
-            </div>
-
-            {data.links?.length > 0 && (
-                <div className="text-xs mt-2 flex flex-wrap gap-3">
-                    {data.links.map((link: any, i: number) => (
-                        <a
-                            key={i}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="underline text-primary"
-                        >
-                            {link.label}
-                        </a>
-                    ))}
-                </div>
-            )}
-        </header>
-    ),
-
-    summary: (data) => (
-        <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Summary</h2>
-            <p className="text-sm leading-relaxed">{data.text}</p>
-        </section>
-    ),
-
-    experience: (data) => (
-        <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Experience</h2>
-
-            <div className="space-y-4">
-                {data.items?.map((item: any) => (
-                    <div key={item.order} className="border-l-2 pl-3">
-                        <div className="flex justify-between flex-wrap text-sm">
-                            <div>
-                                <span className="font-semibold">
-                                    {item.role}
-                                </span>{" "}
-                                at {item.company}
-                            </div>
-
-                            <div className="text-xs text-muted-foreground">
-                                {item.startDate} - {item.endDate || "Present"}
-                            </div>
-                        </div>
-
-                        {item.location && (
-                            <div className="text-xs text-muted-foreground">
-                                {item.location}
-                            </div>
-                        )}
-
-                        {item.links?.length > 0 && (
-                            <div className="text-xs mt-1">
-                                {item.links.map((link: any, idx: number) => (
-                                    <a
-                                        key={idx}
-                                        href={link.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="underline text-primary mr-2"
-                                    >
-                                        {link.label}
-                                    </a>
-                                ))}
-                            </div>
-                        )}
-
-                        <ul className="list-disc ml-5 text-sm mt-1 space-y-0.5">
-                            {item.points?.map((p: string, idx: number) => (
-                                <li key={idx}>{p}</li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
-            </div>
-        </section>
-    ),
-
-    education: (data) => (
-        <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Education</h2>
-
-            <div className="space-y-3">
-                {data.items?.map((item: any, i: number) => (
-                    <div key={i} className="text-sm">
-                        <div className="flex justify-between flex-wrap">
-                            <span className="font-medium">{item.degree}</span>
-
-                            <span className="text-xs text-muted-foreground">
-                                {item.startDate} - {item.endDate}
-                            </span>
-                        </div>
-
-                        <div className="text-xs text-muted-foreground">
-                            {item.institution}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </section>
-    ),
-
-    projects: (data) => (
-        <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Projects</h2>
-
-            <div className="space-y-4">
-                {data.items?.map((item: any, i: number) => (
-                    <div key={i} className="border-l-2 pl-3 text-sm">
-                        <div className="flex flex-wrap items-center gap-2">
-                            <span className="font-semibold">{item.name}</span>
-
-                            {item.links.length > 0 &&
-                                item.links.map((link: any, idx: number) => (
-                                    <a
-                                        key={idx}
-                                        href={link.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary underline text-xs"
-                                    >
-                                        {link.label ? link.label : "Live"}
-                                    </a>
-                                ))}
-                        </div>
-
-                        {item.stack?.length > 0 && (
-                            <div className="text-xs text-muted-foreground">
-                                <span className="font-medium">Tech:</span>{" "}
-                                {item.stack.join(", ")}
-                            </div>
-                        )}
-
-                        <ul className="list-disc ml-4 mt-1 space-y-0.5">
-                            {item.points?.map((point: string, idx: number) => (
-                                <li key={idx}>{point}</li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
-            </div>
-        </section>
-    ),
-
-    skills: (data) => (
-        <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">Skills</h2>
-
-            <div className="space-y-2 text-sm">
-                {data.groups?.map((group: any, i: number) => (
-                    <div key={i}>
-                        <span className="font-medium">{group.title}:</span>{" "}
-                        <span className="text-muted-foreground">
-                            {group.items.join(", ")}
-                        </span>
-                    </div>
-                ))}
-            </div>
-        </section>
-    ),
-
-    custom: (data) => (
-        <section className="mb-4">
-            <h2 className="text-lg font-semibold mb-2">{data.title}</h2>
-
-            <ul className="list-disc ml-5 text-sm space-y-0.5">
-                {data.items?.map((item: string, i: number) => (
-                    <li key={i}>{item}</li>
-                ))}
-            </ul>
-        </section>
-    ),
-}
-
 function RouteComponent() {
-    const sections = [...resumeData.sections]
+    const components = [...resumeData.components]
         .filter((s) => s.visible !== false)
         .sort((a, b) => a.order - b.order)
 
@@ -466,14 +261,16 @@ function RouteComponent() {
         <div className="min-h-screen h-full bg-muted">
             <div className="relative mx-auto w-[8.5in] p-4  bg-white text-black ">
                 <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed  pointer-events-none"></div>
+
                 <main>
-                    {sections.map((section) => {
-                        const renderer = resumeTemplate[section.type]
+                    {components.map((component) => {
+                        const renderer =
+                            basicConfig.components[component.type]
                         if (!renderer) return null
 
                         return (
-                            <div key={section.id}>
-                                {renderer(section.content)}
+                            <div key={component.id}>
+                                {renderer(component.content)}
                             </div>
                         )
                     })}
