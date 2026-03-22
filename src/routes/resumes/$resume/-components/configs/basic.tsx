@@ -30,7 +30,7 @@ type Props = {
         links?: Link[]
     }
     summary: {
-        text: string
+        points: string[]
     }
     experience: {
         items: ItemProps[]
@@ -96,11 +96,13 @@ export const basicConfig: Config<Props> = {
         },
 
         summary: {
-            defaultProps: { text: "" },
+            defaultProps: { points: [] },
             render: (props) => (
                 <section className="mb-4">
                     <h2 className="text-md font-semibold mb-2 border-b">Summary</h2>
-                    <p className="text-sm leading-relaxed whitespace-pre-line">{props.text}</p>
+                    {props.points?.map((point) => (
+                        <p className="text-xs leading-relaxed whitespace-pre-line">{point}</p>
+                    ))}
                 </section>
             ),
         },

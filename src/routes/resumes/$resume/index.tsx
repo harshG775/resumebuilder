@@ -47,7 +47,9 @@ const resumeData: Data = {
             type: "summary",
             order: 1,
             props: {
-                text: "Frontend Engineer with 2+ years of experience building scalable SaaS platforms and AI-powered applications using React, Next.js, TypeScript, and TanStack ecosystem. Strong focus on performance, maintainability, and clean architecture. Experienced in multi-tenant systems, real-time features, and production-grade UI systems. Comfortable working across frontend and backend (Node.js, Express, Flask).",
+                points: [
+                    "Frontend Engineer with 2+ years building multi-tenant SaaS platforms and AI-powered apps using React, Next.js, TypeScript, and TanStack. Focused on performance, clean architecture, and scalable UI systems.",
+                ],
             },
         },
 
@@ -116,41 +118,71 @@ const resumeData: Data = {
             props: {
                 items: [
                     {
-                        id: "proj-1",
+                        id: "proj-3",
                         order: 0,
+                        title: "Astrologer SaaS Platform",
+                        organization: "Prabhubhakti",
+                        stack: ["Next.js", "TypeScript", "TanStack Start", "TanStack Router", "Node.js", "Razorpay"],
+                        links: [
+                            {
+                                id: "proj-link-4",
+                                label: "prabhubhakti.io",
+                                url: "https://learn.prabhubhakti.io",
+                            },
+                            {
+                                id: "proj-link-4",
+                                label: "prabhubhakti.io",
+                                url: "https://prabhubhakti.io",
+                            },
+                            {
+                                id: "proj-link-3",
+                                label: "github.com/harshG775/tanstack-start-multi-tenant-example",
+                                url: "https://github.com/harshG775/tanstack-start-multi-tenant-example",
+                            },
+                        ],
+                        points: [
+                            "Architected a multi-tenant astrologer platform supporting domain/subdomain-based tenant isolation with per-tenant UI and routing.",
+                            "Built end-to-end booking and Razorpay payment flows reused across multiple tenant platforms, reducing per-tenant dev time by ~70%.",
+                            "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling faster feature rollout across tenants.",
+                            "Documented the multi-tenant routing pattern as an open-source TanStack Start example on GitHub.",
+                        ],
+                    },
+                    {
+                        id: "proj-1",
+                        order: 1,
                         title: "SupportDesk - AI Customer Support Platform",
                         organization: "Adda247",
                         stack: ["React", "Zustand", "Flask", "WebSockets", "OpenAI API"],
-                        links: [{ id: "proj-link-1", label: "Live Demo", url: "https://supportdesk.adda247.com/" }],
+                        links: [
+                            {
+                                id: "proj-link-1",
+                                label: "supportdesk.adda247.com",
+                                url: "https://supportdesk.adda247.com/",
+                            },
+                        ],
                         points: [
-                            "Built real-time chat system with AI + human handover.",
-                            "Reduced dependency on third-party tools, saving ~₹2L/year.",
+                            "Built a real-time chat system with seamless AI-to-human handover using WebSockets and OpenAI API.",
+                            "Replaced third-party support tooling entirely, saving ~₹2L/year in licensing costs.",
+                            "Managed global chat state with Zustand across agent dashboard, user widget, and admin panel.",
                         ],
                     },
                     {
                         id: "proj-2",
-                        order: 1,
+                        order: 2,
                         title: "AiDoubtSolver - Voice AI Chatbot",
                         organization: "Adda247",
                         stack: ["React", "SSE", "Whisper API"],
                         links: [
-                            { id: "proj-link-2", label: "Live Demo", url: "https://aidoubtsolverdev.adda247.com/" },
+                            {
+                                id: "proj-link-2",
+                                label: "aidoubtsolverdev.adda247.com",
+                                url: "https://aidoubtsolverdev.adda247.com/",
+                            },
                         ],
                         points: [
-                            "Implemented voice-to-voice AI doubt solving using Whisper.",
-                            "Handled 150+ concurrent sessions with streaming responses.",
-                        ],
-                    },
-                    {
-                        id: "proj-3",
-                        order: 2,
-                        title: "Astrologer SaaS Platform",
-                        organization: "Prabhubhakti",
-                        stack: ["Next.js", "TypeScript", "TanStack", "Node.js", "Razorpay"],
-                        links: [],
-                        points: [
-                            "Built multi-tenant astrologer platform with booking and payment flows.",
-                            "Implemented tenant-specific UI and routing system.",
+                            "Implemented voice-to-voice doubt solving pipeline using Whisper API with streaming responses over SSE.",
+                            "Handled 150+ concurrent sessions with low-latency UI updates and minimal re-renders.",
+                            "Designed stateful conversation flow in React with optimistic UI for perceived responsiveness.",
                         ],
                     },
                 ],
