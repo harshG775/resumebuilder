@@ -99,7 +99,7 @@ export const basicConfig: Config<Props> = {
             defaultProps: { points: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-semibold mb-2 border-b">Summary</h2>
+                    <h2 className="text-md font-bold mb-2 border-b">Summary</h2>
                     {props.points?.map((point) => (
                         <p className="text-xs leading-relaxed whitespace-pre-line">{point}</p>
                     ))}
@@ -111,7 +111,7 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-semibold mb-2 border-b">Experience</h2>
+                    <h2 className="text-md font-bold mb-2 border-b">Experience</h2>
                     <div className="space-y-4">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -124,13 +124,13 @@ export const basicConfig: Config<Props> = {
                                             <span className="font-semibold">{item.organization}</span>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <div className="text-xs text-muted-foreground">
+                                            <span className="text-xs text-muted-foreground">
                                                 {formatDate(item.startDate)} {item.startDate && "—"}{" "}
                                                 {formatDate(item.endDate) || (item.startDate && "Present")}
-                                            </div>
+                                            </span>
                                             |
                                             {item.location && (
-                                                <div className="text-xs text-muted-foreground">{item.location}</div>
+                                                <span className="text-xs text-muted-foreground">{item.location}</span>
                                             )}
                                         </div>
                                     </div>
@@ -146,35 +146,11 @@ export const basicConfig: Config<Props> = {
             ),
         },
 
-        education: {
-            defaultProps: { items: [] },
-            render: (props) => (
-                <section className="mb-4">
-                    <h2 className="text-md font-semibold mb-2 border-b">Education</h2>
-                    <div className="space-y-3">
-                        {props.items
-                            ?.sort((a, b) => a.order - b.order)
-                            .map((item) => (
-                                <div key={item.id} className="text-xs">
-                                    <div className="flex justify-between flex-wrap">
-                                        <span className="font-medium">{item.title}</span>
-                                        <span className="text-xs text-muted-foreground">
-                                            {item.startDate} {item.endDate && `— ${item.endDate}`}
-                                        </span>
-                                    </div>
-                                    <div className="text-xs text-muted-foreground">{item.organization}</div>
-                                </div>
-                            ))}
-                    </div>
-                </section>
-            ),
-        },
-
         projects: {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-semibold mb-2 border-b">Projects</h2>
+                    <h2 className="text-md font-bold mb-2 border-b">Projects</h2>
                     <div className="space-y-4">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -215,13 +191,13 @@ export const basicConfig: Config<Props> = {
             defaultProps: { groups: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-semibold mb-2 border-b">Skills</h2>
+                    <h2 className="text-md font-bold mb-2 border-b">Skills</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         {props.groups
                             ?.sort((a, b) => a.order - b.order)
                             .map((group) => (
                                 <div key={group.id}>
-                                    <span className="font-medium">{group.title}:</span>{" "}
+                                    <span className="font-bold">{group.title}:</span>{" "}
                                     <span className="text-muted-foreground">{group.items?.join(", ")}</span>
                                 </div>
                             ))}
@@ -229,12 +205,11 @@ export const basicConfig: Config<Props> = {
                 </section>
             ),
         },
-
-        certifications: {
+        education: {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-semibold mb-2 border-b">Certifications</h2>
+                    <h2 className="text-md font-bold mb-2 border-b">Education</h2>
                     <div className="space-y-3">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -243,7 +218,32 @@ export const basicConfig: Config<Props> = {
                                     <div className="flex justify-between flex-wrap">
                                         <span className="font-medium">{item.title}</span>
                                         <span className="text-xs text-muted-foreground">
-                                            {item.startDate} {item.endDate && `— ${item.endDate}`}
+                                            {formatDate(item.startDate)} {item.startDate && "—"}{" "}
+                                            {formatDate(item.endDate) || (item.startDate && "Present")}{" "}
+                                        </span>
+                                    </div>
+                                    <div className="text-xs text-muted-foreground">{item.organization}</div>
+                                </div>
+                            ))}
+                    </div>
+                </section>
+            ),
+        },
+        certifications: {
+            defaultProps: { items: [] },
+            render: (props) => (
+                <section className="mb-4">
+                    <h2 className="text-md font-bold mb-2 border-b">Certifications and Training</h2>
+                    <div className="space-y-3">
+                        {props.items
+                            ?.sort((a, b) => a.order - b.order)
+                            .map((item) => (
+                                <div key={item.id} className="text-xs">
+                                    <div className="flex justify-between flex-wrap">
+                                        <span className="font-medium">{item.title}</span>
+                                        <span className="text-xs text-muted-foreground">
+                                            {formatDate(item.startDate)} {item.startDate && "—"}{" "}
+                                            {formatDate(item.endDate) || (item.startDate && "Present")}
                                         </span>
                                     </div>
                                     <div className="text-xs text-muted-foreground">{item.organization}</div>
