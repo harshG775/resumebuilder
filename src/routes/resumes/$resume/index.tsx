@@ -74,7 +74,6 @@ const resumeData: Data = {
                             "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing",
                             "Built high-performance UI using Next.js, TypeScript, Tailwind CSS, and ShadCN with focus on scalability and reusability.",
                             "Implemented booking, payment (Razorpay), and wallet systems on Frontend used across multiple tenant platforms.",
-                            "Reduced onboarding time for new tenants by ~70% by standardizing tenant templates.",
                         ],
                     },
                     {
@@ -125,16 +124,12 @@ const resumeData: Data = {
                         links: [
                             {
                                 id: "proj-link-1",
-                                label: "prabhubhakti.io",
+                                label: "learn.prabhubhakti.io",
                                 url: "https://learn.prabhubhakti.io",
                             },
+                           
                             {
                                 id: "proj-link-2",
-                                label: "prabhubhakti.io",
-                                url: "https://prabhubhakti.io",
-                            },
-                            {
-                                id: "proj-link-3",
                                 label: "github.com/harshG775/tanstack-start-multi-tenant-example",
                                 url: "https://github.com/harshG775/tanstack-start-multi-tenant-example",
                             },
@@ -143,7 +138,6 @@ const resumeData: Data = {
                             "Architected a multi-tenant astrologer platform supporting domain/subdomain-based tenant isolation with per-tenant UI and routing.",
                             "Built end-to-end booking and Razorpay payment flows reused across multiple tenant platforms, reducing per-tenant dev time by ~70%.",
                             "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling faster feature rollout across tenants.",
-                            "Documented the multi-tenant routing pattern as an open-source TanStack Start example on GitHub.",
                         ],
                     },
                     {
@@ -256,23 +250,6 @@ const resumeData: Data = {
             },
         },
 
-        {
-            id: "certifications",
-            type: "certifications",
-            order: 6,
-            props: {
-                items: [
-                    {
-                        id: "cert-1",
-                        order: 0,
-                        title: "Web Development Certification",
-                        organization: "MyCodeLearning",
-                        startDate: "2023",
-                        endDate: "2023",
-                    },
-                ],
-            },
-        },
     ],
 }
 

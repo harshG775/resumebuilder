@@ -66,7 +66,7 @@ export const basicConfig: Config<Props> = {
                 links: [],
             },
             render: (props) => (
-                <header className="mb-4 flex">
+                <header className="mb-3 flex">
                     <div className="flex-1">
                         <h1 className="text-2xl font-bold">{props.name || "Name"}</h1>
                         <p className="text-sm font-medium text-muted-foreground">{props.headline}</p>
@@ -77,7 +77,7 @@ export const basicConfig: Config<Props> = {
                         </div>
                     </div>
                     {props.links && props.links.length > 0 && (
-                        <div className="text-xs self-end flex flex-col  gap-1">
+                        <div className="text-xs flex flex-col  gap-1">
                             {props.links.map((link, i) => (
                                 <a
                                     key={link.id || i}
@@ -98,7 +98,7 @@ export const basicConfig: Config<Props> = {
         summary: {
             defaultProps: { points: [] },
             render: (props) => (
-                <section className="mb-4">
+                <section className="mb-3">
                     <h2 className="text-base font-bold mb-2 border-b">Summary</h2>
                     {props.points?.map((point, idx) => (
                         <p key={idx} className="text-xs leading-relaxed whitespace-pre-line">
@@ -112,7 +112,7 @@ export const basicConfig: Config<Props> = {
         experience: {
             defaultProps: { items: [] },
             render: (props) => (
-                <section className="mb-4">
+                <section className="mb-3">
                     <h2 className="text-base font-bold mb-2 border-b">Experience</h2>
                     <div className="space-y-4">
                         {props.items
@@ -125,19 +125,22 @@ export const basicConfig: Config<Props> = {
                                             <span className="font-bold">{" - "}</span>
                                             <span className="font-semibold">{item.organization}</span>
                                             {item.links && item.links.length > 0 && (
-                                                <div className="flex flex-wrap gap-2 mt-0.5">
-                                                    {item.links.map((link, idx) => (
-                                                        <a
-                                                            key={link.id || idx}
-                                                            href={link.url}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-primary underline text-xs"
-                                                        >
-                                                            {link.label}
-                                                        </a>
-                                                    ))}
-                                                </div>
+                                                <>
+                                                    <span className="font-bold">{" - "}</span>
+                                                    <div className="inline-flex flex-wrap gap-2 mt-0.5">
+                                                        {item.links.map((link, idx) => (
+                                                            <a
+                                                                key={link.id || idx}
+                                                                href={link.url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-primary underline text-xs"
+                                                            >
+                                                                {link.label}
+                                                            </a>
+                                                        ))}
+                                                    </div>
+                                                </>
                                             )}
                                         </div>
 
@@ -167,7 +170,7 @@ export const basicConfig: Config<Props> = {
         projects: {
             defaultProps: { items: [] },
             render: (props) => (
-                <section className="mb-4">
+                <section className="mb-3">
                     <h2 className="text-base font-bold mb-2 border-b">Projects</h2>
                     <div className="space-y-4">
                         {props.items
@@ -214,15 +217,15 @@ export const basicConfig: Config<Props> = {
         skills: {
             defaultProps: { groups: [] },
             render: (props) => (
-                <section className="mb-4">
+                <section className="mb-3">
                     <h2 className="text-base font-bold mb-2 border-b">Skills</h2>
-                    <div className="grid grid-cols-1 gap-1 text-xs">
+                    <div className="text-xs space-y-0.5">
                         {props.groups
                             ?.sort((a, b) => a.order - b.order)
                             .map((group) => (
                                 <div key={group.id}>
-                                    <span className="font-bold">{group.title}:</span>{" "}
-                                    <span className="text-muted-foreground">{group.items?.join(", ")}</span>
+                                    <span className="font-semibold">{group.title}: </span>
+                                    <span className="text-muted-foreground">{group.items?.join(" · ")}</span>
                                 </div>
                             ))}
                     </div>
@@ -232,7 +235,7 @@ export const basicConfig: Config<Props> = {
         education: {
             defaultProps: { items: [] },
             render: (props) => (
-                <section className="mb-4">
+                <section className="mb-3">
                     <h2 className="text-base font-bold mb-2 border-b">Education</h2>
                     <div className="space-y-3">
                         {props.items
@@ -256,7 +259,7 @@ export const basicConfig: Config<Props> = {
         certifications: {
             defaultProps: { items: [] },
             render: (props) => (
-                <section className="mb-4">
+                <section className="mb-3">
                     <h2 className="text-base font-bold mb-2 border-b">Certifications and Training</h2>
                     <div className="space-y-3">
                         {props.items
