@@ -21,7 +21,7 @@ const resumeData: Data = {
             order: 0,
             props: {
                 name: "Harsh Gaur",
-                headline: "Frontend Engineer | React.js | Next.js | MERN Stack",
+                headline: "Frontend Engineer | React · Next.js ·Tanstack · TypeScript | SaaS Platforms",
                 email: "hgaur491@gmail.com",
                 phone: "(+91) 9310745921",
                 location: "Delhi, India",
@@ -74,6 +74,7 @@ const resumeData: Data = {
                             "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing",
                             "Built high-performance UI using Next.js, TypeScript, Tailwind CSS, and ShadCN with focus on scalability and reusability.",
                             "Implemented booking, payment (Razorpay), and wallet systems on Frontend used across multiple tenant platforms.",
+                            "Reduced onboarding time by ~70%",
                         ],
                     },
                     {
@@ -101,7 +102,7 @@ const resumeData: Data = {
                         endDate: "2024-05-01",
                         links: [{ id: "exp-link-4", label: "itaxeasy.com", url: "https://itaxeasy.com" }],
                         points: [
-                            "Migrated from React.js to Next.js adding better SEO And Revamped UI of a legacy tax-filing platform using React.js and Tailwind CSS",
+                            "Migrated from React.js to Next.js adding better SEO and Revamped UI of a legacy tax-filing platform using React.js and Tailwind CSS",
                             "Implemented route-based code splitting and lazy loading for performance optimization.",
                         ],
                     },
@@ -124,10 +125,10 @@ const resumeData: Data = {
                         links: [
                             {
                                 id: "proj-link-1",
-                                label: "learn.prabhubhakti.io",
-                                url: "https://learn.prabhubhakti.io",
+                                label: "demo.prabhubhakti.io",
+                                url: "https://demo.prabhubhakti.io",
                             },
-                           
+
                             {
                                 id: "proj-link-2",
                                 label: "github.com/harshG775/tanstack-start-multi-tenant-example",
@@ -249,13 +250,50 @@ const resumeData: Data = {
                 ],
             },
         },
-
     ],
 }
 
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
+import { Button } from "#/components/ui/button"
+import { useRef } from "react"
 
 function RouteComponent() {
+    const ref = useRef<HTMLElement>(null)
+    const handlePrint = () => {
+        const content = ref.current
+        if (!content) return
+
+        const printWindow = window.open("", "_blank")
+        if (!printWindow) return
+
+        const styles = Array.from(document.styleSheets)
+            .map((sheet) => {
+                try {
+                    return Array.from(sheet.cssRules)
+                        .map((rule) => rule.cssText)
+                        .join("\n")
+                } catch {
+                    return ""
+                }
+            })
+            .join("\n")
+
+        printWindow.document.write(`
+        <html>
+            <head>
+                <title>Harsh_Gaur_Resume</title>
+                <style>${styles}</style>
+            </head>
+            <body>
+                ${content.innerHTML}
+            </body>
+        </html>
+    `)
+        printWindow.document.close()
+        printWindow.focus()
+        printWindow.print()
+        printWindow.close()
+    }
     return (
         <div className="flex">
             {/* <div className="bg-red-100 w-96"></div> */}
@@ -264,13 +302,16 @@ function RouteComponent() {
                     <div className="h-screen w-screen">
                         <div className="relative w-[8.5in]  mx-auto p-4 bg-white text-black ">
                             <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
-                            <main className="bg-zinc-50 text-zinc-950">
+                            <main ref={ref} className="bg-zinc-50 text-zinc-950">
                                 <Render config={basicConfig} data={resumeData} />
                             </main>
                         </div>
                     </div>
                 </TransformComponent>
             </TransformWrapper>
+            <div className="fixed bottom-4 left-4 ring-4">
+                <Button onClick={handlePrint}>handlePrint</Button>
+            </div>
         </div>
     )
 }
