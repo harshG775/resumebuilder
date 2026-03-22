@@ -216,7 +216,7 @@ export const basicConfig: Config<Props> = {
             render: (props) => (
                 <section className="mb-4">
                     <h2 className="text-base font-bold mb-2 border-b">Skills</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div className="grid grid-cols-1 gap-1 text-xs">
                         {props.groups
                             ?.sort((a, b) => a.order - b.order)
                             .map((group) => (
