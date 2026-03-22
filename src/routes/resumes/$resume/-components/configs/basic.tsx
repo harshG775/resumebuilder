@@ -99,9 +99,11 @@ export const basicConfig: Config<Props> = {
             defaultProps: { points: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-bold mb-2 border-b">Summary</h2>
-                    {props.points?.map((point) => (
-                        <p className="text-xs leading-relaxed whitespace-pre-line">{point}</p>
+                    <h2 className="text-base font-bold mb-2 border-b">Summary</h2>
+                    {props.points?.map((point, idx) => (
+                        <p key={idx} className="text-xs leading-relaxed whitespace-pre-line">
+                            {point}
+                        </p>
                     ))}
                 </section>
             ),
@@ -111,7 +113,7 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-bold mb-2 border-b">Experience</h2>
+                    <h2 className="text-base font-bold mb-2 border-b">Experience</h2>
                     <div className="space-y-4">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -122,10 +124,26 @@ export const basicConfig: Config<Props> = {
                                             <span className="font-bold">{item.title}</span>
                                             <span className="font-bold">{" - "}</span>
                                             <span className="font-semibold">{item.organization}</span>
+                                            {item.links && item.links.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 mt-0.5">
+                                                    {item.links.map((link, idx) => (
+                                                        <a
+                                                            key={link.id || idx}
+                                                            href={link.url}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-primary underline text-xs"
+                                                        >
+                                                            {link.label}
+                                                        </a>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="flex items-center gap-1">
+
+                                        <div className="flex gap-1">
                                             <span className="text-xs text-muted-foreground">
-                                                {formatDate(item.startDate)} {item.startDate && "—"}{" "}
+                                                {formatDate(item.startDate)} {item.startDate && "-"}{" "}
                                                 {formatDate(item.endDate) || (item.startDate && "Present")}
                                             </span>
                                             |
@@ -150,14 +168,20 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-bold mb-2 border-b">Projects</h2>
+                    <h2 className="text-base font-bold mb-2 border-b">Projects</h2>
                     <div className="space-y-4">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
                             .map((item) => (
                                 <div key={item.id} className="border-l-2 pl-3 text-xs">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <span className="font-semibold">{item.title}</span>
+                                        <span className="font-semibold">
+                                            {item.title}
+                                            {item.organization && (
+                                                <span className="text-muted-foreground"> - {item.organization}</span>
+                                            )}
+                                        </span>
+
                                         {item.links?.map((link, idx) => (
                                             <a
                                                 key={link.id || idx}
@@ -191,7 +215,7 @@ export const basicConfig: Config<Props> = {
             defaultProps: { groups: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-bold mb-2 border-b">Skills</h2>
+                    <h2 className="text-base font-bold mb-2 border-b">Skills</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         {props.groups
                             ?.sort((a, b) => a.order - b.order)
@@ -209,7 +233,7 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-bold mb-2 border-b">Education</h2>
+                    <h2 className="text-base font-bold mb-2 border-b">Education</h2>
                     <div className="space-y-3">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -218,8 +242,8 @@ export const basicConfig: Config<Props> = {
                                     <div className="flex justify-between flex-wrap">
                                         <span className="font-medium">{item.title}</span>
                                         <span className="text-xs text-muted-foreground">
-                                            {formatDate(item.startDate)} {item.startDate && "—"}{" "}
-                                            {formatDate(item.endDate) || (item.startDate && "Present")}{" "}
+                                            {formatDate(item.startDate)} {item.startDate && "-"}{" "}
+                                            {formatDate(item.endDate) || (item.startDate && "Ongoing")}{" "}
                                         </span>
                                     </div>
                                     <div className="text-xs text-muted-foreground">{item.organization}</div>
@@ -233,7 +257,7 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-md font-bold mb-2 border-b">Certifications and Training</h2>
+                    <h2 className="text-base font-bold mb-2 border-b">Certifications and Training</h2>
                     <div className="space-y-3">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -242,8 +266,8 @@ export const basicConfig: Config<Props> = {
                                     <div className="flex justify-between flex-wrap">
                                         <span className="font-medium">{item.title}</span>
                                         <span className="text-xs text-muted-foreground">
-                                            {formatDate(item.startDate)} {item.startDate && "—"}{" "}
-                                            {formatDate(item.endDate) || (item.startDate && "Present")}
+                                            {formatDate(item.startDate)} {item.startDate && "-"}{" "}
+                                            {formatDate(item.endDate) || (item.startDate && "Ongoing")}
                                         </span>
                                     </div>
                                     <div className="text-xs text-muted-foreground">{item.organization}</div>

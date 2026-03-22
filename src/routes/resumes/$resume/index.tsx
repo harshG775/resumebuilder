@@ -69,7 +69,6 @@ const resumeData: Data = {
                         endDate: null,
                         links: [
                             { id: "exp-link-1", label: "learn.prabhubhakti.io", url: "https://learn.prabhubhakti.io" },
-                            { id: "exp-link-2", label: "prabhubhakti.io", url: "https://prabhubhakti.io" },
                         ],
                         points: [
                             "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing",
@@ -125,12 +124,12 @@ const resumeData: Data = {
                         stack: ["Next.js", "TypeScript", "TanStack Start", "TanStack Router", "Node.js", "Razorpay"],
                         links: [
                             {
-                                id: "proj-link-4",
+                                id: "proj-link-1",
                                 label: "prabhubhakti.io",
                                 url: "https://learn.prabhubhakti.io",
                             },
                             {
-                                id: "proj-link-4",
+                                id: "proj-link-2",
                                 label: "prabhubhakti.io",
                                 url: "https://prabhubhakti.io",
                             },
