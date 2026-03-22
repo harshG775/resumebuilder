@@ -3,6 +3,7 @@ import { basicConfig } from "./-components/configs/basic"
 import { Render, type Data } from "./-components/render"
 
 export const Route = createFileRoute("/resumes/$resume/")({
+    ssr: false,
     component: RouteComponent,
 })
 
@@ -37,6 +38,12 @@ const resumeData: Data = {
                         order: 1,
                         label: "linkedin.com/in/harshg775",
                         url: "https://linkedin.com/in/harshg775",
+                    },
+                    {
+                        id: "link-3",
+                        order: 1,
+                        label: "harshgaur.in",
+                        url: "https://www.harshgaur.in",
                     },
                 ],
             },
@@ -256,6 +263,7 @@ const resumeData: Data = {
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { Button } from "#/components/ui/button"
 import { useRef } from "react"
+import Editor from "./-components/Editor"
 
 function RouteComponent() {
     const ref = useRef<HTMLElement>(null)
@@ -297,6 +305,9 @@ function RouteComponent() {
     return (
         <div className="flex">
             {/* <div className="bg-red-100 w-96"></div> */}
+            {/* <div className="fixed inset-0 overflow-auto z-10 bg-black">
+                <Editor />
+            </div> */}
             <TransformWrapper initialScale={1} minScale={0.5} maxScale={2} limitToBounds={false} centerOnInit={true}>
                 <TransformComponent>
                     <div className="h-screen w-screen">
