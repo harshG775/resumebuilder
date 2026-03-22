@@ -35,9 +35,6 @@ type Props = {
     experience: {
         items: ItemProps[]
     }
-    education: {
-        items: ItemProps[]
-    }
     projects: {
         items: ItemProps[]
     }
@@ -48,6 +45,9 @@ type Props = {
             title: string
             items: string[]
         }>
+    }
+    education: {
+        items: ItemProps[]
     }
     certifications: {
         items: ItemProps[]
