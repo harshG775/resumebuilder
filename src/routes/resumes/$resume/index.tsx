@@ -75,7 +75,11 @@ const resumeData: Data = {
                         startDate: "2025-06-01",
                         endDate: null,
                         links: [
-                            { id: "exp-link-1", label: "learn.prabhubhakti.io", url: "https://learn.prabhubhakti.io" },
+                            {
+                                id: "exp-link-1",
+                                label: "learn.prabhubhakti.io",
+                                url: "https://learn.prabhubhakti.io",
+                            },
                         ],
                         points: [
                             "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing",
@@ -92,7 +96,13 @@ const resumeData: Data = {
                         location: "Gurugram",
                         startDate: "2024-08-01",
                         endDate: "2025-02-01",
-                        links: [{ id: "exp-link-3", label: "adda247.com", url: "https://adda247.com" }],
+                        links: [
+                            {
+                                id: "exp-link-3",
+                                label: "adda247.com",
+                                url: "https://adda247.com",
+                            },
+                        ],
                         points: [
                             "Built AI-powered chatbot features using React, Zustand, and OpenAI APIs.",
                             "Developed real-time communication features using SSE/WebSockets.",
@@ -107,7 +117,13 @@ const resumeData: Data = {
                         location: "Remote",
                         startDate: "2023-11-01",
                         endDate: "2024-05-01",
-                        links: [{ id: "exp-link-4", label: "itaxeasy.com", url: "https://itaxeasy.com" }],
+                        links: [
+                            {
+                                id: "exp-link-4",
+                                label: "itaxeasy.com",
+                                url: "https://itaxeasy.com",
+                            },
+                        ],
                         points: [
                             "Migrated from React.js to Next.js adding better SEO and Revamped UI of a legacy tax-filing platform using React.js and Tailwind CSS",
                             "Implemented route-based code splitting and lazy loading for performance optimization.",
@@ -128,7 +144,14 @@ const resumeData: Data = {
                         order: 0,
                         title: "Astrologer SaaS Platform",
                         organization: "Prabhubhakti",
-                        stack: ["Next.js", "TypeScript", "TanStack Start", "TanStack Router", "Node.js", "Razorpay"],
+                        stack: [
+                            "Next.js",
+                            "TypeScript",
+                            "TanStack Start",
+                            "TanStack Router",
+                            "Node.js",
+                            "Razorpay",
+                        ],
                         links: [
                             {
                                 id: "proj-link-1",
@@ -153,7 +176,13 @@ const resumeData: Data = {
                         order: 1,
                         title: "SupportDesk - AI Customer Support Platform",
                         organization: "Adda247",
-                        stack: ["React", "Zustand", "Flask", "WebSockets", "OpenAI API"],
+                        stack: [
+                            "React",
+                            "Zustand",
+                            "Flask",
+                            "WebSockets",
+                            "OpenAI API",
+                        ],
                         links: [
                             {
                                 id: "proj-link-1",
@@ -242,7 +271,8 @@ const resumeData: Data = {
                         id: "edu-1",
                         order: 0,
                         title: "Master of Computer Applications (MCA)",
-                        organization: "Indira Gandhi National Open University (IGNOU)",
+                        organization:
+                            "Indira Gandhi National Open University (IGNOU)",
                         startDate: "2025",
                         endDate: null,
                     },
@@ -266,7 +296,7 @@ import { useRef } from "react"
 import Editor from "./-components/Editor"
 
 function RouteComponent() {
-    const ref = useRef<HTMLElement>(null)
+    const ref = useRef<HTMLDivElement | null>(null)
     const handlePrint = () => {
         const content = ref.current
         if (!content) return
@@ -303,24 +333,34 @@ function RouteComponent() {
         printWindow.close()
     }
     return (
-        <div className="flex">
-            {/* <div className="bg-red-100 w-96"></div> */}
-            {/* <div className="fixed inset-0 overflow-auto z-10 bg-black">
+        <div className="flex h-screen">
+            <div className="w-200 overflow-auto">
                 <Editor />
-            </div> */}
-            <TransformWrapper initialScale={1} minScale={0.5} maxScale={2} limitToBounds={false} centerOnInit={true}>
+            </div>
+            <TransformWrapper
+                initialScale={1}
+                minScale={0.5}
+                maxScale={2}
+                limitToBounds={false}
+                centerOnInit={true}
+            >
                 <TransformComponent>
                     <div className="h-screen w-screen">
-                        <div className="relative w-[8.5in]  mx-auto p-4 bg-white text-black ">
+                        <div className="relative w-[8.5in]  mx-auto  bg-white text-black ">
                             <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
-                            <main ref={ref} className="bg-zinc-50 text-zinc-950">
-                                <Render config={basicConfig} data={resumeData} />
-                            </main>
+                            <div ref={ref}>
+                                <main className="bg-zinc-50 text-zinc-950 p-4">
+                                    <Render
+                                        config={basicConfig}
+                                        data={resumeData}
+                                    />
+                                </main>
+                            </div>
                         </div>
                     </div>
                 </TransformComponent>
             </TransformWrapper>
-            <div className="fixed bottom-4 left-4 ring-4">
+            <div className="fixed bottom-4 right-4 ring-4">
                 <Button onClick={handlePrint}>handlePrint</Button>
             </div>
         </div>
