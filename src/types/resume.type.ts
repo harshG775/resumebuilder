@@ -26,7 +26,7 @@ export type BasicsProps = {
 
 // Summary
 export type SummaryProps = {
-    points: string[]
+    content: string
 }
 
 // Experience
@@ -61,14 +61,14 @@ export type ProjectsProps = {
 }
 
 // Skills
-export type SkillGroup = {
+export type SkillItem = {
     id: string
     order: number
     title: string
     items: string[]
 }
 export type SkillsProps = {
-    groups: SkillGroup[]
+    items: SkillItem[]
 }
 
 // Education
@@ -98,7 +98,7 @@ export type CertificationsProps = {
 }
 
 // Base Section Generic
-export type BaseContent<T, K extends SectionUnionType> = {
+export type BaseContent<K extends SectionUnionType, T> = {
     id: string
     type: K
     order: number
@@ -107,25 +107,22 @@ export type BaseContent<T, K extends SectionUnionType> = {
 
 // Section Mapping
 export type SectionMap = {
-    basics: BasicsProps
-    summary: SummaryProps
-    experience: ExperienceProps
-    projects: ProjectsProps
-    skills: SkillsProps
-    education: EducationProps
-    certifications: CertificationsProps
+    basics: BaseContent<"basics", BasicsProps>
+    summary: BaseContent<"summary", SummaryProps>
+    experience: BaseContent<"experience", ExperienceProps>
+    projects: BaseContent<"projects", ProjectsProps>
+    skills: BaseContent<"skills", SkillsProps>
+    education: BaseContent<"education", EducationProps>
+    certifications: BaseContent<"certifications", CertificationsProps>
 }
-export type Section = {
-    [K in keyof SectionMap]: BaseContent<SectionMap[K], K>
-}[keyof SectionMap]
 
 // Root Data Type
 export type ResumeData = {
-    head: {
-        props: {
-            title: string
-            description: string
+    metaData: {
+        template: "basic"
+        layout: {
+            order: Record<number, SectionUnionType>
         }
     }
-    content: Section[]
+    sections: SectionMap
 }
