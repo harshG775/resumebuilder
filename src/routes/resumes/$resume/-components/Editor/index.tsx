@@ -55,7 +55,8 @@ const sectionData: Section[] = [
             email: "",
             phone: "",
             location: "",
-            website: "",
+            website: { url: "", label: "" },
+            links: [{ id: crypto.randomUUID(), url: "", label: "" }],
         },
     },
     {
@@ -188,36 +189,87 @@ export default function Editor() {
                                 </Field>
                             )}
                         />
-                        <form.Field
-                            name="website"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel htmlFor={field.name}>Website</FieldLabel>
-                                    <div className="flex gap-2">
+                        <div className="flex gap-2 items-end">
+                            <form.Field name="website.url">
+                                {(field) => (
+                                    <Field>
+                                        <FieldLabel htmlFor={field.name}>Website</FieldLabel>
                                         <Input
-                                            id={field.name}
-                                            value={field.state.value.url}
+                                            value={field.state.value}
                                             onBlur={field.handleBlur}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             placeholder="https://"
-                                            autoComplete="off"
                                         />
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <Button variant="outline">
-                                                    <Tag />
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent>
-                                                <PopoverHeader>
-                                                    {/* <PopoverTitle>Title</PopoverTitle>
-                                                    <PopoverDescription>Description text here.</PopoverDescription> */}
-                                                    <FieldLabel>Label</FieldLabel>
-                                                    <Input autoComplete="off" />
-                                                </PopoverHeader>
-                                            </PopoverContent>
-                                        </Popover>
-                                    </div>
+                                    </Field>
+                                )}
+                            </form.Field>
+
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline">
+                                        <Tag />
+                                    </Button>
+                                </PopoverTrigger>
+
+                                <PopoverContent>
+                                    <FieldLabel>Label</FieldLabel>
+
+                                    <form.Field name="website.label">
+                                        {(field) => (
+                                            <Input
+                                                value={field.state.value}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                            />
+                                        )}
+                                    </form.Field>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                        <form.Field
+                            name="links"
+                            mode="array"
+                            children={(field) => (
+                                <Field>
+                                    <FieldLabel>Links</FieldLabel>
+
+                                    {field.state.value.map((item: any, idx: number) => (
+                                        <div key={item.id} className="flex gap-2 mb-2">
+                                            <form.Field name={`links[${idx}].url`}>
+                                                {(field) => (
+                                                    <Input
+                                                        value={field.state.value}
+                                                        onChange={(e) => field.handleChange(e.target.value)}
+                                                        placeholder="https://"
+                                                    />
+                                                )}
+                                            </form.Field>
+
+                                            <form.Field name={`links[${idx}].label`}>
+                                                {(field) => (
+                                                    <Input
+                                                        value={field.state.value}
+                                                        onChange={(e) => field.handleChange(e.target.value)}
+                                                        placeholder="Label"
+                                                    />
+                                                )}
+                                            </form.Field>
+
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => field.removeValue(idx)}
+                                            >
+                                                Remove
+                                            </Button>
+                                        </div>
+                                    ))}
+
+                                    <Button
+                                        type="button"
+                                        onClick={() => field.pushValue({ id: crypto.randomUUID(), url: "", label: "" })}
+                                    >
+                                        Add Link
+                                    </Button>
                                 </Field>
                             )}
                         />
