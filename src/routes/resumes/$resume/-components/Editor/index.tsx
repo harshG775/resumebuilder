@@ -37,12 +37,78 @@ const SectionUnionSchema = z.union([
 ])
 type SectionUnionType = z.infer<typeof SectionUnionSchema>
 
-type Section = {
+const BasicsSectionSchema = z.object({
+    name: z.string(),
+    headline: z.string(),
+    email: z.email(),
+    phone: z.string(),
+    location: z.string(),
+
+    website: z.object({
+        url: z.url().or(z.literal("")),
+        label: z.string(),
+    }),
+
+    links: z.array(
+        z.object({
+            id: z.string(),
+            url: z.url().or(z.literal("")),
+            label: z.string(),
+        }),
+    ),
+})
+type BasicsSection = {
     id: string
-    type: SectionUnionType
+    type: "basics"
     order: number
-    content: any
+    content: z.infer<typeof BasicsSectionSchema>
 }
+
+type SummarySection = {
+    id: string
+    type: "summary"
+    order: number
+    content: Record<string, never>
+}
+type ExperienceSection = {
+    id: string
+    type: "experience"
+    order: number
+    content: Record<string, never>
+}
+type ProjectsSection = {
+    id: string
+    type: "projects"
+    order: number
+    content: Record<string, never>
+}
+type SkillsSection = {
+    id: string
+    type: "skills"
+    order: number
+    content: Record<string, never>
+}
+type EducationSection = {
+    id: string
+    type: "education"
+    order: number
+    content: Record<string, never>
+}
+type CertificationsSection = {
+    id: string
+    type: "certifications"
+    order: number
+    content: Record<string, never>
+}
+
+type Section =
+    | BasicsSection
+    | SummarySection
+    | ExperienceSection
+    | ProjectsSection
+    | SkillsSection
+    | EducationSection
+    | CertificationsSection
 
 const sectionData: Section[] = [
     {
@@ -99,205 +165,227 @@ const sectionData: Section[] = [
 
 export default function Editor() {
     const form = useForm({
-        defaultValues: sectionData[0].content,
+        defaultValues: {
+            sections: sectionData,
+        },
     })
     console.log(form.state.values)
 
     return (
         <div className="p-4 mx-auto max-w-lg">
             <FieldGroup>
-                <FieldSet>
-                    <FieldLegend className="font-bold text-2xl!">Basics</FieldLegend>
-                    <FieldGroup>
-                        <form.Field
-                            name="name"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                                    <Input
-                                        id={field.name}
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        autoComplete="off"
-                                    />
-                                </Field>
-                            )}
-                        />
+                <form.Field
+                    name="sections"
+                    mode="array"
+                    children={(field) => (
+                        <>
+                            {field.state.value.map((section, idx) => {
+                                switch (section.type) {
+                                    case "basics": {
+                                        const base = `sections[${idx}].content` as const
 
-                        <form.Field
-                            name="headline"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel htmlFor={field.name}>Headline</FieldLabel>
-                                    <Input
-                                        id={field.name}
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        autoComplete="off"
-                                    />
-                                </Field>
-                            )}
-                        />
-
-                        <form.Field
-                            name="email"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                                    <Input
-                                        type="email"
-                                        id={field.name}
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        autoComplete="off"
-                                    />
-                                </Field>
-                            )}
-                        />
-                        <form.Field
-                            name="phone"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
-                                    <Input
-                                        type="tel"
-                                        id={field.name}
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        autoComplete="off"
-                                    />
-                                </Field>
-                            )}
-                        />
-
-                        <form.Field
-                            name="location"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel htmlFor={field.name}>Location</FieldLabel>
-                                    <Input
-                                        id={field.name}
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        autoComplete="off"
-                                    />
-                                </Field>
-                            )}
-                        />
-                        <div className="flex gap-2 items-end">
-                            <form.Field name="website.url">
-                                {(field) => (
-                                    <Field>
-                                        <FieldLabel htmlFor={field.name}>Website</FieldLabel>
-                                        <Input
-                                            value={field.state.value}
-                                            onBlur={field.handleBlur}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            placeholder="https://"
-                                        />
-                                    </Field>
-                                )}
-                            </form.Field>
-
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline">
-                                        <Tag />
-                                    </Button>
-                                </PopoverTrigger>
-
-                                <PopoverContent>
-                                    <FieldLabel>Label</FieldLabel>
-
-                                    <form.Field name="website.label">
-                                        {(field) => (
-                                            <Input
-                                                value={field.state.value}
-                                                onChange={(e) => field.handleChange(e.target.value)}
-                                            />
-                                        )}
-                                    </form.Field>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-                        <form.Field
-                            name="links"
-                            mode="array"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel>Links</FieldLabel>
-
-                                    {field.state.value.map((item: any, idx: number) => (
-                                        <div key={item.id} className="flex gap-2 mb-2">
-                                            <form.Field name={`links[${idx}].url`}>
-                                                {(field) => (
-                                                    <Input
-                                                        value={field.state.value}
-                                                        onChange={(e) => field.handleChange(e.target.value)}
-                                                        placeholder="https://"
+                                        return (
+                                            <FieldSet key={idx}>
+                                                <FieldLegend className="font-bold text-2xl!">Basics</FieldLegend>
+                                                <FieldGroup>
+                                                    <form.Field
+                                                        name={`${base}.name`}
+                                                        children={(field) => (
+                                                            <Field>
+                                                                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                                                                <Input
+                                                                    id={field.name}
+                                                                    value={field.state.value}
+                                                                    onBlur={field.handleBlur}
+                                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                                    autoComplete="off"
+                                                                />
+                                                            </Field>
+                                                        )}
                                                     />
-                                                )}
-                                            </form.Field>
 
-                                            <form.Field name={`links[${idx}].label`}>
-                                                {(field) => (
-                                                    <Input
-                                                        value={field.state.value}
-                                                        onChange={(e) => field.handleChange(e.target.value)}
-                                                        placeholder="Label"
+                                                    <form.Field
+                                                        name={`${base}.headline`}
+                                                        children={(field) => (
+                                                            <Field>
+                                                                <FieldLabel htmlFor={field.name}>Headline</FieldLabel>
+                                                                <Input
+                                                                    id={field.name}
+                                                                    value={field.state.value}
+                                                                    onBlur={field.handleBlur}
+                                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                                    autoComplete="off"
+                                                                />
+                                                            </Field>
+                                                        )}
                                                     />
-                                                )}
-                                            </form.Field>
 
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                onClick={() => field.removeValue(idx)}
-                                            >
-                                                Remove
-                                            </Button>
-                                        </div>
-                                    ))}
+                                                    <form.Field
+                                                        name={`${base}.email`}
+                                                        children={(field) => (
+                                                            <Field>
+                                                                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                                                                <Input
+                                                                    type="email"
+                                                                    id={field.name}
+                                                                    value={field.state.value}
+                                                                    onBlur={field.handleBlur}
+                                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                                    autoComplete="off"
+                                                                />
+                                                            </Field>
+                                                        )}
+                                                    />
+                                                    <form.Field
+                                                        name={`${base}.phone`}
+                                                        children={(field) => (
+                                                            <Field>
+                                                                <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
+                                                                <Input
+                                                                    type="tel"
+                                                                    id={field.name}
+                                                                    value={field.state.value}
+                                                                    onBlur={field.handleBlur}
+                                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                                    autoComplete="off"
+                                                                />
+                                                            </Field>
+                                                        )}
+                                                    />
 
-                                    <Button
-                                        type="button"
-                                        onClick={() => field.pushValue({ id: crypto.randomUUID(), url: "", label: "" })}
-                                    >
-                                        Add Link
-                                    </Button>
-                                </Field>
-                            )}
-                        />
-                    </FieldGroup>
-                </FieldSet>
+                                                    <form.Field
+                                                        name={`${base}.location`}
+                                                        children={(field) => (
+                                                            <Field>
+                                                                <FieldLabel htmlFor={field.name}>Location</FieldLabel>
+                                                                <Input
+                                                                    id={field.name}
+                                                                    value={field.state.value}
+                                                                    onBlur={field.handleBlur}
+                                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                                    autoComplete="off"
+                                                                />
+                                                            </Field>
+                                                        )}
+                                                    />
+                                                    <div className="flex gap-2 items-end">
+                                                        <form.Field name={`${base}.website.url`}>
+                                                            {(field) => (
+                                                                <Field>
+                                                                    <FieldLabel htmlFor={field.name}>
+                                                                        Website
+                                                                    </FieldLabel>
+                                                                    <Input
+                                                                        value={field.state.value}
+                                                                        onBlur={field.handleBlur}
+                                                                        onChange={(e) =>
+                                                                            field.handleChange(e.target.value)
+                                                                        }
+                                                                        placeholder="https://"
+                                                                    />
+                                                                </Field>
+                                                            )}
+                                                        </form.Field>
 
-                <FieldSeparator />
+                                                        <Popover>
+                                                            <PopoverTrigger asChild>
+                                                                <Button variant="outline">
+                                                                    <Tag />
+                                                                </Button>
+                                                            </PopoverTrigger>
 
-                <FieldSet>
-                    <FieldLegend className="font-bold text-2xl!">Summary</FieldLegend>
-                    <FieldGroup>
-                        <form.Field
-                            name="summary"
-                            children={(field) => (
-                                <Field>
-                                    <FieldLabel htmlFor={field.name}>Summary</FieldLabel>
-                                    <Textarea
-                                        id={field.name}
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(JSON.stringify(e.target.value))}
-                                        autoComplete="off"
-                                    />
-                                </Field>
-                            )}
-                        />
-                    </FieldGroup>
-                </FieldSet>
+                                                            <PopoverContent>
+                                                                <FieldLabel>Label</FieldLabel>
+
+                                                                <form.Field name={`${base}.website.label`}>
+                                                                    {(field) => (
+                                                                        <Input
+                                                                            value={field.state.value}
+                                                                            onChange={(e) =>
+                                                                                field.handleChange(e.target.value)
+                                                                            }
+                                                                        />
+                                                                    )}
+                                                                </form.Field>
+                                                            </PopoverContent>
+                                                        </Popover>
+                                                    </div>
+                                                    <form.Field
+                                                        name={`${base}.links`}
+                                                        mode="array"
+                                                        children={(field) => (
+                                                            <Field>
+                                                                <FieldLabel>Links</FieldLabel>
+
+                                                                {field.state.value.map((item: any, idx: number) => (
+                                                                    <div key={item.id} className="flex gap-2 mb-2">
+                                                                        <form.Field name={`${base}.links[${idx}].url`}>
+                                                                            {(field) => (
+                                                                                <Input
+                                                                                    value={field.state.value}
+                                                                                    onChange={(e) =>
+                                                                                        field.handleChange(
+                                                                                            e.target.value,
+                                                                                        )
+                                                                                    }
+                                                                                    placeholder="https://"
+                                                                                />
+                                                                            )}
+                                                                        </form.Field>
+
+                                                                        <form.Field
+                                                                            name={`${base}.links[${idx}].label`}
+                                                                        >
+                                                                            {(field) => (
+                                                                                <Input
+                                                                                    value={field.state.value}
+                                                                                    onChange={(e) =>
+                                                                                        field.handleChange(
+                                                                                            e.target.value,
+                                                                                        )
+                                                                                    }
+                                                                                    placeholder="Label"
+                                                                                />
+                                                                            )}
+                                                                        </form.Field>
+
+                                                                        <Button
+                                                                            type="button"
+                                                                            variant="outline"
+                                                                            onClick={() => field.removeValue(idx)}
+                                                                        >
+                                                                            Remove
+                                                                        </Button>
+                                                                    </div>
+                                                                ))}
+
+                                                                <Button
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        field.pushValue({
+                                                                            id: crypto.randomUUID(),
+                                                                            url: "",
+                                                                            label: "",
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    Add Link
+                                                                </Button>
+                                                            </Field>
+                                                        )}
+                                                    />
+                                                </FieldGroup>
+                                            </FieldSet>
+                                        )
+                                    }
+                                    default: {
+                                        return <div key={idx}></div>
+                                    }
+                                }
+                            })}
+                        </>
+                    )}
+                />
             </FieldGroup>
         </div>
     )
