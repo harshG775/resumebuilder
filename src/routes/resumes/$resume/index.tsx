@@ -334,7 +334,7 @@ function RouteComponent() {
     }
     return (
         <div className="flex h-screen">
-            <div className="w-200 overflow-auto">
+            <div className="w-96 min-w-96 overflow-auto">
                 <Editor />
             </div>
             <TransformWrapper
@@ -345,7 +345,7 @@ function RouteComponent() {
                 centerOnInit={true}
             >
                 <TransformComponent>
-                    <div className="h-screen w-screen">
+                    <div className=" h-screen w-screen">
                         <div className="relative w-[8.5in]  mx-auto  bg-white text-black ">
                             <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
                             <div ref={ref}>

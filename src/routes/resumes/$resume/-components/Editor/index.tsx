@@ -57,6 +57,8 @@ const BasicsSectionSchema = z.object({
         }),
     ),
 })
+const SummerySectionSchema = z.object({ summery: z.string() })
+
 type BasicsSection = {
     id: string
     type: "basics"
@@ -68,8 +70,9 @@ type SummarySection = {
     id: string
     type: "summary"
     order: number
-    content: Record<string, never>
+    content: z.infer<typeof SummerySectionSchema>
 }
+
 type ExperienceSection = {
     id: string
     type: "experience"
@@ -129,7 +132,9 @@ const sectionData: Section[] = [
         id: "summary-id",
         type: "summary",
         order: 1,
-        content: {},
+        content: {
+            summery: "",
+        },
     },
     {
         id: "experience-id",
@@ -319,7 +324,9 @@ export default function Editor() {
 
                                                                 {field.state.value.map((item: any, idx: number) => (
                                                                     <div key={item.id} className="flex gap-2 mb-2">
-                                                                        <form.Field name={`${base}.links[${idx}].url`}>
+                                                                        <form.Field
+                                                                            name={`${base}.links[${idx}].url`}
+                                                                        >
                                                                             {(field) => (
                                                                                 <Input
                                                                                     value={field.state.value}
@@ -371,6 +378,33 @@ export default function Editor() {
                                                                 >
                                                                     Add Link
                                                                 </Button>
+                                                            </Field>
+                                                        )}
+                                                    />
+                                                </FieldGroup>
+                                            </FieldSet>
+                                        )
+                                    }
+                                    case "summary": {
+                                        const base = `sections[${idx}].content` as const
+
+                                        return (
+                                            <FieldSet key={idx}>
+                                                <FieldLegend className="font-bold text-2xl!">Summary</FieldLegend>
+                                                <FieldGroup>
+                                                    <form.Field
+                                                        name={`${base}.summery`}
+                                                        children={(field) => (
+                                                            <Field>
+                                                                <FieldLabel htmlFor={field.name}>Summery</FieldLabel>
+                                                                <Textarea
+                                                                    id={field.name}
+                                                                    value={field.state.value}
+                                                                    onBlur={field.handleBlur}
+                                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                                    autoComplete="off"
+                                                                    className="min-h-32"
+                                                                />
                                                             </Field>
                                                         )}
                                                     />
