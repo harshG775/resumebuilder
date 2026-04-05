@@ -23,7 +23,8 @@ import {
 import { Input } from "#/components/ui/input"
 import { Textarea } from "#/components/ui/textarea"
 import { Button } from "#/components/ui/button"
-import { Tag } from "lucide-react"
+import { LinkIcon, Tag, X } from "lucide-react"
+import { ResumeSchema } from "#/lib/schemas/resume-schema"
 
 export default function Editor() {
     const form = useForm({
@@ -34,8 +35,17 @@ export default function Editor() {
                 email: "",
                 phone: "",
                 location: "",
-                website: { url: "", label: "" },
-                links: [{ url: "", label: "" }],
+                website: {
+                    url: "",
+                    label: "",
+                },
+                customFields: [
+                    {
+                        id: "custom-field-1",
+                        url: "",
+                        label: "",
+                    },
+                ],
             },
             summary: {
                 title: "Summary",
@@ -46,6 +56,7 @@ export default function Editor() {
                 experience: {
                     title: "Experience",
                     hidden: false,
+                    columns: 1,
                     items: [
                         {
                             id: "exp-1",
@@ -63,6 +74,7 @@ export default function Editor() {
                 projects: {
                     title: "Projects",
                     hidden: false,
+                    columns: 1,
                     items: [
                         {
                             id: "pro-1",
@@ -77,6 +89,7 @@ export default function Editor() {
                 skills: {
                     title: "Skills",
                     hidden: false,
+                    columns: 1,
                     items: [
                         {
                             id: "skill-1",
@@ -92,6 +105,7 @@ export default function Editor() {
                 education: {
                     title: "Education",
                     hidden: false,
+                    columns: 1,
                     items: [
                         {
                             id: "edu-1",
@@ -110,6 +124,7 @@ export default function Editor() {
                 certifications: {
                     title: "Certifications",
                     hidden: false,
+                    columns: 1,
                     items: [
                         {
                             id: "cert-1",
@@ -123,8 +138,10 @@ export default function Editor() {
                     ],
                 },
             },
-            customSections: [],
             order: ["experience", "projects", "skills", "education", "certifications"],
+        },
+        validators: {
+            onChange: ResumeSchema,
         },
     })
     console.log(form.state.values)
@@ -233,7 +250,7 @@ export default function Editor() {
 
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button variant="outline">
+                                    <Button variant="ghost">
                                         <Tag />
                                     </Button>
                                 </PopoverTrigger>
@@ -253,40 +270,50 @@ export default function Editor() {
                             </Popover>
                         </div>
                         <form.Field
-                            name={`basics.links`}
+                            name={`basics.customFields`}
                             mode="array"
                             children={(field) => (
                                 <Field>
-                                    <FieldLabel>Links</FieldLabel>
+                                    <FieldLabel>Custom Fields</FieldLabel>
 
                                     {field.state.value.map((item: any, idx: number) => (
-                                        <div key={item.id} className="flex gap-2 mb-2">
-                                            <form.Field name={`basics.links[${idx}].url`}>
+                                        <div key={`${idx}-${item.id}`} className="flex gap-2 mb-2">
+                                            <form.Field name={`basics.customFields[${idx}].label`}>
                                                 {(field) => (
                                                     <Input
                                                         value={field.state.value}
                                                         onChange={(e) => field.handleChange(e.target.value)}
-                                                        placeholder="https://"
                                                     />
                                                 )}
                                             </form.Field>
 
-                                            <form.Field name={`basics.links[${idx}].label`}>
-                                                {(field) => (
-                                                    <Input
-                                                        value={field.state.value}
-                                                        onChange={(e) => field.handleChange(e.target.value)}
-                                                        placeholder="Label"
-                                                    />
-                                                )}
-                                            </form.Field>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button variant="ghost">
+                                                        <LinkIcon />
+                                                    </Button>
+                                                </PopoverTrigger>
+
+                                                <PopoverContent>
+                                                    <FieldLabel>Enter The URL to link to</FieldLabel>
+
+                                                    <form.Field name={`basics.customFields[${idx}].url`}>
+                                                        {(field) => (
+                                                            <Input
+                                                                value={field.state.value}
+                                                                onChange={(e) => field.handleChange(e.target.value)}
+                                                            />
+                                                        )}
+                                                    </form.Field>
+                                                </PopoverContent>
+                                            </Popover>
 
                                             <Button
                                                 type="button"
-                                                variant="outline"
+                                                variant="ghost"
                                                 onClick={() => field.removeValue(idx)}
                                             >
-                                                Remove
+                                                <X />
                                             </Button>
                                         </div>
                                     ))}
@@ -295,6 +322,7 @@ export default function Editor() {
                                         type="button"
                                         onClick={() =>
                                             field.pushValue({
+                                                id: crypto.randomUUID(),
                                                 url: "",
                                                 label: "",
                                             })

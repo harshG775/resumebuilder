@@ -1,7 +1,8 @@
 import z from "zod"
 
 const linkSchema = z.object({
-    url: z.url(),
+    id: z.string(),
+    url: z.string(),
     label: z.string(),
 })
 
@@ -11,14 +12,23 @@ const SectionBaseSchema = z.object({
     columns: z.number().default(1),
 })
 
+//
 const BasicsSchema = z.object({
     name: z.string(),
     headline: z.string(),
-    email: z.email(),
+    email: z.string(),
     phone: z.string(),
     location: z.string(),
-    website: linkSchema,
-    links: z.array(linkSchema),
+    website: z.object({
+        url: z.string(),
+        label: z.string(),
+    }),
+    customFields: z.array(linkSchema),
+})
+const SummarySchema = z.object({
+    title: z.string(),
+    hidden: z.boolean().default(false),
+    content: z.string(),
 })
 const ExperienceItemsSchema = z.object({
     id: z.string(),
@@ -29,7 +39,7 @@ const ExperienceItemsSchema = z.object({
     period: z.string(),
     website: z.object({
         showLink: z.boolean().default(false),
-        url: z.url().or(z.literal("")),
+        url: z.string(),
         label: z.string(),
     }),
     description: z.string(),
@@ -80,7 +90,7 @@ const CertificationsItemsSchema = z.object({
 
 export const ResumeSchema = z.object({
     basics: BasicsSchema,
-    summary: SectionBaseSchema.extend({ content: z.string() }),
+    summary: SummarySchema,
     sections: z.object({
         experience: SectionBaseSchema.extend({ items: z.array(ExperienceItemsSchema) }),
         projects: SectionBaseSchema.extend({ items: z.array(ProjectsItemsSchema) }),
