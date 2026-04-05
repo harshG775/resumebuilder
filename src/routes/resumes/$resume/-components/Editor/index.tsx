@@ -35,43 +35,92 @@ export default function Editor() {
                 phone: "",
                 location: "",
                 website: { url: "", label: "" },
-                links: [{ id: crypto.randomUUID(), url: "", label: "" }],
+                links: [{ url: "", label: "" }],
             },
             summary: {
-                title: "",
-                content: "",
+                title: "Summary",
                 hidden: false,
+                content: "",
             },
             sections: {
                 experience: {
-                    id: "experience-id",
-                    content: {
-                        items: [],
-                    },
+                    title: "Experience",
+                    hidden: false,
+                    items: [
+                        {
+                            id: "exp-1",
+                            hidden: false,
+                            company: "",
+                            position: "",
+                            location: "",
+                            period: "",
+                            website: { showLink: false, url: "", label: "" },
+                            description: "",
+                            roles: [],
+                        },
+                    ],
                 },
                 projects: {
-                    id: "projects-id",
-                    content: {
-                        items: [],
-                    },
+                    title: "Projects",
+                    hidden: false,
+                    items: [
+                        {
+                            id: "pro-1",
+                            hidden: false,
+                            name: "",
+                            period: "",
+                            website: [{ url: "", label: "" }],
+                            description: "",
+                        },
+                    ],
                 },
                 skills: {
-                    id: "skills-id",
-                    content: {
-                        items: [],
-                    },
+                    title: "Skills",
+                    hidden: false,
+                    items: [
+                        {
+                            id: "skill-1",
+                            hidden: false,
+                            icon: "",
+                            name: "",
+                            proficiency: "",
+                            level: 0,
+                            keywords: [],
+                        },
+                    ],
                 },
                 education: {
-                    id: "education-id",
-                    content: {
-                        items: [],
-                    },
+                    title: "Education",
+                    hidden: false,
+                    items: [
+                        {
+                            id: "edu-1",
+                            hidden: false,
+                            school: "",
+                            degree: "",
+                            area: "",
+                            grade: "",
+                            location: "",
+                            period: "",
+                            website: { url: "", label: "" },
+                            description: "",
+                        },
+                    ],
                 },
                 certifications: {
-                    id: "certifications-id",
-                    content: {
-                        items: [],
-                    },
+                    title: "Certifications",
+                    hidden: false,
+                    items: [
+                        {
+                            id: "cert-1",
+                            hidden: false,
+                            title: "",
+                            issuer: "",
+                            date: "",
+                            website: { url: "", label: "" },
+                            description: "",
+                        },
+                    ],
                 },
             },
             customSections: [],
@@ -246,7 +295,6 @@ export default function Editor() {
                                         type="button"
                                         onClick={() =>
                                             field.pushValue({
-                                                id: crypto.randomUUID(),
                                                 url: "",
                                                 label: "",
                                             })
