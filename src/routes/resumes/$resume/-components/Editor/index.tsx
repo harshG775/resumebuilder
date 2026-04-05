@@ -81,7 +81,7 @@ export default function Editor() {
                             hidden: false,
                             name: "",
                             period: "",
-                            website: [{ url: "", label: "" }],
+                            website: [{ id: "w-1", url: "", label: "" }],
                             description: "",
                         },
                     ],
