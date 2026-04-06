@@ -1,7 +1,7 @@
 import z from "zod"
 
 const WebsiteSchema = z.object({
-    showLink: z.boolean().default(false).optional(),
+    showLink: z.boolean().default(false),
     url: z.string(),
     label: z.string(),
 })
@@ -13,8 +13,8 @@ const LinkSchema = z.object({
 
 const SectionBaseSchema = z.object({
     title: z.string(),
-    hidden: z.boolean().default(false).optional(),
-    columns: z.number().default(1).optional(),
+    hidden: z.boolean().default(false),
+    columns: z.number().default(1),
 })
 
 //
@@ -28,11 +28,13 @@ const BasicsSchema = z.object({
     customFields: z.array(LinkSchema),
 })
 const SummarySchema = z.object({
+    title: z.string(),
+    hidden: z.boolean().default(false),
     content: z.string(),
 })
 const ExperienceItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false).optional(),
+    hidden: z.boolean().default(false),
     company: z.string(),
     position: z.string(),
     location: z.string(),
@@ -44,7 +46,7 @@ const ExperienceItemsSchema = z.object({
 
 const ProjectsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false).optional(),
+    hidden: z.boolean().default(false),
     name: z.string(),
     period: z.string(),
     website: z.array(LinkSchema),
@@ -53,7 +55,7 @@ const ProjectsItemsSchema = z.object({
 
 const SkillsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false).optional(),
+    hidden: z.boolean().default(false),
     icon: z.string(),
     name: z.string(),
     proficiency: z.string(),
@@ -63,7 +65,7 @@ const SkillsItemsSchema = z.object({
 
 const EducationItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false).optional(),
+    hidden: z.boolean().default(false),
     school: z.string(),
     degree: z.string(),
     area: z.string(),
@@ -76,7 +78,7 @@ const EducationItemsSchema = z.object({
 
 const CertificationsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false).optional(),
+    hidden: z.boolean().default(false),
     title: z.string(),
     issuer: z.string(),
     date: z.string(),
@@ -87,14 +89,13 @@ const CertificationsItemsSchema = z.object({
 export const ResumeSchema = z.object({
     basics: BasicsSchema,
     sections: z.object({
-        summary: SectionBaseSchema.extend({ items: z.array(SummarySchema) }),
+        summary: SummarySchema,
         experience: SectionBaseSchema.extend({ items: z.array(ExperienceItemsSchema) }),
         projects: SectionBaseSchema.extend({ items: z.array(ProjectsItemsSchema) }),
         skills: SectionBaseSchema.extend({ items: z.array(SkillsItemsSchema) }),
         education: SectionBaseSchema.extend({ items: z.array(EducationItemsSchema) }),
         certifications: SectionBaseSchema.extend({ items: z.array(CertificationsItemsSchema) }),
     }),
-    order: z.array(z.string()),
 })
 
 export type ResumeValues = z.infer<typeof ResumeSchema>
