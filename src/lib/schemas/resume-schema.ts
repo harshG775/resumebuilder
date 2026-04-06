@@ -8,8 +8,8 @@ const linkSchema = z.object({
 
 const SectionBaseSchema = z.object({
     title: z.string(),
-    hidden: z.boolean().default(false),
-    columns: z.number().default(1),
+    hidden: z.boolean().default(false).optional(),
+    columns: z.number().default(1).optional(),
 })
 
 //
@@ -27,18 +27,18 @@ const BasicsSchema = z.object({
 })
 const SummarySchema = z.object({
     title: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean().default(false).optional(),
     content: z.string(),
 })
 const ExperienceItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean().default(false).optional(),
     company: z.string(),
     position: z.string(),
     location: z.string(),
     period: z.string(),
     website: z.object({
-        showLink: z.boolean().default(false),
+        showLink: z.boolean().default(false).optional(),
         url: z.string(),
         label: z.string(),
     }),
@@ -48,7 +48,7 @@ const ExperienceItemsSchema = z.object({
 
 const ProjectsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean().default(false).optional(),
     name: z.string(),
     period: z.string(),
     website: z.array(linkSchema),
@@ -57,7 +57,7 @@ const ProjectsItemsSchema = z.object({
 
 const SkillsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean().default(false).optional(),
     icon: z.string(),
     name: z.string(),
     proficiency: z.string(),
@@ -67,7 +67,7 @@ const SkillsItemsSchema = z.object({
 
 const EducationItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean().default(false).optional(),
     school: z.string(),
     degree: z.string(),
     area: z.string(),
@@ -80,7 +80,7 @@ const EducationItemsSchema = z.object({
 
 const CertificationsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean().default(false).optional(),
     title: z.string(),
     issuer: z.string(),
     date: z.string(),
