@@ -99,7 +99,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { points: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">Summary</h2>
+                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">
+                        Summary
+                    </h2>
                     {props.points?.map((point, idx) => (
                         <p key={idx} className="text-[11px] leading-relaxed text-neutral-800 whitespace-pre-line">
                             {point}
@@ -113,7 +115,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Experience</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Experience
+                    </h2>
                     <div className="space-y-3">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -170,7 +174,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Projects</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Projects
+                    </h2>
                     <div className="space-y-3">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -180,7 +186,10 @@ export const basicConfig: Config<Props> = {
                                         <span className="font-bold text-neutral-900">
                                             {item.title}
                                             {item.organization && (
-                                                <span className="text-neutral-500 font-normal"> @ {item.organization}</span>
+                                                <span className="text-neutral-500 font-normal">
+                                                    {" "}
+                                                    @ {item.organization}
+                                                </span>
                                             )}
                                         </span>
 
@@ -198,7 +207,7 @@ export const basicConfig: Config<Props> = {
                                     </div>
                                     {item.stack && item.stack.length > 0 && (
                                         <div className="text-[10px] text-neutral-500 mt-0.5">
-                                            <span className="font-bold uppercase tracking-tighter">Tech:</span> {item.stack.join(", ")}
+                                            {item.stack.join(", ")}
                                         </div>
                                     )}
                                     <ul className="list-disc ml-4 mt-1 space-y-0.5 text-neutral-700">
@@ -217,14 +226,23 @@ export const basicConfig: Config<Props> = {
             defaultProps: { groups: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">Skills</h2>
+                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">
+                        Skills
+                    </h2>
                     <div className="text-[11px] space-y-1">
                         {props.groups
                             ?.sort((a, b) => a.order - b.order)
                             .map((group) => (
                                 <div key={group.id} className="leading-tight">
                                     <span className="font-bold text-neutral-800">{group.title}: </span>
-                                    <span className="text-neutral-700">{group.items?.join(" • ")}</span>
+                                    <span className="font-medium text-neutral-700">
+                                        {group.items?.map((item, index) => (
+                                            <span key={index}>
+                                                <span>{item}</span>
+                                                {index < group.items.length - 1 && ", "}
+                                            </span>
+                                        ))}
+                                    </span>{" "}
                                 </div>
                             ))}
                     </div>
@@ -235,7 +253,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Education</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Education
+                    </h2>
                     <div className="space-y-2">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -259,7 +279,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Certifications</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Certifications
+                    </h2>
                     <div className="space-y-2">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -267,9 +289,7 @@ export const basicConfig: Config<Props> = {
                                 <div key={item.id} className="text-[11px]">
                                     <div className="flex justify-between items-baseline flex-wrap">
                                         <span className="font-bold text-neutral-900">{item.title}</span>
-                                        <span className="text-neutral-500 font-medium">
-                                            {formatDate(item.endDate)}
-                                        </span>
+                                        <span className="text-neutral-500 font-medium">{formatDate(item.endDate)}</span>
                                     </div>
                                     <div className="text-neutral-600">{item.organization}</div>
                                 </div>

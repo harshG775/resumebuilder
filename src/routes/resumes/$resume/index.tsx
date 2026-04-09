@@ -223,8 +223,8 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Built a real-time chat system with seamless agent-to-human handover",
-                            "Eliminated dependency on third-party support tooling, saving ~₹2L/year in licensing costs.",
+                            "Built real-time chat system with seamless agent-to-human handover using React, WebSockets, and OpenAI API integration",
+                            "Eliminated third-party support tooling dependency, saving ~₹2L/year in annual licensing costs",
                         ],
                     },
                     {
