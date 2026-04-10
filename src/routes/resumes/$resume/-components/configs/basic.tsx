@@ -1,4 +1,5 @@
 import { formatDate } from "#/lib/format"
+import React from "react"
 import type { Config } from "../render"
 
 type Link = {
@@ -66,7 +67,7 @@ export const basicConfig: Config<Props> = {
                 links: [],
             },
             render: (props) => (
-                <header className="mb-4 flex" >
+                <header className="mb-4 flex">
                     <div className="flex-1">
                         <h1 className="text-2xl font-bold text-neutral-900">{props.name || "Name"}</h1>
                         <p className="text-sm font-medium text-neutral-700">{props.headline}</p>
@@ -77,18 +78,18 @@ export const basicConfig: Config<Props> = {
                             {props.links && props.links.length > 0 && (
                                 <>
                                     {props.links.map((link, i) => (
-                                        <>
-                                            {props?.links?.length === i ? "" : <span>|</span>}
+                                        <React.Fragment key={link.id || i}>
+                                            {i > 0 && <span>|</span>}
                                             <a
                                                 key={link.id || i}
                                                 href={link.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="underline text-blue-700 hover:text-blue-800"
+                                                className="underline text-blue-700 hover:text-blue-800 wrap-break-word"
                                             >
                                                 {link.label}
                                             </a>
-                                        </>
+                                        </React.Fragment>
                                     ))}
                                 </>
                             )}
@@ -128,8 +129,8 @@ export const basicConfig: Config<Props> = {
                                 <div key={item.id} className="border-l-2 border-neutral-200 pl-3">
                                     <div className="flex justify-between items-baseline flex-wrap text-[11px]">
                                         <div>
-                                            <span className="font-bold text-neutral-900">{item.title}</span>
-                                            <span className="text-neutral-400 mx-1">|</span>
+                                            <span className="font-bold text-neutral-950">{item.title}</span>
+                                            <span className="text-neutral-500 mx-1">|</span>
                                             <span className="font-semibold text-neutral-700">{item.organization}</span>
                                             {item.links && item.links.length > 0 && (
                                                 <div className="inline-flex flex-wrap gap-2 ml-2">
@@ -139,7 +140,7 @@ export const basicConfig: Config<Props> = {
                                                             href={link.url}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="text-blue-700 underline"
+                                                            className="text-blue-700 underline wrap-break-word"
                                                         >
                                                             {link.label}
                                                         </a>
@@ -202,7 +203,7 @@ export const basicConfig: Config<Props> = {
                                                 href={link.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-blue-700 underline"
+                                                className="text-blue-700 underline wrap-break-word"
                                             >
                                                 {link.label || "Link"}
                                             </a>

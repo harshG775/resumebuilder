@@ -307,7 +307,7 @@ function RouteComponent() {
         printWindow.document.write(`
         <html>
             <head>
-                <title>Harsh_Gaur_Resume</title>
+                <title>${resumeData.head.props.title}</title>
                 <style>${styles}</style>
             </head>
             <body>
