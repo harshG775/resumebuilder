@@ -22,7 +22,7 @@ const resumeData: Data = {
             order: 0,
             props: {
                 name: "Harsh Gaur",
-                headline: "Software Engineer | React · Next.js ·Tanstack · TypeScript | SaaS Platforms",
+                headline: "Software Engineer | React, Next.js, Tanstack, TypeScript | SaaS Platforms",
                 email: "hgaur491@gmail.com",
                 phone: "(+91) 9310745921",
                 location: "Delhi, India",
@@ -55,7 +55,7 @@ const resumeData: Data = {
             order: 1,
             props: {
                 points: [
-                    `Software Engineer with 2+ years building production web applications and multi-tenant SaaS platforms using React, Next.js, TypeScript, and Node.js. Delivered measurable impact: reduced tenant onboarding time by ~70%, AI API integration, and replaced third-party tooling saving ~₹2L/year. Strong grasp of component architecture, API integration, and full-stack TypeScript workflows.`,
+                    `Software Engineer with 2+ years building production web applications and multi-tenant SaaS platforms using React, Next.js, TypeScript, and Node.js. Proven track record: reduced tenant onboarding time by ~70%, architected AI-powered customer support platform, and eliminated third-party tooling costs (~₹2L/year savings). Expert in component architecture, real-time API integration, and full-stack TypeScript workflows.`,
                 ],
             },
         },
@@ -68,13 +68,13 @@ const resumeData: Data = {
                 groups: [
                     {
                         id: "skill-group-1",
-                        order: 0,
+                        order: 1,
                         title: "Languages",
-                        items: ["TypeScript", "Javascript (ES2022+)", "python"],
+                        items: ["TypeScript", "Javascript (ES2022+)", "Python"],
                     },
                     {
                         id: "skill-group-2",
-                        order: 0,
+                        order: 2,
                         title: "Frontend",
                         items: [
                             "React",
@@ -87,19 +87,19 @@ const resumeData: Data = {
                     },
                     {
                         id: "skill-group-3",
-                        order: 1,
+                        order: 3,
                         title: "Backend",
                         items: ["Node.js", "Express.js", "Flask", "OpenAI API"],
                     },
                     {
                         id: "skill-group-4",
-                        order: 2,
+                        order: 4,
                         title: "Database",
                         items: ["MongoDB", "PostgreSQL", "Prisma"],
                     },
                     {
                         id: "skill-group-5",
-                        order: 3,
+                        order: 5,
                         title: "Tools & Systems",
                         items: ["Git", "Docker", "Linux", "Postman"],
                     },
@@ -116,7 +116,7 @@ const resumeData: Data = {
                     {
                         id: "exp-1",
                         order: 0,
-                        title: "Frontend Developer",
+                        title: "Senior Frontend Engineer",
                         organization: "Prabhubhakti Pvt. Ltd.",
                         location: "Gurugram",
                         startDate: "2025-06-01",
@@ -130,13 +130,14 @@ const resumeData: Data = {
                         ],
                         points: [
                             "Architected three multi-tenant SaaS platforms (Astrologer, Temple Management, Ebook) with domain/subdomain-based tenant isolation, per-tenant UI theming, and Next.js middleware routing.",
-                            "Led frontend implementation of booking and payment flows—reusable React/TypeScript components that integrate with backend Razorpay APIs—deployed across all tenant platforms, cutting per-tenant integration time by ~70%.",
+                            "Built reusable React/TypeScript components for booking and payment flows with unified payment gateway (prabhubhakti.io) integrated via Razorpay—deployed across all tenant platforms, reducing per-tenant integration time by ~70%.",
+                            "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling rapid feature rollout across tenants.",
                         ],
                     },
                     {
                         id: "exp-2",
                         order: 1,
-                        title: "Frontend Developer SDE Trainee",
+                        title: "Frontend Engineer (SDE Trainee)",
                         organization: "Metis Eduventures Pvt. Ltd. (Adda247)",
                         location: "Gurugram",
                         startDate: "2024-08-01",
@@ -149,17 +150,17 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Built an AI customer support platform (SupportDesk) with real-time AI-to-human handover using WebSockets and OpenAI API, replacing third-party tooling and saving ~₹2L/year.",
-                            "Developed AiDoubtSolver, an academic AI chatbot with voice-to-voice chat using Web Speech API, camera image capture via browser Camera API, and real-time streaming responses via SSE, handling 150+ concurrent sessions with optimistic UI updates.",
-                            "Reduced application load times by ~25% through bundle analysis, route-based code splitting, and memoization strategies in React.",
+                            "Built SupportDesk, an AI customer support platform with real-time agent-to-human handover using WebSockets and OpenAI API integration, eliminating third-party tooling and saving ~₹2L/year.",
+                            "Developed AiDoubtSolver, an academic AI chatbot with voice-to-voice chat using Whisper API, browser Camera API, and real-time streaming responses via SSE, supporting 150+ concurrent users with optimized state management and minimal re-renders.",
+                            "Improved application performance by ~25% through bundle analysis, route-based code splitting, and memoization strategies.",
                         ],
                     },
                     {
                         id: "exp-3",
                         order: 2,
-                        title: "Frontend Developer",
+                        title: "Frontend Developer Internship",
                         organization: "ItaxEasy",
-                        location: "Remote",
+                        location: "Gwalior (Remote)",
                         startDate: "2023-11-01",
                         endDate: "2024-05-01",
                         links: [
@@ -170,8 +171,8 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Led migration of legacy tax-filing platform from React.js to Next.js App Router, improving SEO and enabling SSR for dynamic content pages.",
-                            "Implemented route-based code splitting and lazy loading for performance optimization.",
+                            "Migrated legacy tax-filing platform from React.js to Next.js App Router, enabling SSR for improved SEO and faster content delivery.",
+                            "Optimized performance through route-based code splitting and lazy loading strategies.",
                         ],
                     },
                 ],
@@ -204,9 +205,9 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Architected a multi-tenant astrologer platform supporting domain/subdomain-based tenant isolation with per-tenant UI and routing.",
-                            "Built end-to-end booking and Razorpay payment flows reused across multiple tenant platforms, reducing per-tenant dev time by ~70%.",
-                            "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling faster feature rollout across tenants.",
+                            "Architected multi-tenant platform supporting domain/subdomain-based tenant isolation with per-tenant UI and routing.",
+                            "Built reusable booking and Razorpay payment flows with unified payment gateway (prabhubhakti.io) for all tenant platforms, reducing per-tenant integration time by ~70%.",
+                            "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling rapid feature rollout across tenants.",
                         ],
                     },
                     {
@@ -223,8 +224,8 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Built real-time chat system with seamless agent-to-human handover using React, WebSockets, and OpenAI API integration",
-                            "Eliminated third-party support tooling dependency, saving ~₹2L/year in annual licensing costs",
+                            "Built real-time chat system with seamless AI-to-human handover using React, WebSockets, and OpenAI API integration.",
+                            "Eliminated third-party support platform dependency, saving ~₹2L/year in licensing costs.",
                         ],
                     },
                     {
@@ -241,9 +242,9 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Implemented voice-to-voice doubt solving pipeline using Whisper API with streaming responses over SSE.",
-                            "Handled 150+ concurrent sessions with low-latency UI updates and minimal re-renders.",
-                            "Designed stateful conversation flow in React with optimistic UI for perceived responsiveness.",
+                            "Implemented voice-to-voice doubt solving pipeline using Whisper API with real-time streaming responses via SSE.",
+                            "Supported 150+ concurrent users with optimized state management and minimal re-renders.",
+                            "Designed stateful conversation flow in React with optimistic UI updates for perceived responsiveness.",
                         ],
                     },
                 ],
@@ -277,7 +278,6 @@ const resumeData: Data = {
         },
     ],
 }
-
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { Button } from "#/components/ui/button"
 import { useRef } from "react"
@@ -331,7 +331,10 @@ function RouteComponent() {
                         <div className="relative w-[8.5in]  mx-auto  bg-white text-black ">
                             <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
                             <div ref={ref}>
-                                <main className="bg-zinc-50 text-zinc-950 p-4">
+                                <main
+                                    className="bg-zinc-50 text-zinc-950 p-4"
+                                    style={{ fontFamily: `'Inter', sans-serif` }}
+                                >
                                     <Render config={basicConfig} data={resumeData} />
                                 </main>
                             </div>

@@ -66,31 +66,34 @@ export const basicConfig: Config<Props> = {
                 links: [],
             },
             render: (props) => (
-                <header className="mb-4 flex">
+                <header className="mb-4 flex" >
                     <div className="flex-1">
                         <h1 className="text-2xl font-bold text-neutral-900">{props.name || "Name"}</h1>
-                        <p className="text-sm font-medium text-neutral-600">{props.headline}</p>
-                        <div className="text-[11px] mt-1 flex flex-wrap gap-2 text-neutral-500">
+                        <p className="text-sm font-medium text-neutral-700">{props.headline}</p>
+                        <div className="text-[11px] mt-1 flex flex-wrap gap-2 text-neutral-600">
                             {props.email && <span>{props.email}</span>}
-                            {props.phone && <span>• {props.phone}</span>}
-                            {props.location && <span>• {props.location}</span>}
+                            {props.phone && <span>| {props.phone}</span>}
+                            {props.location && <span>| {props.location}</span>}
+                            {props.links && props.links.length > 0 && (
+                                <>
+                                    {props.links.map((link, i) => (
+                                        <>
+                                            {props?.links?.length === i ? "" : <span>|</span>}
+                                            <a
+                                                key={link.id || i}
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="underline text-blue-700 hover:text-blue-800"
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </>
+                                    ))}
+                                </>
+                            )}
                         </div>
                     </div>
-                    {props.links && props.links.length > 0 && (
-                        <div className="text-[11px] flex flex-col gap-1 items-end">
-                            {props.links.map((link, i) => (
-                                <a
-                                    key={link.id || i}
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="underline text-blue-700 hover:text-blue-800"
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
-                        </div>
-                    )}
                 </header>
             ),
         },
