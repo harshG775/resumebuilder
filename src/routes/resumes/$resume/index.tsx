@@ -10,8 +10,8 @@ export const Route = createFileRoute("/resumes/$resume/")({
 const resumeData: Data = {
     head: {
         props: {
-            title: "Harsh_Gaur_Software_Engineer_Resume",
-            description: "Harsh Gaur - Software Engineer specializing in React, Next.js, TanStack, and SaaS platforms.",
+            title: "Harsh_Gaur_Frontend_Engineer_Resume.pdf",
+            description: "Harsh Gaur - Frontend Engineer specializing in React, Next.js, TanStack, and SaaS platforms.",
         },
     },
 
@@ -332,7 +332,7 @@ function RouteComponent() {
                             <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
                             <div ref={ref}>
                                 <main
-                                    className="bg-zinc-50 text-zinc-950 p-4"
+                                    className="bg-zinc-50 text-zinc-950 p-6 py-5"
                                     style={{ fontFamily: `'Inter', sans-serif` }}
                                 >
                                     <Render config={basicConfig} data={resumeData} />
