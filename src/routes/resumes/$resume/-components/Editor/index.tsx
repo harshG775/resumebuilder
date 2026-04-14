@@ -24,120 +24,123 @@ import { Input } from "#/components/ui/input"
 import { Textarea } from "#/components/ui/textarea"
 import { Button } from "#/components/ui/button"
 import { LinkIcon, Tag, X } from "lucide-react"
-import { ResumeSchema } from "#/lib/schemas/resume-schema"
+import { ResumeSchema, type ResumeValues } from "#/lib/schemas/resume-schema"
+
+
 
 export default function Editor() {
-    const form = useForm({
-        defaultValues: {
-            basics: {
-                name: "",
-                headline: "",
-                email: "",
-                phone: "",
-                location: "",
-                website: { showLink: false, url: "", label: "" },
-                customFields: [
+    const defaultValues: ResumeValues = {
+        basics: {
+            name: "",
+            headline: "",
+            email: "",
+            phone: "",
+            location: "",
+            website: { showLink: false, url: "", label: "" },
+            customFields: [
+                {
+                    id: "custom-field-1",
+                    url: "",
+                    label: "",
+                },
+            ],
+        },
+        sections: {
+            summary: {
+                title: "Summary",
+                hidden: false,
+                columns: 1,
+                content: "",
+            },
+            experience: {
+                title: "Experience",
+                hidden: false,
+                columns: 1,
+                items: [
                     {
-                        id: "custom-field-1",
-                        url: "",
-                        label: "",
+                        id: "exp-1",
+                        hidden: false,
+                        company: "",
+                        position: "",
+                        location: "",
+                        period: "",
+                        website: { showLink: false, url: "", label: "" },
+                        description: "",
+                        roles: [],
                     },
                 ],
             },
-            sections: {
-                summary: {
-                    title: "Summary",
-                    hidden: false,
-                    columns: 1,
-                    content: "",
-                },
-                experience: {
-                    title: "Experience",
-                    hidden: false,
-                    columns: 1,
-                    items: [
-                        {
-                            id: "exp-1",
-                            hidden: false,
-                            company: "",
-                            position: "",
-                            location: "",
-                            period: "",
-                            website: { showLink: false, url: "", label: "" },
-                            description: "",
-                            roles: [] as string[],
-                        },
-                    ],
-                },
-                projects: {
-                    title: "Projects",
-                    hidden: false,
-                    columns: 1,
-                    items: [
-                        {
-                            id: "pro-1",
-                            hidden: false,
-                            name: "",
-                            period: "",
-                            links: [{ id: "123", url: "", label: "" }],
-                            description: "",
-                        },
-                    ],
-                },
-                skills: {
-                    title: "Skills",
-                    hidden: false,
-                    columns: 1,
-                    items: [
-                        {
-                            id: "skill-1",
-                            hidden: false,
-                            icon: "",
-                            name: "",
-                            proficiency: "",
-                            level: 0,
-                            keywords: [] as string[],
-                        },
-                    ],
-                },
-                education: {
-                    title: "Education",
-                    hidden: false,
-                    columns: 1,
-                    items: [
-                        {
-                            id: "edu-1",
-                            hidden: false,
-                            school: "",
-                            degree: "",
-                            area: "",
-                            grade: "",
-                            location: "",
-                            period: "",
-                            website: { showLink: false, url: "", label: "" },
-                            description: "",
-                        },
-                    ],
-                },
-                certifications: {
-                    title: "Certifications",
-                    hidden: false,
-                    columns: 1,
-                    items: [
-                        {
-                            id: "cert-1",
-                            hidden: false,
-                            title: "",
-                            issuer: "",
-                            date: "",
-                            website: { showLink: false, url: "", label: "" },
-                            description: "",
-                        },
-                    ],
-                },
+            projects: {
+                title: "Projects",
+                hidden: false,
+                columns: 1,
+                items: [
+                    {
+                        id: "pro-1",
+                        hidden: false,
+                        name: "",
+                        period: "",
+                        links: [{ id: "123", url: "", label: "" }],
+                        description: "",
+                    },
+                ],
             },
-            order: ["experience", "projects", "skills", "education", "certifications"],
+            skills: {
+                title: "Skills",
+                hidden: false,
+                columns: 1,
+                items: [
+                    {
+                        id: "skill-1",
+                        hidden: false,
+                        icon: "",
+                        name: "",
+                        proficiency: "",
+                        level: 0,
+                        keywords: [],
+                    },
+                ],
+            },
+            education: {
+                title: "Education",
+                hidden: false,
+                columns: 1,
+                items: [
+                    {
+                        id: "edu-1",
+                        hidden: false,
+                        school: "",
+                        degree: "",
+                        area: "",
+                        grade: "",
+                        location: "",
+                        period: "",
+                        website: { showLink: false, url: "", label: "" },
+                        description: "",
+                    },
+                ],
+            },
+            certifications: {
+                title: "Certifications",
+                hidden: false,
+                columns: 1,
+                items: [
+                    {
+                        id: "cert-1",
+                        hidden: false,
+                        title: "",
+                        issuer: "",
+                        date: "",
+                        website: { showLink: false, url: "", label: "" },
+                        description: "",
+                    },
+                ],
+            },
         },
+        order: ["experience", "projects", "skills", "education", "certifications"],
+    }
+    const form = useForm({
+        defaultValues: defaultValues,
         validators: {
             onChange: ResumeSchema,
         },
