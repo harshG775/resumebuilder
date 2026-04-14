@@ -33,6 +33,15 @@ const SummarySchema = z.object({
     columns: z.number(),
     content: z.string(),
 })
+const SkillsItemsSchema = z.object({
+    id: z.string(),
+    hidden: z.boolean(),
+    icon: z.string(),
+    name: z.string(),
+    proficiency: z.string(),
+    level: z.number().min(0).max(100),
+    keywords: z.array(z.string()),
+})
 const ExperienceItemsSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
@@ -53,15 +62,6 @@ const ProjectsItemsSchema = z.object({
     description: z.string(),
 })
 
-const SkillsItemsSchema = z.object({
-    id: z.string(),
-    hidden: z.boolean(),
-    icon: z.string(),
-    name: z.string(),
-    proficiency: z.string(),
-    level: z.number().min(0).max(100),
-    keywords: z.array(z.string()),
-})
 
 const EducationItemsSchema = z.object({
     id: z.string(),

@@ -44,6 +44,12 @@ export default function Editor() {
                 columns: 1,
                 content: "",
             },
+            skills: {
+                title: "Skills",
+                hidden: false,
+                columns: 1,
+                items: [],
+            },
             experience: {
                 title: "Experience",
                 hidden: false,
@@ -52,12 +58,6 @@ export default function Editor() {
             },
             projects: {
                 title: "Projects",
-                hidden: false,
-                columns: 1,
-                items: [],
-            },
-            skills: {
-                title: "Skills",
                 hidden: false,
                 columns: 1,
                 items: [],
