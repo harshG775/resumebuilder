@@ -26,8 +26,6 @@ import { Button } from "#/components/ui/button"
 import { LinkIcon, Tag, X } from "lucide-react"
 import { ResumeSchema, type ResumeValues } from "#/lib/schemas/resume-schema"
 
-
-
 export default function Editor() {
     const defaultValues: ResumeValues = {
         basics: {
@@ -137,7 +135,7 @@ export default function Editor() {
                 ],
             },
         },
-        order: ["experience", "projects", "skills", "education", "certifications"],
+        order: ["summary", "skills", "experience", "projects", "education", "certifications"],
     }
     const form = useForm({
         defaultValues: defaultValues,
