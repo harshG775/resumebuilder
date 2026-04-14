@@ -8,8 +8,8 @@ const linkSchema = z.object({
 
 const SectionBaseSchema = z.object({
     title: z.string(),
-    hidden: z.boolean().default(false),
-    columns: z.number().default(1),
+    hidden: z.boolean(),
+    columns: z.number(),
 })
 
 //
@@ -27,28 +27,27 @@ const BasicsSchema = z.object({
 })
 const SummarySchema = z.object({
     title: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean(),
     content: z.string(),
 })
 const ExperienceItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean(),
     company: z.string(),
     position: z.string(),
     location: z.string(),
     period: z.string(),
     website: z.object({
-        showLink: z.boolean().default(false),
+        showLink: z.boolean(),
         url: z.string(),
         label: z.string(),
     }),
     description: z.string(),
     roles: z.array(z.string()),
 })
-
 const ProjectsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean(),
     name: z.string(),
     period: z.string(),
     website: z.array(linkSchema),
@@ -57,7 +56,7 @@ const ProjectsItemsSchema = z.object({
 
 const SkillsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean(),
     icon: z.string(),
     name: z.string(),
     proficiency: z.string(),
@@ -67,7 +66,7 @@ const SkillsItemsSchema = z.object({
 
 const EducationItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean(),
     school: z.string(),
     degree: z.string(),
     area: z.string(),
@@ -80,7 +79,7 @@ const EducationItemsSchema = z.object({
 
 const CertificationsItemsSchema = z.object({
     id: z.string(),
-    hidden: z.boolean().default(false),
+    hidden: z.boolean(),
     title: z.string(),
     issuer: z.string(),
     date: z.string(),

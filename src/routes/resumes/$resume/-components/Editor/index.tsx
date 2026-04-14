@@ -50,7 +50,7 @@ export default function Editor() {
             summary: {
                 title: "Summary",
                 hidden: false,
-                content: "",
+                content: "some data",
             },
             sections: {
                 experience: {
@@ -67,7 +67,7 @@ export default function Editor() {
                             period: "",
                             website: { showLink: false, url: "", label: "" },
                             description: "",
-                            roles: [],
+                            roles: [] as string[],
                         },
                     ],
                 },
@@ -98,7 +98,7 @@ export default function Editor() {
                             name: "",
                             proficiency: "",
                             level: 0,
-                            keywords: [],
+                            keywords: [] as string[],
                         },
                     ],
                 },
@@ -338,7 +338,7 @@ export default function Editor() {
                 <FieldSeparator />
                 <FieldSet>
                     <FieldLegend className="font-bold text-2xl!">Summary</FieldLegend>
-                    <FieldDescription>{/*  */}</FieldDescription>
+                    <FieldDescription></FieldDescription>
                     <FieldGroup>
                         <form.Field
                             name={`summary.content`}
