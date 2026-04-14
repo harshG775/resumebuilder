@@ -35,10 +35,7 @@ export default function Editor() {
                 email: "",
                 phone: "",
                 location: "",
-                website: {
-                    url: "",
-                    label: "",
-                },
+                website: { showLink: false, url: "", label: "" },
                 customFields: [
                     {
                         id: "custom-field-1",
@@ -47,12 +44,13 @@ export default function Editor() {
                     },
                 ],
             },
-            summary: {
-                title: "Summary",
-                hidden: false,
-                content: "some data",
-            },
             sections: {
+                summary: {
+                    title: "Summary",
+                    hidden: false,
+                    columns: 1,
+                    content: "",
+                },
                 experience: {
                     title: "Experience",
                     hidden: false,
@@ -81,7 +79,7 @@ export default function Editor() {
                             hidden: false,
                             name: "",
                             period: "",
-                            website: [{ id: "w-1", url: "", label: "" }],
+                            links: [{ id: "123", url: "", label: "" }],
                             description: "",
                         },
                     ],
@@ -116,7 +114,7 @@ export default function Editor() {
                             grade: "",
                             location: "",
                             period: "",
-                            website: { url: "", label: "" },
+                            website: { showLink: false, url: "", label: "" },
                             description: "",
                         },
                     ],
@@ -132,7 +130,7 @@ export default function Editor() {
                             title: "",
                             issuer: "",
                             date: "",
-                            website: { url: "", label: "" },
+                            website: { showLink: false, url: "", label: "" },
                             description: "",
                         },
                     ],
@@ -144,14 +142,14 @@ export default function Editor() {
             onChange: ResumeSchema,
         },
     })
+
     console.log(form.state.values)
 
     return (
-        <div className="p-4 mx-auto max-w-lg">
+        <div className="p-4 mx-auto max-w-lg pb-24">
             <FieldGroup>
                 <FieldSet>
                     <FieldLegend className="font-bold text-2xl!">Basics</FieldLegend>
-                    <FieldDescription>{/*  */}</FieldDescription>
                     <FieldGroup>
                         <form.Field
                             name={`basics.name`}
@@ -257,7 +255,6 @@ export default function Editor() {
 
                                 <PopoverContent>
                                     <FieldLabel>Label</FieldLabel>
-
                                     <form.Field name={`basics.website.label`}>
                                         {(field) => (
                                             <Input
@@ -296,7 +293,6 @@ export default function Editor() {
 
                                                 <PopoverContent>
                                                     <FieldLabel>Enter The URL to link to</FieldLabel>
-
                                                     <form.Field name={`basics.customFields[${idx}].url`}>
                                                         {(field) => (
                                                             <Input
@@ -320,6 +316,7 @@ export default function Editor() {
 
                                     <Button
                                         type="button"
+                                        variant="outline"
                                         onClick={() =>
                                             field.pushValue({
                                                 id: crypto.randomUUID(),
@@ -335,13 +332,14 @@ export default function Editor() {
                         />
                     </FieldGroup>
                 </FieldSet>
+
                 <FieldSeparator />
+
                 <FieldSet>
                     <FieldLegend className="font-bold text-2xl!">Summary</FieldLegend>
-                    <FieldDescription></FieldDescription>
                     <FieldGroup>
                         <form.Field
-                            name={`summary.content`}
+                            name={`sections.summary.content`}
                             children={(field) => (
                                 <Field>
                                     <FieldLabel htmlFor={field.name}>Summary</FieldLabel>

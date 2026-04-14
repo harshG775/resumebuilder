@@ -1,4 +1,5 @@
 import { formatDate } from "#/lib/format"
+import React from "react"
 import type { Config } from "../render"
 
 type Link = {
@@ -69,28 +70,31 @@ export const basicConfig: Config<Props> = {
                 <header className="mb-4 flex">
                     <div className="flex-1">
                         <h1 className="text-2xl font-bold text-neutral-900">{props.name || "Name"}</h1>
-                        <p className="text-sm font-medium text-neutral-600">{props.headline}</p>
-                        <div className="text-[11px] mt-1 flex flex-wrap gap-2 text-neutral-500">
+                        <p className="text-sm font-medium text-neutral-700">{props.headline}</p>
+                        <div className="text-[11px] mt-1 flex flex-wrap gap-2 text-neutral-600">
                             {props.email && <span>{props.email}</span>}
-                            {props.phone && <span>• {props.phone}</span>}
-                            {props.location && <span>• {props.location}</span>}
+                            {props.phone && <span>| {props.phone}</span>}
+                            {props.location && <span>| {props.location}</span>}
+                            {props.links && props.links.length > 0 && (
+                                <>
+                                    {props.links.map((link, i) => (
+                                        <React.Fragment key={link.id || i}>
+                                            {i > 0 && <span>|</span>}
+                                            <a
+                                                key={link.id || i}
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="underline text-blue-700 hover:text-blue-800 wrap-break-word"
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </React.Fragment>
+                                    ))}
+                                </>
+                            )}
                         </div>
                     </div>
-                    {props.links && props.links.length > 0 && (
-                        <div className="text-[11px] flex flex-col gap-1 items-end">
-                            {props.links.map((link, i) => (
-                                <a
-                                    key={link.id || i}
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="underline text-blue-700 hover:text-blue-800"
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
-                        </div>
-                    )}
                 </header>
             ),
         },
@@ -99,7 +103,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { points: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">Summary</h2>
+                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">
+                        Summary
+                    </h2>
                     {props.points?.map((point, idx) => (
                         <p key={idx} className="text-[11px] leading-relaxed text-neutral-800 whitespace-pre-line">
                             {point}
@@ -113,7 +119,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Experience</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Experience
+                    </h2>
                     <div className="space-y-3">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -121,8 +129,8 @@ export const basicConfig: Config<Props> = {
                                 <div key={item.id} className="border-l-2 border-neutral-200 pl-3">
                                     <div className="flex justify-between items-baseline flex-wrap text-[11px]">
                                         <div>
-                                            <span className="font-bold text-neutral-900">{item.title}</span>
-                                            <span className="text-neutral-400 mx-1">|</span>
+                                            <span className="font-bold text-neutral-950">{item.title}</span>
+                                            <span className="text-neutral-500 mx-1">|</span>
                                             <span className="font-semibold text-neutral-700">{item.organization}</span>
                                             {item.links && item.links.length > 0 && (
                                                 <div className="inline-flex flex-wrap gap-2 ml-2">
@@ -132,7 +140,7 @@ export const basicConfig: Config<Props> = {
                                                             href={link.url}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="text-blue-700 underline"
+                                                            className="text-blue-700 underline wrap-break-word"
                                                         >
                                                             {link.label}
                                                         </a>
@@ -170,7 +178,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Projects</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Projects
+                    </h2>
                     <div className="space-y-3">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -180,7 +190,10 @@ export const basicConfig: Config<Props> = {
                                         <span className="font-bold text-neutral-900">
                                             {item.title}
                                             {item.organization && (
-                                                <span className="text-neutral-500 font-normal"> @ {item.organization}</span>
+                                                <span className="text-neutral-500 font-normal">
+                                                    {" "}
+                                                    @ {item.organization}
+                                                </span>
                                             )}
                                         </span>
 
@@ -190,7 +203,7 @@ export const basicConfig: Config<Props> = {
                                                 href={link.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-blue-700 underline"
+                                                className="text-blue-700 underline wrap-break-word"
                                             >
                                                 {link.label || "Link"}
                                             </a>
@@ -198,7 +211,7 @@ export const basicConfig: Config<Props> = {
                                     </div>
                                     {item.stack && item.stack.length > 0 && (
                                         <div className="text-[10px] text-neutral-500 mt-0.5">
-                                            <span className="font-bold uppercase tracking-tighter">Tech:</span> {item.stack.join(", ")}
+                                            {item.stack.join(", ")}
                                         </div>
                                     )}
                                     <ul className="list-disc ml-4 mt-1 space-y-0.5 text-neutral-700">
@@ -217,14 +230,23 @@ export const basicConfig: Config<Props> = {
             defaultProps: { groups: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">Skills</h2>
+                    <h2 className="text-sm font-bold mb-1.5 border-b border-neutral-300 uppercase tracking-wide">
+                        Skills
+                    </h2>
                     <div className="text-[11px] space-y-1">
                         {props.groups
                             ?.sort((a, b) => a.order - b.order)
                             .map((group) => (
                                 <div key={group.id} className="leading-tight">
                                     <span className="font-bold text-neutral-800">{group.title}: </span>
-                                    <span className="text-neutral-700">{group.items?.join(" • ")}</span>
+                                    <span className="font-medium text-neutral-700">
+                                        {group.items?.map((item, index) => (
+                                            <span key={index}>
+                                                <span>{item}</span>
+                                                {index < group.items.length - 1 && ", "}
+                                            </span>
+                                        ))}
+                                    </span>{" "}
                                 </div>
                             ))}
                     </div>
@@ -235,7 +257,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Education</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Education
+                    </h2>
                     <div className="space-y-2">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -259,7 +283,9 @@ export const basicConfig: Config<Props> = {
             defaultProps: { items: [] },
             render: (props) => (
                 <section className="mb-4">
-                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">Certifications</h2>
+                    <h2 className="text-sm font-bold mb-2 border-b border-neutral-300 uppercase tracking-wide">
+                        Certifications
+                    </h2>
                     <div className="space-y-2">
                         {props.items
                             ?.sort((a, b) => a.order - b.order)
@@ -267,9 +293,7 @@ export const basicConfig: Config<Props> = {
                                 <div key={item.id} className="text-[11px]">
                                     <div className="flex justify-between items-baseline flex-wrap">
                                         <span className="font-bold text-neutral-900">{item.title}</span>
-                                        <span className="text-neutral-500 font-medium">
-                                            {formatDate(item.endDate)}
-                                        </span>
+                                        <span className="text-neutral-500 font-medium">{formatDate(item.endDate)}</span>
                                     </div>
                                     <div className="text-neutral-600">{item.organization}</div>
                                 </div>

@@ -1,6 +1,11 @@
 import z from "zod"
 
-const linkSchema = z.object({
+const WebsiteSchema = z.object({
+    showLink: z.boolean(),
+    url: z.string(),
+    label: z.string(),
+})
+const LinkSchema = z.object({
     id: z.string(),
     url: z.string(),
     label: z.string(),
@@ -19,15 +24,13 @@ const BasicsSchema = z.object({
     email: z.string(),
     phone: z.string(),
     location: z.string(),
-    website: z.object({
-        url: z.string(),
-        label: z.string(),
-    }),
-    customFields: z.array(linkSchema),
+    website: WebsiteSchema,
+    customFields: z.array(LinkSchema),
 })
 const SummarySchema = z.object({
     title: z.string(),
     hidden: z.boolean(),
+    columns: z.number(),
     content: z.string(),
 })
 const ExperienceItemsSchema = z.object({
@@ -37,11 +40,7 @@ const ExperienceItemsSchema = z.object({
     position: z.string(),
     location: z.string(),
     period: z.string(),
-    website: z.object({
-        showLink: z.boolean(),
-        url: z.string(),
-        label: z.string(),
-    }),
+    website: WebsiteSchema,
     description: z.string(),
     roles: z.array(z.string()),
 })
@@ -50,7 +49,7 @@ const ProjectsItemsSchema = z.object({
     hidden: z.boolean(),
     name: z.string(),
     period: z.string(),
-    website: z.array(linkSchema),
+    links: z.array(LinkSchema),
     description: z.string(),
 })
 
@@ -73,7 +72,7 @@ const EducationItemsSchema = z.object({
     grade: z.string(),
     location: z.string(),
     period: z.string(),
-    website: linkSchema,
+    website: WebsiteSchema,
     description: z.string(),
 })
 
@@ -83,14 +82,14 @@ const CertificationsItemsSchema = z.object({
     title: z.string(),
     issuer: z.string(),
     date: z.string(),
-    website: linkSchema,
+    website: WebsiteSchema,
     description: z.string(),
 })
 
 export const ResumeSchema = z.object({
     basics: BasicsSchema,
-    summary: SummarySchema,
     sections: z.object({
+        summary: SummarySchema,
         experience: SectionBaseSchema.extend({ items: z.array(ExperienceItemsSchema) }),
         projects: SectionBaseSchema.extend({ items: z.array(ProjectsItemsSchema) }),
         skills: SectionBaseSchema.extend({ items: z.array(SkillsItemsSchema) }),
