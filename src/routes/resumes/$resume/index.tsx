@@ -10,7 +10,7 @@ export const Route = createFileRoute("/resumes/$resume/")({
 const resumeData: Data = {
     head: {
         props: {
-            title: "Harsh_Gaur_Frontend_Engineer_Resume",
+            title: "Harsh_Gaur_Frontend_Engineer_Resume.pdf",
             description: "Harsh Gaur - Frontend Engineer specializing in React, Next.js, TanStack, and SaaS platforms.",
         },
     },
@@ -22,7 +22,7 @@ const resumeData: Data = {
             order: 0,
             props: {
                 name: "Harsh Gaur",
-                headline: "Frontend Engineer | React · Next.js ·Tanstack · TypeScript | SaaS Platforms",
+                headline: "Software Engineer | React, Next.js, Tanstack, TypeScript | SaaS Platforms",
                 email: "hgaur491@gmail.com",
                 phone: "(+91) 9310745921",
                 location: "Delhi, India",
@@ -55,7 +55,54 @@ const resumeData: Data = {
             order: 1,
             props: {
                 points: [
-                    "Frontend Engineer with 2+ years building multi-tenant SaaS platforms and AI-powered apps using React, Next.js, TypeScript, and TanStack. Focused on performance, clean architecture, and scalable UI systems.",
+                    `Software Engineer with 2+ years building production web applications and multi-tenant SaaS platforms using React, Next.js, TypeScript, and Node.js. Proven track record: reduced tenant onboarding time by ~70%, architected AI-powered customer support platform, and eliminated third-party tooling costs (~₹2L/year savings). Expert in component architecture, real-time API integration, and full-stack TypeScript workflows.`,
+                ],
+            },
+        },
+
+        {
+            id: "skills",
+            type: "skills",
+            order: 2,
+            props: {
+                groups: [
+                    {
+                        id: "skill-group-1",
+                        order: 1,
+                        title: "Languages",
+                        items: ["TypeScript", "Javascript (ES2022+)", "Python"],
+                    },
+                    {
+                        id: "skill-group-2",
+                        order: 2,
+                        title: "Frontend",
+                        items: [
+                            "React",
+                            "Next.js",
+                            "TanStack (Query, Router, Start)",
+                            "Zustand",
+                            "Tailwind CSS",
+                            "ShadCN UI",
+                        ],
+                    },
+                    {
+                        id: "skill-group-3",
+                        order: 3,
+                        title: "Backend",
+                        items: ["Node.js", "Express.js", "Flask", "OpenAI API"],
+                    },
+                    {
+                        id: "skill-group-4",
+                        order: 4,
+                        title: "Database",
+                        items: ["MongoDB", "PostgreSQL", "Prisma"],
+                    },
+                    {
+                        id: "skill-group-5",
+                        order: 5,
+                        title: "Tools & Systems",
+                        items: ["Git", "Docker", "Linux", "Postman"],
+                    },
                 ],
             },
         },
@@ -63,13 +110,13 @@ const resumeData: Data = {
         {
             id: "experience",
             type: "experience",
-            order: 2,
+            order: 3,
             props: {
                 items: [
                     {
                         id: "exp-1",
                         order: 0,
-                        title: "Frontend Developer",
+                        title: "Senior Frontend Engineer",
                         organization: "Prabhubhakti Pvt. Ltd.",
                         location: "Gurugram",
                         startDate: "2025-06-01",
@@ -82,16 +129,15 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing",
-                            "Built high-performance UI using Next.js, TypeScript, Tailwind CSS, and ShadCN with focus on scalability and reusability.",
-                            "Implemented booking, payment (Razorpay), and wallet systems on Frontend used across multiple tenant platforms.",
-                            "Reduced onboarding time by ~70%",
+                            "Architected three multi-tenant SaaS platforms (Astrologer, Temple Management, Ebook) with domain/subdomain-based tenant isolation, per-tenant UI theming, and Next.js middleware routing.",
+                            "Built reusable React/TypeScript components for booking and payment flows with unified payment gateway (prabhubhakti.io) integrated via Razorpay—deployed across all tenant platforms, reducing per-tenant integration time by ~70%.",
+                            "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling rapid feature rollout across tenants.",
                         ],
                     },
                     {
                         id: "exp-2",
                         order: 1,
-                        title: "Frontend Developer SDE Trainee",
+                        title: "Frontend Engineer (SDE Trainee)",
                         organization: "Metis Eduventures Pvt. Ltd. (Adda247)",
                         location: "Gurugram",
                         startDate: "2024-08-01",
@@ -104,17 +150,17 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Built AI-powered chatbot features using React, Zustand, and OpenAI APIs.",
-                            "Developed real-time communication features using SSE/WebSockets.",
-                            "Improved application performance resulting in ~25% faster load times.",
+                            "Built SupportDesk, an AI customer support platform with real-time agent-to-human handover using WebSockets and OpenAI API integration, eliminating third-party tooling and saving ~₹2L/year.",
+                            "Developed AiDoubtSolver, an academic AI chatbot with voice-to-voice chat using Whisper API, browser Camera API, and real-time streaming responses via SSE, supporting 150+ concurrent users with optimized state management and minimal re-renders.",
+                            "Improved application performance by ~25% through bundle analysis, route-based code splitting, and memoization strategies.",
                         ],
                     },
                     {
                         id: "exp-3",
                         order: 2,
-                        title: "Frontend Developer",
+                        title: "Frontend Developer Internship",
                         organization: "ItaxEasy",
-                        location: "Remote",
+                        location: "Gwalior (Remote)",
                         startDate: "2023-11-01",
                         endDate: "2024-05-01",
                         links: [
@@ -125,8 +171,8 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Migrated from React.js to Next.js adding better SEO and Revamped UI of a legacy tax-filing platform using React.js and Tailwind CSS",
-                            "Implemented route-based code splitting and lazy loading for performance optimization.",
+                            "Migrated legacy tax-filing platform from React.js to Next.js App Router, enabling SSR for improved SEO and faster content delivery.",
+                            "Optimized performance through route-based code splitting and lazy loading strategies.",
                         ],
                     },
                 ],
@@ -136,7 +182,7 @@ const resumeData: Data = {
         {
             id: "projects",
             type: "projects",
-            order: 3,
+            order: 4,
             props: {
                 items: [
                     {
@@ -144,14 +190,7 @@ const resumeData: Data = {
                         order: 0,
                         title: "Astrologer SaaS Platform",
                         organization: "Prabhubhakti",
-                        stack: [
-                            "Next.js",
-                            "TypeScript",
-                            "TanStack Start",
-                            "TanStack Router",
-                            "Node.js",
-                            "Razorpay",
-                        ],
+                        stack: ["Next.js", "TypeScript", "TanStack Start", "TanStack Router", "Node.js", "Razorpay"],
                         links: [
                             {
                                 id: "proj-link-1",
@@ -166,23 +205,17 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Architected a multi-tenant astrologer platform supporting domain/subdomain-based tenant isolation with per-tenant UI and routing.",
-                            "Built end-to-end booking and Razorpay payment flows reused across multiple tenant platforms, reducing per-tenant dev time by ~70%.",
-                            "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling faster feature rollout across tenants.",
+                            "Architected multi-tenant platform supporting domain/subdomain-based tenant isolation with per-tenant UI and routing.",
+                            "Built reusable booking and Razorpay payment flows with unified payment gateway (prabhubhakti.io) for all tenant platforms, reducing per-tenant integration time by ~70%.",
+                            "Standardized tenant onboarding templates in Next.js with TanStack Router, enabling rapid feature rollout across tenants.",
                         ],
                     },
                     {
-                        id: "proj-1",
+                        id: "proj-2",
                         order: 1,
                         title: "SupportDesk - AI Customer Support Platform",
                         organization: "Adda247",
-                        stack: [
-                            "React",
-                            "Zustand",
-                            "Flask",
-                            "WebSockets",
-                            "OpenAI API",
-                        ],
+                        stack: ["React", "Zustand", "Flask", "WebSockets", "OpenAI API"],
                         links: [
                             {
                                 id: "proj-link-1",
@@ -191,13 +224,12 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Built a real-time chat system with seamless AI-to-human handover using WebSockets and OpenAI API.",
-                            "Replaced third-party support tooling entirely, saving ~₹2L/year in licensing costs.",
-                            "Managed global chat state with Zustand across agent dashboard, user widget, and admin panel.",
+                            "Built real-time chat system with seamless AI-to-human handover using React, WebSockets, and OpenAI API integration.",
+                            "Eliminated third-party support platform dependency, saving ~₹2L/year in licensing costs.",
                         ],
                     },
                     {
-                        id: "proj-2",
+                        id: "proj-1",
                         order: 2,
                         title: "AiDoubtSolver - Voice AI Chatbot",
                         organization: "Adda247",
@@ -210,52 +242,10 @@ const resumeData: Data = {
                             },
                         ],
                         points: [
-                            "Implemented voice-to-voice doubt solving pipeline using Whisper API with streaming responses over SSE.",
-                            "Handled 150+ concurrent sessions with low-latency UI updates and minimal re-renders.",
-                            "Designed stateful conversation flow in React with optimistic UI for perceived responsiveness.",
+                            "Implemented voice-to-voice doubt solving pipeline using Whisper API with real-time streaming responses via SSE.",
+                            "Supported 150+ concurrent users with optimized state management and minimal re-renders.",
+                            "Designed stateful conversation flow in React with optimistic UI updates for perceived responsiveness.",
                         ],
-                    },
-                ],
-            },
-        },
-
-        {
-            id: "skills",
-            type: "skills",
-            order: 4,
-            props: {
-                groups: [
-                    {
-                        id: "skill-group-1",
-                        order: 0,
-                        title: "Frontend",
-                        items: [
-                            "React",
-                            "Next.js",
-                            "TypeScript",
-                            "TanStack (Query, Router)",
-                            "Zustand",
-                            "Tailwind CSS",
-                            "ShadCN UI",
-                        ],
-                    },
-                    {
-                        id: "skill-group-2",
-                        order: 1,
-                        title: "Backend",
-                        items: ["Node.js", "Express.js", "Flask"],
-                    },
-                    {
-                        id: "skill-group-3",
-                        order: 2,
-                        title: "Database",
-                        items: ["MongoDB", "PostgreSQL", "Prisma"],
-                    },
-                    {
-                        id: "skill-group-4",
-                        order: 3,
-                        title: "Tools & Systems",
-                        items: ["Git", "Docker", "Postman", "Linux", "pnpm"],
                     },
                 ],
             },
@@ -271,8 +261,7 @@ const resumeData: Data = {
                         id: "edu-1",
                         order: 0,
                         title: "Master of Computer Applications (MCA)",
-                        organization:
-                            "Indira Gandhi National Open University (IGNOU)",
+                        organization: "Indira Gandhi National Open University (IGNOU)",
                         startDate: "2025",
                         endDate: null,
                     },
@@ -289,7 +278,6 @@ const resumeData: Data = {
         },
     ],
 }
-
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { Button } from "#/components/ui/button"
 import { useRef } from "react"
@@ -301,7 +289,7 @@ function RouteComponent() {
         const content = ref.current
         if (!content) return
 
-        const printWindow = window.open("", "_blank")
+        const printWindow = window.open("/", "_blank")
         if (!printWindow) return
 
         const styles = Array.from(document.styleSheets)
@@ -319,7 +307,7 @@ function RouteComponent() {
         printWindow.document.write(`
         <html>
             <head>
-                <title>Harsh_Gaur_Resume</title>
+                <title>${resumeData.head.props.title}</title>
                 <style>${styles}</style>
             </head>
             <body>
@@ -334,26 +322,20 @@ function RouteComponent() {
     }
     return (
         <div className="flex h-screen">
-            <div className="w-200 overflow-auto">
+            <div className="w-96 min-w-96 overflow-auto">
                 <Editor />
             </div>
-            <TransformWrapper
-                initialScale={1}
-                minScale={0.5}
-                maxScale={2}
-                limitToBounds={false}
-                centerOnInit={true}
-            >
+            <TransformWrapper initialScale={1} minScale={0.5} maxScale={2} limitToBounds={false} centerOnInit={true}>
                 <TransformComponent>
-                    <div className="h-screen w-screen">
+                    <div className=" h-screen w-screen">
                         <div className="relative w-[8.5in]  mx-auto  bg-white text-black ">
                             <div className="w-[8.5in] h-[11in] absolute left-0 top-0 border-2 border-dashed pointer-events-none"></div>
                             <div ref={ref}>
-                                <main className="bg-zinc-50 text-zinc-950 p-4">
-                                    <Render
-                                        config={basicConfig}
-                                        data={resumeData}
-                                    />
+                                <main
+                                    className="bg-zinc-50 text-zinc-950 p-6 py-5"
+                                    style={{ fontFamily: `'Inter', sans-serif` }}
+                                >
+                                    <Render config={basicConfig} data={resumeData} />
                                 </main>
                             </div>
                         </div>

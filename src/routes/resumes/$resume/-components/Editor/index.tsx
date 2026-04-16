@@ -20,97 +20,80 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { z } from "zod"
 import { Input } from "#/components/ui/input"
 import { Textarea } from "#/components/ui/textarea"
 import { Button } from "#/components/ui/button"
-import { Tag } from "lucide-react"
+import { LinkIcon, Tag, X } from "lucide-react"
+import { ResumeSchema, type ResumeValues } from "#/lib/schemas/resume-schema"
 
-const SectionUnionSchema = z.union([
-    z.literal("basics"),
-    z.literal("summary"),
-    z.literal("experience"),
-    z.literal("projects"),
-    z.literal("skills"),
-    z.literal("education"),
-    z.literal("certifications"),
-])
-type SectionUnionType = z.infer<typeof SectionUnionSchema>
-
-type Section = {
-    id: string
-    type: SectionUnionType
-    order: number
-    content: any
-}
-
-const sectionData: Section[] = [
-    {
-        id: "basics-id",
-        type: "basics",
-        order: 0,
-        content: {
+export default function Editor() {
+    const defaultValues: ResumeValues = {
+        basics: {
             name: "",
             headline: "",
             email: "",
             phone: "",
             location: "",
-            website: { url: "", label: "" },
-            links: [{ id: crypto.randomUUID(), url: "", label: "" }],
+            website: { showLink: false, url: "", label: "" },
+            customFields: [],
         },
-    },
-    {
-        id: "summary-id",
-        type: "summary",
-        order: 1,
-        content: {},
-    },
-    {
-        id: "experience-id",
-        type: "experience",
-        order: 1,
-        content: {},
-    },
-    {
-        id: "projects-id",
-        type: "projects",
-        order: 2,
-        content: {},
-    },
-    {
-        id: "skills-id",
-        type: "skills",
-        order: 3,
-        content: {},
-    },
-    {
-        id: "education-id",
-        type: "education",
-        order: 4,
-        content: {},
-    },
-    {
-        id: "certifications-id",
-        type: "certifications",
-        order: 5,
-        content: {},
-    },
-]
-
-export default function Editor() {
+        sections: {
+            summary: {
+                title: "Summary",
+                hidden: false,
+                columns: 1,
+                content: "",
+            },
+            skills: {
+                title: "Skills",
+                hidden: false,
+                columns: 1,
+                items: [],
+            },
+            experience: {
+                title: "Experience",
+                hidden: false,
+                columns: 1,
+                items: [],
+            },
+            projects: {
+                title: "Projects",
+                hidden: false,
+                columns: 1,
+                items: [],
+            },
+            education: {
+                title: "Education",
+                hidden: false,
+                columns: 1,
+                items: [],
+            },
+            certifications: {
+                title: "Certifications",
+                hidden: false,
+                columns: 1,
+                items: [],
+            },
+        },
+        order: ["summary", "skills", "experience", "projects", "education", "certifications"],
+    }
     const form = useForm({
-        defaultValues: sectionData[0].content,
+        defaultValues: defaultValues,
+        validators: {
+            onChange: ResumeSchema,
+        },
     })
+
     console.log(form.state.values)
 
     return (
-        <div className="p-4 mx-auto max-w-lg">
+        <div className="p-4 mx-auto max-w-lg pb-24">
             <FieldGroup>
                 <FieldSet>
                     <FieldLegend className="font-bold text-2xl!">Basics</FieldLegend>
                     <FieldGroup>
                         <form.Field
-                            name="name"
+                            name={`basics.name`}
                             children={(field) => (
                                 <Field>
                                     <FieldLabel htmlFor={field.name}>Name</FieldLabel>
@@ -126,7 +109,7 @@ export default function Editor() {
                         />
 
                         <form.Field
-                            name="headline"
+                            name={`basics.headline`}
                             children={(field) => (
                                 <Field>
                                     <FieldLabel htmlFor={field.name}>Headline</FieldLabel>
@@ -142,7 +125,7 @@ export default function Editor() {
                         />
 
                         <form.Field
-                            name="email"
+                            name={`basics.email`}
                             children={(field) => (
                                 <Field>
                                     <FieldLabel htmlFor={field.name}>Email</FieldLabel>
@@ -158,7 +141,7 @@ export default function Editor() {
                             )}
                         />
                         <form.Field
-                            name="phone"
+                            name={`basics.phone`}
                             children={(field) => (
                                 <Field>
                                     <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
@@ -175,7 +158,7 @@ export default function Editor() {
                         />
 
                         <form.Field
-                            name="location"
+                            name={`basics.location`}
                             children={(field) => (
                                 <Field>
                                     <FieldLabel htmlFor={field.name}>Location</FieldLabel>
@@ -190,7 +173,7 @@ export default function Editor() {
                             )}
                         />
                         <div className="flex gap-2 items-end">
-                            <form.Field name="website.url">
+                            <form.Field name={`basics.website.url`}>
                                 {(field) => (
                                     <Field>
                                         <FieldLabel htmlFor={field.name}>Website</FieldLabel>
@@ -206,15 +189,14 @@ export default function Editor() {
 
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button variant="outline">
+                                    <Button variant="ghost">
                                         <Tag />
                                     </Button>
                                 </PopoverTrigger>
 
                                 <PopoverContent>
                                     <FieldLabel>Label</FieldLabel>
-
-                                    <form.Field name="website.label">
+                                    <form.Field name={`basics.website.label`}>
                                         {(field) => (
                                             <Input
                                                 value={field.state.value}
@@ -226,47 +208,63 @@ export default function Editor() {
                             </Popover>
                         </div>
                         <form.Field
-                            name="links"
+                            name={`basics.customFields`}
                             mode="array"
                             children={(field) => (
                                 <Field>
-                                    <FieldLabel>Links</FieldLabel>
+                                    <FieldLabel>Custom Fields</FieldLabel>
 
                                     {field.state.value.map((item: any, idx: number) => (
-                                        <div key={item.id} className="flex gap-2 mb-2">
-                                            <form.Field name={`links[${idx}].url`}>
+                                        <div key={`${idx}-${item.id}`} className="flex gap-2 mb-2">
+                                            <form.Field name={`basics.customFields[${idx}].label`}>
                                                 {(field) => (
                                                     <Input
                                                         value={field.state.value}
                                                         onChange={(e) => field.handleChange(e.target.value)}
-                                                        placeholder="https://"
                                                     />
                                                 )}
                                             </form.Field>
 
-                                            <form.Field name={`links[${idx}].label`}>
-                                                {(field) => (
-                                                    <Input
-                                                        value={field.state.value}
-                                                        onChange={(e) => field.handleChange(e.target.value)}
-                                                        placeholder="Label"
-                                                    />
-                                                )}
-                                            </form.Field>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button variant="ghost">
+                                                        <LinkIcon />
+                                                    </Button>
+                                                </PopoverTrigger>
+
+                                                <PopoverContent>
+                                                    <FieldLabel>Enter The URL to link to</FieldLabel>
+                                                    <form.Field name={`basics.customFields[${idx}].url`}>
+                                                        {(field) => (
+                                                            <Input
+                                                                value={field.state.value}
+                                                                onChange={(e) => field.handleChange(e.target.value)}
+                                                            />
+                                                        )}
+                                                    </form.Field>
+                                                </PopoverContent>
+                                            </Popover>
 
                                             <Button
                                                 type="button"
-                                                variant="outline"
+                                                variant="ghost"
                                                 onClick={() => field.removeValue(idx)}
                                             >
-                                                Remove
+                                                <X />
                                             </Button>
                                         </div>
                                     ))}
 
                                     <Button
                                         type="button"
-                                        onClick={() => field.pushValue({ id: crypto.randomUUID(), url: "", label: "" })}
+                                        variant="outline"
+                                        onClick={() =>
+                                            field.pushValue({
+                                                id: crypto.randomUUID(),
+                                                url: "",
+                                                label: "",
+                                            })
+                                        }
                                     >
                                         Add Link
                                     </Button>
@@ -282,7 +280,7 @@ export default function Editor() {
                     <FieldLegend className="font-bold text-2xl!">Summary</FieldLegend>
                     <FieldGroup>
                         <form.Field
-                            name="summary"
+                            name={`sections.summary.content`}
                             children={(field) => (
                                 <Field>
                                     <FieldLabel htmlFor={field.name}>Summary</FieldLabel>
@@ -290,8 +288,9 @@ export default function Editor() {
                                         id={field.name}
                                         value={field.state.value}
                                         onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(JSON.stringify(e.target.value))}
+                                        onChange={(e) => field.handleChange(e.target.value)}
                                         autoComplete="off"
+                                        className="min-h-32"
                                     />
                                 </Field>
                             )}
