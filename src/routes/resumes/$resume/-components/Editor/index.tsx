@@ -25,6 +25,7 @@ import { Textarea } from "#/components/ui/textarea"
 import { Button } from "#/components/ui/button"
 import { LinkIcon, Tag, X } from "lucide-react"
 import { ResumeSchema, type ResumeValues } from "#/lib/schemas/resume-schema"
+import { useAppForm } from "#/hooks/form"
 
 export default function Editor() {
     const defaultValues: ResumeValues = {
@@ -77,7 +78,7 @@ export default function Editor() {
         },
         order: ["summary", "skills", "experience", "projects", "education", "certifications"],
     }
-    const form = useForm({
+    const form = useAppForm({
         defaultValues: defaultValues,
         validators: {
             onChange: ResumeSchema,
@@ -92,7 +93,7 @@ export default function Editor() {
                 <FieldSet>
                     <FieldLegend className="font-bold text-2xl!">Basics</FieldLegend>
                     <FieldGroup>
-                        <form.Field
+                        <form.AppField
                             name={`basics.name`}
                             children={(field) => (
                                 <Field>
@@ -108,7 +109,7 @@ export default function Editor() {
                             )}
                         />
 
-                        <form.Field
+                        <form.AppField
                             name={`basics.headline`}
                             children={(field) => (
                                 <Field>
@@ -124,7 +125,7 @@ export default function Editor() {
                             )}
                         />
 
-                        <form.Field
+                        <form.AppField
                             name={`basics.email`}
                             children={(field) => (
                                 <Field>
@@ -140,7 +141,7 @@ export default function Editor() {
                                 </Field>
                             )}
                         />
-                        <form.Field
+                        <form.AppField
                             name={`basics.phone`}
                             children={(field) => (
                                 <Field>
@@ -157,7 +158,7 @@ export default function Editor() {
                             )}
                         />
 
-                        <form.Field
+                        <form.AppField
                             name={`basics.location`}
                             children={(field) => (
                                 <Field>
@@ -173,7 +174,7 @@ export default function Editor() {
                             )}
                         />
                         <div className="flex gap-2 items-end">
-                            <form.Field name={`basics.website.url`}>
+                            <form.AppField name={`basics.website.url`}>
                                 {(field) => (
                                     <Field>
                                         <FieldLabel htmlFor={field.name}>Website</FieldLabel>
@@ -185,7 +186,7 @@ export default function Editor() {
                                         />
                                     </Field>
                                 )}
-                            </form.Field>
+                            </form.AppField>
 
                             <Popover>
                                 <PopoverTrigger asChild>
@@ -196,18 +197,18 @@ export default function Editor() {
 
                                 <PopoverContent>
                                     <FieldLabel>Label</FieldLabel>
-                                    <form.Field name={`basics.website.label`}>
+                                    <form.AppField name={`basics.website.label`}>
                                         {(field) => (
                                             <Input
                                                 value={field.state.value}
                                                 onChange={(e) => field.handleChange(e.target.value)}
                                             />
                                         )}
-                                    </form.Field>
+                                    </form.AppField>
                                 </PopoverContent>
                             </Popover>
                         </div>
-                        <form.Field
+                        <form.AppField
                             name={`basics.customFields`}
                             mode="array"
                             children={(field) => (
@@ -216,14 +217,14 @@ export default function Editor() {
 
                                     {field.state.value.map((item: any, idx: number) => (
                                         <div key={`${idx}-${item.id}`} className="flex gap-2 mb-2">
-                                            <form.Field name={`basics.customFields[${idx}].label`}>
+                                            <form.AppField name={`basics.customFields[${idx}].label`}>
                                                 {(field) => (
                                                     <Input
                                                         value={field.state.value}
                                                         onChange={(e) => field.handleChange(e.target.value)}
                                                     />
                                                 )}
-                                            </form.Field>
+                                            </form.AppField>
 
                                             <Popover>
                                                 <PopoverTrigger asChild>
@@ -234,14 +235,14 @@ export default function Editor() {
 
                                                 <PopoverContent>
                                                     <FieldLabel>Enter The URL to link to</FieldLabel>
-                                                    <form.Field name={`basics.customFields[${idx}].url`}>
+                                                    <form.AppField name={`basics.customFields[${idx}].url`}>
                                                         {(field) => (
                                                             <Input
                                                                 value={field.state.value}
                                                                 onChange={(e) => field.handleChange(e.target.value)}
                                                             />
                                                         )}
-                                                    </form.Field>
+                                                    </form.AppField>
                                                 </PopoverContent>
                                             </Popover>
 
@@ -279,7 +280,7 @@ export default function Editor() {
                 <FieldSet>
                     <FieldLegend className="font-bold text-2xl!">Summary</FieldLegend>
                     <FieldGroup>
-                        <form.Field
+                        <form.AppField
                             name={`sections.summary.content`}
                             children={(field) => (
                                 <Field>
@@ -297,6 +298,9 @@ export default function Editor() {
                         />
                     </FieldGroup>
                 </FieldSet>
+
+                <FieldSeparator />
+                
             </FieldGroup>
         </div>
     )
