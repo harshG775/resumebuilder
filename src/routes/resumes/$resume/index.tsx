@@ -2,7 +2,9 @@ import { ResumeSchema, type ResumeValues } from "#/lib/schemas/resume-schema"
 import { createFileRoute } from "@tanstack/react-router"
 import { useAppForm } from "#/hooks/form"
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { BasicsSection, ProjectsSection, SummarySection } from "./-components/Editor"
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 
 export const Route = createFileRoute("/resumes/$resume/")({
     ssr: false,
@@ -69,9 +71,9 @@ function RouteComponent() {
     console.log(form.state.values)
 
     return (
-        <div className="flex h-screen">
-            <div className="w-96 min-w-96 overflow-auto">
-                <FieldGroup className="p-4">
+        <div className="h-screen w-screen bg-muted">
+            <div className="fixed inset-0 z-10  pointer-events-none">
+                <FieldGroup className="p-4 max-w-96 h-full overflow-y-auto border pointer-events-auto bg-sidebar">
                     <BasicsSection form={form} />
                     <FieldSeparator />
                     <SummarySection form={form} />
@@ -79,7 +81,21 @@ function RouteComponent() {
                     <ProjectsSection form={form} />
                 </FieldGroup>
             </div>
-            <div className="flex-1 bg-muted">{/* preview */}</div>
+            <TransformWrapper initialScale={0.3} minScale={0.1} maxScale={2} centerOnInit limitToBounds={false}>
+                <TransformComponent
+                    wrapperStyle={{
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    <div className="relative w-full h-full bg-white text-black shadow-lg">
+                        <main className="p-6 aspect-8.5/11 w-7xl">
+                            <h1 className="text-xl font-bold">Resume Preview</h1>
+                            <p className="text-sm text-gray-600">This maintains proper 8.5:11 aspect ratio.</p>
+                        </main>
+                    </div>
+                </TransformComponent>
+            </TransformWrapper>
         </div>
     )
 }
