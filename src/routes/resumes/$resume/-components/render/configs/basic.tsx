@@ -1,6 +1,6 @@
 import { formatDate } from "#/lib/format"
 import React from "react"
-import type { Config } from "../render"
+import type { Config } from ".."
 
 type Link = {
     id?: string
