@@ -7,10 +7,11 @@ export const SummarySection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
         <FieldSet>
-            <FieldLegend className="font-bold text-2xl!">Summary</FieldLegend>
+            <FieldLegend className="font-bold text-2xl!">{form.state.values.sections.summary.title}</FieldLegend>
             <FieldGroup>
-                <form.AppField name="sections.summary.content">
-                    {(field) => (
+                <form.AppField
+                    name="sections.summary.content"
+                    children={(field) => (
                         <Field>
                             <FieldLabel htmlFor={field.name}>Summary</FieldLabel>
                             <Textarea
@@ -22,7 +23,7 @@ export const SummarySection = withForm({
                             />
                         </Field>
                     )}
-                </form.AppField>
+                />
             </FieldGroup>
         </FieldSet>
     ),

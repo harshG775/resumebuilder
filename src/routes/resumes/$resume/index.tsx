@@ -2,7 +2,7 @@ import { ResumeSchema, type ResumeValues } from "#/lib/schemas/resume-schema"
 import { createFileRoute } from "@tanstack/react-router"
 import { useAppForm } from "#/hooks/form"
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
-import { BasicsSection, SummarySection } from "./-components/Editor"
+import { BasicsSection, ProjectsSection, SummarySection } from "./-components/Editor"
 
 export const Route = createFileRoute("/resumes/$resume/")({
     ssr: false,
@@ -76,6 +76,7 @@ function RouteComponent() {
                     <FieldSeparator />
                     <SummarySection form={form} />
                     <FieldSeparator />
+                    <ProjectsSection form={form} />
                 </FieldGroup>
             </div>
             <div className="flex-1 bg-muted">{/* preview */}</div>
