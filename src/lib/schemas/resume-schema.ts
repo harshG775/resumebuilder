@@ -39,7 +39,7 @@ const SkillsItemsSchema = z.object({
     icon: z.string(),
     name: z.string(),
     proficiency: z.string(),
-    level: z.number().min(0).max(100),
+    level: z.number().min(0).max(100).nullable(),
     keywords: z.array(z.string()),
 })
 const ExperienceItemsSchema = z.object({
@@ -57,11 +57,13 @@ const ProjectsItemsSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     name: z.string(),
+    type: z.enum(["personal", "professional", "open-source", "freelance"]),
+    source: z.string(),
+    keywords: z.array(z.string()),
     period: z.string(),
     links: z.array(LinkSchema),
     description: z.string(),
 })
-
 
 const EducationItemsSchema = z.object({
     id: z.string(),

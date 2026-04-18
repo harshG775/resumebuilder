@@ -13,21 +13,7 @@ export const ProjectsSection = withForm({
             children={(field) => {
                 const items = field.state.value
                 const handleClickAddProject = () => {
-                    field.pushValue({
-                        id: crypto.randomUUID(),
-                        hidden: false,
-                        name: "asdasd",
-                        description: "",
-                        period: "",
-                        links: [
-                            {
-                                id: crypto.randomUUID(),
-
-                                label: "",
-                                url: "",
-                            },
-                        ],
-                    })
+                    
                 }
                 return (
                     <FieldSet>
