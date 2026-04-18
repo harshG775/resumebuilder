@@ -2,11 +2,19 @@ import { ResumeSchema } from "#/lib/schemas/resume-schema"
 import { createFileRoute } from "@tanstack/react-router"
 import { useAppForm } from "#/hooks/form"
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
-import { BasicsSection, CertificationsSection, EducationSection, ExperienceSection, ProjectsSection, SkillsSection, SummarySection } from "@/components/Editor"
+import {
+    BasicsSection,
+    CertificationsSection,
+    EducationSection,
+    ExperienceSection,
+    ProjectsSection,
+    SkillsSection,
+    SummarySection,
+} from "@/components/Editor"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { Preview } from "#/components/preview"
 import { fetchResumeById } from "#/lib/api"
-
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 export const Route = createFileRoute("/resumes/$resume/")({
     loader: ({ params }) => fetchResumeById({ id: params.resume }),
     ssr: false,
@@ -22,21 +30,38 @@ function RouteComponent() {
     return (
         <div className="h-screen w-screen bg-muted">
             <div className="fixed inset-0 z-10  pointer-events-none">
-                <FieldGroup className="p-4 max-w-96 h-full overflow-y-auto border pointer-events-auto bg-sidebar">
-                    <BasicsSection form={form} />
-                    <FieldSeparator />
-                    <SummarySection form={form} />
-                    <FieldSeparator />
-                    <SkillsSection form={form} />
-                    <FieldSeparator />
-                    <ExperienceSection form={form} />
-                    <FieldSeparator />
-                    <ProjectsSection form={form} />
-                    <FieldSeparator />
-                    <EducationSection form={form} />
-                    <FieldSeparator />
-                    <CertificationsSection form={form} />
-                </FieldGroup>
+                <ResizablePanelGroup orientation="horizontal">
+                    <ResizablePanel
+                        defaultSize={20}
+                        className="border pointer-events-auto bg-sidebar flex"
+                    >
+                        {/* resume content editor */}
+                        <FieldGroup className="h-full overflow-y-auto p-4">
+                            <BasicsSection form={form} />
+                            <FieldSeparator />
+                            <SummarySection form={form} />
+                            <FieldSeparator />
+                            <SkillsSection form={form} />
+                            <FieldSeparator />
+                            <ExperienceSection form={form} />
+                            <FieldSeparator />
+                            <ProjectsSection form={form} />
+                            <FieldSeparator />
+                            <EducationSection form={form} />
+                            <FieldSeparator />
+                            <CertificationsSection form={form} />
+                        </FieldGroup>
+                    </ResizablePanel>
+                    <ResizableHandle withHandle />
+                    <ResizablePanel defaultSize={60}></ResizablePanel>
+                    <ResizableHandle withHandle />
+                    <ResizablePanel
+                        defaultSize={20}
+                        className="border pointer-events-auto bg-sidebar flex"
+                    >
+                        <FieldGroup className="h-full overflow-y-auto p-4">Resume editor</FieldGroup>
+                    </ResizablePanel>
+                </ResizablePanelGroup>
             </div>
             <TransformWrapper initialScale={0.3} minScale={0.1} maxScale={2} centerOnInit limitToBounds={false}>
                 <TransformComponent
