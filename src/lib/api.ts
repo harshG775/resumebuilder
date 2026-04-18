@@ -342,7 +342,21 @@ const userSampleValue: ResumeValues = {
             title: "Certifications",
             hidden: false,
             columns: 1,
-            items: [],
+            items: [
+                {
+                    id: "cert-1",
+                    title: "web Development Certification",
+                    website: {
+                        label: "",
+                        showLink: false,
+                        url: "",
+                    },
+                    issuer: "MyCodeLearning",
+                    hidden: false,
+                    description: "",
+                    date: "2023",
+                },
+            ],
         },
     },
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],

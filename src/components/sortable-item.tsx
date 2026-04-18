@@ -35,8 +35,8 @@ export const SortableItemRow = ({
                 onClick={onItemClick}
                 className="h-14 p-2 flex flex-col justify-center hover:bg-muted/80 flex-1 select-none text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-                <div className="text-sm text-foreground font-semibold">{title}</div>
-                {subtitle && <div className="text-xs">{subtitle}</div>}
+                <div className="text-sm text-foreground font-semibold line-clamp-1">{title}</div>
+                {subtitle && <div className="text-xs line-clamp-1">{subtitle}</div>}
             </button>
             <button
                 type="button"

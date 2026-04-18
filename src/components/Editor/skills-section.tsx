@@ -125,7 +125,7 @@ export const SkillsSection = withForm({
                                 <SortableItemRow
                                     key={item.id}
                                     title={item?.name}
-                                    subtitle={item?.proficiency}
+                                    subtitle={item?.keywords.join(", ")}
                                     onDragHandleProps={{
                                         onClick: () => {
                                             alert("dragged")

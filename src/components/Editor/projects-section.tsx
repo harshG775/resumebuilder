@@ -3,6 +3,7 @@ import { FieldGroup, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/lib/resume-form-options"
 import { Plus } from "lucide-react"
+import { SortableItemRow } from "../sortable-item"
 
 export const ProjectsSection = withForm({
     ...resumeFormOptions,
@@ -12,9 +13,7 @@ export const ProjectsSection = withForm({
             mode="array"
             children={(field) => {
                 const items = field.state.value
-                const handleClickAddProject = () => {
-                    
-                }
+                const handleClickAddProject = () => {}
                 return (
                     <FieldSet>
                         <FieldLegend className="font-bold text-2xl!">
@@ -23,7 +22,22 @@ export const ProjectsSection = withForm({
                         <FieldGroup>
                             <div>
                                 {items.map((item) => (
-                                    <div key={item.id}>{item.name}</div>
+                                    <SortableItemRow
+                                        key={item.id}
+                                        title={item?.name}
+                                        subtitle={item?.period}
+                                        onDragHandleProps={{
+                                            onClick: () => {
+                                                alert("dragged")
+                                            },
+                                        }}
+                                        onItemClick={() => {
+                                            alert("Item")
+                                        }}
+                                        onOptionsClick={() => {
+                                            alert("option")
+                                        }}
+                                    />
                                 ))}
                             </div>
                             <Button variant={"outline"} onClick={handleClickAddProject}>

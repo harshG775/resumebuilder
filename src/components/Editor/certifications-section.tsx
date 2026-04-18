@@ -3,6 +3,7 @@ import { FieldGroup, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/lib/resume-form-options"
 import { Plus } from "lucide-react"
+import { SortableItemRow } from "../sortable-item"
 
 export const CertificationsSection = withForm({
     ...resumeFormOptions,
@@ -21,7 +22,22 @@ export const CertificationsSection = withForm({
                         <FieldGroup>
                             <div>
                                 {items.map((item) => (
-                                    <div key={item.id}>{item.title}</div>
+                                    <SortableItemRow
+                                        key={item.id}
+                                        title={item?.title}
+                                        subtitle={item?.issuer}
+                                        onDragHandleProps={{
+                                            onClick: () => {
+                                                alert("dragged")
+                                            },
+                                        }}
+                                        onItemClick={() => {
+                                            alert("Item")
+                                        }}
+                                        onOptionsClick={() => {
+                                            alert("option")
+                                        }}
+                                    />
                                 ))}
                             </div>
                             <Button variant={"outline"} onClick={handleClickAddProject}>
