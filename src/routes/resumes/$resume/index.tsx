@@ -42,7 +42,7 @@ function RouteComponent() {
                 <ResizablePanelGroup orientation="horizontal">
                     <ResizablePanel defaultSize={20} className="border pointer-events-auto bg-sidebar flex">
                         {/* resume content editor */}
-                        <FieldGroup className="h-full overflow-y-auto p-4">
+                        <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
                             <BasicsSection form={form} />
                             <FieldSeparator />
                             <SummarySection form={form} />
