@@ -90,9 +90,9 @@ export const ResumeSchema = z.object({
     basics: BasicsSchema,
     sections: z.object({
         summary: SummarySchema,
+        skills: SectionBaseSchema.extend({ items: z.array(SkillsItemsSchema) }),
         experience: SectionBaseSchema.extend({ items: z.array(ExperienceItemsSchema) }),
         projects: SectionBaseSchema.extend({ items: z.array(ProjectsItemsSchema) }),
-        skills: SectionBaseSchema.extend({ items: z.array(SkillsItemsSchema) }),
         education: SectionBaseSchema.extend({ items: z.array(EducationItemsSchema) }),
         certifications: SectionBaseSchema.extend({ items: z.array(CertificationsItemsSchema) }),
     }),

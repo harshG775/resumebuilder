@@ -2,7 +2,7 @@ import { ResumeSchema } from "#/lib/schemas/resume-schema"
 import { createFileRoute } from "@tanstack/react-router"
 import { useAppForm } from "#/hooks/form"
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
-import { BasicsSection, ProjectsSection, SummarySection } from "@/components/Editor"
+import { BasicsSection, CertificationsSection, EducationSection, ExperienceSection, ProjectsSection, SkillsSection, SummarySection } from "@/components/Editor"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { Preview } from "#/components/preview"
 import { fetchResumeById } from "#/lib/api"
@@ -27,7 +27,15 @@ function RouteComponent() {
                     <FieldSeparator />
                     <SummarySection form={form} />
                     <FieldSeparator />
+                    <SkillsSection form={form} />
+                    <FieldSeparator />
+                    <ExperienceSection form={form} />
+                    <FieldSeparator />
                     <ProjectsSection form={form} />
+                    <FieldSeparator />
+                    <EducationSection form={form} />
+                    <FieldSeparator />
+                    <CertificationsSection form={form} />
                 </FieldGroup>
             </div>
             <TransformWrapper initialScale={0.3} minScale={0.1} maxScale={2} centerOnInit limitToBounds={false}>
