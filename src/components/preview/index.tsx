@@ -5,6 +5,7 @@ import React from "react"
 export const Preview = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
+        console.log(form.state.values)
         return (
             <form.Subscribe selector={(state) => state.values}>
                 {(values) => (
