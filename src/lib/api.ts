@@ -349,6 +349,12 @@ const userSampleValue: ResumeValues = {
 }
 
 export const fetchResumeById = ({ id }: { id: string }) => {
+    if (id == "harsh-resume") {
+        return {
+            id: id,
+            data: userSampleValue,
+        }
+    }
     return {
         id: id,
         data: defaultValues,
