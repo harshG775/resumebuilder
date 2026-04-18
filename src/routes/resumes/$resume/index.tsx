@@ -15,6 +15,9 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { Preview } from "#/components/preview"
 import { fetchResumeById } from "#/lib/api"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
+import { Button } from "#/components/ui/button"
+import { printResumePdf } from "#/lib/resume.client"
+import { useRef } from "react"
 export const Route = createFileRoute("/resumes/$resume/")({
     loader: ({ params }) => fetchResumeById({ id: params.resume }),
     ssr: false,
@@ -23,18 +26,21 @@ export const Route = createFileRoute("/resumes/$resume/")({
 
 function RouteComponent() {
     const saved = Route.useLoaderData()
+    const previewRef = useRef<HTMLDivElement>(null)
     const form = useAppForm({
         defaultValues: saved.data,
         validators: { onChange: ResumeSchema },
     })
+
+    const handleDownloadPdf = () => {
+        const html = previewRef.current?.innerHTML ?? ""
+        printResumePdf(html)
+    }
     return (
         <div className="h-screen w-screen bg-muted">
             <div className="fixed inset-0 z-10  pointer-events-none">
                 <ResizablePanelGroup orientation="horizontal">
-                    <ResizablePanel
-                        defaultSize={20}
-                        className="border pointer-events-auto bg-sidebar flex"
-                    >
+                    <ResizablePanel defaultSize={20} className="border pointer-events-auto bg-sidebar flex">
                         {/* resume content editor */}
                         <FieldGroup className="h-full overflow-y-auto p-4">
                             <BasicsSection form={form} />
@@ -55,11 +61,11 @@ function RouteComponent() {
                     <ResizableHandle withHandle />
                     <ResizablePanel defaultSize={60}></ResizablePanel>
                     <ResizableHandle withHandle />
-                    <ResizablePanel
-                        defaultSize={20}
-                        className="border pointer-events-auto bg-sidebar flex"
-                    >
-                        <FieldGroup className="h-full overflow-y-auto p-4">Resume editor</FieldGroup>
+                    <ResizablePanel defaultSize={20} className="border pointer-events-auto bg-sidebar flex">
+                        <FieldGroup className="h-full overflow-y-auto p-4">
+                            Resume editor
+                            <Button onClick={handleDownloadPdf}>Download PDF</Button>
+                        </FieldGroup>
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </div>
@@ -70,7 +76,9 @@ function RouteComponent() {
                         height: "100%",
                     }}
                 >
-                    <Preview form={form} />
+                    <div ref={previewRef}>
+                        <Preview form={form} />
+                    </div>
                 </TransformComponent>
             </TransformWrapper>
         </div>
