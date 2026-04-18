@@ -2,6 +2,7 @@ import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/componen
 import { Textarea } from "#/components/ui/textarea"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/lib/resume-form-options"
+import { RichTextEditor } from "../ui/rich-text-editor"
 
 export const SummarySection = withForm({
     ...resumeFormOptions,
@@ -14,12 +15,18 @@ export const SummarySection = withForm({
                     children={(field) => (
                         <Field>
                             <FieldLabel htmlFor={field.name}>Summary</FieldLabel>
-                            <Textarea
+                            {/* <Textarea
                                 id={field.name}
                                 value={field.state.value}
                                 onBlur={field.handleBlur}
                                 onChange={(e) => field.handleChange(e.target.value)}
                                 className="min-h-32"
+                            /> */}
+                            <RichTextEditor
+                                id={field.name}
+                                value={field.state.value}
+                                onChange={field.handleChange}
+                                onBlur={field.handleBlur}
                             />
                         </Field>
                     )}
