@@ -1,3 +1,4 @@
+import { PAPER_SIZES } from "#/constants/paper-sizes"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/lib/resume-form-options"
 import React from "react"
@@ -6,6 +7,7 @@ export const Preview = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
         console.log(form.state.values)
+        const paperSize = PAPER_SIZES["a4"]
         return (
             <form.Subscribe selector={(state) => state.values}>
                 {(values) => (
@@ -14,8 +16,8 @@ export const Preview = withForm({
                         style={{
                             // A4 size page
                             padding: "1.5rem",
-                            aspectRatio: 8.5 / 11,
-                            width: "80rem",
+                            aspectRatio: paperSize.aspectRatio,
+                            width: `${paperSize.widthPx}px`,
                             backgroundColor: "white",
                             color: "black",
                         }}

@@ -3,10 +3,12 @@ import { useEditor, EditorContent, useEditorState } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import { useEffect } from "react"
 import { cn } from "#/lib/utils"
-import { Toggle } from "#/components/ui/toggle"
+import { ToggleGroup, ToggleGroupItem } from "#/components/ui/toggle-group"
 import { Separator } from "#/components/ui/separator"
 import { Button } from "#/components/ui/button"
-import { Bold, Italic, Strikethrough, List, ListOrdered, Undo, Redo, Minus, Code } from "lucide-react"
+import { Bold, Italic, Strikethrough, Code, List, ListOrdered, Undo, Redo, Minus } from "lucide-react"
+
+// ── Toolbar ────────────────────────────────────────────────────────────────────
 
 function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
     const state = useEditorState({
@@ -23,97 +25,113 @@ function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
         }),
     })
 
-    if (!editor) return null
+    if (!editor || !state) return null
+
+    // Derive active marks/lists as string[] for ToggleGroup type="multiple"
+    const activeMarks = [
+        state.bold && "bold",
+        state.italic && "italic",
+        state.strike && "strike",
+        state.code && "code",
+    ].filter(Boolean) as string[]
+
+    const activeLists = [state.bulletList && "bulletList", state.orderedList && "orderedList"].filter(
+        Boolean,
+    ) as string[]
 
     return (
-        <div className="flex flex-wrap items-center gap-0.5 rounded-t-md border border-b-0 border-input bg-muted/40 px-2 py-1.5">
+        <div className="flex flex-wrap items-center gap-1 rounded-t-md border border-b-0 border-input bg-muted/40 px-2 py-1.5">
             {/* History */}
-            <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="size-7"
-                disabled={!state?.canUndo}
-                onClick={() => editor.chain().focus().undo().run()}
-            >
-                <Undo className="size-3.5" />
-            </Button>
-            <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="size-7"
-                disabled={!state?.canRedo}
-                onClick={() => editor.chain().focus().redo().run()}
-            >
-                <Redo className="size-3.5" />
-            </Button>
+            <div className="flex items-center gap-0.5">
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="size-7"
+                    disabled={!state.canUndo}
+                    onClick={() => editor.chain().focus().undo().run()}
+                >
+                    <Undo className="size-3.5" />
+                </Button>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="size-7"
+                    disabled={!state.canRedo}
+                    onClick={() => editor.chain().focus().redo().run()}
+                >
+                    <Redo className="size-3.5" />
+                </Button>
+            </div>
 
-            <Separator orientation="vertical" className="mx-1 h-5" />
+            <Separator orientation="vertical" className="h-5" />
 
-            {/* Marks */}
-            <Toggle
-                type="button"
-                size="sm"
-                className="size-7 p-0"
-                pressed={state?.bold}
-                onPressedChange={() => editor.chain().focus().toggleBold().run()}
+            {/* Marks — multiple selection */}
+            <ToggleGroup
+                type="multiple"
+                value={activeMarks}
+                onValueChange={(vals) => {
+                    // Toggle whichever mark changed
+                    const was = activeMarks
+                    const now = vals
+                    const added = now.filter((v) => !was.includes(v))
+                    const removed = was.filter((v) => !now.includes(v))
+                    ;[...added, ...removed].forEach((mark) => {
+                        const cmd = {
+                            bold: () => editor.chain().focus().toggleBold().run(),
+                            italic: () => editor.chain().focus().toggleItalic().run(),
+                            strike: () => editor.chain().focus().toggleStrike().run(),
+                            code: () => editor.chain().focus().toggleCode().run(),
+                        }[mark]
+                        cmd?.()
+                    })
+                }}
             >
-                <Bold className="size-3.5" />
-            </Toggle>
-            <Toggle
-                type="button"
-                size="sm"
-                className="size-7 p-0"
-                pressed={state?.italic}
-                onPressedChange={() => editor.chain().focus().toggleItalic().run()}
-            >
-                <Italic className="size-3.5" />
-            </Toggle>
-            <Toggle
-                type="button"
-                size="sm"
-                className="size-7 p-0"
-                pressed={state?.strike}
-                onPressedChange={() => editor.chain().focus().toggleStrike().run()}
-            >
-                <Strikethrough className="size-3.5" />
-            </Toggle>
-            <Toggle
-                type="button"
-                size="sm"
-                className="size-7 p-0"
-                pressed={state?.code}
-                onPressedChange={() => editor.chain().focus().toggleCode().run()}
-            >
-                <Code className="size-3.5" />
-            </Toggle>
+                <ToggleGroupItem value="bold" aria-label="Bold" className="size-7 p-0">
+                    <Bold className="size-3.5" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="italic" aria-label="Italic" className="size-7 p-0">
+                    <Italic className="size-3.5" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="strike" aria-label="Strikethrough" className="size-7 p-0">
+                    <Strikethrough className="size-3.5" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="code" aria-label="Inline code" className="size-7 p-0">
+                    <Code className="size-3.5" />
+                </ToggleGroupItem>
+            </ToggleGroup>
 
-            <Separator orientation="vertical" className="mx-1 h-5" />
+            <Separator orientation="vertical" className="h-5" />
 
-            {/* Lists */}
-            <Toggle
-                type="button"
-                size="sm"
-                className="size-7 p-0"
-                pressed={state?.bulletList}
-                onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
+            {/* Lists — multiple selection (bold one at a time in practice) */}
+            <ToggleGroup
+                type="multiple"
+                value={activeLists}
+                onValueChange={(vals) => {
+                    const was = activeLists
+                    const added = vals.filter((v) => !was.includes(v))
+                    const removed = was.filter((v) => !vals.includes(v))
+                    ;[...added, ...removed].forEach((list) => {
+                        const cmd = {
+                            bulletList: () => editor.chain().focus().toggleBulletList().run(),
+                            orderedList: () => editor.chain().focus().toggleOrderedList().run(),
+                        }[list]
+                        cmd?.()
+                    })
+                }}
             >
-                <List className="size-3.5" />
-            </Toggle>
-            <Toggle
-                type="button"
-                size="sm"
-                className="size-7 p-0"
-                pressed={state?.orderedList}
-                onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
-            >
-                <ListOrdered className="size-3.5" />
-            </Toggle>
+                <ToggleGroupItem value="bulletList" aria-label="Bullet list" className="size-7 p-0">
+                    <List className="size-3.5" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="orderedList" aria-label="Ordered list" className="size-7 p-0">
+                    <ListOrdered className="size-3.5" />
+                </ToggleGroupItem>
+            </ToggleGroup>
 
-            <Separator orientation="vertical" className="mx-1 h-5" />
+            <Separator orientation="vertical" className="h-5" />
 
-            {/* HR */}
+            {/* Insert */}
             <Button
                 type="button"
                 variant="ghost"
@@ -126,6 +144,9 @@ function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
         </div>
     )
 }
+
+// ── Editor ─────────────────────────────────────────────────────────────────────
+
 interface RichTextEditorProps {
     id?: string
     value: string
@@ -149,9 +170,7 @@ export function RichTextEditor({ id, value, onChange, onBlur, className }: RichT
             attributes: {
                 id: id ?? "",
                 class: cn(
-                    "min-h-32 w-full rounded-md border border-input bg-background px-3 py-2",
-                    "text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                    "prose prose-sm max-w-none",
+                    "min-h-32 w-full rounded-sm border border-input bg-background px-3 py-2",
                     className,
                 ),
             },
@@ -166,7 +185,7 @@ export function RichTextEditor({ id, value, onChange, onBlur, className }: RichT
     }, [value, editor])
 
     return (
-        <div className="rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+        <div className="rounded-md ">
             {editor && <Toolbar editor={editor} />}
             <EditorContent editor={editor} />
         </div>
