@@ -181,7 +181,6 @@
     --font-sans: var(--font-sans);
     --font-mono: var(--font-mono);
     --font-serif: var(--font-serif);
-
 }
 
 @layer base {
@@ -191,5 +190,12 @@
     body {
         @apply bg-background text-foreground;
         letter-spacing: var(--tracking-normal);
+    }
+
+    /* reset tailwind for element and all the element inside */
+    .reset-tw,
+    .reset-tw * {
+        all: revert;
+        box-sizing: border-box;
     }
 }
