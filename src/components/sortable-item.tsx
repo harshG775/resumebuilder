@@ -16,35 +16,41 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useSortable } from "@dnd-kit/react/sortable"
 type SortableItemRowProps = {
     title: string
     subtitle?: string
     hidden?: boolean
-    dragHandleProps?: React.HTMLAttributes<HTMLDivElement>
     actions: {
         onToggleVisibility: (hidden: boolean) => void
         onEdit: () => void
         onDelete: () => void
     }
     className?: string
+
+    sortableProps: {
+        index: number
+        id: string
+    }
 }
 
 export const SortableItemRow = ({
     title,
     subtitle,
     hidden,
-    dragHandleProps,
     actions,
     className,
+    sortableProps,
 }: SortableItemRowProps) => {
+    const { ref } = useSortable({ id: sortableProps.id, index: sortableProps.index })
+
     return (
-        <div className={cn("flex text-muted-foreground rounded-md", className)} role="listitem">
+        <div ref={ref} className={cn("flex text-muted-foreground rounded-md", className)} role="listitem">
             <div
                 role="button"
                 tabIndex={0}
                 aria-label={`Drag to reorder ${title}`}
                 className="h-14 flex items-center p-2 hover:bg-muted/80 rounded-l-md cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                {...dragHandleProps}
             >
                 <DotsSixVerticalIcon aria-hidden="true" />
             </div>

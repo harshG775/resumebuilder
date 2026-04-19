@@ -62,7 +62,11 @@ export const Preview = withForm({
                             </div>
                         </header>
                         <main>
-                            <section></section>
+                            <section>
+                                {form.state.values.sections.skills.items.map((item) => (
+                                    <div key={item.id}>{item.name}</div>
+                                ))}
+                            </section>
                             <section></section>
                             <section></section>
                             <section></section>

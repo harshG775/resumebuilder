@@ -106,10 +106,11 @@ const SkillItemDialog = ({ onSave, trigger }: { onSave: (value: SkillItem) => vo
     )
 }
 
+import { DragDropProvider } from "@dnd-kit/react"
+
 export const SkillsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
-    
         return (
             <form.AppField
                 name="sections.skills.items"
@@ -126,38 +127,48 @@ export const SkillsSection = withForm({
                             </Button>
                         </FieldLegend>
                         <FieldGroup>
-                            <div className="border divide-y rounded-md">
-                                {field.state.value.map((item) => (
-                                    <SortableItemRow
-                                        key={item.id}
-                                        title={item?.name}
-                                        subtitle={item?.keywords.join(", ")}
-                                        hidden={item?.hidden}
-                                        dragHandleProps={{
-                                            onClick: () => {
-                                                alert("dragged")
-                                            },
-                                        }}
-                                        actions={{
-                                            onToggleVisibility: (nextHidden) => {
-                                                field.handleChange((prev) =>
-                                                    prev.map((i) =>
-                                                        i.id === item.id ? { ...i, hidden: nextHidden } : i,
-                                                    ),
-                                                )
-                                            },
+                            <DragDropProvider
+                                onDragEnd={(event) => {
+                                    if (event.canceled) return
+                                    const { source, target } = event.operation
+                                    if (!source || !target) return
 
-                                            onEdit: () => {
-                                                alert("Update item " + item.id)
-                                            },
+                                    console.log("source", source)
+                                    console.log("target", target)
+                                }}
+                            >
+                                {/* <div className="border divide-y rounded-md"> */}
+                                    {field.state.value.map((item, idx) => (
+                                        <SortableItemRow
+                                            key={item.id}
+                                            sortableProps={{
+                                                index: idx,
+                                                id: item.id,
+                                            }}
+                                            title={item?.name}
+                                            subtitle={item?.keywords.join(", ")}
+                                            hidden={item?.hidden}
+                                            actions={{
+                                                onToggleVisibility: (nextHidden) => {
+                                                    field.handleChange((prev) =>
+                                                        prev.map((i) =>
+                                                            i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                        ),
+                                                    )
+                                                },
 
-                                            onDelete: () => {
-                                                field.handleChange((prev) => prev.filter((i) => i.id !== item.id))
-                                            },
-                                        }}
-                                    />
-                                ))}
-                            </div>
+                                                onEdit: () => {
+                                                    alert("Update item " + item.id)
+                                                },
+
+                                                onDelete: () => {
+                                                    field.handleChange((prev) => prev.filter((i) => i.id !== item.id))
+                                                },
+                                            }}
+                                        />
+                                    ))}
+                                {/* </div> */}
+                            </DragDropProvider>
                             <SkillItemDialog
                                 trigger={
                                     <Button variant={"outline"}>
