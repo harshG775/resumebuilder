@@ -17,8 +17,8 @@ import type z from "zod"
 import type { SkillsItemSchema } from "#/lib/schemas/resume-schema"
 import { useState } from "react"
 import { TagsInput } from "../ui/tags-input"
-import { DotsSixVerticalIcon, DotsThreeVerticalIcon } from "@phosphor-icons/react"
 import { SortableItemRow } from "../sortable-item"
+import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
 type SkillItem = z.infer<typeof SkillsItemSchema>
 
 const SkillItemDialog = ({ onSave }: { onSave: (value: SkillItem) => void }) => {
@@ -118,24 +118,44 @@ export const SkillsSection = withForm({
             mode="array"
             children={(field) => (
                 <FieldSet>
-                    <FieldLegend className="font-bold text-2xl!">{form.state.values.sections.skills.title}</FieldLegend>
+                    <FieldLegend className="font-bold text-2xl! flex items-center w-full">
+                        <Button variant={"ghost"}>
+                            <CaretDownIcon />
+                        </Button>
+                        <div className="w-full">{form.state.values.sections.skills.title}</div>
+                        <Button variant={"ghost"}>
+                            <ListIcon />
+                        </Button>
+                    </FieldLegend>
                     <FieldGroup>
                         <div className="border divide-y rounded-md">
-                            {field.state.value.map((item) => (
+                            {field.state.value.map((item, index) => (
                                 <SortableItemRow
                                     key={item.id}
                                     title={item?.name}
                                     subtitle={item?.keywords.join(", ")}
-                                    onDragHandleProps={{
+                                    hidden={item?.hidden}
+                                    dragHandleProps={{
                                         onClick: () => {
                                             alert("dragged")
                                         },
                                     }}
-                                    onItemClick={() => {
-                                        alert("Item")
-                                    }}
-                                    onOptionsClick={() => {
-                                        alert("option")
+                                    actions={{
+                                        onToggleVisibility: (nextHidden) => {
+                                            field.handleChange((prev) =>
+                                                prev.map((i, idx) =>
+                                                    idx === index ? { ...i, hidden: nextHidden } : i,
+                                                ),
+                                            )
+                                        },
+
+                                        onEdit: () => {
+                                            alert("Update item " + item.id)
+                                        },
+
+                                        onDelete: () => {
+                                            field.handleChange((prev) => prev.filter((_, idx) => idx !== index))
+                                        },
                                     }}
                                 />
                             ))}

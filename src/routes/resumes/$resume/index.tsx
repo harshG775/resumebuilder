@@ -48,14 +48,14 @@ function RouteComponent() {
                             <SummarySection form={form} />
                             <FieldSeparator />
                             <SkillsSection form={form} />
-                            <FieldSeparator />
+                            {/* <FieldSeparator />
                             <ExperienceSection form={form} />
                             <FieldSeparator />
                             <ProjectsSection form={form} />
                             <FieldSeparator />
                             <EducationSection form={form} />
                             <FieldSeparator />
-                            <CertificationsSection form={form} />
+                            <CertificationsSection form={form} /> */}
                         </FieldGroup>
                     </ResizablePanel>
                     <ResizableHandle withHandle />
