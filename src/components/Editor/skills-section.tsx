@@ -108,63 +108,68 @@ const SkillItemDialog = ({ onSave, trigger }: { onSave: (value: SkillItem) => vo
 
 export const SkillsSection = withForm({
     ...resumeFormOptions,
-    render: ({ form }) => (
-        <form.AppField
-            name="sections.skills.items"
-            mode="array"
-            children={(field) => (
-                <FieldSet>
-                    <FieldLegend className="font-bold text-2xl! flex items-center w-full">
-                        <Button variant={"ghost"}>
-                            <CaretDownIcon />
-                        </Button>
-                        <div className="w-full">{form.state.values.sections.skills.title}</div>
-                        <Button variant={"ghost"}>
-                            <ListIcon />
-                        </Button>
-                    </FieldLegend>
-                    <FieldGroup>
-                        <div className="border divide-y rounded-md">
-                            {field.state.value.map((item) => (
-                                <SortableItemRow
-                                    key={item.id}
-                                    title={item?.name}
-                                    subtitle={item?.keywords.join(", ")}
-                                    hidden={item?.hidden}
-                                    dragHandleProps={{
-                                        onClick: () => {
-                                            alert("dragged")
-                                        },
-                                    }}
-                                    actions={{
-                                        onToggleVisibility: (nextHidden) => {
-                                            field.handleChange((prev) =>
-                                                prev.map((i) => (i.id === item.id ? { ...i, hidden: nextHidden } : i)),
-                                            )
-                                        },
+    render: ({ form }) => {
+    
+        return (
+            <form.AppField
+                name="sections.skills.items"
+                mode="array"
+                children={(field) => (
+                    <FieldSet>
+                        <FieldLegend className="font-bold text-2xl! flex items-center w-full">
+                            <Button variant={"ghost"}>
+                                <CaretDownIcon />
+                            </Button>
+                            <div className="w-full">{form.state.values.sections.skills.title}</div>
+                            <Button variant={"ghost"}>
+                                <ListIcon />
+                            </Button>
+                        </FieldLegend>
+                        <FieldGroup>
+                            <div className="border divide-y rounded-md">
+                                {field.state.value.map((item) => (
+                                    <SortableItemRow
+                                        key={item.id}
+                                        title={item?.name}
+                                        subtitle={item?.keywords.join(", ")}
+                                        hidden={item?.hidden}
+                                        dragHandleProps={{
+                                            onClick: () => {
+                                                alert("dragged")
+                                            },
+                                        }}
+                                        actions={{
+                                            onToggleVisibility: (nextHidden) => {
+                                                field.handleChange((prev) =>
+                                                    prev.map((i) =>
+                                                        i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                    ),
+                                                )
+                                            },
 
-                                        onEdit: () => {
-                                            alert("Update item " + item.id)
-                                        },
+                                            onEdit: () => {
+                                                alert("Update item " + item.id)
+                                            },
 
-                                        onDelete: () => {
-                                            field.handleChange((prev) => prev.filter((i) => i.id !== item.id))
-                                        },
-                                    }}
-                                />
-                            ))}
-                        </div>
-                        <SkillItemDialog
-                            trigger={
-                                <Button variant={"outline"}>
-                                    <Plus /> Add a new skills
-                                </Button>
-                            }
-                            onSave={(newItem) => field.pushValue(newItem)}
-                        />
-                    </FieldGroup>
-                </FieldSet>
-            )}
-        />
-    ),
+                                            onDelete: () => {
+                                                field.handleChange((prev) => prev.filter((i) => i.id !== item.id))
+                                            },
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                            <SkillItemDialog
+                                trigger={
+                                    <Button variant={"outline"}>
+                                        <Plus /> Add a new skills
+                                    </Button>
+                                }
+                                onSave={(newItem) => field.pushValue(newItem)}
+                            />
+                        </FieldGroup>
+                    </FieldSet>
+                )}
+            />
+        )
+    },
 })
