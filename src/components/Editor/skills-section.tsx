@@ -21,7 +21,7 @@ import { SortableItemRow } from "../sortable-item"
 import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
 type SkillItem = z.infer<typeof SkillsItemSchema>
 
-const SkillItemDialog = ({ onSave }: { onSave: (value: SkillItem) => void }) => {
+const SkillItemDialog = ({ onSave, trigger }: { onSave: (value: SkillItem) => void; trigger: React.ReactNode }) => {
     const [open, setOpen] = useState(false)
     const [draft, setDraft] = useState({
         id: "",
@@ -42,11 +42,7 @@ const SkillItemDialog = ({ onSave }: { onSave: (value: SkillItem) => void }) => 
     }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button variant={"outline"}>
-                    <Plus /> Add a new skills
-                </Button>
-            </DialogTrigger>
+            <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent className="md:max-w-2xl lg:max-w-3xl">
                 <DialogHeader>
                     <DialogTitle className="flex gap-2 items-center">
@@ -129,7 +125,7 @@ export const SkillsSection = withForm({
                     </FieldLegend>
                     <FieldGroup>
                         <div className="border divide-y rounded-md">
-                            {field.state.value.map((item, index) => (
+                            {field.state.value.map((item) => (
                                 <SortableItemRow
                                     key={item.id}
                                     title={item?.name}
@@ -143,9 +139,7 @@ export const SkillsSection = withForm({
                                     actions={{
                                         onToggleVisibility: (nextHidden) => {
                                             field.handleChange((prev) =>
-                                                prev.map((i, idx) =>
-                                                    idx === index ? { ...i, hidden: nextHidden } : i,
-                                                ),
+                                                prev.map((i) => (i.id === item.id ? { ...i, hidden: nextHidden } : i)),
                                             )
                                         },
 
@@ -154,13 +148,20 @@ export const SkillsSection = withForm({
                                         },
 
                                         onDelete: () => {
-                                            field.handleChange((prev) => prev.filter((_, idx) => idx !== index))
+                                            field.handleChange((prev) => prev.filter((i) => i.id !== item.id))
                                         },
                                     }}
                                 />
                             ))}
                         </div>
-                        <SkillItemDialog onSave={(newItem) => field.pushValue(newItem)} />
+                        <SkillItemDialog
+                            trigger={
+                                <Button variant={"outline"}>
+                                    <Plus /> Add a new skills
+                                </Button>
+                            }
+                            onSave={(newItem) => field.pushValue(newItem)}
+                        />
                     </FieldGroup>
                 </FieldSet>
             )}

@@ -72,7 +72,6 @@ export const SortableItemRow = ({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuGroup>
-                        <DropdownMenuLabel></DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => actions?.onToggleVisibility(!hidden)}>
                             {hidden ? (
                                 <>
@@ -80,7 +79,7 @@ export const SortableItemRow = ({
                                 </>
                             ) : (
                                 <>
-                                    <EyeClosedIcon /> Hide{" "}
+                                    <EyeClosedIcon /> Hide
                                 </>
                             )}
                         </DropdownMenuItem>
