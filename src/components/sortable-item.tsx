@@ -17,7 +17,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRef } from "react"
-import { useSortable, isSortable } from "@dnd-kit/react/sortable"
+import {
+    useSortable,
+    // isSortable
+} from "@dnd-kit/react/sortable"
+import { move } from "@dnd-kit/helpers"
 import { DragDropProvider } from "@dnd-kit/react"
 
 type SortableItemRowProps = {
@@ -128,18 +132,19 @@ export function SortableDragProvider<T>({ value, onChange, children }: SortableD
                 snapshot.current = value
             }}
             onDragOver={(event) => {
-                onChange((items) => {
-                    const { source } = event.operation
-                    if (!isSortable(source)) return items
-                    //
-                    const { initialIndex, index } = source
-                    if (initialIndex === index) return items
-                    //
-                    const next = [...items]
-                    const [removed] = next.splice(initialIndex, 1)
-                    next.splice(index, 0, removed)
-                    return next
-                })
+                // onChange((items) => {
+                //     const { source } = event.operation
+                //     if (!isSortable(source)) return items
+                //     //
+                //     const { initialIndex, index } = source
+                //     if (initialIndex === index) return items
+                //     //
+                //     const next = [...items]
+                //     const [removed] = next.splice(initialIndex, 1)
+                //     next.splice(index, 0, removed)
+                //     return next
+                // })
+                onChange((prev: any) => move(prev, event))
             }}
             onDragEnd={(event) => {
                 if (event.canceled) {
