@@ -12,11 +12,14 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
+    // DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useSortable } from "@dnd-kit/react/sortable"
+import { useRef } from "react"
+import { useSortable, isSortable } from "@dnd-kit/react/sortable"
+import { DragDropProvider } from "@dnd-kit/react"
+
 type SortableItemRowProps = {
     title: string
     subtitle?: string
@@ -45,7 +48,7 @@ export const SortableItemRow = ({
     const { ref } = useSortable({ id: sortableProps.id, index: sortableProps.index })
 
     return (
-        <div ref={ref} className={cn("flex text-muted-foreground rounded-md", className)} role="listitem">
+        <div ref={ref} className={cn("flex text-muted-foreground", className)} role="listitem">
             <div
                 role="button"
                 tabIndex={0}
@@ -107,5 +110,44 @@ export const SortableItemRow = ({
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
+    )
+}
+
+type SortableDragProviderProps<T> = {
+    value: T[]
+    onChange: (updater: (prev: T[]) => T[]) => void
+    children: React.ReactNode
+}
+
+export function SortableDragProvider<T>({ value, onChange, children }: SortableDragProviderProps<T>) {
+    const snapshot = useRef<T[]>([])
+
+    return (
+        <DragDropProvider
+            onDragStart={() => {
+                snapshot.current = value
+            }}
+            onDragOver={(event) => {
+                onChange((items) => {
+                    const { source } = event.operation
+                    if (!isSortable(source)) return items
+                    //
+                    const { initialIndex, index } = source
+                    if (initialIndex === index) return items
+                    //
+                    const next = [...items]
+                    const [removed] = next.splice(initialIndex, 1)
+                    next.splice(index, 0, removed)
+                    return next
+                })
+            }}
+            onDragEnd={(event) => {
+                if (event.canceled) {
+                    onChange(() => snapshot.current)
+                }
+            }}
+        >
+            {children}
+        </DragDropProvider>
     )
 }

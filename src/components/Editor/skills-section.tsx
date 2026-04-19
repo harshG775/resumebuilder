@@ -15,10 +15,13 @@ import { Slider } from "../ui/slider"
 import { Input } from "../ui/input"
 import type z from "zod"
 import type { SkillsItemSchema } from "#/lib/schemas/resume-schema"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { TagsInput } from "../ui/tags-input"
-import { SortableItemRow } from "../sortable-item"
+import { SortableDragProvider, SortableItemRow } from "../sortable-item"
 import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
+import { DragDropProvider } from "@dnd-kit/react"
+import { move } from "@dnd-kit/helpers"
+
 type SkillItem = z.infer<typeof SkillsItemSchema>
 
 const SkillItemDialog = ({ onSave, trigger }: { onSave: (value: SkillItem) => void; trigger: React.ReactNode }) => {
@@ -106,8 +109,6 @@ const SkillItemDialog = ({ onSave, trigger }: { onSave: (value: SkillItem) => vo
     )
 }
 
-import { DragDropProvider } from "@dnd-kit/react"
-
 export const SkillsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
@@ -127,17 +128,8 @@ export const SkillsSection = withForm({
                             </Button>
                         </FieldLegend>
                         <FieldGroup>
-                            <DragDropProvider
-                                onDragEnd={(event) => {
-                                    if (event.canceled) return
-                                    const { source, target } = event.operation
-                                    if (!source || !target) return
-
-                                    console.log("source", source)
-                                    console.log("target", target)
-                                }}
-                            >
-                                {/* <div className="border divide-y rounded-md"> */}
+                            <div className="border divide-y rounded-md">
+                                <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
                                     {field.state.value.map((item, idx) => (
                                         <SortableItemRow
                                             key={item.id}
@@ -167,8 +159,8 @@ export const SkillsSection = withForm({
                                             }}
                                         />
                                     ))}
-                                {/* </div> */}
-                            </DragDropProvider>
+                                </SortableDragProvider>
+                            </div>
                             <SkillItemDialog
                                 trigger={
                                     <Button variant={"outline"}>
