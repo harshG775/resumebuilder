@@ -57,7 +57,7 @@ export const SortableItemRow = ({
                 role="button"
                 tabIndex={0}
                 aria-label={`Drag to reorder ${title}`}
-                className="h-14 flex items-center p-2 hover:bg-muted/80 rounded-l-md cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="h-14 flex items-center p-2 hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
                 <DotsSixVerticalIcon aria-hidden="true" />
             </div>
@@ -117,6 +117,23 @@ export const SortableItemRow = ({
     )
 }
 
+type SortableDragItemProps = {
+    children?: React.ReactNode
+    className?: string
+    sortableProps: {
+        index: number
+        id: string
+    }
+}
+export const SortableDragItem = ({ className, sortableProps, children }: SortableDragItemProps) => {
+    const { ref } = useSortable({ id: sortableProps.id, index: sortableProps.index })
+
+    return (
+        <div ref={ref} className={cn(className)}>
+            {children}
+        </div>
+    )
+}
 type SortableDragProviderProps<T> = {
     value: T[]
     onChange: (updater: (prev: T[]) => T[]) => void
