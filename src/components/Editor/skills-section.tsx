@@ -15,12 +15,10 @@ import { Slider } from "../ui/slider"
 import { Input } from "../ui/input"
 import type z from "zod"
 import type { SkillsItemSchema } from "#/lib/schemas/resume-schema"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { TagsInput } from "../ui/tags-input"
 import { SortableDragProvider, SortableItemRow } from "../sortable-item"
 import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
-import { DragDropProvider } from "@dnd-kit/react"
-import { move } from "@dnd-kit/helpers"
 
 type SkillItem = z.infer<typeof SkillsItemSchema>
 

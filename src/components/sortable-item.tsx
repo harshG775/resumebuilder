@@ -23,7 +23,7 @@ import { DragDropProvider } from "@dnd-kit/react"
 type SortableItemRowProps = {
     title: string
     subtitle?: string
-    hidden?: boolean
+    hidden: boolean
     actions: {
         onToggleVisibility: (hidden: boolean) => void
         onEdit: () => void

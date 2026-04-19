@@ -3,7 +3,7 @@ import { FieldGroup, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/lib/resume-form-options"
 import { Plus } from "lucide-react"
-import { SortableItemRow } from "../sortable-item"
+import { SortableDragProvider, SortableItemRow } from "../sortable-item"
 
 export const ExperienceSection = withForm({
     ...resumeFormOptions,
@@ -20,25 +20,38 @@ export const ExperienceSection = withForm({
                             {form.state.values.sections.experience.title}
                         </FieldLegend>
                         <FieldGroup>
-                            <div>
-                                {items.map((item) => (
-                                    <SortableItemRow
-                                        key={item.id}
-                                        title={item?.company}
-                                        subtitle={item?.position}
-                                        onDragHandleProps={{
-                                            onClick: () => {
-                                                alert("dragged")
-                                            },
-                                        }}
-                                        onItemClick={() => {
-                                            alert("Item")
-                                        }}
-                                        onOptionsClick={() => {
-                                            alert("option")
-                                        }}
-                                    />
-                                ))}
+                            <div className="border divide-y rounded-md">
+                                <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
+                                    {items.map((item, idx) => (
+                                        <SortableItemRow
+                                            key={item.id}
+                                            sortableProps={{
+                                                index: idx,
+                                                id: item.id,
+                                            }}
+                                            title={item?.company}
+                                            subtitle={item?.position}
+                                            hidden={item?.hidden}
+                                            actions={{
+                                                onToggleVisibility: (nextHidden) => {
+                                                    field.handleChange((prev) =>
+                                                        prev.map((i) =>
+                                                            i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                        ),
+                                                    )
+                                                },
+
+                                                onEdit: () => {
+                                                    alert("Update item " + item.id)
+                                                },
+
+                                                onDelete: () => {
+                                                    field.handleChange((prev) => prev.filter((i) => i.id !== item.id))
+                                                },
+                                            }}
+                                        />
+                                    ))}
+                                </SortableDragProvider>
                             </div>
                             <Button variant={"outline"} onClick={handleClickAddProject}>
                                 <Plus /> Add a new {form.state.values.sections.experience.title}
