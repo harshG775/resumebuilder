@@ -1,8 +1,131 @@
 import { PAPER_SIZES } from "#/constants/paper-sizes"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/lib/resume-form-options"
+import type { ResumeValues } from "#/lib/schemas/resume-schema"
 import React from "react"
 
+const sectionRenderers = {
+    summary: (values: ResumeValues) =>
+        !values.sections.summary.hidden && (
+            <section>
+                <h2 className="font-semibold text-base border-b mb-1">{values.sections.summary.title || "Summary"}</h2>
+                <p className="text-neutral-700 whitespace-pre-line">{values.sections.summary.content}</p>
+            </section>
+        ),
+
+    skills: (values: ResumeValues) =>
+        !values.sections.skills.hidden && (
+            <section>
+                <h2 className="font-semibold text-base border-b mb-1">{values.sections.skills.title || "Skills"}</h2>
+                <div className="flex flex-wrap gap-2">
+                    {values.sections.skills.items
+                        .filter((item) => !item.hidden)
+                        .map((item) => (
+                            <span key={item.id} className="px-2 py-1 border rounded text-xs">
+                                {item.name}
+                            </span>
+                        ))}
+                </div>
+            </section>
+        ),
+
+    experience: (values: ResumeValues) =>
+        !values.sections.experience.hidden && (
+            <section>
+                <h2 className="font-semibold text-base border-b mb-1">
+                    {values.sections.experience.title || "Experience"}
+                </h2>
+
+                <div className="space-y-2">
+                    {values.sections.experience.items
+                        .filter((item) => !item.hidden)
+                        .map((item) => (
+                            <div key={item.id}>
+                                <div className="flex justify-between">
+                                    <span className="font-medium">
+                                        {item.position} — {item.company}
+                                    </span>
+                                    <span className="text-xs text-neutral-600">{item.period}</span>
+                                </div>
+                                <div className="text-xs text-neutral-600">{item.location}</div>
+                                <p className="text-neutral-700 whitespace-pre-line">{item.description}</p>
+                            </div>
+                        ))}
+                </div>
+            </section>
+        ),
+
+    projects: (values: ResumeValues) =>
+        !values.sections.projects.hidden && (
+            <section>
+                <h2 className="font-semibold text-base border-b mb-1">
+                    {values.sections.projects.title || "Projects"}
+                </h2>
+
+                <div className="space-y-2">
+                    {values.sections.projects.items
+                        .filter((item) => !item.hidden)
+                        .map((item) => (
+                            <div key={item.id}>
+                                <div className="flex justify-between">
+                                    <span className="font-medium">{item.name}</span>
+                                    <span className="text-xs text-neutral-600">{item.period}</span>
+                                </div>
+                                <p className="text-neutral-700 whitespace-pre-line">{item.description}</p>
+                            </div>
+                        ))}
+                </div>
+            </section>
+        ),
+
+    education: (values: ResumeValues) =>
+        !values.sections.education.hidden && (
+            <section>
+                <h2 className="font-semibold text-base border-b mb-1">
+                    {values.sections.education.title || "Education"}
+                </h2>
+
+                <div className="space-y-2">
+                    {values.sections.education.items
+                        .filter((item) => !item.hidden)
+                        .map((item) => (
+                            <div key={item.id}>
+                                <div className="flex justify-between">
+                                    <span className="font-medium">
+                                        {item.degree} — {item.school}
+                                    </span>
+                                    <span className="text-xs text-neutral-600">{item.period}</span>
+                                </div>
+                                <div className="text-xs text-neutral-600">{item.location}</div>
+                            </div>
+                        ))}
+                </div>
+            </section>
+        ),
+
+    certifications: (values: ResumeValues) =>
+        !values.sections.certifications.hidden && (
+            <section>
+                <h2 className="font-semibold text-base border-b mb-1">
+                    {values.sections.certifications.title || "Certifications"}
+                </h2>
+
+                <div className="space-y-2">
+                    {values.sections.certifications.items
+                        .filter((item) => !item.hidden)
+                        .map((item) => (
+                            <div key={item.id}>
+                                <div className="flex justify-between">
+                                    <span className="font-medium">{item.title}</span>
+                                    <span className="text-xs text-neutral-600">{item.date}</span>
+                                </div>
+                                <div className="text-xs text-neutral-600">{item.issuer}</div>
+                            </div>
+                        ))}
+                </div>
+            </section>
+        ),
+}
 export const Preview = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
@@ -62,142 +185,13 @@ export const Preview = withForm({
                             </div>
                         </header>
                         <main className="space-y-4 text-sm">
-                            {/* SUMMARY */}
-                            {!values.sections.summary.hidden && (
-                                <section>
-                                    <h2 className="font-semibold text-base border-b mb-1">
-                                        {values.sections.summary.title || "Summary"}
-                                    </h2>
-                                    <p className="text-neutral-700 whitespace-pre-line">
-                                        {values.sections.summary.content}
-                                    </p>
-                                </section>
-                            )}
+                            {values.order.map((sectionKey) => {
+                                const render = sectionRenderers[sectionKey as keyof typeof sectionRenderers]
 
-                            {/* SKILLS */}
-                            {!values.sections.skills.hidden && (
-                                <section>
-                                    <h2 className="font-semibold text-base border-b mb-1">
-                                        {values.sections.skills.title || "Skills"}
-                                    </h2>
+                                if (!render) return null
 
-                                    <div className="flex flex-wrap gap-2">
-                                        {values.sections.skills.items
-                                            .filter((item) => !item.hidden)
-                                            .map((item) => (
-                                                <span key={item.id} className="px-2 py-1 border rounded text-xs">
-                                                    {item.name}
-                                                </span>
-                                            ))}
-                                    </div>
-                                </section>
-                            )}
-
-                            {/* EXPERIENCE */}
-                            {!values.sections.experience.hidden && (
-                                <section>
-                                    <h2 className="font-semibold text-base border-b mb-1">
-                                        {values.sections.experience.title || "Experience"}
-                                    </h2>
-
-                                    <div className="space-y-2">
-                                        {values.sections.experience.items
-                                            .filter((item) => !item.hidden)
-                                            .map((item) => (
-                                                <div key={item.id}>
-                                                    <div className="flex justify-between">
-                                                        <span className="font-medium">
-                                                            {item.position} — {item.company}
-                                                        </span>
-                                                        <span className="text-xs text-neutral-600">{item.period}</span>
-                                                    </div>
-
-                                                    <div className="text-xs text-neutral-600">{item.location}</div>
-
-                                                    <p className="text-neutral-700 whitespace-pre-line">
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                    </div>
-                                </section>
-                            )}
-
-                            {/* PROJECTS */}
-                            {!values.sections.projects.hidden && (
-                                <section>
-                                    <h2 className="font-semibold text-base border-b mb-1">
-                                        {values.sections.projects.title || "Projects"}
-                                    </h2>
-
-                                    <div className="space-y-2">
-                                        {values.sections.projects.items
-                                            .filter((item) => !item.hidden)
-                                            .map((item) => (
-                                                <div key={item.id}>
-                                                    <div className="flex justify-between">
-                                                        <span className="font-medium">{item.name}</span>
-                                                        <span className="text-xs text-neutral-600">{item.period}</span>
-                                                    </div>
-
-                                                    <p className="text-neutral-700 whitespace-pre-line">
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                    </div>
-                                </section>
-                            )}
-
-                            {/* EDUCATION */}
-                            {!values.sections.education.hidden && (
-                                <section>
-                                    <h2 className="font-semibold text-base border-b mb-1">
-                                        {values.sections.education.title || "Education"}
-                                    </h2>
-
-                                    <div className="space-y-2">
-                                        {values.sections.education.items
-                                            .filter((item) => !item.hidden)
-                                            .map((item) => (
-                                                <div key={item.id}>
-                                                    <div className="flex justify-between">
-                                                        <span className="font-medium">
-                                                            {item.degree} — {item.school}
-                                                        </span>
-                                                        <span className="text-xs text-neutral-600">{item.period}</span>
-                                                    </div>
-
-                                                    <div className="text-xs text-neutral-600">{item.location}</div>
-                                                </div>
-                                            ))}
-                                    </div>
-                                </section>
-                            )}
-
-                            {/* CERTIFICATIONS */}
-                            {!values.sections.certifications.hidden && (
-                                <section>
-                                    <h2 className="font-semibold text-base border-b mb-1">
-                                        {values.sections.certifications.title || "Certifications"}
-                                    </h2>
-
-                                    <div className="space-y-2">
-                                        {values.sections.certifications.items
-                                            .filter((item) => !item.hidden)
-                                            .map((item) => (
-                                                <div key={item.id}>
-                                                    <div className="flex justify-between">
-                                                        <span className="font-medium">{item.title}</span>
-                                                        <span className="text-xs text-neutral-600">{item.date}</span>
-                                                    </div>
-
-                                                    <div className="text-xs text-neutral-600">{item.issuer}</div>
-                                                </div>
-                                            ))}
-                                    </div>
-                                </section>
-                            )}
+                                return <React.Fragment key={sectionKey}>{render(values)}</React.Fragment>
+                            })}
                         </main>
                     </div>
                 )}
