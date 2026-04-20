@@ -349,8 +349,8 @@ ${html}
     win.onload = () => {
         win.print()
         win.addEventListener("afterprint", () => {
-            // win.close()
-            // URL.revokeObjectURL(url)
+            win.close()
+            URL.revokeObjectURL(url)
         })
     }
 }
