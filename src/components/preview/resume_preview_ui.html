@@ -1,0 +1,238 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --page-bg:#fff;--text-primary:#111;--text-secondary:#444;--text-muted:#777;
+    --border:#d0cfc8;--accent:#1a1a1a;--link:#1d4ed8;
+    --ff-head:'EB Garamond',Georgia,serif;--ff-body:'DM Sans',sans-serif;
+  }
+  body{background:var(--color-background-tertiary,#f5f4f0);padding:2rem 1rem;font-family:var(--ff-body)}
+  .resume-shell{
+    max-width:780px;margin:0 auto;
+    background:var(--page-bg);
+    border:0.5px solid var(--border);
+    border-radius:2px;
+    padding:2.5rem 2.75rem;
+    color:var(--text-primary);
+  }
+
+  /* HEADER */
+  .r-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;margin-bottom:1.4rem;padding-bottom:1.2rem;border-bottom:1.5px solid var(--accent)}
+  .r-header-left{}
+  .r-name{font-family:var(--ff-head);font-size:2rem;font-weight:600;letter-spacing:-0.01em;line-height:1.1;color:var(--accent)}
+  .r-headline{font-family:var(--ff-body);font-size:0.8rem;font-weight:400;color:var(--text-secondary);margin-top:0.3rem;letter-spacing:0.04em}
+  .r-contact{font-size:0.72rem;color:var(--text-muted);margin-top:0.4rem;display:flex;flex-wrap:wrap;gap:0.3rem 0.5rem;align-items:center}
+  .r-contact span{display:flex;align-items:center;gap:0.25rem}
+  .r-contact-sep{color:var(--border)}
+  .r-links{display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;flex-shrink:0}
+  .r-links a{font-size:0.7rem;color:var(--link);text-decoration:none;letter-spacing:0.01em}
+  .r-links a:hover{text-decoration:underline}
+
+  /* SECTIONS */
+  .r-section{margin-bottom:1.2rem}
+  .r-section-title{
+    font-family:var(--ff-body);font-size:0.65rem;font-weight:500;
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);
+    margin-bottom:0.5rem;padding-bottom:0.3rem;
+    border-bottom:0.5px solid var(--border);
+  }
+
+  /* SUMMARY */
+  .r-summary{font-size:0.8rem;line-height:1.65;color:var(--text-secondary)}
+
+  /* EXPERIENCE / PROJECTS / EDUCATION */
+  .r-items{display:flex;flex-direction:column;gap:0.9rem}
+  .r-item{}
+  .r-item-header{display:flex;justify-content:space-between;align-items:baseline;gap:0.5rem;margin-bottom:0.08rem}
+  .r-item-title{font-family:var(--ff-head);font-size:0.95rem;font-weight:500;color:var(--accent);line-height:1.2}
+  .r-item-period{font-size:0.68rem;color:var(--text-muted);white-space:nowrap;flex-shrink:0}
+  .r-item-sub{font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.3rem;display:flex;gap:0.5rem;align-items:center}
+  .r-item-sub a{color:var(--link);text-decoration:none}
+  .r-item-sub a:hover{text-decoration:underline}
+  .r-item-desc{font-size:0.77rem;line-height:1.6;color:var(--text-secondary);white-space:pre-line}
+  .r-item-tech{font-size:0.68rem;color:var(--text-muted);margin-top:0.2rem;font-weight:500}
+  .r-item-bullets{list-style:none;margin-top:0.3rem;display:flex;flex-direction:column;gap:0.18rem}
+  .r-item-bullets li{font-size:0.77rem;line-height:1.55;color:var(--text-secondary);padding-left:0.9rem;position:relative}
+  .r-item-bullets li::before{content:'·';position:absolute;left:0.1rem;color:var(--text-muted);font-size:1rem;line-height:1.3}
+
+  /* SKILLS */
+  .r-skills-grid{display:flex;flex-direction:column;gap:0.4rem}
+  .r-skill-row{display:flex;gap:0.5rem;font-size:0.77rem;line-height:1.5}
+  .r-skill-label{font-weight:500;color:var(--accent);min-width:80px;flex-shrink:0}
+  .r-skill-val{color:var(--text-secondary)}
+
+  /* EDUCATION */
+  .r-edu-sub{font-size:0.72rem;color:var(--text-muted);font-style:italic}
+
+  /* PROJECT LINKS row */
+  .r-proj-links{display:flex;gap:0.5rem;align-items:center;margin-bottom:0.15rem;flex-wrap:wrap}
+  .r-proj-links a{font-size:0.68rem;color:var(--link);text-decoration:none;border:0.5px solid #bfdbfe;border-radius:2px;padding:0.05rem 0.35rem}
+  .r-proj-links a:hover{background:#eff6ff}
+  .r-proj-tech{font-size:0.68rem;color:var(--text-muted);font-weight:500;margin-bottom:0.2rem}
+</style>
+
+<div class="resume-shell">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Resume preview for Harsh Gaur, Frontend Engineer</h2>
+
+  <!-- HEADER -->
+  <header class="r-header">
+    <div class="r-header-left">
+      <div class="r-name">Harsh Gaur</div>
+      <div class="r-headline">Frontend Engineer &nbsp;|&nbsp; React · Next.js · TanStack · TypeScript · SaaS Platforms</div>
+      <div class="r-contact">
+        <span>hgaur491@gmail.com</span>
+        <span class="r-contact-sep">·</span>
+        <span>(+91) 9310745921</span>
+        <span class="r-contact-sep">·</span>
+        <span>Delhi, India</span>
+      </div>
+    </div>
+    <div class="r-links">
+      <a href="https://github.com/harshG775" target="_blank">github.com/harshG775</a>
+      <a href="https://linkedin.com/in/harshg775" target="_blank">linkedin.com/in/harshg775</a>
+      <a href="https://harshgaur.in" target="_blank">harshgaur.in</a>
+    </div>
+  </header>
+
+  <!-- SUMMARY -->
+  <section class="r-section">
+    <div class="r-section-title">Summary</div>
+    <p class="r-summary">Frontend Engineer with 2+ years building multi-tenant SaaS platforms and AI-powered apps using React, Next.js, TypeScript, and TanStack. Focused on performance, clean architecture, and scalable UI systems.</p>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="r-section">
+    <div class="r-section-title">Experience</div>
+    <div class="r-items">
+
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">Frontend Developer &nbsp;—&nbsp; Prabhubhakti Pvt. Ltd.</div>
+          <div class="r-item-period">Jun 2025 — Present · Gurugram</div>
+        </div>
+        <div class="r-item-sub"><a href="https://learn.prabhubhakti.io" target="_blank">learn.prabhubhakti.io</a></div>
+        <ul class="r-item-bullets">
+          <li>Developed and maintained multi-tenant SaaS platforms (Astrologer, Temple, Ebook systems) with domain/subdomain routing</li>
+          <li>Built high-performance UI using Next.js, TypeScript, Tailwind CSS, and ShadCN with focus on scalability and reusability</li>
+          <li>Implemented booking, payment (Razorpay), and wallet systems on Frontend used across multiple tenant platforms</li>
+          <li>Reduced onboarding time by ~70%</li>
+        </ul>
+      </div>
+
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">Frontend Developer SDE Trainee &nbsp;—&nbsp; Metis Eduventures (Adda247)</div>
+          <div class="r-item-period">Aug 2024 — Feb 2025 · Gurugram</div>
+        </div>
+        <div class="r-item-sub"><a href="https://adda247.com" target="_blank">adda247.com</a></div>
+        <ul class="r-item-bullets">
+          <li>Built AI-powered chatbot features using React, Zustand, and OpenAI APIs</li>
+          <li>Developed real-time communication features using SSE/WebSockets</li>
+          <li>Improved application performance resulting in ~25% faster load times</li>
+        </ul>
+      </div>
+
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">Frontend Developer &nbsp;—&nbsp; ItaxEasy</div>
+          <div class="r-item-period">Nov 2023 — May 2024 · Remote</div>
+        </div>
+        <div class="r-item-sub"><a href="https://itaxeasy.com" target="_blank">itaxeasy.com</a></div>
+        <ul class="r-item-bullets">
+          <li>Migrated from React.js to Next.js adding better SEO and revamped UI of a legacy tax-filing platform using React.js and Tailwind CSS</li>
+          <li>Implemented route-based code splitting and lazy loading for performance optimization</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="r-section">
+    <div class="r-section-title">Projects</div>
+    <div class="r-items">
+
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">Astrologer SaaS Platform @ Prabhubhakti</div>
+          <div class="r-item-period"></div>
+        </div>
+        <div class="r-proj-links">
+          <a href="https://demo.prabhubhakti.io" target="_blank">demo.prabhubhakti.io</a>
+          <a href="https://github.com/harshG775/tanstack-start-multi-tenant-example" target="_blank">github</a>
+        </div>
+        <div class="r-proj-tech">TECH: Next.js, TypeScript, TanStack Start, TanStack Router, Node.js, Razorpay</div>
+        <ul class="r-item-bullets">
+          <li>Architected a multi-tenant astrologer platform supporting domain/subdomain-based tenant isolation with per-tenant UI and routing</li>
+          <li>Built end-to-end booking and Razorpay payment flows reused across multiple tenant platforms, reducing per-tenant dev time by ~70%</li>
+          <li>Standardized tenant onboarding templates in Next.js with TanStack Router, enabling faster feature rollout across tenants</li>
+        </ul>
+      </div>
+
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">SupportDesk — AI Customer Support Platform @ Adda247</div>
+        </div>
+        <div class="r-proj-links">
+          <a href="https://supportdesk.adda247.com" target="_blank">supportdesk.adda247.com</a>
+        </div>
+        <div class="r-proj-tech">TECH: React, Zustand, Flask, WebSockets, OpenAI API</div>
+        <ul class="r-item-bullets">
+          <li>Built a real-time chat system with seamless AI-to-human handover using WebSockets and OpenAI API</li>
+          <li>Replaced third-party support tooling entirely, saving ~₹2L/year in licensing costs</li>
+          <li>Managed global chat state with Zustand across agent dashboard, user widget, and admin panel</li>
+        </ul>
+      </div>
+
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">AiDoubtSolver — Voice AI Chatbot @ Adda247</div>
+        </div>
+        <div class="r-proj-links">
+          <a href="https://aidoubtsolverdev.adda247.com" target="_blank">aidoubtsolverdev.adda247.com</a>
+        </div>
+        <div class="r-proj-tech">TECH: React, SSE, Whisper API</div>
+        <ul class="r-item-bullets">
+          <li>Implemented voice-to-voice doubt solving pipeline using Whisper API with streaming responses over SSE</li>
+          <li>Handled 150+ concurrent sessions with low-latency UI updates and minimal re-renders</li>
+          <li>Designed stateful conversation flow in React with optimistic UI for perceived responsiveness</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="r-section">
+    <div class="r-section-title">Skills</div>
+    <div class="r-skills-grid">
+      <div class="r-skill-row"><span class="r-skill-label">Frontend</span><span class="r-skill-val">React · Next.js · TypeScript · TanStack (Query, Router) · Zustand · Tailwind CSS · ShadCN UI</span></div>
+      <div class="r-skill-row"><span class="r-skill-label">Backend</span><span class="r-skill-val">Node.js · Express.js · Flask</span></div>
+      <div class="r-skill-row"><span class="r-skill-label">Database</span><span class="r-skill-val">MongoDB · PostgreSQL · Prisma</span></div>
+      <div class="r-skill-row"><span class="r-skill-label">Tools &amp; Systems</span><span class="r-skill-val">Git · Docker · Postman · Linux · pnpm</span></div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="r-section" style="margin-bottom:0">
+    <div class="r-section-title">Education</div>
+    <div class="r-items">
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">Master of Computer Applications (MCA)</div>
+          <div class="r-item-period">2025 — Ongoing</div>
+        </div>
+        <div class="r-edu-sub">Indira Gandhi National Open University (IGNOU)</div>
+      </div>
+      <div class="r-item">
+        <div class="r-item-header">
+          <div class="r-item-title">Bachelor of Arts (English Honours)</div>
+          <div class="r-item-period">2020 — 2023</div>
+        </div>
+        <div class="r-edu-sub">Prof. Rajendra Singh University</div>
+      </div>
+    </div>
+  </section>
+
+</div>

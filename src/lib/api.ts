@@ -362,11 +362,315 @@ const userSampleValue: ResumeValues = {
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],
 }
 
+const khushbuResume: ResumeValues = {
+    basics: {
+        name: "Khushbu Gaur",
+        headline: "Frontend Developer & AI/ML Enthusiast",
+        email: "khushbu9625@gmail.com",
+        phone: "+91 9625099976",
+        location: "Delhi, India",
+        website: {
+            showLink: true,
+            url: "https://linkedin.com/in/khush03",
+            label: "LinkedIn",
+        },
+        customFields: [
+            {
+                id: "github",
+                url: "https://github.com/Khushh03",
+                label: "GitHub",
+            },
+        ],
+    },
+
+    sections: {
+        summary: {
+            title: "Summary",
+            hidden: false,
+            columns: 1,
+            content:
+                "Frontend Developer with hands-on experience building responsive, SEO-optimized web applications using React.js and WordPress. Backed by a Data Science & AI/ML certification with working knowledge of Python and machine learning fundamentals. Pursuing MCA while actively contributing to real-world products. Looking for opportunities to grow at the intersection of frontend and AI.",
+        },
+
+        skills: {
+            title: "Skills",
+            hidden: false,
+            columns: 2,
+            items: [
+                {
+                    id: "skill-react",
+                    hidden: false,
+                    icon: "",
+                    name: "React.js",
+                    proficiency: "Intermediate",
+                    level: 70,
+                    keywords: ["SPA", "React Router", "Component Architecture"],
+                },
+                {
+                    id: "skill-tailwind",
+                    hidden: false,
+                    icon: "",
+                    name: "Tailwind CSS & ShadCN UI",
+                    proficiency: "Intermediate",
+                    level: 65,
+                    keywords: ["Utility-first CSS", "Design Systems"],
+                },
+                {
+                    id: "skill-wordpress",
+                    hidden: false,
+                    icon: "",
+                    name: "WordPress",
+                    proficiency: "Intermediate",
+                    level: 65,
+                    keywords: ["Theme Customization", "SEO", "PHP"],
+                },
+                {
+                    id: "skill-python",
+                    hidden: false,
+                    icon: "",
+                    name: "Python",
+                    proficiency: "Beginner-Intermediate",
+                    level: 45,
+                    keywords: ["Data Preprocessing", "ML Basics"],
+                },
+                {
+                    id: "skill-aiml",
+                    hidden: false,
+                    icon: "",
+                    name: "AI/ML Fundamentals",
+                    proficiency: "Beginner",
+                    level: 40,
+                    keywords: ["Machine Learning", "OpenAI API", "Data Science"],
+                },
+                {
+                    id: "skill-js",
+                    hidden: false,
+                    icon: "",
+                    name: "JavaScript (ES6+)",
+                    proficiency: "Intermediate",
+                    level: 65,
+                    keywords: ["ES6+", "DOM", "Async/Await"],
+                },
+                {
+                    id: "skill-db",
+                    hidden: false,
+                    icon: "",
+                    name: "PostgreSQL",
+                    proficiency: "Beginner",
+                    level: 30,
+                    keywords: ["SQL", "Relational Databases"],
+                },
+                {
+                    id: "skill-tools",
+                    hidden: false,
+                    icon: "",
+                    name: "Dev Tools",
+                    proficiency: "Intermediate",
+                    level: 60,
+                    keywords: ["Git", "GitHub", "VS Code", "Postman"],
+                },
+            ],
+        },
+
+        experience: {
+            title: "Experience",
+            hidden: false,
+            columns: 1,
+            items: [
+                {
+                    id: "exp-quickipedia",
+                    hidden: false,
+                    company: "Quickipedia",
+                    position: "Frontend Developer",
+                    location: "Remote",
+                    period: "May 2025 - Present",
+                    website: {
+                        showLink: true,
+                        url: "https://quickipedia.com",
+                        label: "quickipedia.com",
+                    },
+                    description:
+                        "Working on frontend development and WordPress-based web solutions for clients across domains.",
+                    roles: [
+                        "Developed and maintained responsive web applications using React.js, improving UI performance and user experience.",
+                        "Built reusable React components and implemented client-side routing for scalable frontend architecture.",
+                        "Customized and optimized WordPress-based websites to enhance performance, security, and SEO rankings.",
+                        "Integrated Tailwind CSS and Bootstrap for consistent design systems across multiple projects.",
+                        "Ensured cross-browser compatibility, mobile responsiveness, and accessibility best practices.",
+                    ],
+                },
+            ],
+        },
+
+        projects: {
+            title: "Projects",
+            hidden: false,
+            columns: 1,
+            items: [
+                {
+                    id: "proj-quixgrow",
+                    hidden: false,
+                    name: "QuixGrow",
+                    type: "professional",
+                    source: "https://github.com/Khushh03",
+                    keywords: ["React.js", "Vite", "Tailwind CSS", "ShadCN UI"],
+                    period: "2025",
+                    links: [
+                        {
+                            id: "quixgrow-live",
+                            url: "https://quixgrow.vercel.app",
+                            label: "Live",
+                        },
+                    ],
+                    description:
+                        "Modern responsive marketing website built with React.js and Vite. Implemented reusable UI components using Tailwind CSS and ShadCN UI, with a focus on performance, mobile-first responsiveness, and clean user interactions.",
+                },
+                {
+                    id: "proj-alepaa",
+                    hidden: false,
+                    name: "Alepaa",
+                    type: "personal",
+                    source: "https://github.com/Khushh03",
+                    keywords: ["React.js", "React Router", "Tailwind CSS", "ShadCN"],
+                    period: "2025",
+                    links: [
+                        {
+                            id: "alepaa-live",
+                            url: "https://alepaa.vercel.app",
+                            label: "Live",
+                        },
+                    ],
+                    description:
+                        "Single-page application with dynamic routing via React Router. Features a clean, consistent UI built with Tailwind CSS and ShadCN components.",
+                },
+                {
+                    id: "proj-birgunj",
+                    hidden: false,
+                    name: "Improving Birgunj",
+                    type: "freelance",
+                    source: "",
+                    keywords: ["WordPress", "PHP", "HTML5", "CSS3"],
+                    period: "2024",
+                    links: [
+                        {
+                            id: "birgunj-live",
+                            url: "https://improvingbirgunj.org",
+                            label: "Live",
+                        },
+                    ],
+                    description:
+                        "Responsive nonprofit website focused on healthcare, education, and child welfare. Customized WordPress themes to highlight campaigns including Roti Bank and Feeding Nepal.",
+                },
+                {
+                    id: "proj-kamal",
+                    hidden: false,
+                    name: "Kamal Hospital (Delhi NCR)",
+                    type: "freelance",
+                    source: "",
+                    keywords: ["WordPress", "HTML5", "CSS3"],
+                    period: "2024",
+                    links: [
+                        {
+                            id: "kamal-live",
+                            url: "https://kamalhospitalncr.com",
+                            label: "Live",
+                        },
+                    ],
+                    description:
+                        "Healthcare website designed to improve accessibility and online visibility. Customized layouts for real-time health packages and service updates.",
+                },
+            ],
+        },
+
+        education: {
+            title: "Education",
+            hidden: false,
+            columns: 1,
+            items: [
+                {
+                    id: "edu-mca",
+                    hidden: false,
+                    school: "Indira Gandhi National Open University (IGNOU)",
+                    degree: "Master of Computer Applications",
+                    area: "Computer Applications",
+                    grade: "",
+                    location: "India",
+                    period: "2025 – Present",
+                    website: {
+                        showLink: false,
+                        url: "https://ignou.ac.in",
+                        label: "IGNOU",
+                    },
+                    description: "Currently pursuing MCA (Distance Learning).",
+                },
+                {
+                    id: "edu-bcom",
+                    hidden: false,
+                    school: "Prof. Rajendra Singh University",
+                    degree: "Bachelor of Commerce",
+                    area: "Accounts",
+                    grade: "",
+                    location: "India",
+                    period: "2020 – 2023",
+                    website: {
+                        showLink: false,
+                        url: "",
+                        label: "",
+                    },
+                    description: "",
+                },
+            ],
+        },
+
+        certifications: {
+            title: "Certifications",
+            hidden: false,
+            columns: 1,
+            items: [
+                {
+                    id: "cert-aiml",
+                    hidden: false,
+                    title: "Data Science & AI/ML",
+                    issuer: "F1Macro Technologies",
+                    date: "2025",
+                    website: {
+                        showLink: false,
+                        url: "",
+                        label: "",
+                    },
+                    description:
+                        "Covered machine learning fundamentals, data preprocessing, Python for data science, and applied AI concepts.",
+                },
+                {
+                    id: "cert-webdev",
+                    hidden: false,
+                    title: "Web Development",
+                    issuer: "MyCodeLearning",
+                    date: "2023",
+                    website: {
+                        showLink: false,
+                        url: "",
+                        label: "",
+                    },
+                    description: "Fundamentals of HTML, CSS, JavaScript, and responsive web design.",
+                },
+            ],
+        },
+    },
+
+    order: ["summary", "experience", "projects", "skills", "education", "certifications"],
+}
 export const fetchResumeById = ({ id }: { id: string }) => {
     if (id == "harsh-resume") {
         return {
             id: id,
             data: userSampleValue,
+        }
+    }
+    if (id == "khushbu-resume") {
+        return {
+            id: id,
+            data: khushbuResume,
         }
     }
     return {

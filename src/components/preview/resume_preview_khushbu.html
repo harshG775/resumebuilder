@@ -1,0 +1,222 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--color-background-tertiary,#f5f4f0);padding:2rem 1rem;font-family:'DM Sans',sans-serif}
+  .resume-shell{
+    max-width:780px;margin:0 auto;
+    background:#fff;
+    border:0.5px solid #d0cfc8;
+    border-radius:2px;
+    padding:2.5rem 2.75rem;
+    color:#111;
+  }
+  .r-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;margin-bottom:1.4rem;padding-bottom:1.2rem;border-bottom:1.5px solid #111}
+  .r-name{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:600;letter-spacing:-0.01em;line-height:1.1;color:#111}
+  .r-headline{font-size:0.8rem;font-weight:400;color:#444;margin-top:0.3rem;letter-spacing:0.04em}
+  .r-contact{font-size:0.72rem;color:#777;margin-top:0.4rem;display:flex;flex-wrap:wrap;gap:0.3rem 0.5rem;align-items:center}
+  .r-contact-sep{color:#d0cfc8}
+  .r-links{display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;flex-shrink:0}
+  .r-links a{font-size:0.7rem;color:#1d4ed8;text-decoration:none;letter-spacing:0.01em}
+  .r-links a:hover{text-decoration:underline}
+  .r-section{margin-bottom:1.2rem}
+  .r-section-title{font-size:0.65rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#777;margin-bottom:0.5rem;padding-bottom:0.3rem;border-bottom:0.5px solid #d0cfc8}
+  .r-summary{font-size:0.8rem;line-height:1.65;color:#444}
+  .r-items{display:flex;flex-direction:column;gap:0.9rem}
+  .r-item-header{display:flex;justify-content:space-between;align-items:baseline;gap:0.5rem;margin-bottom:0.08rem}
+  .r-item-title{font-family:'EB Garamond',Georgia,serif;font-size:0.95rem;font-weight:500;color:#111;line-height:1.2}
+  .r-item-period{font-size:0.68rem;color:#777;white-space:nowrap;flex-shrink:0}
+  .r-item-sub{font-size:0.72rem;color:#444;margin-bottom:0.25rem;display:flex;gap:0.5rem;align-items:center}
+  .r-item-sub a{color:#1d4ed8;text-decoration:none}
+  .r-item-sub a:hover{text-decoration:underline}
+  .r-item-bullets{list-style:none;margin-top:0.3rem;display:flex;flex-direction:column;gap:0.18rem}
+  .r-item-bullets li{font-size:0.77rem;line-height:1.55;color:#444;padding-left:0.9rem;position:relative}
+  .r-item-bullets li::before{content:'·';position:absolute;left:0.1rem;color:#777;font-size:1rem;line-height:1.3}
+  .r-proj-links{display:flex;gap:0.5rem;align-items:center;margin-bottom:0.15rem;flex-wrap:wrap}
+  .r-proj-links a{font-size:0.68rem;color:#1d4ed8;text-decoration:none;border:0.5px solid #bfdbfe;border-radius:2px;padding:0.05rem 0.35rem}
+  .r-proj-links a:hover{background:#eff6ff}
+  .r-proj-tech{font-size:0.68rem;color:#777;font-weight:500;margin-bottom:0.2rem}
+  .r-skills-grid{display:flex;flex-direction:column;gap:0.4rem}
+  .r-skill-row{display:flex;gap:0.5rem;font-size:0.77rem;line-height:1.5}
+  .r-skill-label{font-weight:500;color:#111;min-width:130px;flex-shrink:0}
+  .r-skill-val{color:#444}
+  .r-edu-sub{font-size:0.72rem;color:#777;font-style:italic}
+  .r-cert-issuer{font-size:0.72rem;color:#777;margin-top:0.05rem}
+  .r-cert-desc{font-size:0.75rem;color:#444;margin-top:0.2rem;line-height:1.55}
+</style>
+
+<div class="resume-shell">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Resume preview for Khushbu Gaur, Frontend Developer and AI/ML Enthusiast</h2>
+
+  <header class="r-header">
+    <div>
+      <div class="r-name">Khushbu Gaur</div>
+      <div class="r-headline">Frontend Developer &amp; AI/ML Enthusiast</div>
+      <div class="r-contact">
+        <span>khushbu9625@gmail.com</span>
+        <span class="r-contact-sep">·</span>
+        <span>+91 9625099976</span>
+        <span class="r-contact-sep">·</span>
+        <span>Delhi, India</span>
+      </div>
+    </div>
+    <div class="r-links">
+      <a href="https://linkedin.com/in/khush03" target="_blank">linkedin.com/in/khush03</a>
+      <a href="https://github.com/Khushh03" target="_blank">github.com/Khushh03</a>
+    </div>
+  </header>
+
+  <!-- SUMMARY -->
+  <section class="r-section">
+    <div class="r-section-title">Summary</div>
+    <p class="r-summary">Frontend Developer with hands-on experience building responsive, SEO-optimized web applications using React.js and WordPress. Backed by a Data Science &amp; AI/ML certification with working knowledge of Python and machine learning fundamentals. Pursuing MCA while actively contributing to real-world products. Looking for opportunities to grow at the intersection of frontend and AI.</p>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="r-section">
+    <div class="r-section-title">Experience</div>
+    <div class="r-items">
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Frontend Developer &nbsp;—&nbsp; Quickipedia</div>
+          <div class="r-item-period">May 2025 – Present · Remote</div>
+        </div>
+        <div class="r-item-sub"><a href="https://quickipedia.com" target="_blank">quickipedia.com</a></div>
+        <ul class="r-item-bullets">
+          <li>Developed and maintained responsive web applications using React.js, improving UI performance and user experience</li>
+          <li>Built reusable React components and implemented client-side routing for scalable frontend architecture</li>
+          <li>Customized and optimized WordPress-based websites to enhance performance, security, and SEO rankings</li>
+          <li>Integrated Tailwind CSS and Bootstrap for consistent design systems across multiple projects</li>
+          <li>Ensured cross-browser compatibility, mobile responsiveness, and accessibility best practices</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="r-section">
+    <div class="r-section-title">Projects</div>
+    <div class="r-items">
+
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">QuixGrow</div>
+          <div class="r-item-period">2025</div>
+        </div>
+        <div class="r-proj-links">
+          <a href="https://quixgrow.vercel.app" target="_blank">Live</a>
+          <a href="https://github.com/Khushh03" target="_blank">GitHub</a>
+        </div>
+        <div class="r-proj-tech">TECH: React.js · Vite · Tailwind CSS · ShadCN UI</div>
+        <ul class="r-item-bullets">
+          <li>Modern responsive marketing website built with React.js and Vite with a focus on performance and mobile-first responsiveness</li>
+          <li>Implemented reusable UI components using Tailwind CSS and ShadCN UI with clean user interactions</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Alepaa</div>
+          <div class="r-item-period">2025</div>
+        </div>
+        <div class="r-proj-links">
+          <a href="https://alepaa.vercel.app" target="_blank">Live</a>
+          <a href="https://github.com/Khushh03" target="_blank">GitHub</a>
+        </div>
+        <div class="r-proj-tech">TECH: React.js · React Router · Tailwind CSS · ShadCN</div>
+        <ul class="r-item-bullets">
+          <li>Single-page application with dynamic routing via React Router</li>
+          <li>Clean, consistent UI built with Tailwind CSS and ShadCN components</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Improving Birgunj <span style="font-size:0.7rem;font-weight:400;color:#777;font-family:'DM Sans',sans-serif">(Freelance)</span></div>
+          <div class="r-item-period">2024</div>
+        </div>
+        <div class="r-proj-links">
+          <a href="https://improvingbirgunj.org" target="_blank">Live</a>
+        </div>
+        <div class="r-proj-tech">TECH: WordPress · PHP · HTML5 · CSS3</div>
+        <ul class="r-item-bullets">
+          <li>Responsive nonprofit website focused on healthcare, education, and child welfare</li>
+          <li>Customized WordPress themes to highlight campaigns including Roti Bank and Feeding Nepal</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Kamal Hospital (Delhi NCR) <span style="font-size:0.7rem;font-weight:400;color:#777;font-family:'DM Sans',sans-serif">(Freelance)</span></div>
+          <div class="r-item-period">2024</div>
+        </div>
+        <div class="r-proj-links">
+          <a href="https://kamalhospitalncr.com" target="_blank">Live</a>
+        </div>
+        <div class="r-proj-tech">TECH: WordPress · HTML5 · CSS3</div>
+        <ul class="r-item-bullets">
+          <li>Healthcare website designed to improve accessibility and online visibility</li>
+          <li>Customized layouts for real-time health packages and service updates</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="r-section">
+    <div class="r-section-title">Skills</div>
+    <div class="r-skills-grid">
+      <div class="r-skill-row"><span class="r-skill-label">Frontend</span><span class="r-skill-val">React.js · JavaScript (ES6+) · Tailwind CSS · ShadCN UI · HTML5 · CSS3</span></div>
+      <div class="r-skill-row"><span class="r-skill-label">CMS</span><span class="r-skill-val">WordPress · Theme Customization · SEO</span></div>
+      <div class="r-skill-row"><span class="r-skill-label">AI / Data Science</span><span class="r-skill-val">Python · ML Fundamentals · Data Preprocessing · OpenAI API</span></div>
+      <div class="r-skill-row"><span class="r-skill-label">Database</span><span class="r-skill-val">PostgreSQL · SQL</span></div>
+      <div class="r-skill-row"><span class="r-skill-label">Tools</span><span class="r-skill-val">Git · GitHub · VS Code · Postman</span></div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="r-section">
+    <div class="r-section-title">Education</div>
+    <div class="r-items">
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Master of Computer Applications (MCA)</div>
+          <div class="r-item-period">2025 – Present</div>
+        </div>
+        <div class="r-edu-sub">Indira Gandhi National Open University (IGNOU)</div>
+      </div>
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Bachelor of Commerce</div>
+          <div class="r-item-period">2020 – 2023</div>
+        </div>
+        <div class="r-edu-sub">Prof. Rajendra Singh University</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section class="r-section" style="margin-bottom:0">
+    <div class="r-section-title">Certifications</div>
+    <div class="r-items">
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Data Science &amp; AI/ML</div>
+          <div class="r-item-period">2025</div>
+        </div>
+        <div class="r-cert-issuer">F1Macro Technologies</div>
+        <p class="r-cert-desc">Covered machine learning fundamentals, data preprocessing, Python for data science, and applied AI concepts.</p>
+      </div>
+      <div>
+        <div class="r-item-header">
+          <div class="r-item-title">Web Development</div>
+          <div class="r-item-period">2023</div>
+        </div>
+        <div class="r-cert-issuer">MyCodeLearning</div>
+        <p class="r-cert-desc">Fundamentals of HTML, CSS, JavaScript, and responsive web design.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
