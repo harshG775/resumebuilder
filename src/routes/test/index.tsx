@@ -1,57 +1,21 @@
-import type { ResumeValues } from "./schemas/resume-schema"
+import { Button } from "#/components/ui/button"
+import { createFileRoute } from "@tanstack/react-router"
+import { useRef, useState } from "react"
 
-const defaultValues: ResumeValues = {
-    basics: {
-        name: "",
-        headline: "",
-        email: "",
-        phone: "",
-        location: "",
-        website: { showLink: false, url: "", label: "" },
-        customFields: [],
-    },
-    sections: {
-        summary: {
-            title: "Summary",
-            hidden: false,
-            columns: 1,
-            content: "",
-        },
-        skills: {
-            title: "Skills",
-            hidden: false,
-            columns: 1,
-            items: [],
-        },
-        experience: {
-            title: "Experience",
-            hidden: false,
-            columns: 1,
-            items: [],
-        },
-        projects: {
-            title: "Projects",
-            hidden: false,
-            columns: 1,
-            items: [],
-        },
-        education: {
-            title: "Education",
-            hidden: false,
-            columns: 1,
-            items: [],
-        },
-        certifications: {
-            title: "Certifications",
-            hidden: false,
-            columns: 1,
-            items: [],
-        },
-    },
-    order: ["summary", "skills", "experience", "projects", "education", "certifications"],
+export const Route = createFileRoute("/test/")({
+    component: RouteComponent,
+})
+
+const formatDate = (date?: string | null) => {
+    if (!date) return ""
+    const d = new Date(date)
+    return d.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+    })
 }
 
-const userSampleValue: ResumeValues = {
+const userSampleValue = {
     basics: {
         name: "Harsh Gaur",
         headline: "Software Engineer | React, Next.js, Tanstack, TypeScript | SaaS Platforms",
@@ -362,319 +326,259 @@ const userSampleValue: ResumeValues = {
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],
 }
 
-const khushbuResume: ResumeValues = {
-    basics: {
-        name: "Khushbu Gaur",
-        headline: "Frontend Developer & AI/ML Enthusiast",
-        email: "khushbu9625@gmail.com",
-        phone: "+91 9625099976",
-        location: "Delhi, India",
-        website: {
-            showLink: true,
-            url: "https://linkedin.com/in/khush03",
-            label: "LinkedIn",
-        },
-        customFields: [
-            {
-                id: "github",
-                url: "https://github.com/Khushh03",
-                label: "GitHub",
-            },
-        ],
-    },
+const printResumePdf = ({ html, style }: { html: string; style: string }) => {
+    const fullHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+${style}
+</style>
+</head>
+${html}
+</html>
+`
 
-    sections: {
-        summary: {
-            title: "Summary",
-            hidden: false,
-            columns: 1,
-            content:
-                "Frontend Developer with hands-on experience building responsive, SEO-optimized web applications using React.js and WordPress. Backed by a Data Science & AI/ML certification with working knowledge of Python and machine learning fundamentals. Pursuing MCA while actively contributing to real-world products. Looking for opportunities to grow at the intersection of frontend and AI.",
-        },
+    const blob = new Blob([fullHtml], { type: "text/html" })
+    const url = URL.createObjectURL(blob)
 
-        skills: {
-            title: "Skills",
-            hidden: false,
-            columns: 2,
-            items: [
-                {
-                    id: "skill-react",
-                    hidden: false,
-                    icon: "",
-                    name: "React.js",
-                    proficiency: "Intermediate",
-                    level: 70,
-                    keywords: ["SPA", "React Router", "Component Architecture"],
-                },
-                {
-                    id: "skill-tailwind",
-                    hidden: false,
-                    icon: "",
-                    name: "Tailwind CSS & ShadCN UI",
-                    proficiency: "Intermediate",
-                    level: 65,
-                    keywords: ["Utility-first CSS", "Design Systems"],
-                },
-                {
-                    id: "skill-wordpress",
-                    hidden: false,
-                    icon: "",
-                    name: "WordPress",
-                    proficiency: "Intermediate",
-                    level: 65,
-                    keywords: ["Theme Customization", "SEO", "PHP"],
-                },
-                {
-                    id: "skill-python",
-                    hidden: false,
-                    icon: "",
-                    name: "Python",
-                    proficiency: "Beginner-Intermediate",
-                    level: 45,
-                    keywords: ["Data Preprocessing", "ML Basics"],
-                },
-                {
-                    id: "skill-aiml",
-                    hidden: false,
-                    icon: "",
-                    name: "AI/ML Fundamentals",
-                    proficiency: "Beginner",
-                    level: 40,
-                    keywords: ["Machine Learning", "OpenAI API", "Data Science"],
-                },
-                {
-                    id: "skill-js",
-                    hidden: false,
-                    icon: "",
-                    name: "JavaScript (ES6+)",
-                    proficiency: "Intermediate",
-                    level: 65,
-                    keywords: ["ES6+", "DOM", "Async/Await"],
-                },
-                {
-                    id: "skill-db",
-                    hidden: false,
-                    icon: "",
-                    name: "PostgreSQL",
-                    proficiency: "Beginner",
-                    level: 30,
-                    keywords: ["SQL", "Relational Databases"],
-                },
-                {
-                    id: "skill-tools",
-                    hidden: false,
-                    icon: "",
-                    name: "Dev Tools",
-                    proficiency: "Intermediate",
-                    level: 60,
-                    keywords: ["Git", "GitHub", "VS Code", "Postman"],
-                },
-            ],
-        },
+    const win = window.open(url, "_blank")
+    if (!win) return
 
-        experience: {
-            title: "Experience",
-            hidden: false,
-            columns: 1,
-            items: [
-                {
-                    id: "exp-quickipedia",
-                    hidden: false,
-                    company: "Quickipedia",
-                    position: "Frontend Developer",
-                    location: "Remote",
-                    period: "May 2025 - Present",
-                    website: {
-                        showLink: true,
-                        url: "https://quickipedia.com",
-                        label: "quickipedia.com",
-                    },
-                    description:
-                        "Working on frontend development and WordPress-based web solutions for clients across domains.",
-                    roles: [
-                        "Developed and maintained responsive web applications using React.js, improving UI performance and user experience.",
-                        "Built reusable React components and implemented client-side routing for scalable frontend architecture.",
-                        "Customized and optimized WordPress-based websites to enhance performance, security, and SEO rankings.",
-                        "Integrated Tailwind CSS and Bootstrap for consistent design systems across multiple projects.",
-                        "Ensured cross-browser compatibility, mobile responsiveness, and accessibility best practices.",
-                    ],
-                },
-            ],
-        },
-
-        projects: {
-            title: "Projects",
-            hidden: false,
-            columns: 1,
-            items: [
-                {
-                    id: "proj-quixgrow",
-                    hidden: false,
-                    name: "QuixGrow",
-                    type: "professional",
-                    source: "https://github.com/Khushh03",
-                    keywords: ["React.js", "Vite", "Tailwind CSS", "ShadCN UI"],
-                    period: "2025",
-                    links: [
-                        {
-                            id: "quixgrow-live",
-                            url: "https://quixgrow.vercel.app",
-                            label: "Live",
-                        },
-                    ],
-                    description:
-                        "Modern responsive marketing website built with React.js and Vite. Implemented reusable UI components using Tailwind CSS and ShadCN UI, with a focus on performance, mobile-first responsiveness, and clean user interactions.",
-                },
-                {
-                    id: "proj-alepaa",
-                    hidden: false,
-                    name: "Alepaa",
-                    type: "personal",
-                    source: "https://github.com/Khushh03",
-                    keywords: ["React.js", "React Router", "Tailwind CSS", "ShadCN"],
-                    period: "2025",
-                    links: [
-                        {
-                            id: "alepaa-live",
-                            url: "https://alepaa.vercel.app",
-                            label: "Live",
-                        },
-                    ],
-                    description:
-                        "Single-page application with dynamic routing via React Router. Features a clean, consistent UI built with Tailwind CSS and ShadCN components.",
-                },
-                {
-                    id: "proj-birgunj",
-                    hidden: false,
-                    name: "Improving Birgunj",
-                    type: "freelance",
-                    source: "",
-                    keywords: ["WordPress", "PHP", "HTML5", "CSS3"],
-                    period: "2024",
-                    links: [
-                        {
-                            id: "birgunj-live",
-                            url: "https://improvingbirgunj.org",
-                            label: "Live",
-                        },
-                    ],
-                    description:
-                        "Responsive nonprofit website focused on healthcare, education, and child welfare. Customized WordPress themes to highlight campaigns including Roti Bank and Feeding Nepal.",
-                },
-                {
-                    id: "proj-kamal",
-                    hidden: false,
-                    name: "Kamal Hospital (Delhi NCR)",
-                    type: "freelance",
-                    source: "",
-                    keywords: ["WordPress", "HTML5", "CSS3"],
-                    period: "2024",
-                    links: [
-                        {
-                            id: "kamal-live",
-                            url: "https://kamalhospitalncr.com",
-                            label: "Live",
-                        },
-                    ],
-                    description:
-                        "Healthcare website designed to improve accessibility and online visibility. Customized layouts for real-time health packages and service updates.",
-                },
-            ],
-        },
-
-        education: {
-            title: "Education",
-            hidden: false,
-            columns: 1,
-            items: [
-                {
-                    id: "edu-mca",
-                    hidden: false,
-                    school: "Indira Gandhi National Open University (IGNOU)",
-                    degree: "Master of Computer Applications",
-                    area: "Computer Applications",
-                    grade: "",
-                    location: "India",
-                    period: "2025 – Present",
-                    website: {
-                        showLink: false,
-                        url: "https://ignou.ac.in",
-                        label: "IGNOU",
-                    },
-                    description: "Currently pursuing MCA (Distance Learning).",
-                },
-                {
-                    id: "edu-bcom",
-                    hidden: false,
-                    school: "Prof. Rajendra Singh University",
-                    degree: "Bachelor of Commerce",
-                    area: "Accounts",
-                    grade: "",
-                    location: "India",
-                    period: "2020 – 2023",
-                    website: {
-                        showLink: false,
-                        url: "",
-                        label: "",
-                    },
-                    description: "",
-                },
-            ],
-        },
-
-        certifications: {
-            title: "Certifications",
-            hidden: false,
-            columns: 1,
-            items: [
-                {
-                    id: "cert-aiml",
-                    hidden: false,
-                    title: "Data Science & AI/ML",
-                    issuer: "F1Macro Technologies",
-                    date: "2025",
-                    website: {
-                        showLink: false,
-                        url: "",
-                        label: "",
-                    },
-                    description:
-                        "Covered machine learning fundamentals, data preprocessing, Python for data science, and applied AI concepts.",
-                },
-                {
-                    id: "cert-webdev",
-                    hidden: false,
-                    title: "Web Development",
-                    issuer: "MyCodeLearning",
-                    date: "2023",
-                    website: {
-                        showLink: false,
-                        url: "",
-                        label: "",
-                    },
-                    description: "Fundamentals of HTML, CSS, JavaScript, and responsive web design.",
-                },
-            ],
-        },
-    },
-
-    order: ["summary", "experience", "projects", "skills", "education", "certifications"],
+    win.focus()
+    win.onload = () => {
+        win.print()
+        win.addEventListener("afterprint", () => {
+            win.close()
+            URL.revokeObjectURL(url)
+        })
+    }
 }
-export const fetchResumeById = ({ id }: { id: string }) => {
-    if (id == "harsh-resume") {
-        return {
-            id: id,
-            data: userSampleValue,
-        }
+
+function RouteComponent() {
+    const { basics, sections } = userSampleValue
+    const ref = useRef<HTMLDivElement>(null)
+    const [style] = useState(`
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #000;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+}
+
+@page {
+    size: A4;
+    margin: 20mm;
+}
+
+.page {
+    width: 210mm;
+    margin: 0 auto;
+    font-size: 14px;
+}
+
+header {
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-size: 22px;
+    margin: 0;
+}
+
+h2 {
+    font-size: 16px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #000;
+}
+
+.meta {
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+section {
+    margin-bottom: 12px;
+    page-break-inside: avoid;
+}
+
+ul {
+    margin: 4px 0 8px 16px;
+}
+
+li {
+    margin-bottom: 2px;
+    page-break-inside: avoid;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+`)
+    const handlePrint = () => {
+        const html = ref.current?.innerHTML ?? ""
+        printResumePdf({
+            style: style,
+            html,
+        })
     }
-    if (id == "khushbu-resume") {
-        return {
-            id: id,
-            data: khushbuResume,
-        }
-    }
-    return {
-        id: id,
-        data: defaultValues,
-    }
+    return (
+        <>
+            {/* Preview (same styles applied) */}
+            <style>{style}</style>
+
+            <div ref={ref} className="page">
+                {/* HEADER */}
+                <header>
+                    <h1>{basics.name}</h1>
+                    <p>{basics.headline}</p>
+
+                    <div className="meta">
+                        {basics.email} | {basics.phone} | {basics.location}
+                        {basics.customFields?.map((link: any) => (
+                            <span key={link.id}>
+                                {" | "}
+                                <a href={link.url} target="_blank" rel="noopener noreferrer">
+                                    {link.label}
+                                </a>
+                            </span>
+                        ))}
+                        {basics.website?.showLink && (
+                            <span>
+                                {" | "}
+                                <a href={basics.website.url} target="_blank" rel="noopener noreferrer">
+                                    {basics.website.label}
+                                </a>
+                            </span>
+                        )}
+                    </div>
+                </header>
+
+                {/* SUMMARY */}
+                {!sections.summary.hidden && (
+                    <section>
+                        <h2>{sections.summary.title.toUpperCase()}</h2>
+                        <p>{sections.summary.content}</p>
+                    </section>
+                )}
+
+                {/* EXPERIENCE */}
+                {!sections.experience.hidden && (
+                    <section>
+                        <h2>{sections.experience.title.toUpperCase()}</h2>
+
+                        {sections.experience.items.map((exp: any) => (
+                            <div key={exp.id}>
+                                <div className="row">
+                                    <strong>
+                                        {exp.position} | {exp.company}
+                                    </strong>
+                                    <span>{exp.period}</span>
+                                </div>
+
+                                <div>{exp.location}</div>
+
+                                <ul>
+                                    {exp.roles.map((role: string, i: number) => (
+                                        <li key={i}>{role}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </section>
+                )}
+
+                {/* PROJECTS */}
+                {!sections.projects.hidden && (
+                    <section>
+                        <h2>{sections.projects.title.toUpperCase()}</h2>
+
+                        {sections.projects.items.map((proj: any) => (
+                            <div key={proj.id}>
+                                <strong>
+                                    {proj.name} {proj.source && `@ ${proj.source}`}
+                                </strong>
+
+                                <div>
+                                    {proj.links.map((link: any) => (
+                                        <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer">
+                                            {link.label}
+                                        </a>
+                                    ))}
+                                </div>
+
+                                <div>{proj.keywords.join(", ")}</div>
+
+                                <ul>
+                                    {proj.description.split("\n").map((line: string, i: number) => (
+                                        <li key={i}>{line.replace("• ", "")}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </section>
+                )}
+
+                {/* SKILLS */}
+                {!sections.skills.hidden && (
+                    <section>
+                        <h2>{sections.skills.title.toUpperCase()}</h2>
+
+                        {sections.skills.items.map((group: any) => (
+                            <div key={group.id}>
+                                <strong>{group.name}:</strong> {group.keywords.join(", ")}
+                            </div>
+                        ))}
+                    </section>
+                )}
+
+                {/* EDUCATION */}
+                {!sections.education.hidden && (
+                    <section>
+                        <h2>{sections.education.title.toUpperCase()}</h2>
+
+                        {sections.education.items.map((edu: any) => (
+                            <div key={edu.id}>
+                                <div className="row">
+                                    <strong>{edu.degree}</strong>
+                                    <span>{edu.period}</span>
+                                </div>
+                                <div>{edu.school}</div>
+                            </div>
+                        ))}
+                    </section>
+                )}
+
+                {/* CERTIFICATIONS */}
+                {!sections.certifications.hidden && (
+                    <section>
+                        <h2>{sections.certifications.title.toUpperCase()}</h2>
+
+                        {sections.certifications.items.map((cert: any) => (
+                            <div key={cert.id}>
+                                <strong>{cert.title}</strong> — {cert.issuer} ({cert.date})
+                            </div>
+                        ))}
+                    </section>
+                )}
+            </div>
+
+            {/* PRINT BUTTON */}
+            <div style={{ position: "fixed", top: 20, right: 20 }}>
+                <button onClick={handlePrint}>Print</button>
+            </div>
+        </>
+    )
 }
