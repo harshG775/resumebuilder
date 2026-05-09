@@ -1,0 +1,268 @@
+<!-- ./resume.html -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Harsh gaur frontend developer resume</title>
+    </head>
+    <style>
+        /* reset default styles */
+        *,
+        ::before,
+        ::after {
+            box-sizing: border-box;
+        }
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        p,
+        ul,
+        ol,
+        figure,
+        blockquote,
+        dl,
+        dd {
+            margin: 0;
+            padding: 0;
+        }
+        ul,
+        ol {
+            list-style: none;
+        }
+        body {
+            line-height: 1.5;
+        }
+    </style>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+        :root {
+            --paper-width: 210mm;
+            --paper-height: 297mm;
+
+            /* mauve */
+            --primary: oklch(26.3% 0.024 320.12);
+            --background: oklch(98.5% 0 0);
+            --foreground: oklch(14.5% 0.008 326);
+            --border: oklch(14.518% 0.00825 325.899);
+
+            /* fonts */
+            --font-sans: "PT Sans", sans-serif;
+            --font-serif: "PT Serif", serif;
+        }
+    </style>
+    <style>
+        body {
+            font-family: var(--font-sans);
+            margin: 0 auto;
+            width: var(--paper-width);
+            min-height: var(--paper-height);
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-serif);
+        }
+        header {
+            & ul {
+                list-style: none;
+                display: flex;
+                gap: 0.75rem;
+                padding-left: 0;
+            }
+            h1 {
+                font-weight: bold;
+                font-weight: 800;
+            }
+            p {
+                font-weight: 700;
+            }
+        }
+        section {
+            & h2 {
+                margin: 1rem 0 0.2rem 0;
+                font-weight: 600;
+                text-transform: uppercase;
+
+                border-bottom: 0.12rem solid color-mix(in oklab, var(--border) 70%, transparent);
+            }
+            & h3 {
+            }
+            & ul,
+            ol {
+                padding-left: 1.5rem;
+                list-style: disc;
+
+                border-left: 0.15rem solid color-mix(in oklab, var(--border) 20%, transparent);
+            }
+        }
+    </style>
+    <style>
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                background-color: var(--background) !important;
+                color: var(--foreground) !important;
+            }
+
+            /* 3. Adjust margins for standard A4 or Letter paper */
+            @page {
+                margin: 1cm;
+            }
+
+            /* 4. Hide things that aren't useful in a PDF */
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+    <body>
+        <header>
+            <h1>Harsh Gaur</h1>
+            <p>Software Engineer | React, Next.js, Tanstack, TypeScript | SaaS Platforms</p>
+            <ul>
+                <li>
+                    <a href="mailto:hgaur491@gmail.com">hgaur491@gmail.com</a>
+                </li>
+                <li>(+91) 9310745921</li>
+                <li><a href="https://harshgaur.in">harshgaur.in</a></li>
+                <li><a href="https://linkedin.com/in/harshg775">linkedin.com/in/harshg775</a></li>
+                <li><a href="https://github.com/harshG775">github.com/harshG775</a></li>
+                <li>Delhi, India</li>
+            </ul>
+        </header>
+        <main>
+            <section>
+                <h2>summary</h2>
+                <p>
+                    Software Engineer with 2+ years building production web applications and multi-tenant SaaS platforms
+                    using React, Next.js, TypeScript, and Node.js. Proven track record: reduced tenant onboarding time
+                    by ~70%, architected Al-powered customer support platform, and eliminated third-party tooling costs
+                    (~₹2L/year savings). Expert in component architecture, real-time API integration, and full-stack
+                    TypeScript workflows.
+                </p>
+            </section>
+
+            <section>
+                <h2>skills</h2>
+                <ul>
+                    <li><strong>Languages:</strong> TypeScript, Javascript (ES2022+), Python</li>
+                    <li>
+                        <strong>Frontend:</strong> React, Next.js, TanStack (Query, Router, Start), Zustand, Tailwind
+                        CSS, ShadCN UI
+                    </li>
+                    <li><strong>Backend:</strong> Node.js, Express.js, Flask, OpenAI API</li>
+                    <li><strong>Database:</strong> MongoDB, PostgreSQL, Prisma</li>
+                    <li><strong>Tools & Systems:</strong> Git, Docker, Linux, Postman</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>experience</h2>
+                <h3>Senior Frontend Engineer | Prabhubhakti Pvt. Ltd.</h3>
+                <p>Jun 2025 - Present | Gurugram</p>
+                <ul>
+                    <li>
+                        Architected three multi-tenant SaaS platforms (Astrologer, Temple Management, Ebook) with
+                        domain/subdomain-based tenant isolation, per-tenant Ul theming, and Next.js middleware routing.
+                    </li>
+                    <li>
+                        Built reusable React/TypeScript components for booking and payment flows with unified payment
+                        gateway integrated via Razorpay, reducing per-tenant integration time by ~70%.
+                    </li>
+                    <li>
+                        Standardized tenant onboarding templates in Next.js with TanStack Router, enabling rapid feature
+                        rollout across tenants.
+                    </li>
+                </ul>
+
+                <h3>Frontend Engineer (SDE Trainee) | Metis Eduventures Pvt. Ltd. (Adda247)</h3>
+                <p>Aug 2024 - Feb 2025 | Gurugram</p>
+                <ul>
+                    <li>
+                        Built SupportDesk, an Al customer support platform with real-time agent-to-human handover using
+                        WebSockets and OpenAI API integration, eliminating third-party tooling and saving ~2L/year.
+                    </li>
+                    <li>
+                        Developed AiDoubtSolver, an academic Al chatbot with voice-to-voice chat using Whisper API,
+                        browser Camera API, and real-time streaming responses via SSE, supporting 150+ concurrent users.
+                    </li>
+                    <li>
+                        Improved application performance by ~25% through bundle analysis, route-based code splitting,
+                        and memoization strategies.
+                    </li>
+                </ul>
+
+                <h3>Frontend Developer Internship | ItaxEasy</h3>
+                <p>Nov 2023 - May 2024 | Gwalior (Remote)</p>
+                <ul>
+                    <li>
+                        Migrated legacy tax-filing platform from React.js to Next.js App Router, enabling SSR for
+                        improved SEO and faster content delivery.
+                    </li>
+                    <li>Optimized performance through route-based code splitting and lazy loading strategies.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>projects</h2>
+                <h3>Astrologer SaaS Platform @ Prabhubhakti</h3>
+                <p>Next.js, TypeScript, TanStack Start, TanStack Router, Node.js, Razorpay</p>
+                <ul>
+                    <li>
+                        Architected multi-tenant platform supporting domain/subdomain-based tenant isolation with
+                        per-tenant Ul and routing.
+                    </li>
+                    <li>
+                        Built reusable booking and Razorpay payment flows reducing per-tenant integration time by ~70%.
+                    </li>
+                </ul>
+
+                <h3>SupportDesk - Al Customer Support Platform @Adda247</h3>
+                <p>React, Zustand, Flask, WebSockets, OpenAl ΑΡΙ</p>
+                <ul>
+                    <li>
+                        Built real-time chat system with seamless Al-to-human handover using React, WebSockets, and
+                        OpenAl API integration.
+                    </li>
+                    <li>Eliminated third-party support platform dependency, saving~2L/year in licensing costs.</li>
+                </ul>
+
+                <h3>AiDoubtSolver - Voice Al Chatbot @ Adda247</h3>
+                <p>React, SSE, Whisper API</p>
+                <ul>
+                    <li>
+                        Implemented voice-to-voice doubt solving pipeline using Whisper API with real-time streaming
+                        responses via SSE.
+                    </li>
+                    <li>
+                        Designed stateful conversation flow in React with optimistic Ul updates for perceived
+                        responsiveness.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>education</h2>
+                <ul>
+                    <li>
+                        <strong>Master of Computer Applications (MCA)</strong><br />
+                        Indira Gandhi National Open University (IGNOU) | 2025 - Ongoing
+                    </li>
+                    <li>
+                        <strong>Bachelor of Arts (English Honours)</strong><br />
+                        Prof. Rajendra Singh University | 2020 - 2023
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </body>
+</html>
