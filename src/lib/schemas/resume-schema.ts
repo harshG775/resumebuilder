@@ -1,5 +1,8 @@
 import z from "zod"
 
+export const TemplateIdSchema = z.enum(["default"])
+
+// resume sectionns
 const WebsiteSchema = z.object({
     showLink: z.boolean(),
     url: z.string(),
@@ -98,7 +101,12 @@ export const ResumeSchema = z.object({
         education: SectionBaseSchema.extend({ items: z.array(EducationItemSchema) }),
         certifications: SectionBaseSchema.extend({ items: z.array(CertificationsItemSchema) }),
     }),
+    // 
     order: z.array(z.string()),
+    meta: z.object({
+        template: z.object({ id: TemplateIdSchema }),
+    }),
 })
+
 
 export type ResumeValues = z.infer<typeof ResumeSchema>

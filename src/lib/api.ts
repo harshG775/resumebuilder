@@ -49,6 +49,11 @@ const defaultValues: ResumeValues = {
         },
     },
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],
+    meta: {
+        template: {
+            id: "default",
+        },
+    },
 }
 
 const userSampleValue: ResumeValues = {
@@ -360,6 +365,11 @@ const userSampleValue: ResumeValues = {
         },
     },
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],
+    meta: {
+        template: {
+            id: "default",
+        },
+    },
 }
 
 const khushbuResume: ResumeValues = {
@@ -659,6 +669,11 @@ const khushbuResume: ResumeValues = {
     },
 
     order: ["summary", "experience", "projects", "skills", "education", "certifications"],
+    meta: {
+        template: {
+            id: "default",
+        },
+    },
 }
 export const fetchResumeById = ({ id }: { id: string }) => {
     if (id == "harsh-resume") {

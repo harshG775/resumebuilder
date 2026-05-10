@@ -76,6 +76,9 @@ function RouteComponent() {
                             </FieldGroup>
                             <div className="p-4">
                                 <section>
+                                    <h2>Template:{form.state.values.meta?.template?.id}</h2>
+                                </section>
+                                <section>
                                     <h2>Layout</h2>
                                     <form.AppField
                                         name={`order`}
