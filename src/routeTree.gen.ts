@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TestIndexRouteImport } from './routes/test/index'
 import { Route as ResumesResumeIndexRouteImport } from './routes/resumes/$resume/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestIndexRoute = TestIndexRouteImport.update({
+  id: '/test/',
+  path: '/test/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResumesResumeIndexRoute = ResumesResumeIndexRouteImport.update({
@@ -25,27 +31,31 @@ const ResumesResumeIndexRoute = ResumesResumeIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/test/': typeof TestIndexRoute
   '/resumes/$resume/': typeof ResumesResumeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/test': typeof TestIndexRoute
   '/resumes/$resume': typeof ResumesResumeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/test/': typeof TestIndexRoute
   '/resumes/$resume/': typeof ResumesResumeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/resumes/$resume/'
+  fullPaths: '/' | '/test/' | '/resumes/$resume/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/resumes/$resume'
-  id: '__root__' | '/' | '/resumes/$resume/'
+  to: '/' | '/test' | '/resumes/$resume'
+  id: '__root__' | '/' | '/test/' | '/resumes/$resume/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TestIndexRoute: typeof TestIndexRoute
   ResumesResumeIndexRoute: typeof ResumesResumeIndexRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test/': {
+      id: '/test/'
+      path: '/test'
+      fullPath: '/test/'
+      preLoaderRoute: typeof TestIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resumes/$resume/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TestIndexRoute: TestIndexRoute,
   ResumesResumeIndexRoute: ResumesResumeIndexRoute,
 }
 export const routeTree = rootRouteImport

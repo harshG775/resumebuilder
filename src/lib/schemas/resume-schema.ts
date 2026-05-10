@@ -33,16 +33,16 @@ const SummarySchema = z.object({
     columns: z.number(),
     content: z.string(),
 })
-const SkillsItemsSchema = z.object({
+export const SkillsItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     icon: z.string(),
     name: z.string(),
     proficiency: z.string(),
-    level: z.number().min(0).max(100),
+    level: z.number().min(0).max(100).nullable(),
     keywords: z.array(z.string()),
 })
-const ExperienceItemsSchema = z.object({
+const ExperienceItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     company: z.string(),
@@ -53,17 +53,19 @@ const ExperienceItemsSchema = z.object({
     description: z.string(),
     roles: z.array(z.string()),
 })
-const ProjectsItemsSchema = z.object({
+const ProjectsItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     name: z.string(),
+    type: z.enum(["personal", "professional", "open-source", "freelance"]),
+    source: z.string(),
+    keywords: z.array(z.string()),
     period: z.string(),
     links: z.array(LinkSchema),
     description: z.string(),
 })
 
-
-const EducationItemsSchema = z.object({
+const EducationItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     school: z.string(),
@@ -76,7 +78,7 @@ const EducationItemsSchema = z.object({
     description: z.string(),
 })
 
-const CertificationsItemsSchema = z.object({
+const CertificationsItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     title: z.string(),
@@ -90,11 +92,11 @@ export const ResumeSchema = z.object({
     basics: BasicsSchema,
     sections: z.object({
         summary: SummarySchema,
-        experience: SectionBaseSchema.extend({ items: z.array(ExperienceItemsSchema) }),
-        projects: SectionBaseSchema.extend({ items: z.array(ProjectsItemsSchema) }),
-        skills: SectionBaseSchema.extend({ items: z.array(SkillsItemsSchema) }),
-        education: SectionBaseSchema.extend({ items: z.array(EducationItemsSchema) }),
-        certifications: SectionBaseSchema.extend({ items: z.array(CertificationsItemsSchema) }),
+        skills: SectionBaseSchema.extend({ items: z.array(SkillsItemSchema) }),
+        experience: SectionBaseSchema.extend({ items: z.array(ExperienceItemSchema) }),
+        projects: SectionBaseSchema.extend({ items: z.array(ProjectsItemSchema) }),
+        education: SectionBaseSchema.extend({ items: z.array(EducationItemSchema) }),
+        certifications: SectionBaseSchema.extend({ items: z.array(CertificationsItemSchema) }),
     }),
     order: z.array(z.string()),
 })
