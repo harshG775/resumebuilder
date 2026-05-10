@@ -16,30 +16,32 @@ import { fetchResumeById } from "#/lib/api"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Button } from "#/components/ui/button"
 import { printResumePdf } from "#/lib/resume.client"
-import { useRef } from "react"
 import { SortableDragItem, SortableDragProvider } from "#/components/sortable-item"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { getTemplate } from "#/features/resume/templates/registry"
-// import { generateResumeHtml } from "#/features/resume/generate-pdf"
+import { generateResumeHtml } from "#/lib/generateResumeHtml"
 
 export const Route = createFileRoute("/resumes/$resume/")({
+    ssr: false,
     loader: ({ params }) => fetchResumeById({ id: params.resume }),
     component: RouteComponent,
 })
 
 function RouteComponent() {
     const saved = Route.useLoaderData()
-    const previewRef = useRef<HTMLDivElement>(null)
     const form = useAppForm({
         defaultValues: saved.data,
         validators: { onChange: ResumeSchema },
     })
+    const Template = getTemplate("default")
 
     const handleDownloadPdf = async () => {
-        // const pdf = await generateResumeHtml("default", form.state.values)
-        const html = previewRef.current?.innerHTML ?? ""
-
-        printResumePdf(html)
+        const bodyMarkup = generateResumeHtml({
+            component: <Template.component data={form.state.values} />,
+            title: form.state.values.basics.name,
+            styles: Template.styles,
+        })
+        printResumePdf(bodyMarkup)
     }
     return (
         <div className="h-screen w-screen bg-muted">
@@ -120,14 +122,9 @@ function RouteComponent() {
                         height: "100%",
                     }}
                 >
-                    <div ref={previewRef}>
-                        <form.Subscribe selector={(state) => state.values}>
-                            {(values) => {
-                                const Temp = getTemplate("default")
-                                return <Temp.component data={values} />
-                            }}
-                        </form.Subscribe>
-                    </div>
+                    <form.Subscribe selector={(state) => state.values}>
+                        {(values) => <Template.component data={values} />}
+                    </form.Subscribe>
                 </TransformComponent>
             </TransformWrapper>
         </div>
