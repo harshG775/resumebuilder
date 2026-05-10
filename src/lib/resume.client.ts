@@ -9,10 +9,10 @@ export const printResumePdf = createClientOnlyFn((html: string) => {
 
     win.focus()
     win.onload = () => {
-        // win.print()
-        // win.addEventListener("afterprint", () => {
-        //     win.close()
-        //     URL.revokeObjectURL(url)
-        // })
+        win.print()
+        win.addEventListener("afterprint", () => {
+            win.close()
+            URL.revokeObjectURL(url)
+        })
     }
 })

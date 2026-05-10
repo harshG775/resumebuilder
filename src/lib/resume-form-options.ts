@@ -20,6 +20,11 @@ const defaultValues: ResumeValues = {
         certifications: { title: "Certifications", hidden: false, columns: 1, items: [] },
     },
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],
+    meta: {
+        template: {
+            id: "default",
+        },
+    },
 }
 export const resumeFormOptions = formOptions({
     defaultValues: defaultValues,
