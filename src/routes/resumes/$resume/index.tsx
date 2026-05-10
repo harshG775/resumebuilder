@@ -16,15 +16,14 @@ import { fetchResumeById } from "#/lib/api"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Button } from "#/components/ui/button"
 import { printResumePdf } from "#/lib/resume.client"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { SortableDragItem, SortableDragProvider } from "#/components/sortable-item"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { getTemplate } from "#/features/resume/templates/registry"
-import { generateResumeHtml } from "#/features/resume/generate-pdf"
+// import { generateResumeHtml } from "#/features/resume/generate-pdf"
 
 export const Route = createFileRoute("/resumes/$resume/")({
     loader: ({ params }) => fetchResumeById({ id: params.resume }),
-    ssr: false,
     component: RouteComponent,
 })
 
@@ -36,22 +35,12 @@ function RouteComponent() {
         validators: { onChange: ResumeSchema },
     })
 
-    const handleDownloadPdf = () => {
+    const handleDownloadPdf = async () => {
+        // const pdf = await generateResumeHtml("default", form.state.values)
         const html = previewRef.current?.innerHTML ?? ""
+
         printResumePdf(html)
     }
-    return (
-        <div>
-            <Button
-                onClick={async () => {
-                    const pdf = await generateResumeHtml("default", form.state.values)
-                }}
-            >
-                PDF
-            </Button>
-        </div>
-    )
-
     return (
         <div className="h-screen w-screen bg-muted">
             <div className="fixed inset-0 z-10  pointer-events-none">
