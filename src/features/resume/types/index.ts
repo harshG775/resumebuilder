@@ -36,6 +36,7 @@ export type TemplateDefinition = {
     meta: TemplateMeta
     config: TemplateConfig
     component: ComponentType<{ data: ResumeValues }>
+    styles: string
 }
 
 /**

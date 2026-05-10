@@ -1,5 +1,5 @@
 import type { ResumeValues } from "#/lib/schemas/resume-schema"
-import s from "./style.module.css"
+import s from "./styles.module.css"
 
 interface ComponentProps {
     data: ResumeValues

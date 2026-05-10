@@ -1,5 +1,6 @@
 import type { TemplateDefinition } from "#/features/resume/types"
 import component from "./component"
+import rawStyles from "./styles.module.css?inline"
 
 const template: TemplateDefinition = {
     meta: {
@@ -14,6 +15,7 @@ const template: TemplateDefinition = {
         maxPages: 2,
     },
     component: component,
+    styles: rawStyles,
 }
 
 export default template
