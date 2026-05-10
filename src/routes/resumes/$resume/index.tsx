@@ -12,7 +12,6 @@ import {
     SummarySection,
 } from "@/components/Editor"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
-import { Preview } from "#/components/preview"
 import { fetchResumeById } from "#/lib/api"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Button } from "#/components/ui/button"
@@ -20,6 +19,8 @@ import { printResumePdf } from "#/lib/resume.client"
 import { useRef } from "react"
 import { SortableDragItem, SortableDragProvider } from "#/components/sortable-item"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
+import { getTemplate } from "#/features/resume/templates/registry"
+
 export const Route = createFileRoute("/resumes/$resume/")({
     loader: ({ params }) => fetchResumeById({ id: params.resume }),
     ssr: false,
@@ -118,7 +119,12 @@ function RouteComponent() {
                     }}
                 >
                     <div ref={previewRef}>
-                        <Preview form={form} />
+                        <form.Subscribe selector={(state) => state.values}>
+                            {(values) => {
+                                const Temp = getTemplate("default")
+                                return <Temp.component data={values} />
+                            }}
+                        </form.Subscribe>
                     </div>
                 </TransformComponent>
             </TransformWrapper>
