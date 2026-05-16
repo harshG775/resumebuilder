@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/popover"
 import { LinkIcon, Tag, X } from "lucide-react"
 import { SortableDragItem, SortableDragProvider } from "../sortable-item"
-import { useSortable } from "@dnd-kit/react/sortable"
-import { cn } from "#/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 
 export const BasicsSection = withForm({
