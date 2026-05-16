@@ -11,13 +11,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Slider } from "../ui/slider"
-import { Input } from "../ui/input"
+import { Slider } from "#/components/ui/slider"
+import { Input } from "#/components/ui/input"
 import type z from "zod"
 import type { SkillsItemSchema } from "#/features/resume/resume-schema"
 import { useState } from "react"
-import { TagsInput } from "../ui/tags-input"
-import { SortableDragProvider, SortableItemRow } from "../sortable-item"
+import { TagsInput } from "#/components/ui/tags-input"
+import { SortableDragProvider, SortableItemRow } from "#/components/sortable-item"
 import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
 
 type SkillItem = z.infer<typeof SkillsItemSchema>

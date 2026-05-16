@@ -10,7 +10,7 @@ import {
     ProjectsSection,
     SkillsSection,
     SummarySection,
-} from "@/components/Editor"
+} from "#/features/resume/Editor"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { fetchResumeById } from "#/lib/api"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"

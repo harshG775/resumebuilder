@@ -3,13 +3,13 @@ import { FieldGroup, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import { Plus } from "lucide-react"
-import { SortableDragProvider, SortableItemRow } from "../sortable-item"
+import { SortableDragProvider, SortableItemRow } from "#/components/sortable-item"
 
-export const ExperienceSection = withForm({
+export const EducationSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
         <form.AppField
-            name="sections.experience.items"
+            name="sections.education.items"
             mode="array"
             children={(field) => {
                 const items = field.state.value
@@ -17,7 +17,7 @@ export const ExperienceSection = withForm({
                 return (
                     <FieldSet>
                         <FieldLegend className="font-bold text-2xl!">
-                            {form.state.values.sections.experience.title}
+                            {form.state.values.sections.education.title}
                         </FieldLegend>
                         <FieldGroup>
                             <div className="border divide-y rounded-md">
@@ -29,8 +29,8 @@ export const ExperienceSection = withForm({
                                                 index: idx,
                                                 id: item.id,
                                             }}
-                                            title={item?.company}
-                                            subtitle={item?.position}
+                                            title={item?.degree}
+                                            subtitle={item?.school}
                                             hidden={item?.hidden}
                                             actions={{
                                                 onToggleVisibility: (nextHidden) => {
@@ -54,7 +54,7 @@ export const ExperienceSection = withForm({
                                 </SortableDragProvider>
                             </div>
                             <Button variant={"outline"} onClick={handleClickAddProject}>
-                                <Plus /> Add a new {form.state.values.sections.experience.title}
+                                <Plus /> Add a new {form.state.values.sections.education.title}
                             </Button>
                         </FieldGroup>
                     </FieldSet>

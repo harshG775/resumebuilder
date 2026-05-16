@@ -3,7 +3,7 @@ import { FieldGroup, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import { Plus } from "lucide-react"
-import { SortableDragProvider, SortableItemRow } from "../sortable-item"
+import { SortableDragProvider, SortableItemRow } from "#/components/sortable-item"
 
 export const CertificationsSection = withForm({
     ...resumeFormOptions,

@@ -12,7 +12,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { LinkIcon, Tag, X } from "lucide-react"
-import { SortableDragItem, SortableDragProvider } from "../sortable-item"
+import { SortableDragItem, SortableDragProvider } from "#/components/sortable-item"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 
 export const BasicsSection = withForm({
