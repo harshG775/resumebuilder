@@ -1,4 +1,4 @@
-import type { ResumeValues } from "#/lib/schemas/resume-schema"
+import type { ResumeValues } from "#/features/resume/resume-schema"
 import s from "./styles.module.css"
 
 interface ComponentProps {

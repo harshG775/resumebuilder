@@ -1,5 +1,5 @@
 import type { ComponentType } from "react"
-import type { ResumeValues, TemplateIdSchema } from "#/lib/schemas/resume-schema"
+import type { ResumeValues, TemplateIdSchema } from "#/features/resume/resume-schema"
 import z from "zod"
 
 /**

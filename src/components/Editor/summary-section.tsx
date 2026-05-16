@@ -1,6 +1,6 @@
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
-import { resumeFormOptions } from "#/lib/resume-form-options"
+import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import { RichTextEditor } from "../ui/rich-text-editor"
 
 export const SummarySection = withForm({

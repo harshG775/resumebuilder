@@ -1,7 +1,7 @@
 import { Button } from "#/components/ui/button"
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
-import { resumeFormOptions } from "#/lib/resume-form-options"
+import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import { Plus } from "lucide-react"
 import {
     Dialog,
@@ -14,7 +14,7 @@ import {
 import { Slider } from "../ui/slider"
 import { Input } from "../ui/input"
 import type z from "zod"
-import type { SkillsItemSchema } from "#/lib/schemas/resume-schema"
+import type { SkillsItemSchema } from "#/features/resume/resume-schema"
 import { useState } from "react"
 import { TagsInput } from "../ui/tags-input"
 import { SortableDragProvider, SortableItemRow } from "../sortable-item"

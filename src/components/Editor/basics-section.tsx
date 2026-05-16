@@ -2,7 +2,7 @@ import { Button } from "#/components/ui/button"
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
 import { withForm } from "#/hooks/form"
-import { resumeFormOptions } from "#/lib/resume-form-options"
+import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import {
     Popover,
     PopoverContent,

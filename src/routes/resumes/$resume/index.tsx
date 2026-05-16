@@ -1,4 +1,4 @@
-import { ResumeSchema } from "#/lib/schemas/resume-schema"
+import { ResumeSchema } from "#/features/resume/resume-schema"
 import { createFileRoute } from "@tanstack/react-router"
 import { useAppForm } from "#/hooks/form"
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
@@ -20,6 +20,7 @@ import { SortableDragItem, SortableDragProvider } from "#/components/sortable-it
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { getTemplate } from "#/features/resume/templates/registry"
 import { generateResumeHtml } from "#/lib/generateResumeHtml"
+import { defaultValues } from "#/features/resume/resume-form-options"
 
 export const Route = createFileRoute("/resumes/$resume/")({
     ssr: false,
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/resumes/$resume/")({
 function RouteComponent() {
     const saved = Route.useLoaderData()
     const form = useAppForm({
-        defaultValues: saved.data,
+        defaultValues: saved?.data || defaultValues,
         validators: { onChange: ResumeSchema },
     })
     const Template = getTemplate("default")
