@@ -9,7 +9,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    // DialogTrigger,
 } from "@/components/ui/dialog"
 import { Slider } from "#/components/ui/slider"
 import { Input } from "#/components/ui/input"
@@ -22,94 +22,20 @@ import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
 
 type SkillItem = z.infer<typeof SkillsItemSchema>
 
-const SkillItemDialog = ({ onSave, trigger }: { onSave: (value: SkillItem) => void; trigger: React.ReactNode }) => {
-    const [open, setOpen] = useState(false)
-    const [draft, setDraft] = useState({
-        id: "",
-        hidden: false,
-        icon: "",
-        keywords: [] as string[],
-        level: 1,
-        name: "",
-        proficiency: "",
-    })
-    const handleCreate = () => {
-        onSave({
-            ...draft,
-            id: crypto.randomUUID(),
-        })
-        setOpen(false)
-        setDraft({ id: "", hidden: false, icon: "", keywords: [], level: 1, name: "", proficiency: "" })
-    }
-    return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>{trigger}</DialogTrigger>
-            <DialogContent className="md:max-w-2xl lg:max-w-3xl">
-                <DialogHeader>
-                    <DialogTitle className="flex gap-2 items-center">
-                        <Plus />
-                        Create a new skill
-                    </DialogTitle>
-                    <DialogDescription className="text-left text-xs">
-                        Fill in the details for your new skill set.
-                    </DialogDescription>{" "}
-                </DialogHeader>
-                <FieldSet>
-                    <FieldSet className="grid grid-cols-1 md:grid-cols-2">
-                        <Field>
-                            <FieldLabel htmlFor="name">Skill Name</FieldLabel>
-                            <Input
-                                id="name"
-                                value={draft.name}
-                                onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-                                placeholder="e.g. React"
-                            />
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="proficiency">Proficiency Description</FieldLabel>
-                            <Input
-                                id="proficiency"
-                                value={draft.proficiency}
-                                onChange={(e) => setDraft({ ...draft, proficiency: e.target.value })}
-                                placeholder="e.g. Advanced / 5 years"
-                            />
-                        </Field>
-                    </FieldSet>
-                    <Field>
-                        <FieldLabel>Skill Level </FieldLabel>
-                        <Slider
-                            value={[draft.level]}
-                            onValueChange={([val]) => setDraft({ ...draft, level: val })}
-                            max={6}
-                            min={1}
-                            step={1}
-                        />
-                        <FieldDescription>({draft.level - 1 > 0 ? `${draft.level - 1}/5` : "hidden"})</FieldDescription>
-                    </Field>
-                    <Field>
-                        <FieldLabel htmlFor="keywords">Keywords</FieldLabel>
-                        <TagsInput
-                            value={draft.keywords}
-                            onValueChange={(val) => setDraft({ ...draft, keywords: val })}
-                            placeholder="Frontend, Hooks, UI"
-                        />
-                        <FieldDescription>Separate with commas</FieldDescription>
-                    </Field>
-                    <div className="flex gap-2 justify-end">
-                        <Button variant={"ghost"} onClick={() => setOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleCreate}>Create</Button>
-                    </div>
-                </FieldSet>
-            </DialogContent>
-        </Dialog>
-    )
-}
-
 export const SkillsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
+        const [editingIndex, setEditingIndex] = useState<number | null>(null)
+        const [draft, setDraft] = useState<SkillItem | null>(null)
+        const isEditing = editingIndex !== null
+        const handleCreate = () => {
+            setDraft(null)
+            setEditingIndex(null)
+        }
+        const handleClose = () => {
+            setDraft(null)
+            setEditingIndex(null)
+        }
         return (
             <form.AppField
                 name="sections.skills.items"
@@ -148,7 +74,9 @@ export const SkillsSection = withForm({
                                                 },
 
                                                 onEdit: () => {
-                                                    alert("Update item " + item.id)
+                                                    // alert("Update item " + item.id)
+                                                    setDraft(item)
+                                                    setEditingIndex(idx)
                                                 },
 
                                                 onDelete: () => {
@@ -159,14 +87,104 @@ export const SkillsSection = withForm({
                                     ))}
                                 </SortableDragProvider>
                             </div>
-                            <SkillItemDialog
-                                trigger={
-                                    <Button variant={"outline"}>
-                                        <Plus /> Add a new skills
-                                    </Button>
-                                }
-                                onSave={(newItem) => field.pushValue(newItem)}
-                            />
+                            <Dialog open={!!draft} onOpenChange={handleClose}>
+                                <DialogContent className="md:max-w-2xl lg:max-w-3xl">
+                                    <DialogHeader>
+                                        <DialogTitle className="flex gap-2 items-center">
+                                            <Plus />
+                                            {isEditing ? "Edit skill" : "Add skill"}
+                                        </DialogTitle>
+                                        <DialogDescription className="text-left text-xs">
+                                            {isEditing
+                                                ? "modify the skill information details below."
+                                                : " Fill out the skill information details below."}
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    {draft && (
+                                        <FieldSet>
+                                            <FieldSet className="grid grid-cols-1 md:grid-cols-2">
+                                                <Field>
+                                                    <FieldLabel htmlFor="name">Skill Name</FieldLabel>
+                                                    <Input
+                                                        id="name"
+                                                        value={draft.name}
+                                                        onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                                                        placeholder="e.g. React"
+                                                    />
+                                                </Field>
+                                                <Field>
+                                                    <FieldLabel htmlFor="proficiency">
+                                                        Proficiency Description
+                                                    </FieldLabel>
+                                                    <Input
+                                                        id="proficiency"
+                                                        value={draft.proficiency}
+                                                        onChange={(e) =>
+                                                            setDraft({ ...draft, proficiency: e.target.value })
+                                                        }
+                                                        placeholder="e.g. Advanced / 5 years"
+                                                    />
+                                                </Field>
+                                            </FieldSet>
+                                            <Field>
+                                                <FieldLabel>Skill Level </FieldLabel>
+                                                <Slider
+                                                    value={[draft.level]}
+                                                    onValueChange={([val]) => setDraft({ ...draft, level: val })}
+                                                    max={6}
+                                                    min={1}
+                                                    step={1}
+                                                />
+                                                <FieldDescription>
+                                                    ({draft.level - 1 > 0 ? `${draft.level - 1}/5` : "hidden"})
+                                                </FieldDescription>
+                                            </Field>
+                                            <Field>
+                                                <FieldLabel htmlFor="keywords">Keywords</FieldLabel>
+                                                <TagsInput
+                                                    value={draft.keywords}
+                                                    onValueChange={(val) => setDraft({ ...draft, keywords: val })}
+                                                    placeholder="Frontend, Hooks, UI"
+                                                />
+                                                <FieldDescription>Separate with commas</FieldDescription>
+                                            </Field>
+                                            <div className="flex gap-2 justify-end">
+                                                <Button variant={"ghost"} onClick={handleClose}>
+                                                    Cancel
+                                                </Button>
+                                                <Button
+                                                    onClick={() => {
+                                                        if (isEditing) {
+                                                            field.replaceValue(editingIndex, draft)
+                                                        } else {
+                                                            field.pushValue(draft)
+                                                        }
+                                                        handleCreate()
+                                                    }}
+                                                >
+                                                    Save
+                                                </Button>
+                                            </div>
+                                        </FieldSet>
+                                    )}
+                                </DialogContent>
+                            </Dialog>
+                            <Button
+                                variant={"outline"}
+                                onClick={() => {
+                                    setDraft({
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        icon: "",
+                                        keywords: [] as string[],
+                                        level: 1,
+                                        name: "",
+                                        proficiency: "",
+                                    })
+                                }}
+                            >
+                                <Plus /> Add a new skills
+                            </Button>
                         </FieldGroup>
                     </FieldSet>
                 )}

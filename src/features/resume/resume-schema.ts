@@ -42,7 +42,7 @@ export const SkillsItemSchema = z.object({
     icon: z.string(),
     name: z.string(),
     proficiency: z.string(),
-    level: z.number().min(0).max(100).nullable(),
+    level: z.number().min(0).max(5),
     keywords: z.array(z.string()),
 })
 const ExperienceItemSchema = z.object({
