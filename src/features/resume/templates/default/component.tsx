@@ -1,3 +1,4 @@
+import { RichText } from "#/components/ui/rich-text"
 import type { ResumeValues } from "#/features/resume/resume-schema"
 import s from "./styles.module.css"
 
@@ -64,7 +65,7 @@ function component({ data }: ComponentProps) {
                         return (
                             <section key="summary" className={s.section}>
                                 <h2 className={s.sectionTitle}>{summary.title}</h2>
-                                <p className={s.summaryContent}>{summary.content}</p>
+                                <RichText content={summary.content} />
                             </section>
                         )
                     }
@@ -82,13 +83,9 @@ function component({ data }: ComponentProps) {
                                 <div className={s.skillsGrid}>
                                     {visibleItems.map((skill) => (
                                         <div key={skill.id} className={s.skillGroup}>
-                                            {skill.name && (
-                                                <span className={s.skillGroupName}>{skill.name}:</span>
-                                            )}
+                                            {skill.name && <span className={s.skillGroupName}>{skill.name}:</span>}
                                             {skill.keywords?.length > 0 && (
-                                                <span className={s.skillKeywords}>
-                                                    {skill.keywords.join(", ")}
-                                                </span>
+                                                <span className={s.skillKeywords}>{skill.keywords.join(", ")}</span>
                                             )}
                                         </div>
                                     ))}
@@ -131,9 +128,7 @@ function component({ data }: ComponentProps) {
                                                         <span className={s.itemLocation}>{item.location}</span>
                                                     )}
                                                 </div>
-                                                {item.period && (
-                                                    <span className={s.itemPeriod}>{item.period}</span>
-                                                )}
+                                                {item.period && <span className={s.itemPeriod}>{item.period}</span>}
                                             </div>
                                             {item.roles?.length > 0 && (
                                                 <ul className={s.pointsList}>
@@ -168,9 +163,7 @@ function component({ data }: ComponentProps) {
                                                 <div className={s.itemMeta}>
                                                     <span className={s.itemTitle}>{item.name}</span>
                                                     {item.keywords?.length > 0 && (
-                                                        <span className={s.itemStack}>
-                                                            {item.keywords.join(" · ")}
-                                                        </span>
+                                                        <span className={s.itemStack}>{item.keywords.join(" · ")}</span>
                                                     )}
                                                 </div>
                                                 <div className={s.itemRight}>
@@ -189,9 +182,7 @@ function component({ data }: ComponentProps) {
                                                             ))}
                                                         </div>
                                                     )}
-                                                    {item.period && (
-                                                        <span className={s.itemPeriod}>{item.period}</span>
-                                                    )}
+                                                    {item.period && <span className={s.itemPeriod}>{item.period}</span>}
                                                 </div>
                                             </div>
                                             {item.description && (
@@ -235,9 +226,7 @@ function component({ data }: ComponentProps) {
                                                         <span className={s.itemGrade}>Grade: {item.grade}</span>
                                                     )}
                                                 </div>
-                                                {item.period && (
-                                                    <span className={s.itemPeriod}>{item.period}</span>
-                                                )}
+                                                {item.period && <span className={s.itemPeriod}>{item.period}</span>}
                                             </div>
                                             {item.description && (
                                                 <p className={s.itemDescription}>{item.description}</p>
@@ -277,9 +266,7 @@ function component({ data }: ComponentProps) {
                                                         </a>
                                                     )}
                                                 </div>
-                                                {item.date && (
-                                                    <span className={s.itemPeriod}>{item.date}</span>
-                                                )}
+                                                {item.date && <span className={s.itemPeriod}>{item.date}</span>}
                                             </div>
                                             {item.description && (
                                                 <p className={s.itemDescription}>{item.description}</p>
