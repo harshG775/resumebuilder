@@ -167,6 +167,7 @@ export const BasicsSection = withForm({
                                                         value={field.state.value}
                                                         onChange={(e) => field.handleChange(e.target.value)}
                                                         className="h-full"
+                                                        placeholder="field..."
                                                     />
                                                 )}
                                             </form.AppField>
