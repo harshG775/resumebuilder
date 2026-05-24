@@ -14,7 +14,7 @@ import {
 import { Slider } from "#/components/ui/slider"
 import { Input } from "#/components/ui/input"
 import type z from "zod"
-import type { SkillsItemSchema } from "#/features/resume/resume-schema"
+import { SkillsItemSchema } from "#/features/resume/resume-schema"
 import { useState } from "react"
 import { TagsInput } from "#/components/ui/tags-input"
 import { SortableDragProvider, SortableItemRow } from "#/components/sortable-item"
