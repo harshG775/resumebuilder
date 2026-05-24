@@ -1,6 +1,6 @@
 import { Button } from "#/components/ui/button"
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
-import { withForm } from "#/hooks/form"
+import { useAppForm, withForm } from "#/hooks/form"
 import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import { Plus } from "lucide-react"
 import {
@@ -22,21 +22,22 @@ import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
 
 type SkillItem = z.infer<typeof SkillsItemSchema>
 
+const getEmptySkill = (): SkillItem => ({
+    id: crypto.randomUUID(),
+    hidden: false,
+    icon: "",
+    keywords: [],
+    level: 1,
+    name: "",
+    proficiency: "",
+})
 export const SkillsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
         const [dialogState, setDialogState] = useState<"NEW_ITEM" | "EDIT_ITEM" | null>(null)
         const [editingIndex, setEditingIndex] = useState<number | null>(null)
 
-        const [formState, setFormState] = useState<SkillItem>({
-            id: crypto.randomUUID(),
-            hidden: false,
-            icon: "",
-            keywords: [],
-            level: 1,
-            name: "",
-            proficiency: "",
-        })
+        const dialogForm = useAppForm({ defaultValues: { item: getEmptySkill() } })
         const isEditing = editingIndex !== null && dialogState === "EDIT_ITEM"
 
         const handleCloseDialog = () => {
@@ -86,7 +87,7 @@ export const SkillsSection = withForm({
                                                             // alert("Update item " + item.id)
                                                             setDialogState("EDIT_ITEM")
                                                             setEditingIndex(idx)
-                                                            setFormState(item)
+                                                            dialogForm.setFieldValue("item", item)
                                                         },
 
                                                         onDelete: () => {
@@ -103,15 +104,7 @@ export const SkillsSection = withForm({
                                         variant={"outline"}
                                         onClick={() => {
                                             setDialogState("NEW_ITEM")
-                                            setFormState({
-                                                id: crypto.randomUUID(),
-                                                hidden: false,
-                                                icon: "",
-                                                keywords: [],
-                                                level: 1,
-                                                name: "",
-                                                proficiency: "",
-                                            })
+                                            dialogForm.setFieldValue("item", getEmptySkill())
                                         }}
                                     >
                                         <Plus /> Add a new skills
@@ -133,61 +126,97 @@ export const SkillsSection = withForm({
                                     </DialogHeader>
                                     <FieldSet>
                                         <FieldSet className="grid grid-cols-1 md:grid-cols-2">
-                                            <Field>
-                                                <FieldLabel htmlFor="name">Skill Name</FieldLabel>
-                                                <Input
-                                                    id="name"
-                                                    value={formState.name}
-                                                    onChange={(e) =>
-                                                        setFormState({ ...formState, name: e.target.value })
-                                                    }
-                                                    placeholder="e.g. React"
-                                                />
-                                            </Field>
-                                            <Field>
-                                                <FieldLabel htmlFor="proficiency">Proficiency Description</FieldLabel>
-                                                <Input
-                                                    id="proficiency"
-                                                    value={formState.proficiency}
-                                                    onChange={(e) =>
-                                                        setFormState({ ...formState, proficiency: e.target.value })
-                                                    }
-                                                    placeholder="e.g. Advanced / 5 years"
-                                                />
-                                            </Field>
+                                            <dialogForm.AppField
+                                                name="item.name"
+                                                children={(dialogField) => {
+                                                    return (
+                                                        <Field>
+                                                            <FieldLabel htmlFor="name">Skill Name</FieldLabel>
+                                                            <Input
+                                                                id="name"
+                                                                value={dialogField.state.value}
+                                                                onChange={(e) =>
+                                                                    dialogField.handleChange(e.target.value)
+                                                                }
+                                                                placeholder="e.g. React"
+                                                            />
+                                                        </Field>
+                                                    )
+                                                }}
+                                            />
+                                            <dialogForm.AppField
+                                                name="item.proficiency"
+                                                children={(dialogField) => {
+                                                    return (
+                                                        <Field>
+                                                            <FieldLabel htmlFor="proficiency">
+                                                                Proficiency Description
+                                                            </FieldLabel>
+                                                            <Input
+                                                                id="proficiency"
+                                                                value={dialogField.state.value}
+                                                                onChange={(e) =>
+                                                                    dialogField.handleChange(e.target.value)
+                                                                }
+                                                                placeholder="e.g. Advanced / 5 years"
+                                                            />
+                                                        </Field>
+                                                    )
+                                                }}
+                                            />
                                         </FieldSet>
-                                        <Field>
-                                            <FieldLabel>Skill Level </FieldLabel>
-                                            <Slider
-                                                value={[formState.level]}
-                                                onValueChange={([val]) => setFormState({ ...formState, level: val })}
-                                                max={6}
-                                                min={1}
-                                                step={1}
-                                            />
-                                            <FieldDescription>
-                                                ({formState.level - 1 > 0 ? `${formState.level - 1}/5` : "hidden"})
-                                            </FieldDescription>
-                                        </Field>
-                                        <Field>
-                                            <FieldLabel htmlFor="keywords">Keywords</FieldLabel>
-                                            <TagsInput
-                                                value={formState.keywords}
-                                                onValueChange={(val) => setFormState({ ...formState, keywords: val })}
-                                                placeholder="Frontend, Hooks, UI"
-                                            />
-                                            <FieldDescription>Separate with commas</FieldDescription>
-                                        </Field>
+                                        <dialogForm.AppField
+                                            name="item.level"
+                                            children={(dialogField) => {
+                                                return (
+                                                    <Field>
+                                                        <FieldLabel>Skill Level </FieldLabel>
+                                                        <Slider
+                                                            value={[dialogField.state.value]}
+                                                            onValueChange={([val]) => dialogField.handleChange(val)}
+                                                            max={6}
+                                                            min={1}
+                                                            step={1}
+                                                        />
+                                                        <FieldDescription>
+                                                            (
+                                                            {dialogField.state.value - 1 > 0
+                                                                ? `${dialogField.state.value - 1}/5`
+                                                                : "hidden"}
+                                                            )
+                                                        </FieldDescription>
+                                                    </Field>
+                                                )
+                                            }}
+                                        />
+                                        <dialogForm.AppField
+                                            name="item.keywords"
+                                            children={(dialogField) => {
+                                                return (
+                                                    <Field>
+                                                        <FieldLabel htmlFor="keywords">Keywords</FieldLabel>
+                                                        <TagsInput
+                                                            value={dialogField.state.value}
+                                                            onValueChange={(val) => dialogField.handleChange(val)}
+                                                            placeholder="Frontend, Hooks, UI"
+                                                        />
+                                                        <FieldDescription>Separate with commas</FieldDescription>
+                                                    </Field>
+                                                )
+                                            }}
+                                        />
+
                                         <div className="flex gap-2 justify-end">
                                             <Button variant={"ghost"} onClick={handleCloseDialog}>
                                                 Cancel
                                             </Button>
                                             <Button
                                                 onClick={() => {
+                                                    const value = dialogForm.state.values.item
                                                     if (isEditing) {
-                                                        field.replaceValue(editingIndex, formState)
+                                                        field.replaceValue(editingIndex, value)
                                                     } else {
-                                                        field.pushValue(formState)
+                                                        field.pushValue(value)
                                                     }
                                                     handleCloseDialog()
                                                 }}
