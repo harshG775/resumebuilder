@@ -1,15 +1,15 @@
 import { Button } from "#/components/ui/button"
 import { FieldGroup, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
-import { resumeFormOptions } from "#/lib/resume-form-options"
+import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import { Plus } from "lucide-react"
-import { SortableDragProvider, SortableItemRow } from "../sortable-item"
+import { SortableDragProvider, SortableItemRow } from "#/components/sortable-item"
 
-export const ProjectsSection = withForm({
+export const ExperienceSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
         <form.AppField
-            name="sections.projects.items"
+            name="sections.experience.items"
             mode="array"
             children={(field) => {
                 const items = field.state.value
@@ -17,7 +17,7 @@ export const ProjectsSection = withForm({
                 return (
                     <FieldSet>
                         <FieldLegend className="font-bold text-2xl!">
-                            {form.state.values.sections.projects.title}
+                            {form.state.values.sections.experience.title}
                         </FieldLegend>
                         <FieldGroup>
                             <div className="border divide-y rounded-md">
@@ -29,8 +29,8 @@ export const ProjectsSection = withForm({
                                                 index: idx,
                                                 id: item.id,
                                             }}
-                                            title={item?.name}
-                                            subtitle={item?.period}
+                                            title={item?.company}
+                                            subtitle={item?.position}
                                             hidden={item?.hidden}
                                             actions={{
                                                 onToggleVisibility: (nextHidden) => {
@@ -54,7 +54,7 @@ export const ProjectsSection = withForm({
                                 </SortableDragProvider>
                             </div>
                             <Button variant={"outline"} onClick={handleClickAddProject}>
-                                <Plus /> Add a new {form.state.values.sections.projects.title}
+                                <Plus /> Add a new {form.state.values.sections.experience.title}
                             </Button>
                         </FieldGroup>
                     </FieldSet>

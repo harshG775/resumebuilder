@@ -1,4 +1,4 @@
-import { ResumeSchema } from "#/lib/schemas/resume-schema"
+import { ResumeSchema } from "#/features/resume/resume-schema"
 import { createFileRoute } from "@tanstack/react-router"
 import { useAppForm } from "#/hooks/form"
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
@@ -10,34 +10,39 @@ import {
     ProjectsSection,
     SkillsSection,
     SummarySection,
-} from "@/components/Editor"
+} from "#/features/resume/Editor"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import { fetchResumeById } from "#/lib/api"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Button } from "#/components/ui/button"
 import { printResumePdf } from "#/lib/resume.client"
-import { useRef } from "react"
 import { SortableDragItem, SortableDragProvider } from "#/components/sortable-item"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { getTemplate } from "#/features/resume/templates/registry"
+import { generateResumeHtml } from "#/lib/generateResumeHtml"
+import { defaultValues } from "#/features/resume/resume-form-options"
 
 export const Route = createFileRoute("/resumes/$resume/")({
-    loader: ({ params }) => fetchResumeById({ id: params.resume }),
     ssr: false,
+    loader: ({ params }) => fetchResumeById({ id: params.resume }),
     component: RouteComponent,
 })
 
 function RouteComponent() {
     const saved = Route.useLoaderData()
-    const previewRef = useRef<HTMLDivElement>(null)
     const form = useAppForm({
-        defaultValues: saved.data,
+        defaultValues: saved?.data || defaultValues,
         validators: { onChange: ResumeSchema },
     })
+    const Template = getTemplate("default")
 
-    const handleDownloadPdf = () => {
-        const html = previewRef.current?.innerHTML ?? ""
-        printResumePdf(html)
+    const handleDownloadPdf = async () => {
+        const bodyMarkup = generateResumeHtml({
+            component: <Template.component data={form.state.values} />,
+            title: form.state.values.basics.name,
+            styles: Template.styles,
+        })
+        printResumePdf(bodyMarkup)
     }
     return (
         <div className="h-screen w-screen bg-muted">
@@ -71,6 +76,9 @@ function RouteComponent() {
                                 <Button onClick={handleDownloadPdf}>Download PDF</Button>
                             </FieldGroup>
                             <div className="p-4">
+                                <section>
+                                    <h2>Template:{form.state.values.meta?.template?.id}</h2>
+                                </section>
                                 <section>
                                     <h2>Layout</h2>
                                     <form.AppField
@@ -118,14 +126,9 @@ function RouteComponent() {
                         height: "100%",
                     }}
                 >
-                    <div ref={previewRef}>
-                        <form.Subscribe selector={(state) => state.values}>
-                            {(values) => {
-                                const Temp = getTemplate("default")
-                                return <Temp.component data={values} />
-                            }}
-                        </form.Subscribe>
-                    </div>
+                    <form.Subscribe selector={(state) => state.values}>
+                        {(values) => <Template.component data={values} />}
+                    </form.Subscribe>
                 </TransformComponent>
             </TransformWrapper>
         </div>

@@ -2,7 +2,7 @@ import { Button } from "#/components/ui/button"
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
 import { withForm } from "#/hooks/form"
-import { resumeFormOptions } from "#/lib/resume-form-options"
+import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import {
     Popover,
     PopoverContent,
@@ -12,9 +12,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { LinkIcon, Tag, X } from "lucide-react"
-import { SortableDragItem, SortableDragProvider } from "../sortable-item"
-import { useSortable } from "@dnd-kit/react/sortable"
-import { cn } from "#/lib/utils"
+import { SortableDragItem, SortableDragProvider } from "#/components/sortable-item"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 
 export const BasicsSection = withForm({
@@ -169,6 +167,7 @@ export const BasicsSection = withForm({
                                                         value={field.state.value}
                                                         onChange={(e) => field.handleChange(e.target.value)}
                                                         className="h-full"
+                                                        placeholder="field..."
                                                     />
                                                 )}
                                             </form.AppField>

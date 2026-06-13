@@ -1,7 +1,7 @@
 import { formOptions } from "@tanstack/react-form"
-import { ResumeSchema, type ResumeValues } from "#/lib/schemas/resume-schema"
+import { ResumeSchema, type ResumeValues } from "#/features/resume/resume-schema"
 
-const defaultValues: ResumeValues = {
+export const defaultValues: ResumeValues = {
     basics: {
         name: "",
         headline: "",
@@ -20,7 +20,13 @@ const defaultValues: ResumeValues = {
         certifications: { title: "Certifications", hidden: false, columns: 1, items: [] },
     },
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],
-}
+    meta: {
+        template: {
+            id: "default",
+        },
+    },
+};
+
 export const resumeFormOptions = formOptions({
     defaultValues: defaultValues,
     validators: {

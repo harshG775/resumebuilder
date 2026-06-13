@@ -1,0 +1,290 @@
+/* src/features/resume/templates/default/styles.module.css */
+@page {
+    size: A4;
+    margin: 0;
+}
+
+/* ─── Reset & Base ─────────────────────────────────────────────────── */
+.resume *,
+.resume *::before,
+.resume *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.resume a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.resume ul {
+    list-style: none;
+}
+
+/* ─── Page Shell ───────────────────────────────────────────────────── */
+.resume {
+    --page-w: 210mm;
+    --page-h: 297mm;
+    --margin-x: 14mm;
+    --margin-y: 12mm;
+
+    --color-text: #1a1a1a;
+    --color-muted: #555555;
+    --color-border: #c8c8c8;
+    --color-link: #1a1a1a;
+
+    --font-main: "Georgia", "Times New Roman", serif;
+    --font-mono: "Courier New", monospace;
+
+    --text-name: 22pt;
+    --text-headline: 9.5pt;
+    --text-section: 9pt;
+    --text-body: 8.5pt;
+    --text-small: 7.5pt;
+
+    --leading-tight: 1.3;
+    --leading-body: 1.5;
+
+    --gap-section: 9px;
+    --gap-item: 7px;
+
+    width: var(--page-w);
+    min-height: var(--page-h);
+    padding: var(--margin-y) var(--margin-x);
+
+    font-family: var(--font-main);
+    font-size: var(--text-body);
+    color: var(--color-text);
+    line-height: var(--leading-body);
+    background: #ffffff;
+
+    /* Screen preview */
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
+    margin: 0 auto;
+}
+
+@media print {
+    .resume {
+        box-shadow: none;
+        margin: 0;
+    }
+}
+
+/* ─── Header ───────────────────────────────────────────────────────── */
+.header {
+    text-align: center;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--color-text);
+    margin-bottom: 10px;
+}
+
+.name {
+    font-family: var(--font-main);
+    font-size: var(--text-name);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.headline {
+    font-size: var(--text-headline);
+    color: var(--color-muted);
+    font-style: italic;
+    line-height: var(--leading-tight);
+    margin-bottom: 5px;
+}
+
+/* Contact row */
+.contactInfo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 12px;
+    font-size: var(--text-small);
+    color: var(--color-muted);
+    margin-bottom: 4px;
+}
+
+.contactItem {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.contactLabel {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Links row */
+.linksList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 14px;
+    font-size: var(--text-small);
+    margin-top: 2px;
+}
+
+.link {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* ─── Sections ─────────────────────────────────────────────────────── */
+.section {
+    margin-bottom: var(--gap-section);
+}
+
+.sectionTitle {
+    font-family: var(--font-main);
+    font-size: var(--text-section);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--color-text);
+    padding-bottom: 1px;
+    margin-bottom: 5px;
+}
+
+/* ─── Summary ──────────────────────────────────────────────────────── */
+.summaryContent {
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--color-text);
+}
+
+/* ─── Skills ───────────────────────────────────────────────────────── */
+.skillsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.skillGroup {
+    font-size: var(--text-body);
+    line-height: var(--leading-tight);
+}
+
+.skillGroupName {
+    font-weight: 700;
+    margin-right: 4px;
+}
+
+.skillKeywords {
+    color: var(--color-text);
+}
+
+/* ─── Item List (Experience / Projects / Education / Certs) ────────── */
+.itemList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-item);
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* Item header: left meta + right period */
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.itemMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 6px;
+    flex: 1;
+}
+
+.itemTitle {
+    font-weight: 700;
+    font-size: var(--text-body);
+    line-height: var(--leading-tight);
+}
+
+.itemOrg {
+    font-style: italic;
+    font-size: var(--text-body);
+    color: var(--color-muted);
+}
+
+.itemLocation {
+    font-size: var(--text-small);
+    color: var(--color-muted);
+}
+
+.itemGrade {
+    font-size: var(--text-small);
+    color: var(--color-muted);
+}
+
+.itemPeriod {
+    font-size: var(--text-small);
+    color: var(--color-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Stack / keywords line (projects) */
+.itemStack {
+    font-size: var(--text-small);
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+}
+
+/* Project right column (links + period stacked) */
+.itemRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+/* Project links */
+.itemLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 10px;
+    font-size: var(--text-small);
+    flex-shrink: 0;
+}
+
+.itemDescription {
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--color-text);
+}
+
+/* ─── Bullet Points ────────────────────────────────────────────────── */
+.pointsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding-left: 10px;
+}
+
+.pointsItem {
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    position: relative;
+}
+
+.pointsItem::before {
+    content: "•";
+    position: absolute;
+    left: -10px;
+    color: var(--color-text);
+}

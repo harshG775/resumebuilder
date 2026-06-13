@@ -1,9 +1,9 @@
 import { Button } from "#/components/ui/button"
 import { FieldGroup, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
-import { resumeFormOptions } from "#/lib/resume-form-options"
+import { resumeFormOptions } from "#/features/resume/resume-form-options"
 import { Plus } from "lucide-react"
-import { SortableDragProvider, SortableItemRow } from "../sortable-item"
+import { SortableDragProvider, SortableItemRow } from "#/components/sortable-item"
 
 export const EducationSection = withForm({
     ...resumeFormOptions,

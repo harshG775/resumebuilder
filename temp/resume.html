@@ -1,267 +1,512 @@
-<!-- ./resume.html -->
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Harsh gaur frontend developer resume</title>
-    </head>
-    <style>
-        /* reset default styles */
-        *,
-        ::before,
-        ::after {
-            box-sizing: border-box;
-        }
-        body,
-        h1,
-        h2,
-        h3,
-        h4,
-        p,
-        ul,
-        ol,
-        figure,
-        blockquote,
-        dl,
-        dd {
-            margin: 0;
-            padding: 0;
-        }
-        ul,
-        ol {
-            list-style: none;
-        }
-        body {
-            line-height: 1.5;
-        }
-    </style>
-    <style>
-        @import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
-        @import url("https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap");
-
-        :root {
-            --paper-width: 210mm;
-            --paper-height: 297mm;
-
-            /* mauve */
-            --primary: oklch(26.3% 0.024 320.12);
-            --background: oklch(98.5% 0 0);
-            --foreground: oklch(14.5% 0.008 326);
-            --border: oklch(14.518% 0.00825 325.899);
-
-            /* fonts */
-            --font-sans: "PT Sans", sans-serif;
-            --font-serif: "PT Serif", serif;
-        }
-    </style>
-    <style>
-        body {
-            font-family: var(--font-sans);
-            margin: 0 auto;
-            width: var(--paper-width);
-            min-height: var(--paper-height);
-        }
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: var(--font-serif);
-        }
-        header {
-            & ul {
+        <title>Harsh Gaur — Frontend Engineer</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            *,
+            ::before,
+            ::after {
+                box-sizing: border-box;
+            }
+            body,
+            h1,
+            h2,
+            h3,
+            h4,
+            p,
+            ul,
+            ol,
+            dl,
+            dd {
+                margin: 0;
+                padding: 0;
+            }
+            ul,
+            ol {
                 list-style: none;
+            }
+
+            :root {
+                --w: 210mm;
+                --ink: #1a1614;
+                --ink-2: #4a4441;
+                --ink-3: #8a8480;
+                --rule: #d4cfc8;
+                --rule-light: #ede9e4;
+                --accent: #2c1f6e;
+                --accent-2: #534ab7;
+                --accent-bg: #eeedfe;
+                --paper: #faf9f7;
+                --font-sans: "PT Sans", sans-serif;
+                --font-serif: "PT Serif", serif;
+            }
+
+            body {
+                font-family: var(--font-sans);
+                font-size: 9.5pt;
+                line-height: 1.55;
+                color: var(--ink);
+                background: var(--paper);
+                width: var(--w);
+                margin: 0 auto;
+                padding: 14mm 14mm 18mm;
+            }
+
+            a {
+                color: var(--accent-2);
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+
+            /* ── HEADER ── */
+            header {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                align-items: start;
+                gap: 1rem;
+                padding-bottom: 1rem;
+                border-bottom: 1.5px solid var(--accent);
+                margin-bottom: 0.9rem;
+            }
+            .header-left h1 {
+                font-family: var(--font-serif);
+                font-size: 26pt;
+                font-weight: 700;
+                letter-spacing: -0.5px;
+                color: var(--accent);
+                line-height: 1.1;
+            }
+            .header-left .tagline {
+                font-size: 8.5pt;
+                color: var(--ink-2);
+                margin-top: 3px;
+                letter-spacing: 0.3px;
+            }
+            .header-right {
                 display: flex;
-                gap: 0.75rem;
-                padding-left: 0;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 4px;
             }
-            h1 {
-                font-weight: bold;
-                font-weight: 800;
+            .contact-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: 4px 12px;
             }
-            p {
+            .contact-links li {
+                font-size: 8pt;
+                color: var(--ink-2);
+                white-space: nowrap;
+            }
+            .contact-links li a {
+                color: var(--ink-2);
+            }
+            .contact-links li a:hover {
+                color: var(--accent-2);
+            }
+
+            .cta-row {
+                display: flex;
+                gap: 8px;
+                margin-top: 6px;
+            }
+            .cta-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                padding: 5px 13px;
+                font-family: var(--font-sans);
+                font-size: 7.5pt;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                border-radius: 3px;
+                cursor: pointer;
+                transition:
+                    background 0.15s,
+                    color 0.15s,
+                    border-color 0.15s;
+                text-decoration: none;
+            }
+            .cta-primary {
+                background: var(--accent);
+                color: #fff;
+                border: 1.5px solid var(--accent);
+            }
+            .cta-primary:hover {
+                background: var(--accent-2);
+                border-color: var(--accent-2);
+                color: #fff;
+                text-decoration: none;
+            }
+            .cta-secondary {
+                background: transparent;
+                color: var(--accent);
+                border: 1.5px solid var(--accent);
+            }
+            .cta-secondary:hover {
+                background: var(--accent-bg);
+                text-decoration: none;
+            }
+
+            /* ── SECTION ── */
+            section {
+                margin-bottom: 0.85rem;
+            }
+            section h2 {
+                font-family: var(--font-sans);
+                font-size: 7pt;
+                font-weight: 700;
+                letter-spacing: 1.8px;
+                text-transform: uppercase;
+                color: var(--ink-3);
+                margin-bottom: 0.45rem;
+                padding-bottom: 3px;
+                border-bottom: 0.75px solid var(--rule);
+            }
+
+            /* summary */
+            .summary-text {
+                font-size: 9pt;
+                line-height: 1.6;
+                color: var(--ink-2);
+                max-width: 96%;
+            }
+
+            /* skills */
+            .skills-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px 2rem;
+            }
+            .skill-row {
+                font-size: 8.5pt;
+                line-height: 1.5;
+            }
+            .skill-row strong {
+                color: var(--ink);
                 font-weight: 700;
             }
-        }
-        section {
-            & h2 {
-                margin: 1rem 0 0.2rem 0;
-                font-weight: 600;
-                text-transform: uppercase;
 
-                border-bottom: 0.12rem solid color-mix(in oklab, var(--border) 70%, transparent);
+            /* experience */
+            .exp-block {
+                margin-bottom: 0.75rem;
             }
-            & h3 {
+            .exp-block:last-child {
+                margin-bottom: 0;
             }
-            & ul,
-            ol {
-                padding-left: 1.5rem;
+            .exp-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                gap: 1rem;
+            }
+            .exp-title {
+                font-family: var(--font-serif);
+                font-size: 10.5pt;
+                font-weight: 700;
+                color: var(--ink);
+            }
+            .exp-meta {
+                font-size: 8pt;
+                color: var(--ink-3);
+                white-space: nowrap;
+            }
+            .exp-bullets {
+                margin-top: 4px;
+                padding-left: 1.1rem;
                 list-style: disc;
-
-                border-left: 0.15rem solid color-mix(in oklab, var(--border) 20%, transparent);
+                border-left: 2px solid var(--rule-light);
             }
-        }
-    </style>
-    <style>
-        @media print {
-            body {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                background-color: var(--background) !important;
-                color: var(--foreground) !important;
+            .exp-bullets li {
+                font-size: 8.5pt;
+                line-height: 1.55;
+                color: var(--ink-2);
+                margin-bottom: 2px;
+                padding-left: 4px;
             }
 
-            /* 3. Adjust margins for standard A4 or Letter paper */
-            @page {
-                margin: 1cm;
+            /* projects */
+            .project-block {
+                margin-bottom: 0.7rem;
+            }
+            .project-block:last-child {
+                margin-bottom: 0;
+            }
+            .project-title {
+                font-family: var(--font-serif);
+                font-size: 10pt;
+                font-weight: 700;
+                color: var(--ink);
+            }
+            .project-stack {
+                font-size: 7.5pt;
+                color: var(--ink-3);
+                margin-top: 1px;
+                margin-bottom: 3px;
+            }
+            .project-stack span {
+                display: inline-block;
+                background: var(--accent-bg);
+                color: var(--accent);
+                border-radius: 2px;
+                padding: 0 5px;
+                margin: 0 2px 2px 0;
+                font-size: 7pt;
+                font-weight: 700;
+                letter-spacing: 0.2px;
+            }
+            .project-bullets {
+                padding-left: 1.1rem;
+                list-style: disc;
+                border-left: 2px solid var(--rule-light);
+            }
+            .project-bullets li {
+                font-size: 8.5pt;
+                line-height: 1.5;
+                color: var(--ink-2);
+                margin-bottom: 2px;
+                padding-left: 4px;
             }
 
-            /* 4. Hide things that aren't useful in a PDF */
-            .no-print {
-                display: none;
+            /* education */
+            .edu-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem 1.5rem;
             }
-        }
-    </style>
+            .edu-item {
+            }
+            .edu-degree {
+                font-size: 9pt;
+                font-weight: 700;
+                color: var(--ink);
+            }
+            .edu-inst {
+                font-size: 8pt;
+                color: var(--ink-3);
+                margin-top: 1px;
+            }
+
+            /* print */
+            @media print {
+                body {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                    background: white;
+                }
+                @page {
+                    margin: 1cm;
+                }
+                .cta-row {
+                    display: none;
+                }
+                a[href]::after {
+                    content: none;
+                }
+            }
+        </style>
+    </head>
     <body>
         <header>
-            <h1>Harsh Gaur</h1>
-            <p>Software Engineer | React, Next.js, Tanstack, TypeScript | SaaS Platforms</p>
-            <ul>
-                <li>
-                    <a href="mailto:hgaur491@gmail.com">hgaur491@gmail.com</a>
-                </li>
-                <li>(+91) 9310745921</li>
-                <li><a href="https://harshgaur.in">harshgaur.in</a></li>
-                <li><a href="https://linkedin.com/in/harshg775">linkedin.com/in/harshg775</a></li>
-                <li><a href="https://github.com/harshG775">github.com/harshG775</a></li>
-                <li>Delhi, India</li>
-            </ul>
+            <div class="header-left">
+                <h1>Harsh Gaur</h1>
+                <p class="tagline">
+                    Software Engineer &nbsp;·&nbsp; React · Next.js · TanStack · TypeScript &nbsp;·&nbsp; SaaS Platforms
+                </p>
+            </div>
+            <div class="header-right">
+                <ul class="contact-links">
+                    <li><a href="mailto:hgaur491@gmail.com">hgaur491@gmail.com</a></li>
+                    <li>(+91) 9310745921</li>
+                    <li><a href="https://harshgaur.in">harshgaur.in</a></li>
+                    <li><a href="https://linkedin.com/in/harshg775">linkedin/harshg775</a></li>
+                    <li><a href="https://github.com/harshG775">github/harshG775</a></li>
+                    <li>Delhi, India</li>
+                </ul>
+                <div class="cta-row">
+                    <a class="cta-btn cta-primary" href="mailto:hgaur491@gmail.com">
+                        <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
+                            <path
+                                d="M2 3h12a1 1 0 011 1v8a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1zm6 5.25L3.5 5h9L8 8.25zM3 6.5v5h10v-5L8 9.75 3 6.5z"
+                            />
+                        </svg>
+                        Hire me
+                    </a>
+                    <a class="cta-btn cta-secondary" href="https://harshgaur.in" target="_blank"> Portfolio ↗ </a>
+                </div>
+            </div>
         </header>
+
         <main>
             <section>
-                <h2>summary</h2>
-                <p>
+                <h2>Summary</h2>
+                <p class="summary-text">
                     Software Engineer with 2+ years building production web applications and multi-tenant SaaS platforms
                     using React, Next.js, TypeScript, and Node.js. Proven track record: reduced tenant onboarding time
-                    by ~70%, architected Al-powered customer support platform, and eliminated third-party tooling costs
+                    by ~70%, architected AI-powered customer support platform, and eliminated third-party tooling costs
                     (~₹2L/year savings). Expert in component architecture, real-time API integration, and full-stack
                     TypeScript workflows.
                 </p>
             </section>
 
             <section>
-                <h2>skills</h2>
-                <ul>
-                    <li><strong>Languages:</strong> TypeScript, Javascript (ES2022+), Python</li>
-                    <li>
+                <h2>Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-row"><strong>Languages:</strong> TypeScript, JavaScript (ES2022+), Python</div>
+                    <div class="skill-row"><strong>Backend:</strong> Node.js, Express.js, Flask, OpenAI API</div>
+                    <div class="skill-row">
                         <strong>Frontend:</strong> React, Next.js, TanStack (Query, Router, Start), Zustand, Tailwind
                         CSS, ShadCN UI
-                    </li>
-                    <li><strong>Backend:</strong> Node.js, Express.js, Flask, OpenAI API</li>
-                    <li><strong>Database:</strong> MongoDB, PostgreSQL, Prisma</li>
-                    <li><strong>Tools & Systems:</strong> Git, Docker, Linux, Postman</li>
-                </ul>
+                    </div>
+                    <div class="skill-row"><strong>Database:</strong> MongoDB, PostgreSQL, Prisma</div>
+                    <div class="skill-row"><strong>Tools &amp; Systems:</strong> Git, Docker, Linux, Postman</div>
+                </div>
             </section>
 
             <section>
-                <h2>experience</h2>
-                <h3>Senior Frontend Engineer | Prabhubhakti Pvt. Ltd.</h3>
-                <p>Jun 2025 - Present | Gurugram</p>
-                <ul>
-                    <li>
-                        Architected three multi-tenant SaaS platforms (Astrologer, Temple Management, Ebook) with
-                        domain/subdomain-based tenant isolation, per-tenant Ul theming, and Next.js middleware routing.
-                    </li>
-                    <li>
-                        Built reusable React/TypeScript components for booking and payment flows with unified payment
-                        gateway integrated via Razorpay, reducing per-tenant integration time by ~70%.
-                    </li>
-                    <li>
-                        Standardized tenant onboarding templates in Next.js with TanStack Router, enabling rapid feature
-                        rollout across tenants.
-                    </li>
-                </ul>
+                <h2>Experience</h2>
 
-                <h3>Frontend Engineer (SDE Trainee) | Metis Eduventures Pvt. Ltd. (Adda247)</h3>
-                <p>Aug 2024 - Feb 2025 | Gurugram</p>
-                <ul>
-                    <li>
-                        Built SupportDesk, an Al customer support platform with real-time agent-to-human handover using
-                        WebSockets and OpenAI API integration, eliminating third-party tooling and saving ~2L/year.
-                    </li>
-                    <li>
-                        Developed AiDoubtSolver, an academic Al chatbot with voice-to-voice chat using Whisper API,
-                        browser Camera API, and real-time streaming responses via SSE, supporting 150+ concurrent users.
-                    </li>
-                    <li>
-                        Improved application performance by ~25% through bundle analysis, route-based code splitting,
-                        and memoization strategies.
-                    </li>
-                </ul>
+                <div class="exp-block">
+                    <div class="exp-header">
+                        <span class="exp-title">Senior Frontend Engineer &nbsp;·&nbsp; Prabhubhakti Pvt. Ltd.</span>
+                        <span class="exp-meta">Jun 2025 – Present &nbsp;·&nbsp; Gurugram</span>
+                    </div>
+                    <ul class="exp-bullets">
+                        <li>
+                            Architected three multi-tenant SaaS platforms (Astrologer, Temple Management, Ebook) with
+                            domain/subdomain-based tenant isolation, per-tenant UI theming, and Next.js middleware
+                            routing.
+                        </li>
+                        <li>
+                            Built reusable React/TypeScript components for booking and payment flows with unified
+                            Razorpay integration, reducing per-tenant integration time by ~70%.
+                        </li>
+                        <li>
+                            Standardized tenant onboarding templates in Next.js with TanStack Router, enabling rapid
+                            feature rollout across tenants.
+                        </li>
+                    </ul>
+                </div>
 
-                <h3>Frontend Developer Internship | ItaxEasy</h3>
-                <p>Nov 2023 - May 2024 | Gwalior (Remote)</p>
-                <ul>
-                    <li>
-                        Migrated legacy tax-filing platform from React.js to Next.js App Router, enabling SSR for
-                        improved SEO and faster content delivery.
-                    </li>
-                    <li>Optimized performance through route-based code splitting and lazy loading strategies.</li>
-                </ul>
+                <div class="exp-block">
+                    <div class="exp-header">
+                        <span class="exp-title"
+                            >Frontend Engineer (SDE Trainee) &nbsp;·&nbsp; Metis Eduventures (Adda247)</span
+                        >
+                        <span class="exp-meta">Aug 2024 – Feb 2025 &nbsp;·&nbsp; Gurugram</span>
+                    </div>
+                    <ul class="exp-bullets">
+                        <li>
+                            Built SupportDesk, an AI customer support platform with real-time agent-to-human handover
+                            using WebSockets and OpenAI API integration, eliminating third-party tooling and saving
+                            ~₹2L/year.
+                        </li>
+                        <li>
+                            Developed AiDoubtSolver, an academic AI chatbot with voice-to-voice chat using Whisper API,
+                            browser Camera API, and real-time streaming responses via SSE, supporting 150+ concurrent
+                            users.
+                        </li>
+                        <li>
+                            Improved application performance by ~25% through bundle analysis, route-based code
+                            splitting, and memoization strategies.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="exp-block">
+                    <div class="exp-header">
+                        <span class="exp-title">Frontend Developer Intern &nbsp;·&nbsp; ItaxEasy</span>
+                        <span class="exp-meta">Nov 2023 – May 2024 &nbsp;·&nbsp; Gwalior (Remote)</span>
+                    </div>
+                    <ul class="exp-bullets">
+                        <li>
+                            Migrated legacy tax-filing platform from React.js to Next.js App Router, enabling SSR for
+                            improved SEO and faster content delivery.
+                        </li>
+                        <li>Optimized performance through route-based code splitting and lazy loading strategies.</li>
+                    </ul>
+                </div>
             </section>
 
             <section>
-                <h2>projects</h2>
-                <h3>Astrologer SaaS Platform @ Prabhubhakti</h3>
-                <p>Next.js, TypeScript, TanStack Start, TanStack Router, Node.js, Razorpay</p>
-                <ul>
-                    <li>
-                        Architected multi-tenant platform supporting domain/subdomain-based tenant isolation with
-                        per-tenant Ul and routing.
-                    </li>
-                    <li>
-                        Built reusable booking and Razorpay payment flows reducing per-tenant integration time by ~70%.
-                    </li>
-                </ul>
+                <h2>Projects</h2>
 
-                <h3>SupportDesk - Al Customer Support Platform @Adda247</h3>
-                <p>React, Zustand, Flask, WebSockets, OpenAl ΑΡΙ</p>
-                <ul>
-                    <li>
-                        Built real-time chat system with seamless Al-to-human handover using React, WebSockets, and
-                        OpenAl API integration.
-                    </li>
-                    <li>Eliminated third-party support platform dependency, saving~2L/year in licensing costs.</li>
-                </ul>
+                <div class="project-block">
+                    <div class="project-title">Astrologer SaaS Platform &nbsp;@&nbsp;Prabhubhakti</div>
+                    <div class="project-stack">
+                        <span>Next.js</span><span>TypeScript</span><span>TanStack Start</span
+                        ><span>TanStack Router</span><span>Node.js</span><span>Razorpay</span>
+                    </div>
+                    <ul class="project-bullets">
+                        <li>
+                            Architected multi-tenant platform supporting domain/subdomain-based tenant isolation with
+                            per-tenant UI and routing.
+                        </li>
+                        <li>
+                            Built reusable booking and Razorpay payment flows reducing per-tenant integration time by
+                            ~70%.
+                        </li>
+                    </ul>
+                </div>
 
-                <h3>AiDoubtSolver - Voice Al Chatbot @ Adda247</h3>
-                <p>React, SSE, Whisper API</p>
-                <ul>
-                    <li>
-                        Implemented voice-to-voice doubt solving pipeline using Whisper API with real-time streaming
-                        responses via SSE.
-                    </li>
-                    <li>
-                        Designed stateful conversation flow in React with optimistic Ul updates for perceived
-                        responsiveness.
-                    </li>
-                </ul>
+                <div class="project-block">
+                    <div class="project-title">SupportDesk — AI Customer Support Platform &nbsp;@&nbsp;Adda247</div>
+                    <div class="project-stack">
+                        <span>React</span><span>Zustand</span><span>Flask</span><span>WebSockets</span
+                        ><span>OpenAI API</span>
+                    </div>
+                    <ul class="project-bullets">
+                        <li>
+                            Built real-time chat system with seamless AI-to-human handover using React, WebSockets, and
+                            OpenAI API integration.
+                        </li>
+                        <li>
+                            Eliminated third-party support platform dependency, saving ~₹2L/year in licensing costs.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="project-block">
+                    <div class="project-title">AiDoubtSolver — Voice AI Chatbot &nbsp;@&nbsp;Adda247</div>
+                    <div class="project-stack"><span>React</span><span>SSE</span><span>Whisper API</span></div>
+                    <ul class="project-bullets">
+                        <li>
+                            Implemented voice-to-voice doubt solving pipeline using Whisper API with real-time streaming
+                            responses via SSE.
+                        </li>
+                        <li>
+                            Designed stateful conversation flow in React with optimistic UI updates for perceived
+                            responsiveness.
+                        </li>
+                    </ul>
+                </div>
             </section>
 
             <section>
-                <h2>education</h2>
-                <ul>
-                    <li>
-                        <strong>Master of Computer Applications (MCA)</strong><br />
-                        Indira Gandhi National Open University (IGNOU) | 2025 - Ongoing
-                    </li>
-                    <li>
-                        <strong>Bachelor of Arts (English Honours)</strong><br />
-                        Prof. Rajendra Singh University | 2020 - 2023
-                    </li>
-                </ul>
+                <h2>Education</h2>
+                <div class="edu-grid">
+                    <div class="edu-item">
+                        <div class="edu-degree">Master of Computer Applications (MCA)</div>
+                        <div class="edu-inst">
+                            Indira Gandhi National Open University (IGNOU) &nbsp;·&nbsp; 2025 – Ongoing
+                        </div>
+                    </div>
+                    <div class="edu-item">
+                        <div class="edu-degree">Bachelor of Arts (English Honours)</div>
+                        <div class="edu-inst">Prof. Rajendra Singh University &nbsp;·&nbsp; 2020 – 2023</div>
+                    </div>
+                </div>
             </section>
         </main>
     </body>

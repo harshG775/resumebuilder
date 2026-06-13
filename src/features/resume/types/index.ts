@@ -1,11 +1,13 @@
 import type { ComponentType } from "react"
-import type { ResumeValues } from "#/lib/schemas/resume-schema"
+import type { ResumeValues, TemplateIdSchema } from "#/features/resume/resume-schema"
+import z from "zod"
 
 /**
  * Template IDs - Discriminated union
  * Add new template names here as they're created
  */
-export type TemplateId = "default"
+
+export type TemplateId = z.infer<typeof TemplateIdSchema>
 
 /**
  * Template Configuration
@@ -22,7 +24,7 @@ export type TemplateConfig = {
  * UI and presentation info
  */
 export type TemplateMeta = {
-    id: string
+    id: TemplateId
     name: string
     description: string
     thumbnail?: string
@@ -36,6 +38,7 @@ export type TemplateDefinition = {
     meta: TemplateMeta
     config: TemplateConfig
     component: ComponentType<{ data: ResumeValues }>
+    styles: string
 }
 
 /**
