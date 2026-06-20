@@ -10,11 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardResumesIndexRouteImport } from './routes/dashboard/resumes/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as BuilderResumesResumeIndexRouteImport } from './routes/builder/resumes/$resume/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardResumesIndexRoute = DashboardResumesIndexRouteImport.update({
+  id: '/dashboard/resumes/',
+  path: '/dashboard/resumes/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -22,31 +29,54 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuilderResumesResumeIndexRoute =
+  BuilderResumesResumeIndexRouteImport.update({
+    id: '/builder/resumes/$resume/',
+    path: '/builder/resumes/$resume/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/resumes/': typeof DashboardResumesIndexRoute
+  '/builder/resumes/$resume/': typeof BuilderResumesResumeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/resumes': typeof DashboardResumesIndexRoute
+  '/builder/resumes/$resume': typeof BuilderResumesResumeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/resumes/': typeof DashboardResumesIndexRoute
+  '/builder/resumes/$resume/': typeof BuilderResumesResumeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/api/auth/$'
+    | '/dashboard/resumes/'
+    | '/builder/resumes/$resume/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/auth/$'
-  id: '__root__' | '/' | '/api/auth/$'
+  to: '/' | '/api/auth/$' | '/dashboard/resumes' | '/builder/resumes/$resume'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/auth/$'
+    | '/dashboard/resumes/'
+    | '/builder/resumes/$resume/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute
+  BuilderResumesResumeIndexRoute: typeof BuilderResumesResumeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +88,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/resumes/': {
+      id: '/dashboard/resumes/'
+      path: '/dashboard/resumes'
+      fullPath: '/dashboard/resumes/'
+      preLoaderRoute: typeof DashboardResumesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/builder/resumes/$resume/': {
+      id: '/builder/resumes/$resume/'
+      path: '/builder/resumes/$resume'
+      fullPath: '/builder/resumes/$resume/'
+      preLoaderRoute: typeof BuilderResumesResumeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -71,6 +115,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  DashboardResumesIndexRoute: DashboardResumesIndexRoute,
+  BuilderResumesResumeIndexRoute: BuilderResumesResumeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
