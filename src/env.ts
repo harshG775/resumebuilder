@@ -3,6 +3,8 @@ import { z } from "zod"
 
 export const env = createEnv({
     server: {
+        DATABASE_URL: z.string(),
+
         SERVER_URL: z.string().url().optional(),
         GOOGLE_CLIENT_ID: z.string(),
         GOOGLE_CLIENT_SECRET: z.string(),

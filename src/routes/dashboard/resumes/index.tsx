@@ -5,6 +5,7 @@ import { Plus, ChevronDown, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { getAllResume } from "#/lib/server/resume.function"
 
 export type Resume = {
     id: string
@@ -16,21 +17,17 @@ export type Resume = {
 }
 
 export const Route = createFileRoute("/dashboard/resumes/")({
+    beforeLoad: async () => {
+        const resume = await getAllResume()
+        return { resume }
+    },
+    pendingComponent: () => <div>Loading user directory...</div>,
     component: RouteComponent,
 })
 
-const mockResumes: Resume[] = [
-    {
-        id: "res_1",
-        userId: "user_123",
-        title: "test",
-        content: { template: "minimal", color: "default" },
-        createdAt: new Date("2026-05-02T16:12:00"),
-        updatedAt: new Date("2026-05-02T16:12:00"),
-    },
-]
-
 function RouteComponent() {
+    const { resume } = Route.useRouteContext()
+
     // Helper to safely format schema timestamps
     const formatUpdateDate = (date: Date) => {
         return (
@@ -85,12 +82,11 @@ function RouteComponent() {
                     </CardFooter>
                 </Card>
 
-                {mockResumes.map((resumeItem) => (
+                {resume.map((resumeItem) => (
                     <Card
                         key={resumeItem.id}
                         className="group relative flex flex-col justify-between overflow-hidden hover:shadow-md transition-all cursor-pointer h-[320px]"
                     >
-                        {/* Visual template preview mapping directly out of content: jsonb schema */}
                         <CardContent className="flex-1 bg-white p-4 overflow-hidden relative select-none">
                             <ResumeThumbnailMockup
                                 template={resumeItem.content.template}
@@ -99,7 +95,6 @@ function RouteComponent() {
                             <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </CardContent>
 
-                        {/* Metadata from Table Fields */}
                         <CardFooter className="bg-secondary/80 backdrop-blur-sm p-4 border-t flex flex-col items-start gap-0.5">
                             <h3 className="font-semibold text-sm truncate text-foreground w-full">
                                 {resumeItem.title}
