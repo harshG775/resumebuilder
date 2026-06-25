@@ -1,5 +1,5 @@
 import { authMiddleware } from "#/lib/server/middleware"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Outlet } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/dashboard")({
     server: {
@@ -9,5 +9,5 @@ export const Route = createFileRoute("/dashboard")({
 })
 
 function RouteComponent() {
-    return <div>Hello "/dashboard"!</div>
+    return <Outlet />
 }
