@@ -9,20 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
+import { Route as BuilderRouteRouteImport } from './routes/builder/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardResumesIndexRouteImport } from './routes/dashboard/resumes/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as BuilderResumesResumeIndexRouteImport } from './routes/builder/resumes/$resume/index'
 
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuilderRouteRoute = BuilderRouteRouteImport.update({
+  id: '/builder',
+  path: '/builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardResumesIndexRoute = DashboardResumesIndexRouteImport.update({
-  id: '/dashboard/resumes/',
-  path: '/dashboard/resumes/',
-  getParentRoute: () => rootRouteImport,
+  id: '/resumes/',
+  path: '/resumes/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -31,19 +43,23 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 const BuilderResumesResumeIndexRoute =
   BuilderResumesResumeIndexRouteImport.update({
-    id: '/builder/resumes/$resume/',
-    path: '/builder/resumes/$resume/',
-    getParentRoute: () => rootRouteImport,
+    id: '/resumes/$resume/',
+    path: '/resumes/$resume/',
+    getParentRoute: () => BuilderRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/builder': typeof BuilderRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/resumes/': typeof DashboardResumesIndexRoute
   '/builder/resumes/$resume/': typeof BuilderResumesResumeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/builder': typeof BuilderRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/resumes': typeof DashboardResumesIndexRoute
   '/builder/resumes/$resume': typeof BuilderResumesResumeIndexRoute
@@ -51,6 +67,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/builder': typeof BuilderRouteRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/resumes/': typeof DashboardResumesIndexRoute
   '/builder/resumes/$resume/': typeof BuilderResumesResumeIndexRoute
@@ -59,14 +77,24 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/builder'
+    | '/dashboard'
     | '/api/auth/$'
     | '/dashboard/resumes/'
     | '/builder/resumes/$resume/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/auth/$' | '/dashboard/resumes' | '/builder/resumes/$resume'
+  to:
+    | '/'
+    | '/builder'
+    | '/dashboard'
+    | '/api/auth/$'
+    | '/dashboard/resumes'
+    | '/builder/resumes/$resume'
   id:
     | '__root__'
     | '/'
+    | '/builder'
+    | '/dashboard'
     | '/api/auth/$'
     | '/dashboard/resumes/'
     | '/builder/resumes/$resume/'
@@ -74,13 +102,27 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BuilderRouteRoute: typeof BuilderRouteRouteWithChildren
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute
-  BuilderResumesResumeIndexRoute: typeof BuilderResumesResumeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/builder': {
+      id: '/builder'
+      path: '/builder'
+      fullPath: '/builder'
+      preLoaderRoute: typeof BuilderRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -90,10 +132,10 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/resumes/': {
       id: '/dashboard/resumes/'
-      path: '/dashboard/resumes'
+      path: '/resumes'
       fullPath: '/dashboard/resumes/'
       preLoaderRoute: typeof DashboardResumesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -104,19 +146,43 @@ declare module '@tanstack/react-router' {
     }
     '/builder/resumes/$resume/': {
       id: '/builder/resumes/$resume/'
-      path: '/builder/resumes/$resume'
+      path: '/resumes/$resume'
       fullPath: '/builder/resumes/$resume/'
       preLoaderRoute: typeof BuilderResumesResumeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BuilderRouteRoute
     }
   }
 }
 
+interface BuilderRouteRouteChildren {
+  BuilderResumesResumeIndexRoute: typeof BuilderResumesResumeIndexRoute
+}
+
+const BuilderRouteRouteChildren: BuilderRouteRouteChildren = {
+  BuilderResumesResumeIndexRoute: BuilderResumesResumeIndexRoute,
+}
+
+const BuilderRouteRouteWithChildren = BuilderRouteRoute._addFileChildren(
+  BuilderRouteRouteChildren,
+)
+
+interface DashboardRouteRouteChildren {
+  DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardResumesIndexRoute: DashboardResumesIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BuilderRouteRoute: BuilderRouteRouteWithChildren,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  DashboardResumesIndexRoute: DashboardResumesIndexRoute,
-  BuilderResumesResumeIndexRoute: BuilderResumesResumeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
