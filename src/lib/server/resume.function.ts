@@ -2,13 +2,39 @@
 import { createServerFn } from "@tanstack/react-start"
 import z from "zod"
 import { db } from "../db"
-import type { resume } from "../db/schema"
+import { resume } from "../db/schema"
+import { eq, count } from "drizzle-orm"
 
-type ResumeType = typeof resume.$inferInsert
-export const getAllResume = createServerFn({ method: "GET" }).handler(async (): Promise<any> => {
-    const resumes = await db.query.resume.findMany()
-    return resumes
+const paginationSchema = z.object({
+    id: z.string(),
+    page: z.number().int().min(1).default(1),
+    pageSize: z.number().int().min(1).max(100).default(10),
 })
+
+export const getAllResume = createServerFn({ method: "GET" })
+    .validator(paginationSchema)
+    .handler(async ({ data }) => {
+        const { id, page, pageSize } = data
+        const offset = (page - 1) * pageSize
+
+        const [resumes, totalResult] = await Promise.all([
+            db.select().from(resume).where(eq(resume.userId, id)).limit(pageSize).offset(offset),
+            db.select({ count: count() }).from(resume).where(eq(resume.userId, id)),
+        ])
+
+        const total = totalResult[0]?.count ?? 0
+
+        return {
+            data: resumes,
+            pagination: {
+                page,
+                pageSize,
+                total,
+                totalPages: Math.ceil(total / pageSize),
+            },
+        }
+    })
+
 export const getResume = createServerFn({ method: "GET" })
     .validator(z.object({ id: z.string() }))
     .handler(async () => {
