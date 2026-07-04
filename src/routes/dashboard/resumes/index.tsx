@@ -70,9 +70,9 @@ function RouteComponent() {
             <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
                 {resumes.map((resume) => (
                     <Link
-                        to={"/builder/resumes/$resume"}
+                        to={"/builder/resumes/$resume_slug"}
                         params={{
-                            resume: resume.slug,
+                            resume_slug: resume.slug,
                         }}
                         key={resume.id}
                         className="relative bg-card text-card-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] border"
@@ -100,9 +100,9 @@ function RouteComponent() {
                                         <DropdownMenuItem
                                             render={
                                                 <Link
-                                                    to={"/builder/resumes/$resume"}
+                                                    to={"/builder/resumes/$resume_slug"}
                                                     params={{
-                                                        resume: resume.slug,
+                                                        resume_slug: resume.slug,
                                                     }}
                                                 />
                                             }
