@@ -64,7 +64,7 @@ function RouteComponent() {
                     Add
                 </Button>
             </div>
-            <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
+            <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
                 {resumes.map((resume) => (
                     <Link
                         to={"/builder/resumes/$resume_slug"}

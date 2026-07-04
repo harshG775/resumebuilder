@@ -1,11 +1,12 @@
+import type { LinkProps } from "@tanstack/react-router"
+import type { LucideIcon } from "lucide-react"
+
 import { Badge } from "#/components/ui/badge"
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
-    SidebarGroupAction,
-    SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
@@ -16,13 +17,18 @@ import {
 
 import { Link, useLocation } from "@tanstack/react-router"
 import { DashboardNavUser } from "./dashboard-nav-user"
-import { LayoutDashboardIcon } from "lucide-react"
+import { ClipboardListIcon } from "lucide-react"
 
-const navMain = [
+const navMain: {
+    title: string
+    href: LinkProps["to"]
+    icon: LucideIcon
+    badge: string
+}[] = [
     {
-        title: "Overview",
-        href: "/dashboard",
-        icon: LayoutDashboardIcon,
+        title: "Resumes",
+        href: "/dashboard/resumes",
+        icon: ClipboardListIcon,
         badge: "3",
     },
 ]
@@ -73,7 +79,6 @@ export function DashboardSidebar() {
                 </SidebarGroup>
 
                 <SidebarSeparator className={"max-w-[calc(100%-2rem)]"} />
-
             </SidebarContent>
             <SidebarFooter className="p-3">
                 <DashboardNavUser />
