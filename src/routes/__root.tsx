@@ -40,7 +40,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 <HeadContent />
             </head>
             <body>
-                <RouteProgressBar/>
+                <RouteProgressBar />
                 {children}
                 <TanStackDevtools
                     config={{
@@ -51,7 +51,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                             name: "Tanstack Router",
                             render: <TanStackRouterDevtoolsPanel />,
                         },
-                        TanStackQueryDevtools
+                        TanStackQueryDevtools,
                     ]}
                 />
                 <Scripts />
