@@ -20,13 +20,13 @@ function RouteComponent() {
     }
     return (
         <div className="flex h-screen items-center justify-center p-4">
-            <div className="island-shell w-full max-w-sm space-y-6 rounded-xl p-8">
+            <div className="w-full max-w-sm space-y-6 rounded-xl p-8">
                 <div className="text-center">
                     <h1 className="display-title text-2xl font-bold">Resume Builder</h1>
                     <p className="mt-2 text-sm text-neutral-500">Sign in to continue</p>
                 </div>
 
-                <Button onClick={handleGoogleSignIn}>
+                <Button onClick={handleGoogleSignIn} variant={"secondary"} className={"w-full"}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-5 w-5">
                         <path
                             fill="#FFC107"
