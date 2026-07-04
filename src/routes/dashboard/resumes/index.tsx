@@ -1,13 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { createResume, getAllResume } from "#/lib/server/resume.function"
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router"
+import { createResume, deleteResume, getAllResume } from "#/lib/server/resume.function"
 import { Button } from "#/components/ui/button"
-import { FolderIcon, MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react"
+import { FolderIcon, MoreVerticalIcon, PencilIcon, PlusIcon, TrashIcon } from "lucide-react"
+import { useMutation } from "@tanstack/react-query"
+
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -21,9 +22,10 @@ export type Resume = {
     updatedAt: Date
 }
 
+const testUserId = "Q2Uvk1rSyo0gPM6g5hiLac7oOnYEZ1r5"
 export const Route = createFileRoute("/dashboard/resumes/")({
     beforeLoad: async () => {
-        const { data } = await getAllResume({ data: { userId: "Q2Uvk1rSyo0gPM6g5hiLac7oOnYEZ1r5" } })
+        const { data } = await getAllResume({ data: { userId: testUserId } })
         return { resumes: data }
     },
     pendingComponent: () => <div>Loading user directory...</div>,
@@ -31,30 +33,41 @@ export const Route = createFileRoute("/dashboard/resumes/")({
 })
 
 function RouteComponent() {
+    const router = useRouter()
     const { resumes } = Route.useRouteContext()
-    console.log(resumes)
-
-    const handleCreateResume = async () => {
-        createResume({
-            data: {
-                userId: "Q2Uvk1rSyo0gPM6g5hiLac7oOnYEZ1r5",
-
-                title: "test",
-                content: JSON.stringify({}),
-            },
-        })
-    }
-
-    const handleDelete = (id: string) => {
-        console.log("Delete resume", id)
-    }
+    const deleteMutation = useMutation({
+        mutationFn: deleteResume,
+        onSuccess: () => {
+            router.invalidate()
+        },
+    })
+    const createMutation = useMutation({
+        mutationFn: createResume,
+        onSuccess: () => {
+            router.invalidate()
+        },
+    })
     return (
         <div className="min-h-screen bg-background text-foreground p-3 sm:p-4 lg:p-6 font-sans">
             <div className="flex justify-between items-center">
                 <h1 className="font-semibold">Resumes</h1>
-                <Button onClick={() => handleCreateResume()}>Add</Button>
+                <Button
+                    disabled={createMutation.status === "pending"}
+                    onClick={() => {
+                        createMutation.mutate({
+                            data: {
+                                userId: testUserId,
+                                title: "test",
+                                content: JSON.stringify({}),
+                            },
+                        })
+                    }}
+                >
+                    <PlusIcon />
+                    Add
+                </Button>
             </div>
-            <section className="mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
+            <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
                 {resumes.map((resume) => (
                     <Link
                         to={"/builder/resumes/$resume"}
@@ -112,7 +125,9 @@ function RouteComponent() {
                                             onClick={(e) => {
                                                 e.preventDefault()
                                                 e.stopPropagation()
-                                                handleDelete(resume.id)
+                                                deleteMutation.mutate({
+                                                    data: { id: resume.id, userId: testUserId },
+                                                })
                                             }}
                                         >
                                             <TrashIcon />

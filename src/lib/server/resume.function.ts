@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/react-start"
 import z from "zod"
 import { db } from "../db"
 import { resume } from "../db/schema"
-import { eq, count } from "drizzle-orm"
+import { eq, count, and } from "drizzle-orm"
 
 const paginationSchema = z.object({
     userId: z.string(),
@@ -18,7 +18,17 @@ export const getAllResume = createServerFn({ method: "GET" })
         const offset = (page - 1) * pageSize
 
         const [resumes, totalResult] = await Promise.all([
-            db.select().from(resume).where(eq(resume.userId, userId)).limit(pageSize).offset(offset),
+            db
+                .select({
+                    id: resume.id,
+                    title: resume.title,
+                    createdAt: resume.createdAt,
+                    updatedAt: resume.updatedAt,
+                })
+                .from(resume)
+                .where(eq(resume.userId, userId))
+                .limit(pageSize)
+                .offset(offset),
             db.select({ count: count() }).from(resume).where(eq(resume.userId, userId)),
         ])
 
@@ -84,7 +94,17 @@ export const updateResume = createServerFn({ method: "POST" })
         return
     })
 export const deleteResume = createServerFn({ method: "POST" })
-    .validator(z.object({ id: z.string() }))
-    .handler(async () => {
-        return
+    .validator(z.object({ id: z.string(), userId: z.string() }))
+    .handler(async ({ data }) => {
+        const resp = await db
+            .delete(resume)
+            .where(and(eq(resume.id, data.id), eq(resume.userId, data.userId)))
+            .returning({
+                id: resume.id,
+                title: resume.title,
+            })
+        return {
+            success: true,
+            data: resp[0],
+        }
     })
