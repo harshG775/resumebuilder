@@ -25,9 +25,12 @@ export const Route = createRootRoute({
             },
         ],
     }),
+    notFoundComponent: notFoundComponent,
     shellComponent: RootDocument,
 })
-
+function notFoundComponent() {
+    return <h1>PAGE NOTE FOUND</h1>
+}
 function RootDocument({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
