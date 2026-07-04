@@ -21,7 +21,7 @@ export type Resume = {
     createdAt: Date
     updatedAt: Date
 }
-export const Route = createFileRoute("/dashboard/resumes/")({
+export const Route = createFileRoute("/_authed/dashboard/resumes/")({
     beforeLoad: async () => {
         const { data } = await getAllResume({ data: { page: 1, pageSize: 10 } })
         return { resumes: data }

@@ -1,7 +1,7 @@
 import { getResumeBySlug } from "#/lib/server/resume.function"
 import { createFileRoute, Link } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/builder/resumes/$resume_slug")({
+export const Route = createFileRoute("/_authed/builder/resumes/$resume_slug")({
     beforeLoad: async ({ params }) => {
         const resume = await getResumeBySlug({ data: { slug: params.resume_slug } })
         return {

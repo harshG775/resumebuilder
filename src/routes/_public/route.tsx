@@ -1,9 +1,9 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/builder")({
+export const Route = createFileRoute("/_public")({
     beforeLoad: async ({ context }) => {
-        if (!context.session?.user) {
-            throw redirect({ to: "/", search: { auth: false } })
+        if (context.session?.user) {
+            throw redirect({ to: "/" })
         }
     },
     component: RouteComponent,
