@@ -13,8 +13,8 @@ import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as BuilderRouteRouteImport } from './routes/builder/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardResumesIndexRouteImport } from './routes/dashboard/resumes/index'
+import { Route as BuilderResumesResume_slugRouteImport } from './routes/builder/resumes/$resume_slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as BuilderResumesResumeIndexRouteImport } from './routes/builder/resumes/$resume/index'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -36,33 +36,33 @@ const DashboardResumesIndexRoute = DashboardResumesIndexRouteImport.update({
   path: '/resumes/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const BuilderResumesResume_slugRoute =
+  BuilderResumesResume_slugRouteImport.update({
+    id: '/resumes/$resume_slug',
+    path: '/resumes/$resume_slug',
+    getParentRoute: () => BuilderRouteRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuilderResumesResumeIndexRoute =
-  BuilderResumesResumeIndexRouteImport.update({
-    id: '/resumes/$resume/',
-    path: '/resumes/$resume/',
-    getParentRoute: () => BuilderRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/builder': typeof BuilderRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/builder/resumes/$resume_slug': typeof BuilderResumesResume_slugRoute
   '/dashboard/resumes/': typeof DashboardResumesIndexRoute
-  '/builder/resumes/$resume/': typeof BuilderResumesResumeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/builder': typeof BuilderRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/builder/resumes/$resume_slug': typeof BuilderResumesResume_slugRoute
   '/dashboard/resumes': typeof DashboardResumesIndexRoute
-  '/builder/resumes/$resume': typeof BuilderResumesResumeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,8 +70,8 @@ export interface FileRoutesById {
   '/builder': typeof BuilderRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/builder/resumes/$resume_slug': typeof BuilderResumesResume_slugRoute
   '/dashboard/resumes/': typeof DashboardResumesIndexRoute
-  '/builder/resumes/$resume/': typeof BuilderResumesResumeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -80,24 +80,24 @@ export interface FileRouteTypes {
     | '/builder'
     | '/dashboard'
     | '/api/auth/$'
+    | '/builder/resumes/$resume_slug'
     | '/dashboard/resumes/'
-    | '/builder/resumes/$resume/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/builder'
     | '/dashboard'
     | '/api/auth/$'
+    | '/builder/resumes/$resume_slug'
     | '/dashboard/resumes'
-    | '/builder/resumes/$resume'
   id:
     | '__root__'
     | '/'
     | '/builder'
     | '/dashboard'
     | '/api/auth/$'
+    | '/builder/resumes/$resume_slug'
     | '/dashboard/resumes/'
-    | '/builder/resumes/$resume/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -137,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardResumesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/builder/resumes/$resume_slug': {
+      id: '/builder/resumes/$resume_slug'
+      path: '/resumes/$resume_slug'
+      fullPath: '/builder/resumes/$resume_slug'
+      preLoaderRoute: typeof BuilderResumesResume_slugRouteImport
+      parentRoute: typeof BuilderRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -144,22 +151,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/builder/resumes/$resume/': {
-      id: '/builder/resumes/$resume/'
-      path: '/resumes/$resume'
-      fullPath: '/builder/resumes/$resume/'
-      preLoaderRoute: typeof BuilderResumesResumeIndexRouteImport
-      parentRoute: typeof BuilderRouteRoute
-    }
   }
 }
 
 interface BuilderRouteRouteChildren {
-  BuilderResumesResumeIndexRoute: typeof BuilderResumesResumeIndexRoute
+  BuilderResumesResume_slugRoute: typeof BuilderResumesResume_slugRoute
 }
 
 const BuilderRouteRouteChildren: BuilderRouteRouteChildren = {
-  BuilderResumesResumeIndexRoute: BuilderResumesResumeIndexRoute,
+  BuilderResumesResume_slugRoute: BuilderResumesResume_slugRoute,
 }
 
 const BuilderRouteRouteWithChildren = BuilderRouteRoute._addFileChildren(
