@@ -11,6 +11,12 @@ export const auth = betterAuth({
         provider: "pg",
         schema: schema,
     }),
+    session: {
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60,
+        },
+    },
     socialProviders: {
         google: {
             prompt: "select_account",

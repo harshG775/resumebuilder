@@ -1,9 +1,10 @@
-import { authMiddleware } from "#/lib/server/auth.middleware"
-import { createFileRoute, Outlet } from "@tanstack/react-router"
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/dashboard")({
-    server: {
-        middleware: [authMiddleware],
+    beforeLoad: async ({ context }) => {
+        if (!context.session?.user) {
+            throw redirect({ to: "/", search: { auth: false } })
+        }
     },
     component: RouteComponent,
 })

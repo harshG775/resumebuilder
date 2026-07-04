@@ -5,8 +5,15 @@ import TanStackQueryDevtools from "#/integrations/tanstack-query/devtools"
 
 import appCss from "../styles.css?url"
 import { RouteProgressBar } from "#/components/route-progress-bar"
+import { getSessionFn } from "#/lib/server/auth.function"
+
+
 
 export const Route = createRootRoute({
+    beforeLoad: async () => {
+        const session = await getSessionFn()
+        return { session }
+    },
     head: () => ({
         meta: [
             {
