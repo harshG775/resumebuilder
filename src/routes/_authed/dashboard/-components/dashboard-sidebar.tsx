@@ -17,7 +17,7 @@ import {
 
 import { Link, useLocation } from "@tanstack/react-router"
 import { DashboardNavUser } from "./dashboard-nav-user"
-import { ClipboardListIcon } from "lucide-react"
+import { ClipboardListIcon, Code2Icon } from "lucide-react"
 
 const navMain: {
     title: string
@@ -43,11 +43,11 @@ export function DashboardSidebar() {
             <SidebarHeader className="p-4">
                 <div className="flex items-center gap-3">
                     <div className="flex size-9 items-center justify-center rounded-xl bg-primary">
-                        {/* <RiFlowChart className="size-4 text-primary-foreground" /> */}
+                        <Code2Icon className="size-4 text-primary-foreground" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-semibold text-foreground text-sm leading-tight">EngageFlow</span>
-                        <span className="text-xs text-muted-foreground leading-tight">Automation Suite</span>
+                        <span className="font-semibold text-foreground text-sm leading-tight">Resume Builder</span>
+                        <span className="text-xs text-muted-foreground leading-tight">Build Your Resume</span>
                     </div>
                 </div>
             </SidebarHeader>
