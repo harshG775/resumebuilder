@@ -1,17 +1,10 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router"
+import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { createResume, deleteResume, getAllResume } from "#/lib/server/resume.function"
 import { Button } from "#/components/ui/button"
-import { FolderIcon, MoreVerticalIcon, PencilIcon, PlusIcon, TrashIcon } from "lucide-react"
+import { PlusIcon } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import ResumeCard from "./-components/resume-card"
 
 export type Resume = {
     id: string
@@ -66,75 +59,15 @@ function RouteComponent() {
             </div>
             <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
                 {resumes.map((resume) => (
-                    <Link
-                        to={"/builder/resumes/$resume_slug"}
-                        params={{
-                            resume_slug: resume.slug,
-                        }}
+                    <ResumeCard
                         key={resume.id}
-                        className="relative bg-card text-card-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] border"
-                    >
-                        <div className="aspect-9/12 bg-muted"></div>
-                        <div className="px-4 py-3">
-                            <h3>{resume.title}</h3>
-                            <div className="text-xs text-muted-foreground">
-                                Last Updated {resume.updatedAt.toDateString()}
-                            </div>
-                        </div>
-                        <div className="absolute right-2 top-2">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger
-                                    render={<Button size="icon" variant="secondary" />}
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                    }}
-                                >
-                                    <MoreVerticalIcon />
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem
-                                            render={
-                                                <Link
-                                                    to={"/builder/resumes/$resume_slug"}
-                                                    params={{
-                                                        resume_slug: resume.slug,
-                                                    }}
-                                                />
-                                            }
-                                        >
-                                            <FolderIcon />
-                                            Open
-                                        </DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem>
-                                            <PencilIcon />
-                                            Update
-                                        </DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem
-                                            variant="destructive"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                e.stopPropagation()
-                                                deleteMutation.mutate({
-                                                    data: { id: resume.id },
-                                                })
-                                            }}
-                                        >
-                                            <TrashIcon />
-                                            Delete
-                                        </DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-                    </Link>
+                        resume={resume}
+                        onDelete={() => {
+                            deleteMutation.mutate({
+                                data: { id: resume.id },
+                            })
+                        }}
+                    />
                 ))}
             </section>
         </div>
