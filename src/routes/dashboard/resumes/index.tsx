@@ -72,7 +72,7 @@ function RouteComponent() {
                     <Link
                         to={"/builder/resumes/$resume"}
                         params={{
-                            resume: resume.id,
+                            resume: resume.slug,
                         }}
                         key={resume.id}
                         className="relative bg-card text-card-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] border"
@@ -102,7 +102,7 @@ function RouteComponent() {
                                                 <Link
                                                     to={"/builder/resumes/$resume"}
                                                     params={{
-                                                        resume: resume.id,
+                                                        resume: resume.slug,
                                                     }}
                                                 />
                                             }

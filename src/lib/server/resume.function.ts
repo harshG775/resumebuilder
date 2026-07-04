@@ -4,6 +4,7 @@ import z from "zod"
 import { db } from "../db"
 import { resume } from "../db/schema"
 import { eq, count, and } from "drizzle-orm"
+import { generateUniqueSlug } from "../utils"
 
 const paginationSchema = z.object({
     userId: z.string(),
@@ -22,6 +23,7 @@ export const getAllResume = createServerFn({ method: "GET" })
                 .select({
                     id: resume.id,
                     title: resume.title,
+                    slug: resume.slug,
                     createdAt: resume.createdAt,
                     updatedAt: resume.updatedAt,
                 })
@@ -52,32 +54,55 @@ export const getResume = createServerFn({ method: "GET" })
         return
     })
 
-const CreateResumePayloadSchema = z.object({
-    userId: z.string(),
-    title: z.string(),
-    content: z.string().transform((str, ctx) => {
-        try {
-            return JSON.parse(str)
-        } catch (e) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Content must be a valid JSON string",
+export const getResumeBySlug = createServerFn({ method: "GET" })
+    .validator(z.object({ slug: z.string(), userId: z.string() }))
+    .handler(async ({ data }) => {
+        const result = await db
+            .select({
+                id: resume.id,
+                title: resume.title,
+                content: resume.content,
+                slug: resume.slug,
+                createdAt: resume.createdAt,
+                updatedAt: resume.updatedAt,
             })
-            return z.NEVER
+            .from(resume)
+            .where(and(eq(resume.slug, data.slug), eq(resume.userId, data.userId)))
+
+        if (result.length === 0) {
+            return {
+                success: false,
+            }
         }
-    }),
+
+        return { success: true, data: result[0] }
+    })
+
+const ZodContentSchema = z.string().transform((str, ctx) => {
+    try {
+        return JSON.parse(str)
+    } catch (e) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Content must be a valid JSON string",
+        })
+        return z.NEVER
+    }
 })
 
 export const createResume = createServerFn({ method: "POST" })
-    .validator(CreateResumePayloadSchema)
+    .validator(z.object({ userId: z.string(), title: z.string(), content: ZodContentSchema }))
     .handler(async ({ data }) => {
+        const id = crypto.randomUUID()
+        const uniqueSlug = generateUniqueSlug(data.title, id)
         const newResume = await db
             .insert(resume)
             .values({
-                id: crypto.randomUUID(),
+                id: id,
                 userId: data.userId,
-                content: data.content,
                 title: data.title,
+                slug: uniqueSlug,
+                content: data.content,
             })
             .returning({
                 id: resume.id,

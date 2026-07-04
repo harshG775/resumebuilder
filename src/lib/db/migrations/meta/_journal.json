@@ -15,6 +15,13 @@
       "when": 1781957120633,
       "tag": "0001_skinny_tyrannus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783151826075,
+      "tag": "0002_absurd_the_executioner",
+      "breakpoints": true
     }
   ]
 }

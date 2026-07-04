@@ -15,7 +15,8 @@ export const resume = pgTable(
             .notNull()
             .references(() => user.id, { onDelete: "cascade" }),
         title: text("title").notNull().default("Untitled Resume"),
-
+        slug: text("slug").notNull(),
+        
         content: jsonb("content").$type<ResumeValues>().notNull().default({}),
 
         createdAt: timestamp("created_at").defaultNow().notNull(),

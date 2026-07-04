@@ -1,0 +1,1 @@
+ALTER TABLE "resume" ADD COLUMN "slug" text NOT NULL;
