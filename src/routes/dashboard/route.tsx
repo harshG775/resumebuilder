@@ -1,4 +1,4 @@
-import { authMiddleware } from "#/lib/server/middleware"
+import { authMiddleware } from "#/lib/server/auth.middleware"
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/dashboard")({

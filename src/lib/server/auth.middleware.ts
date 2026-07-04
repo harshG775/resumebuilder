@@ -7,5 +7,9 @@ export const authMiddleware = createMiddleware().server(async ({ request, next }
     if (!session) {
         throw redirect({ to: "/" })
     }
-    return await next()
+    return await next({
+        context: {
+            session,
+        },
+    })
 })

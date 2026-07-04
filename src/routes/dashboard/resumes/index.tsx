@@ -21,11 +21,9 @@ export type Resume = {
     createdAt: Date
     updatedAt: Date
 }
-
-const testUserId = "Q2Uvk1rSyo0gPM6g5hiLac7oOnYEZ1r5"
 export const Route = createFileRoute("/dashboard/resumes/")({
     beforeLoad: async () => {
-        const { data } = await getAllResume({ data: { userId: testUserId } })
+        const { data } = await getAllResume({ data: { page: 1, pageSize: 10 } })
         return { resumes: data }
     },
     pendingComponent: () => <div>Loading user directory...</div>,
@@ -56,7 +54,6 @@ function RouteComponent() {
                     onClick={() => {
                         createMutation.mutate({
                             data: {
-                                userId: testUserId,
                                 title: "test",
                                 content: JSON.stringify({}),
                             },
@@ -126,7 +123,7 @@ function RouteComponent() {
                                                 e.preventDefault()
                                                 e.stopPropagation()
                                                 deleteMutation.mutate({
-                                                    data: { id: resume.id, userId: testUserId },
+                                                    data: { id: resume.id },
                                                 })
                                             }}
                                         >

@@ -5,17 +5,18 @@ import { db } from "../db"
 import { resume } from "../db/schema"
 import { eq, count, and } from "drizzle-orm"
 import { generateUniqueSlug } from "../utils"
+import { authMiddleware } from "./auth.middleware"
 
 const paginationSchema = z.object({
-    userId: z.string(),
     page: z.number().int().min(1).default(1),
     pageSize: z.number().int().min(1).max(100).default(10),
 })
 
 export const getAllResume = createServerFn({ method: "GET" })
     .validator(paginationSchema)
-    .handler(async ({ data }) => {
-        const { userId, page, pageSize } = data
+    .middleware([authMiddleware])
+    .handler(async ({ data, context }) => {
+        const { page, pageSize } = data
         const offset = (page - 1) * pageSize
 
         const [resumes, totalResult] = await Promise.all([
@@ -28,10 +29,10 @@ export const getAllResume = createServerFn({ method: "GET" })
                     updatedAt: resume.updatedAt,
                 })
                 .from(resume)
-                .where(eq(resume.userId, userId))
+                .where(eq(resume.userId, context.session.user.id))
                 .limit(pageSize)
                 .offset(offset),
-            db.select({ count: count() }).from(resume).where(eq(resume.userId, userId)),
+            db.select({ count: count() }).from(resume).where(eq(resume.userId, context.session.user.id)),
         ])
 
         const total = totalResult[0]?.count ?? 0
@@ -50,13 +51,15 @@ export const getAllResume = createServerFn({ method: "GET" })
 
 export const getResume = createServerFn({ method: "GET" })
     .validator(z.object({ id: z.string() }))
+    .middleware([authMiddleware])
     .handler(async () => {
         return
     })
 
 export const getResumeBySlug = createServerFn({ method: "GET" })
-    .validator(z.object({ slug: z.string(), userId: z.string() }))
-    .handler(async ({ data }) => {
+    .validator(z.object({ slug: z.string() }))
+    .middleware([authMiddleware])
+    .handler(async ({ data, context }) => {
         const result = await db
             .select({
                 id: resume.id,
@@ -67,7 +70,7 @@ export const getResumeBySlug = createServerFn({ method: "GET" })
                 updatedAt: resume.updatedAt,
             })
             .from(resume)
-            .where(and(eq(resume.slug, data.slug), eq(resume.userId, data.userId)))
+            .where(and(eq(resume.slug, data.slug), eq(resume.userId, context.session.user.id)))
 
         if (result.length === 0) {
             return {
@@ -91,15 +94,16 @@ const ZodContentSchema = z.string().transform((str, ctx) => {
 })
 
 export const createResume = createServerFn({ method: "POST" })
-    .validator(z.object({ userId: z.string(), title: z.string(), content: ZodContentSchema }))
-    .handler(async ({ data }) => {
+    .validator(z.object({ title: z.string(), content: ZodContentSchema }))
+    .middleware([authMiddleware])
+    .handler(async ({ data, context }) => {
         const id = crypto.randomUUID()
         const uniqueSlug = generateUniqueSlug(data.title, id)
         const newResume = await db
             .insert(resume)
             .values({
                 id: id,
-                userId: data.userId,
+                userId: context.session.user.id,
                 title: data.title,
                 slug: uniqueSlug,
                 content: data.content,
@@ -115,15 +119,17 @@ export const createResume = createServerFn({ method: "POST" })
     })
 export const updateResume = createServerFn({ method: "POST" })
     .validator(z.object({ id: z.string() }))
+    .middleware([authMiddleware])
     .handler(async () => {
         return
     })
 export const deleteResume = createServerFn({ method: "POST" })
-    .validator(z.object({ id: z.string(), userId: z.string() }))
-    .handler(async ({ data }) => {
+    .validator(z.object({ id: z.string() }))
+    .middleware([authMiddleware])
+    .handler(async ({ data, context }) => {
         const resp = await db
             .delete(resume)
-            .where(and(eq(resume.id, data.id), eq(resume.userId, data.userId)))
+            .where(and(eq(resume.id, data.id), eq(resume.userId, context.session.user.id)))
             .returning({
                 id: resume.id,
                 title: resume.title,
