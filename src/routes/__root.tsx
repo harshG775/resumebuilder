@@ -4,6 +4,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools"
 import TanStackQueryDevtools from "#/integrations/tanstack-query/devtools"
 
 import appCss from "../styles.css?url"
+import { RouteProgressBar } from "#/components/route-progress-bar"
 
 export const Route = createRootRoute({
     head: () => ({
@@ -39,6 +40,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 <HeadContent />
             </head>
             <body>
+                <RouteProgressBar/>
                 {children}
                 <TanStackDevtools
                     config={{
