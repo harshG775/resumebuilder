@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1781342167885,
+      "tag": "0000_chemical_risque",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781957120633,
+      "tag": "0001_skinny_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783151826075,
+      "tag": "0002_absurd_the_executioner",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783252447709,
+      "tag": "0003_magenta_madame_web",
+      "breakpoints": true
+    }
+  ]
+}

@@ -9,58 +9,134 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TestIndexRouteImport } from './routes/test/index'
-import { Route as ResumesResumeIndexRouteImport } from './routes/resumes/$resume/index'
+import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashboard/route'
+import { Route as AuthedBuilderRouteRouteImport } from './routes/_authed/builder/route'
+import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/index'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
+import { Route as AuthedBuilderResumesResume_slugRouteImport } from './routes/_authed/builder/resumes/$resume_slug'
 
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TestIndexRoute = TestIndexRouteImport.update({
-  id: '/test/',
-  path: '/test/',
+const AuthedDashboardRouteRoute = AuthedDashboardRouteRouteImport.update({
+  id: '/_authed/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResumesResumeIndexRoute = ResumesResumeIndexRouteImport.update({
-  id: '/resumes/$resume/',
-  path: '/resumes/$resume/',
+const AuthedBuilderRouteRoute = AuthedBuilderRouteRouteImport.update({
+  id: '/_authed/builder',
+  path: '/builder',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicSignInIndexRoute = PublicSignInIndexRouteImport.update({
+  id: '/sign-in/',
+  path: '/sign-in/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedDashboardResumesIndexRoute =
+  AuthedDashboardResumesIndexRouteImport.update({
+    id: '/resumes/',
+    path: '/resumes/',
+    getParentRoute: () => AuthedDashboardRouteRoute,
+  } as any)
+const AuthedBuilderResumesResume_slugRoute =
+  AuthedBuilderResumesResume_slugRouteImport.update({
+    id: '/resumes/$resume_slug',
+    path: '/resumes/$resume_slug',
+    getParentRoute: () => AuthedBuilderRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/test/': typeof TestIndexRoute
-  '/resumes/$resume/': typeof ResumesResumeIndexRoute
+  '/builder': typeof AuthedBuilderRouteRouteWithChildren
+  '/dashboard': typeof AuthedDashboardRouteRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/sign-in/': typeof PublicSignInIndexRoute
+  '/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
+  '/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/test': typeof TestIndexRoute
-  '/resumes/$resume': typeof ResumesResumeIndexRoute
+  '/builder': typeof AuthedBuilderRouteRouteWithChildren
+  '/dashboard': typeof AuthedDashboardRouteRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/sign-in': typeof PublicSignInIndexRoute
+  '/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
+  '/dashboard/resumes': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/test/': typeof TestIndexRoute
-  '/resumes/$resume/': typeof ResumesResumeIndexRoute
+  '/_public': typeof PublicRouteRouteWithChildren
+  '/_authed/builder': typeof AuthedBuilderRouteRouteWithChildren
+  '/_authed/dashboard': typeof AuthedDashboardRouteRouteWithChildren
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_public/sign-in/': typeof PublicSignInIndexRoute
+  '/_authed/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
+  '/_authed/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test/' | '/resumes/$resume/'
+  fullPaths:
+    | '/'
+    | '/builder'
+    | '/dashboard'
+    | '/api/auth/$'
+    | '/sign-in/'
+    | '/builder/resumes/$resume_slug'
+    | '/dashboard/resumes/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test' | '/resumes/$resume'
-  id: '__root__' | '/' | '/test/' | '/resumes/$resume/'
+  to:
+    | '/'
+    | '/builder'
+    | '/dashboard'
+    | '/api/auth/$'
+    | '/sign-in'
+    | '/builder/resumes/$resume_slug'
+    | '/dashboard/resumes'
+  id:
+    | '__root__'
+    | '/'
+    | '/_public'
+    | '/_authed/builder'
+    | '/_authed/dashboard'
+    | '/api/auth/$'
+    | '/_public/sign-in/'
+    | '/_authed/builder/resumes/$resume_slug'
+    | '/_authed/dashboard/resumes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TestIndexRoute: typeof TestIndexRoute
-  ResumesResumeIndexRoute: typeof ResumesResumeIndexRoute
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
+  AuthedBuilderRouteRoute: typeof AuthedBuilderRouteRouteWithChildren
+  AuthedDashboardRouteRoute: typeof AuthedDashboardRouteRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -68,27 +144,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/test/': {
-      id: '/test/'
-      path: '/test'
-      fullPath: '/test/'
-      preLoaderRoute: typeof TestIndexRouteImport
+    '/_authed/dashboard': {
+      id: '/_authed/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthedDashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/resumes/$resume/': {
-      id: '/resumes/$resume/'
-      path: '/resumes/$resume'
-      fullPath: '/resumes/$resume/'
-      preLoaderRoute: typeof ResumesResumeIndexRouteImport
+    '/_authed/builder': {
+      id: '/_authed/builder'
+      path: '/builder'
+      fullPath: '/builder'
+      preLoaderRoute: typeof AuthedBuilderRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_public/sign-in/': {
+      id: '/_public/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in/'
+      preLoaderRoute: typeof PublicSignInIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed/dashboard/resumes/': {
+      id: '/_authed/dashboard/resumes/'
+      path: '/resumes'
+      fullPath: '/dashboard/resumes/'
+      preLoaderRoute: typeof AuthedDashboardResumesIndexRouteImport
+      parentRoute: typeof AuthedDashboardRouteRoute
+    }
+    '/_authed/builder/resumes/$resume_slug': {
+      id: '/_authed/builder/resumes/$resume_slug'
+      path: '/resumes/$resume_slug'
+      fullPath: '/builder/resumes/$resume_slug'
+      preLoaderRoute: typeof AuthedBuilderResumesResume_slugRouteImport
+      parentRoute: typeof AuthedBuilderRouteRoute
     }
   }
 }
 
+interface PublicRouteRouteChildren {
+  PublicSignInIndexRoute: typeof PublicSignInIndexRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicSignInIndexRoute: PublicSignInIndexRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
+interface AuthedBuilderRouteRouteChildren {
+  AuthedBuilderResumesResume_slugRoute: typeof AuthedBuilderResumesResume_slugRoute
+}
+
+const AuthedBuilderRouteRouteChildren: AuthedBuilderRouteRouteChildren = {
+  AuthedBuilderResumesResume_slugRoute: AuthedBuilderResumesResume_slugRoute,
+}
+
+const AuthedBuilderRouteRouteWithChildren =
+  AuthedBuilderRouteRoute._addFileChildren(AuthedBuilderRouteRouteChildren)
+
+interface AuthedDashboardRouteRouteChildren {
+  AuthedDashboardResumesIndexRoute: typeof AuthedDashboardResumesIndexRoute
+}
+
+const AuthedDashboardRouteRouteChildren: AuthedDashboardRouteRouteChildren = {
+  AuthedDashboardResumesIndexRoute: AuthedDashboardResumesIndexRoute,
+}
+
+const AuthedDashboardRouteRouteWithChildren =
+  AuthedDashboardRouteRoute._addFileChildren(AuthedDashboardRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TestIndexRoute: TestIndexRoute,
-  ResumesResumeIndexRoute: ResumesResumeIndexRoute,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
+  AuthedBuilderRouteRoute: AuthedBuilderRouteRouteWithChildren,
+  AuthedDashboardRouteRoute: AuthedDashboardRouteRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

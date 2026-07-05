@@ -1,5 +1,5 @@
 {
-    "projectName": "resumebuilder",
+    "projectName": "resume-builder",
     "mode": "file-router",
     "typescript": true,
     "packageManager": "pnpm",
@@ -7,9 +7,10 @@
     "tailwind": true,
     "addOnOptions": {},
     "envVarValues": {},
-    "git": false,
+    "git": true,
+    "install": true,
     "routerOnly": false,
     "version": 1,
     "framework": "react",
-    "chosenAddOns": ["eslint", "compiler", "form", "shadcn"]
+    "chosenAddOns": ["eslint", "nitro", "shadcn"]
 }

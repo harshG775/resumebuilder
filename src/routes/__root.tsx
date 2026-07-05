@@ -1,13 +1,21 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
+import TanStackQueryDevtools from "#/integrations/tanstack-query/devtools"
 
 import appCss from "../styles.css?url"
-import { ThemeProvider } from "#/components/ThemeToggle"
-
-const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`
+import { RouteProgressBar } from "#/components/route-progress-bar"
+import { getSessionFn } from "#/lib/server/auth.function"
+import { TooltipProvider } from "#/components/ui/tooltip"
+import ErrorComponent from "./-components/error-component"
+import NotFoundComponent from "./-components/not-found-component"
+import { Toaster } from "#/components/ui/sonner"
 
 export const Route = createRootRoute({
+    beforeLoad: async () => {
+        const session = await getSessionFn()
+        return { session }
+    },
     head: () => ({
         meta: [
             {
@@ -28,20 +36,21 @@ export const Route = createRootRoute({
             },
         ],
     }),
+    errorComponent: ErrorComponent,
+    notFoundComponent: NotFoundComponent,
     shellComponent: RootDocument,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en">
             <head>
-                <script
-                    dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
-                />
                 <HeadContent />
             </head>
-            <body className="font-sans antialiased wrap-anywhere selection:bg-teal-500/20">
-                <ThemeProvider>{children}</ThemeProvider>
+            <body>
+                <RouteProgressBar />
+                <TooltipProvider>{children}</TooltipProvider>
+                <Toaster />
                 <TanStackDevtools
                     config={{
                         position: "bottom-right",
@@ -51,6 +60,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                             name: "Tanstack Router",
                             render: <TanStackRouterDevtoolsPanel />,
                         },
+                        TanStackQueryDevtools,
                     ]}
                 />
                 <Scripts />

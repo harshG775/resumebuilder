@@ -1,12 +1,10 @@
-import { useStore } from "@tanstack/react-form"
+import { useSelector } from "@tanstack/react-store"
 
 import { useFieldContext, useFormContext } from "#/hooks/form-context"
 
 import { Button } from "#/components/ui/button"
 import { Input } from "#/components/ui/input"
 import { Textarea as ShadcnTextarea } from "#/components/ui/textarea"
-import * as ShadcnSelect from "#/components/ui/select"
-import { Slider as ShadcnSlider } from "#/components/ui/slider"
 import { Switch as ShadcnSwitch } from "#/components/ui/switch"
 import { Label } from "#/components/ui/label"
 
@@ -37,11 +35,11 @@ function ErrorMessages({ errors }: { errors: Array<string | { message: string }>
 
 export function TextField({ label, placeholder }: { label: string; placeholder?: string }) {
     const field = useFieldContext<string>()
-    const errors = useStore(field.store, (state) => state.meta.errors)
+    const errors = useSelector(field.store, (state) => state.meta.errors)
 
     return (
         <div>
-            <Label htmlFor={label} className="mb-2 text-xl font-bold">
+            <Label htmlFor={label} className="mb-2 text-md font-bold">
                 {label}
             </Label>
             <Input
@@ -57,11 +55,11 @@ export function TextField({ label, placeholder }: { label: string; placeholder?:
 
 export function TextArea({ label, rows = 3 }: { label: string; rows?: number }) {
     const field = useFieldContext<string>()
-    const errors = useStore(field.store, (state) => state.meta.errors)
+    const errors = useSelector(field.store, (state) => state.meta.errors)
 
     return (
         <div>
-            <Label htmlFor={label} className="mb-2 text-xl font-bold">
+            <Label htmlFor={label} className="mb-2 text-md font-bold">
                 {label}
             </Label>
             <ShadcnTextarea
@@ -75,68 +73,9 @@ export function TextArea({ label, rows = 3 }: { label: string; rows?: number }) 
         </div>
     )
 }
-
-export function Select({
-    label,
-    values,
-    placeholder,
-}: {
-    label: string
-    values: Array<{ label: string; value: string }>
-    placeholder?: string
-}) {
-    const field = useFieldContext<string>()
-    const errors = useStore(field.store, (state) => state.meta.errors)
-
-    return (
-        <div>
-            <ShadcnSelect.Select
-                name={field.name}
-                value={field.state.value}
-                onValueChange={(value) => field.handleChange(value)}
-            >
-                <ShadcnSelect.SelectTrigger className="w-full">
-                    <ShadcnSelect.SelectValue placeholder={placeholder} />
-                </ShadcnSelect.SelectTrigger>
-                <ShadcnSelect.SelectContent className="bg-background text-foreground">
-                    <ShadcnSelect.SelectGroup>
-                        <ShadcnSelect.SelectLabel>{label}</ShadcnSelect.SelectLabel>
-                        {values.map((value) => (
-                            <ShadcnSelect.SelectItem key={value.value} value={value.value} className="text-foreground">
-                                {value.label}
-                            </ShadcnSelect.SelectItem>
-                        ))}
-                    </ShadcnSelect.SelectGroup>
-                </ShadcnSelect.SelectContent>
-            </ShadcnSelect.Select>
-            {field.state.meta.isTouched && <ErrorMessages errors={errors} />}
-        </div>
-    )
-}
-
-export function Slider({ label }: { label: string }) {
-    const field = useFieldContext<number>()
-    const errors = useStore(field.store, (state) => state.meta.errors)
-
-    return (
-        <div>
-            <Label htmlFor={label} className="mb-2 text-xl font-bold">
-                {label}
-            </Label>
-            <ShadcnSlider
-                id={label}
-                onBlur={field.handleBlur}
-                value={[field.state.value]}
-                onValueChange={(value) => field.handleChange(value[0])}
-            />
-            {field.state.meta.isTouched && <ErrorMessages errors={errors} />}
-        </div>
-    )
-}
-
 export function Switch({ label }: { label: string }) {
     const field = useFieldContext<boolean>()
-    const errors = useStore(field.store, (state) => state.meta.errors)
+    const errors = useSelector(field.store, (state) => state.meta.errors)
 
     return (
         <div>
