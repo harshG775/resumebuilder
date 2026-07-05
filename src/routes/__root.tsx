@@ -9,6 +9,7 @@ import { getSessionFn } from "#/lib/server/auth.function"
 import { TooltipProvider } from "#/components/ui/tooltip"
 import ErrorComponent from "./-components/error-component"
 import NotFoundComponent from "./-components/not-found-component"
+import { Toaster } from "#/components/ui/sonner"
 
 export const Route = createRootRoute({
     beforeLoad: async () => {
@@ -49,6 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <body>
                 <RouteProgressBar />
                 <TooltipProvider>{children}</TooltipProvider>
+                <Toaster />
                 <TanStackDevtools
                     config={{
                         position: "bottom-right",

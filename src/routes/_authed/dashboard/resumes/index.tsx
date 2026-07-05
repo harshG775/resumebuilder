@@ -3,20 +3,12 @@ import { createResumeFn, deleteResumeFn, getAllResumeFn } from "#/lib/server/res
 import { Button } from "#/components/ui/button"
 import { PlusIcon } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
-
 import ResumeCard from "./-components/resume-card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 import { useState } from "react"
+import { toast } from "sonner"
 
-export type Resume = {
-    id: string
-    userId: string
-    title: string
-    content: Record<string, any>
-    createdAt: Date
-    updatedAt: Date
-}
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
     beforeLoad: async () => {
         const { data } = await getAllResumeFn({ data: { page: 1, pageSize: 10 } })
@@ -32,13 +24,15 @@ function RouteComponent() {
     const [isOpen, setIsOpen] = useState(false)
     const deleteMutation = useMutation({
         mutationFn: deleteResumeFn,
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
+            toast.success(`${data.title} Deleted!`)
             router.invalidate()
         },
     })
     const createMutation = useMutation({
         mutationFn: createResumeFn,
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
+            toast.success(`${data.title} Created!`)
             setIsOpen(false)
             router.invalidate()
         },
@@ -49,48 +43,8 @@ function RouteComponent() {
                 <h1 className="font-semibold">Resumes</h1>
                 <Button disabled={createMutation.status === "pending"} onClick={() => setIsOpen(true)}>
                     <PlusIcon />
-                    Add
+                    New
                 </Button>
-                <Dialog
-                    open={isOpen}
-                    onOpenChange={(change) => {
-                        if (!change) {
-                            alert("Are you sure you want to close this dialog?")
-                        }
-                        setIsOpen(change)
-                    }}
-                >
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle className={"flex gap-2 items-center"}>
-                                <PlusIcon className="size-5" />
-                                Create a new resume
-                            </DialogTitle>
-                            <DialogDescription>Start building your resume by giving it a name.</DialogDescription>
-                        </DialogHeader>
-                        <div>
-                            <form
-                                onSubmit={(e) => {
-                                    e.preventDefault()
-                                    const formData = new FormData(e.target)
-                                    const title = formData.get("title") as string
-
-                                    createMutation.mutate({
-                                        data: {
-                                            title: title,
-                                        },
-                                    })
-                                }}
-                            >
-                                <div>
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" id="title" name="title" />
-                                </div>
-                                <button type="submit">add</button>
-                            </form>
-                        </div>
-                    </DialogContent>
-                </Dialog>
             </div>
             <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
                 {resumes.map((resume) => (
@@ -105,6 +59,46 @@ function RouteComponent() {
                     />
                 ))}
             </section>
+            <Dialog
+                open={isOpen}
+                onOpenChange={(change) => {
+                    if (!change) {
+                        alert("Are you sure you want to close this dialog?")
+                    }
+                    setIsOpen(change)
+                }}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle className={"flex gap-2 items-center"}>
+                            <PlusIcon className="size-5" />
+                            Create a new resume
+                        </DialogTitle>
+                        <DialogDescription>Start building your resume by giving it a name.</DialogDescription>
+                    </DialogHeader>
+                    <div>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault()
+                                const formData = new FormData(e.target)
+                                const title = formData.get("title") as string
+
+                                createMutation.mutate({
+                                    data: {
+                                        title: title,
+                                    },
+                                })
+                            }}
+                        >
+                            <div>
+                                <label htmlFor="title">Title</label>
+                                <input type="text" id="title" name="title" />
+                            </div>
+                            <button type="submit">add</button>
+                        </form>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
