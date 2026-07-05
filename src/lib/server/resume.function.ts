@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/react-start"
 import z from "zod"
 import { db } from "../db"
 import { resume } from "../db/schema"
-import { eq, count, and } from "drizzle-orm"
+import { eq, count, and, desc } from "drizzle-orm"
 import { generateUniqueSlug } from "../utils"
 import { authMiddleware } from "./auth.middleware"
 
@@ -12,7 +12,7 @@ const paginationSchema = z.object({
     pageSize: z.number().int().min(1).max(100).default(10),
 })
 
-export const getAllResume = createServerFn({ method: "GET" })
+export const getAllResumeFn = createServerFn({ method: "GET" })
     .validator(paginationSchema)
     .middleware([authMiddleware])
     .handler(async ({ data, context }) => {
@@ -31,7 +31,8 @@ export const getAllResume = createServerFn({ method: "GET" })
                 .from(resume)
                 .where(eq(resume.userId, context.session.user.id))
                 .limit(pageSize)
-                .offset(offset),
+                .offset(offset)
+                .orderBy(desc(resume.updatedAt)),
             db.select({ count: count() }).from(resume).where(eq(resume.userId, context.session.user.id)),
         ])
 
@@ -49,14 +50,14 @@ export const getAllResume = createServerFn({ method: "GET" })
         }
     })
 
-export const getResume = createServerFn({ method: "GET" })
+export const getResumeFn = createServerFn({ method: "GET" })
     .validator(z.object({ id: z.string() }))
     .middleware([authMiddleware])
     .handler(async () => {
         return
     })
 
-export const getResumeBySlug = createServerFn({ method: "GET" })
+export const getResumeBySlugFn = createServerFn({ method: "GET" })
     .validator(z.object({ slug: z.string() }))
     .middleware([authMiddleware])
     .handler(async ({ data, context }) => {
@@ -81,24 +82,13 @@ export const getResumeBySlug = createServerFn({ method: "GET" })
         return { success: true, data: result[0] }
     })
 
-const ZodContentSchema = z.string().transform((str, ctx) => {
-    try {
-        return JSON.parse(str)
-    } catch (e) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Content must be a valid JSON string",
-        })
-        return z.NEVER
-    }
-})
-
-export const createResume = createServerFn({ method: "POST" })
-    .validator(z.object({ title: z.string(), content: ZodContentSchema }))
+export const createResumeFn = createServerFn({ method: "POST" })
+    .validator(z.object({ title: z.string() }))
     .middleware([authMiddleware])
     .handler(async ({ data, context }) => {
         const id = crypto.randomUUID()
         const uniqueSlug = generateUniqueSlug(data.title, id)
+        const content = {}
         const newResume = await db
             .insert(resume)
             .values({
@@ -106,7 +96,7 @@ export const createResume = createServerFn({ method: "POST" })
                 userId: context.session.user.id,
                 title: data.title,
                 slug: uniqueSlug,
-                content: data.content,
+                content: content,
             })
             .returning({
                 id: resume.id,
@@ -117,13 +107,13 @@ export const createResume = createServerFn({ method: "POST" })
             data: newResume[0],
         }
     })
-export const updateResume = createServerFn({ method: "POST" })
+export const updateResumeFn = createServerFn({ method: "POST" })
     .validator(z.object({ id: z.string() }))
     .middleware([authMiddleware])
     .handler(async () => {
         return
     })
-export const deleteResume = createServerFn({ method: "POST" })
+export const deleteResumeFn = createServerFn({ method: "POST" })
     .validator(z.object({ id: z.string() }))
     .middleware([authMiddleware])
     .handler(async ({ data, context }) => {
