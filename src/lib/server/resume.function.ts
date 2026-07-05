@@ -2,7 +2,7 @@
 import { createServerFn } from "@tanstack/react-start"
 import z from "zod"
 import { db } from "../db"
-import { resume } from "../db/schema"
+import { resume, user } from "../db/schema"
 import { eq, count, and, desc } from "drizzle-orm"
 import { generateUniqueSlug } from "../utils"
 import { authMiddleware } from "./auth.middleware"
@@ -50,7 +50,7 @@ export const getAllResumeFn = createServerFn({ method: "GET" })
         }
     })
 
-export const getResumeFn = createServerFn({ method: "GET" })
+export const getResumeByIdFn = createServerFn({ method: "GET" })
     .validator(z.object({ id: z.string() }))
     .middleware([authMiddleware])
     .handler(async () => {
@@ -108,10 +108,32 @@ export const createResumeFn = createServerFn({ method: "POST" })
         }
     })
 export const updateResumeFn = createServerFn({ method: "POST" })
-    .validator(z.object({ id: z.string() }))
+    .validator(
+        z.object({
+            id: z.string(),
+            updatePayload: z.object({
+                title: z.string(),
+            }),
+        }),
+    )
     .middleware([authMiddleware])
-    .handler(async () => {
-        return
+    .handler(async ({ data, context }) => {
+        const [updatedResume] = await db
+            .update(resume)
+            .set(data.updatePayload)
+            .where(and(eq(resume.id, data.id), eq(resume.userId, context.session.user.id)))
+            .returning({
+                id: resume.id,
+                title: resume.title,
+                slug: resume.slug,
+                createdAt: resume.createdAt,
+                updatedAt: resume.updatedAt,
+            })
+
+        return {
+            success: true,
+            data: updatedResume,
+        }
     })
 export const deleteResumeFn = createServerFn({ method: "POST" })
     .validator(z.object({ id: z.string() }))

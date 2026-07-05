@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
-import { createResumeFn, deleteResumeFn, getAllResumeFn } from "#/lib/server/resume.function"
+import { createResumeFn, deleteResumeFn, getAllResumeFn, updateResumeFn } from "#/lib/server/resume.function"
 import { Button } from "#/components/ui/button"
 import { PlusIcon } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
@@ -24,7 +24,24 @@ function RouteComponent() {
     const router = useRouter()
     const { resumes } = Route.useRouteContext()
     const [isOpen, setIsOpen] = useState(false)
+    const [currentEditing, setCurrentEditing] = useState<(typeof resumes)[0] | null>(null)
 
+    const createMutation = useMutation({
+        mutationFn: createResumeFn,
+        onSuccess: ({ data }) => {
+            toast.success(`${data.title} Created!`)
+            router.invalidate()
+            setIsOpen(false)
+        },
+    })
+    const updateMutation = useMutation({
+        mutationFn: updateResumeFn,
+        onSuccess: ({ data }) => {
+            toast.success(`${data.title} Updated!`)
+            router.invalidate()
+            setIsOpen(false)
+        },
+    })
     const deleteMutation = useMutation({
         mutationFn: deleteResumeFn,
         onSuccess: ({ data }) => {
@@ -32,24 +49,28 @@ function RouteComponent() {
             router.invalidate()
         },
     })
-    const createMutation = useMutation({
-        mutationFn: createResumeFn,
-        onSuccess: ({ data }) => {
-            toast.success(`${data.title} Created!`)
-            setIsOpen(false)
-            router.invalidate()
-        },
-    })
+
     const form = useAppForm({
         defaultValues: {
             title: "",
         },
         onSubmit({ value, formApi }) {
-            createMutation.mutate({
-                data: {
-                    title: value.title,
-                },
-            })
+            if (currentEditing) {
+                updateMutation.mutate({
+                    data: {
+                        id: currentEditing.id,
+                        updatePayload: {
+                            title: value.title,
+                        },
+                    },
+                })
+            } else {
+                createMutation.mutate({
+                    data: {
+                        title: value.title,
+                    },
+                })
+            }
             formApi.reset()
         },
     })
@@ -67,6 +88,11 @@ function RouteComponent() {
                     <ResumeCard
                         key={resume.id}
                         resume={resume}
+                        onOpenEditDialog={() => {
+                            form.setFieldValue("title", resume.title)
+                            setCurrentEditing(resume)
+                            setIsOpen(true)
+                        }}
                         onDelete={() => {
                             deleteMutation.mutate({
                                 data: { id: resume.id },

@@ -19,9 +19,10 @@ type ResumeCardProps = {
         createdAt: Date
         updatedAt: Date
     }
+    onOpenEditDialog: () => void
     onDelete: () => void
 }
-export default function ResumeCard({ resume, onDelete }: ResumeCardProps) {
+export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: ResumeCardProps) {
     return (
         <Link
             to={"/builder/resumes/$resume_slug"}
@@ -65,9 +66,15 @@ export default function ResumeCard({ resume, onDelete }: ResumeCardProps) {
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    onOpenEditDialog()
+                                }}
+                            >
                                 <PencilIcon />
-                                Update
+                                Edit Details
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
