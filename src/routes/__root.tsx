@@ -7,6 +7,8 @@ import appCss from "../styles.css?url"
 import { RouteProgressBar } from "#/components/route-progress-bar"
 import { getSessionFn } from "#/lib/server/auth.function"
 import { TooltipProvider } from "#/components/ui/tooltip"
+import ErrorComponent from "./-components/error-component"
+import NotFoundComponent from "./-components/not-found-component"
 
 export const Route = createRootRoute({
     beforeLoad: async () => {
@@ -33,12 +35,11 @@ export const Route = createRootRoute({
             },
         ],
     }),
-    notFoundComponent: notFoundComponent,
+    errorComponent: ErrorComponent,
+    notFoundComponent: NotFoundComponent,
     shellComponent: RootDocument,
 })
-function notFoundComponent() {
-    return <h1>PAGE NOTE FOUND</h1>
-}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
