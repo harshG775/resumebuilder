@@ -1,11 +1,8 @@
 import { relations } from "drizzle-orm"
 import { pgTable, text, timestamp, index, jsonb } from "drizzle-orm/pg-core"
 import { user } from "./auth"
-import z from "zod"
-
-// This is where your resume data structure will live
-const ResumeZSchema = z.object({})
-export type ResumeValues = z.infer<typeof ResumeZSchema>
+import type { ResumeValues } from "#/module/resume/schema/resume.zod-schema"
+import { ResumeDefaultValues } from "#/module/resume/data/resume-form-options"
 
 export const resume = pgTable(
     "resume",
@@ -16,8 +13,8 @@ export const resume = pgTable(
             .references(() => user.id, { onDelete: "cascade" }),
         title: text("title").notNull().default("Untitled Resume"),
         slug: text("slug").notNull(),
-        
-        content: jsonb("content").$type<ResumeValues>().notNull().default({}),
+
+        content: jsonb("content").$type<ResumeValues>().notNull().default(ResumeDefaultValues),
 
         createdAt: timestamp("created_at").defaultNow().notNull(),
         updatedAt: timestamp("updated_at")
