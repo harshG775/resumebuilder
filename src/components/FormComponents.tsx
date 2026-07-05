@@ -39,7 +39,7 @@ export function TextField({ label, placeholder }: { label: string; placeholder?:
 
     return (
         <div>
-            <Label htmlFor={label} className="mb-2 text-xl font-bold">
+            <Label htmlFor={label} className="mb-2 text-md font-bold">
                 {label}
             </Label>
             <Input
@@ -59,7 +59,7 @@ export function TextArea({ label, rows = 3 }: { label: string; rows?: number }) 
 
     return (
         <div>
-            <Label htmlFor={label} className="mb-2 text-xl font-bold">
+            <Label htmlFor={label} className="mb-2 text-md font-bold">
                 {label}
             </Label>
             <ShadcnTextarea

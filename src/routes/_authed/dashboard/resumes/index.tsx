@@ -8,6 +8,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 import { useState } from "react"
 import { toast } from "sonner"
+import { useAppForm } from "#/hooks/form"
+import { Field, FieldGroup } from "#/components/ui/field"
 
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
     beforeLoad: async () => {
@@ -22,6 +24,7 @@ function RouteComponent() {
     const router = useRouter()
     const { resumes } = Route.useRouteContext()
     const [isOpen, setIsOpen] = useState(false)
+
     const deleteMutation = useMutation({
         mutationFn: deleteResumeFn,
         onSuccess: ({ data }) => {
@@ -35,6 +38,19 @@ function RouteComponent() {
             toast.success(`${data.title} Created!`)
             setIsOpen(false)
             router.invalidate()
+        },
+    })
+    const form = useAppForm({
+        defaultValues: {
+            title: "",
+        },
+        onSubmit({ value, formApi }) {
+            createMutation.mutate({
+                data: {
+                    title: value.title,
+                },
+            })
+            formApi.reset()
         },
     })
     return (
@@ -76,27 +92,24 @@ function RouteComponent() {
                         </DialogTitle>
                         <DialogDescription>Start building your resume by giving it a name.</DialogDescription>
                     </DialogHeader>
-                    <div>
+                    <form.AppForm>
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault()
-                                const formData = new FormData(e.target)
-                                const title = formData.get("title") as string
-
-                                createMutation.mutate({
-                                    data: {
-                                        title: title,
-                                    },
-                                })
+                                form.handleSubmit()
                             }}
                         >
-                            <div>
-                                <label htmlFor="title">Title</label>
-                                <input type="text" id="title" name="title" />
-                            </div>
-                            <button type="submit">add</button>
+                            <FieldGroup>
+                                <form.AppField
+                                    name="title"
+                                    children={(field) => <field.TextField label="Resume Title" />}
+                                />
+                                <Field orientation="horizontal" className="justify-end">
+                                    <form.SubscribeButton label="Add" />
+                                </Field>
+                            </FieldGroup>
                         </form>
-                    </div>
+                    </form.AppForm>
                 </DialogContent>
             </Dialog>
         </div>
