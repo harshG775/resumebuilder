@@ -1,5 +1,5 @@
 import { getResumeBySlugFn } from "#/lib/server/resume.function"
-import Builder from "#/module/resume/builder"
+import Builder from "#/modules/resume/builder"
 import { createFileRoute, Link } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_authed/builder/resumes/$resume_slug")({
