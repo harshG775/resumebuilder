@@ -62,7 +62,7 @@ export default function BuilderLayout({
                         {editor}
                     </ResizablePanel>
                     <ResizableHandle withHandle />
-                    <ResizablePanel defaultSize={50}></ResizablePanel>
+                    <ResizablePanel defaultSize={"60%"}></ResizablePanel>
                     <ResizableHandle withHandle />
                     <ResizablePanel
                         minSize={"16rem"}
@@ -74,22 +74,24 @@ export default function BuilderLayout({
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </div>
-            <TransformWrapper initialScale={0.3} minScale={0.1} maxScale={2} centerOnInit limitToBounds={false}>
+            <TransformWrapper initialScale={0.4} minScale={0.1} maxScale={2} centerOnInit limitToBounds={false}>
                 {({ zoomIn, zoomOut, resetTransform }) => (
                     <>
-                        <div className="fixed bottom-4 right-4 z-20 flex items-center gap-1 rounded-lg border bg-sidebar p-1 shadow pointer-events-auto">
-                            <Button variant="ghost" size="icon-sm" onClick={() => zoomOut()}>
-                                <ZoomOutIcon className="size-4" />
-                                <span className="sr-only">Zoom out</span>
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" onClick={() => resetTransform()}>
-                                <RotateCcwIcon className="size-4" />
-                                <span className="sr-only">Reset zoom</span>
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" onClick={() => zoomIn()}>
-                                <ZoomInIcon className="size-4" />
-                                <span className="sr-only">Zoom in</span>
-                            </Button>
+                        <div className="fixed bottom-4 left-4 right-4 z-10 flex justify-center">
+                            <div className="flex items-center gap-1 rounded-lg border bg-sidebar/70 p-1 shadow pointer-events-auto">
+                                <Button variant="ghost" size="icon-sm" onClick={() => resetTransform()}>
+                                    <RotateCcwIcon className="size-4" />
+                                    <span className="sr-only">Reset zoom</span>
+                                </Button>
+                                <Button variant="ghost" size="icon-sm" onClick={() => zoomOut()}>
+                                    <ZoomOutIcon className="size-4" />
+                                    <span className="sr-only">Zoom out</span>
+                                </Button>
+                                <Button variant="ghost" size="icon-sm" onClick={() => zoomIn()}>
+                                    <ZoomInIcon className="size-4" />
+                                    <span className="sr-only">Zoom in</span>
+                                </Button>
+                            </div>
                         </div>
                         <TransformComponent
                             wrapperStyle={{
