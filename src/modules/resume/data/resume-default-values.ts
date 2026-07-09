@@ -1,6 +1,8 @@
+import { formOptions } from "@tanstack/react-form"
+import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
 
-export const ResumeDefaultValues: ResumeValues = {
+export const resumeDefaultValues: ResumeValues = {
     basics: {
         name: "",
         headline: "",
@@ -20,3 +22,10 @@ export const ResumeDefaultValues: ResumeValues = {
     },
     order: ["summary", "skills", "experience", "projects", "education", "certifications"],
 }
+
+export const resumeFormOptions = formOptions({
+    defaultValues: resumeDefaultValues,
+    validators: {
+        onChange: ResumeZodSchema,
+    },
+})

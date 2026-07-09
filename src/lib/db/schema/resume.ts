@@ -1,8 +1,8 @@
 import { relations } from "drizzle-orm"
 import { pgTable, text, timestamp, index, jsonb } from "drizzle-orm/pg-core"
 import { user } from "./auth"
-import type { ResumeValues } from "#/module/resume/schema/resume.zod-schema"
-import { ResumeDefaultValues } from "#/module/resume/data/resume-form-options"
+import type { ResumeValues } from "#/modules/resume/schema/resume.zod-schema"
+import { resumeDefaultValues } from "#/modules/resume/data/resume-default-values"
 
 export const resume = pgTable(
     "resume",
@@ -14,7 +14,7 @@ export const resume = pgTable(
         title: text("title").notNull().default("Untitled Resume"),
         slug: text("slug").notNull(),
 
-        content: jsonb("content").$type<ResumeValues>().notNull().default(ResumeDefaultValues),
+        content: jsonb("content").$type<ResumeValues>().notNull().default(resumeDefaultValues),
 
         createdAt: timestamp("created_at").defaultNow().notNull(),
         updatedAt: timestamp("updated_at")

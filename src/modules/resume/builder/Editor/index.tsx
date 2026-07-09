@@ -1,0 +1,7 @@
+export { BasicsSection } from "./basics-section"
+export { CertificationsSection } from "./certifications-section"
+export { EducationSection } from "./education-section"
+export { ExperienceSection } from "./experience-section"
+export { SkillsSection } from "./skills-section"
+export { SummarySection } from "./summary-section"
+export { ProjectsSection } from "./projects-section"

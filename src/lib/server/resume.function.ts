@@ -6,7 +6,7 @@ import { resume, user } from "../db/schema"
 import { eq, count, and, desc } from "drizzle-orm"
 import { generateUniqueSlug } from "../utils"
 import { authMiddleware } from "./auth.middleware"
-import { ResumeDefaultValues } from "#/module/resume/data/resume-form-options"
+import { resumeDefaultValues } from "#/modules/resume/data/resume-default-values"
 
 const paginationSchema = z.object({
     page: z.number().int().min(1).default(1),
@@ -96,7 +96,7 @@ export const createResumeFn = createServerFn({ method: "POST" })
                 userId: context.session.user.id,
                 title: data.title,
                 slug: uniqueSlug,
-                content: ResumeDefaultValues,
+                content: resumeDefaultValues,
             })
             .returning({
                 id: resume.id,
