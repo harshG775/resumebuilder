@@ -12,6 +12,7 @@ import {
     SkillsSection,
     SummarySection,
 } from "./Editor"
+import { TypstPreview } from "./preview"
 
 type BuilderProps = {
     resumeValue: ResumeValues
@@ -46,7 +47,12 @@ export default function Builder({ resumeValue }: BuilderProps) {
             preview={
                 <div className="max-w-3xl w-full">
                     <form.Subscribe selector={(state) => state.values}>
-                        {(values) => <pre>{JSON.stringify(values, null, 2)}</pre>}
+                        {/* {(values) => <pre>{JSON.stringify(values, null, 2)}</pre>} */}
+                        {(values) => <TypstPreview source={`
+                            #set page(fill: rgb("#ffff"), margin: 0.25in, paper: "us-letter")
+                            = heading
+                            == subtitle
+                            `} />}
                     </form.Subscribe>
                 </div>
             }
