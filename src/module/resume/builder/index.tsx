@@ -3,6 +3,7 @@ import { useAppForm } from "#/hooks/form"
 import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
 import BuilderLayout from "./builder-layout"
+import { BasicsSection } from "./Editor"
 
 type BuilderProps = {
     resumeValue: ResumeValues
@@ -18,7 +19,7 @@ export default function Builder({ resumeValue }: BuilderProps) {
             title={form.state.values.basics.name || "Untitled resume"}
             editor={
                 <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
-                    {/* <BasicsSection form={form} /> */}
+                    <BasicsSection form={form} />
                     <FieldSeparator />
                     {/* <SummarySection form={form} /> */}
                     <FieldSeparator />
@@ -34,7 +35,13 @@ export default function Builder({ resumeValue }: BuilderProps) {
                 </FieldGroup>
             }
             design={<FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">design</FieldGroup>}
-            preview={<div className="max-w-3xl w-full">{JSON.stringify(form.state.values)}</div>}
+            preview={
+                <div className="max-w-3xl w-full">
+                    <form.Subscribe selector={(state) => state.values}>
+                        {(values) => <pre>{JSON.stringify(values, null, 2)}</pre>}
+                    </form.Subscribe>
+                </div>
+            }
         />
     )
 }
