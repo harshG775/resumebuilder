@@ -1,5 +1,8 @@
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
 import { useAppForm } from "#/hooks/form"
+import { downloadBlob } from "#/lib/download"
+import { useTypstCompileToPdf } from "#/lib/typst/useTypstSvg"
+import { ClientOnly } from "@tanstack/react-router"
 import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
 import BuilderLayout from "./components/builder-layout"
@@ -12,19 +15,39 @@ import {
     SkillsSection,
     SummarySection,
 } from "./Editor"
-import Preview from "./preview"
+import { getTemplate } from "./templates"
+import { toast } from "sonner"
+import { TypstPreview } from "#/lib/typst/typst-preview"
 
 type BuilderProps = {
     resumeValue: ResumeValues
 }
 export default function Builder({ resumeValue }: BuilderProps) {
+    const { compileToPdf, isCompiling } = useTypstCompileToPdf()
+
     const form = useAppForm({
         defaultValues: resumeValue,
         validators: { onChange: ResumeZodSchema },
     })
+    const template = getTemplate("classic")
+
+    async function handleDownload() {
+        try {
+            const values = form.state.values
+            const pdfBytes = await compileToPdf(template.render(values))
+            downloadBlob(pdfBytes, `${values.basics.name || "resume"}.pdf`, "application/pdf")
+        } catch (err) {
+            console.error(err)
+            toast.error("Failed to generate PDF", {
+                description: err instanceof Error ? err.message : "Please try again.",
+            })
+        }
+    }
 
     return (
         <BuilderLayout
+            isDownloading={isCompiling}
+            onDownload={handleDownload}
             title={form.state.values.basics.name || "Untitled resume"}
             editor={
                 <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
@@ -45,11 +68,13 @@ export default function Builder({ resumeValue }: BuilderProps) {
             }
             design={<FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">design</FieldGroup>}
             preview={
-                <div className="max-w-3xl w-full">
-                    <form.Subscribe selector={(state) => state.values}>
-                        {(values) => <Preview templateId="classic" values={values} />}
-                    </form.Subscribe>
-                </div>
+                <form.Subscribe selector={(state) => state.values}>
+                    {(values) => (
+                        <ClientOnly fallback={<div>Loading preview…</div>}>
+                            <TypstPreview source={template.render(values)} />
+                        </ClientOnly>
+                    )}
+                </form.Subscribe>
             }
         />
     )
