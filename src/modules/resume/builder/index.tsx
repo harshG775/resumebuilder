@@ -2,8 +2,16 @@ import { FieldGroup, FieldSeparator } from "#/components/ui/field"
 import { useAppForm } from "#/hooks/form"
 import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
-import BuilderLayout from "./builder-layout"
-import { BasicsSection } from "./Editor"
+import BuilderLayout from "./components/builder-layout"
+import {
+    BasicsSection,
+    CertificationsSection,
+    EducationSection,
+    ExperienceSection,
+    ProjectsSection,
+    SkillsSection,
+    SummarySection,
+} from "./Editor"
 
 type BuilderProps = {
     resumeValue: ResumeValues
@@ -21,17 +29,17 @@ export default function Builder({ resumeValue }: BuilderProps) {
                 <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
                     <BasicsSection form={form} />
                     <FieldSeparator />
-                    {/* <SummarySection form={form} /> */}
+                    <SummarySection form={form} />
                     <FieldSeparator />
-                    {/* <SkillsSection form={form} /> */}
+                    <SkillsSection form={form} />
                     <FieldSeparator />
-                    {/* <ExperienceSection form={form} /> */}
+                    <ExperienceSection form={form} />
                     <FieldSeparator />
-                    {/* <ProjectsSection form={form} /> */}
+                    <ProjectsSection form={form} />
                     <FieldSeparator />
-                    {/* <EducationSection form={form} /> */}
+                    <EducationSection form={form} />
                     <FieldSeparator />
-                    {/* <CertificationsSection form={form} /> */}
+                    <CertificationsSection form={form} />
                 </FieldGroup>
             }
             design={<FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">design</FieldGroup>}
