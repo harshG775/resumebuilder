@@ -15,6 +15,7 @@ export default function Builder({ resumeValue }: BuilderProps) {
 
     return (
         <BuilderLayout
+            title={form.state.values.basics.name || "Untitled resume"}
             editor={
                 <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
                     {/* <BasicsSection form={form} /> */}
