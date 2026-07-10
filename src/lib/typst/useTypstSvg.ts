@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { getTypst } from "./client"
 
 export type TypstStatus = "idle" | "loading-engine" | "compiling" | "ready" | "error"
@@ -45,4 +45,34 @@ export function useTypstSvg(source: string, options: UseTypstSvgOptions = {}): U
     }, [source, debounceMs])
 
     return { svg, status, error }
+}
+
+export interface UseTypstCompileToPdfResult {
+    compileToPdf: (source: string) => Promise<Uint8Array>
+    isCompiling: boolean
+    error: string | null
+}
+
+export function useTypstCompileToPdf(): UseTypstCompileToPdfResult {
+    const [isCompiling, setIsCompiling] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+
+    const compileToPdf = useCallback(async (source: string): Promise<Uint8Array> => {
+        setIsCompiling(true)
+        setError(null)
+        try {
+            const typst = await getTypst()
+            const result = await typst.pdf({ mainContent: source })
+            if (!result) throw new Error("PDF compilation produced no output")
+            return result
+        } catch (err) {
+            const message = err instanceof Error ? err.message : String(err)
+            setError(message)
+            throw err
+        } finally {
+            setIsCompiling(false)
+        }
+    }, [])
+
+    return { compileToPdf, isCompiling, error }
 }
