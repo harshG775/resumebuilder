@@ -10,8 +10,10 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { authClient } from "#/lib/auth/auth-client"
 import { ChevronDownIcon, ChevronRightIcon, LogOutIcon, PaletteIcon } from "lucide-react"
+import { useRouter } from "@tanstack/react-router"
 
 export function DashboardNavUser() {
+    const router = useRouter()
     const { data: session, isPending } = authClient.useSession()
     if (isPending) {
         return <div>isPending</div>
@@ -52,7 +54,17 @@ export function DashboardNavUser() {
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => void authClient.signOut()} variant="destructive">
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    authClient.signOut().then(() => {
+                                        router.navigate({
+                                            from: "/dashboard/resumes/",
+                                            to: "/sign-in",
+                                        })
+                                    })
+                                }}
+                                variant="destructive"
+                            >
                                 <LogOutIcon />
                                 Log out
                             </DropdownMenuItem>
