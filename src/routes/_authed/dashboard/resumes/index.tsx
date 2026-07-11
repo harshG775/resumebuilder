@@ -3,8 +3,9 @@ import { createResumeFn, deleteResumeFn, getAllResumeFn, updateResumeFn } from "
 import { Button } from "#/components/ui/button"
 import { PlusIcon } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
-import ResumeCard from "./-components/resume-card"
+import ResumeCard, { ResumeCardSkeleton } from "./-components/resume-card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Skeleton } from "#/components/ui/skeleton"
 
 import { useState } from "react"
 import { toast } from "sonner"
@@ -16,9 +17,25 @@ export const Route = createFileRoute("/_authed/dashboard/resumes/")({
         const { data } = await getAllResumeFn({ data: { page: 1, pageSize: 10 } })
         return { resumes: data }
     },
-    pendingComponent: () => <div>Loading user directory...</div>,
+    pendingComponent: RoutePendingComponent,
     component: RouteComponent,
 })
+
+function RoutePendingComponent() {
+    return (
+        <div className="min-h-screen bg-background text-foreground p-3 sm:p-4 lg:p-6 font-sans">
+            <div className="flex justify-between items-center">
+                <Skeleton className="h-6 w-24 rounded-sm" />
+                <Skeleton className="h-9 w-24" />
+            </div>
+            <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
+                {Array.from({ length: 8 }).map((_, i) => (
+                    <ResumeCardSkeleton key={i} />
+                ))}
+            </section>
+        </div>
+    )
+}
 
 function RouteComponent() {
     const router = useRouter()

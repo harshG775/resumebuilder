@@ -8,6 +8,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { Skeleton } from "#/components/ui/skeleton"
 import { authClient } from "#/lib/auth/auth-client"
 import { ChevronDownIcon, ChevronRightIcon, LogOutIcon, PaletteIcon } from "lucide-react"
 import { useRouter } from "@tanstack/react-router"
@@ -16,7 +17,19 @@ export function DashboardNavUser() {
     const router = useRouter()
     const { data: session, isPending } = authClient.useSession()
     if (isPending) {
-        return <div>isPending</div>
+        return (
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton size="lg" className="pointer-events-none">
+                        <Skeleton className="size-8 rounded-lg" />
+                        <div className="grid flex-1 gap-1.5">
+                            <Skeleton className="h-3 w-3/4 rounded-sm" />
+                            <Skeleton className="h-2.5 w-full rounded-sm" />
+                        </div>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+        )
     }
 
     if (session) {
