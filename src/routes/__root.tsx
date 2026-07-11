@@ -10,6 +10,7 @@ import { TooltipProvider } from "#/components/ui/tooltip"
 import ErrorComponent from "./-components/error-component"
 import NotFoundComponent from "./-components/not-found-component"
 import { Toaster } from "#/components/ui/sonner"
+import { AlertHost } from "#/components/ui/native-alert"
 
 export const Route = createRootRoute({
     beforeLoad: async () => {
@@ -51,6 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 <RouteProgressBar />
                 <TooltipProvider>{children}</TooltipProvider>
                 <Toaster />
+                <AlertHost />
                 <TanStackDevtools
                     config={{
                         position: "bottom-right",
