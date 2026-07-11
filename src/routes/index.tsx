@@ -12,41 +12,40 @@ function Home() {
     if (isPending) {
         return (
             <div className="flex h-screen items-center justify-center">
-                <div className="h-8 w-8 animate-pulse rounded-full bg-neutral-400" />
+                <div className="h-8 w-8 animate-pulse rounded-full bg-primary" />
             </div>
         )
     }
 
     return (
-        <div className="flex h-screen flex-col items-center justify-center gap-4">
-            {session?.user && (
-                <div className="island-shell flex items-center gap-4 rounded-xl p-6">
-                    {session.user.image ? (
-                        <img src={session.user.image} alt={session.user.name} className="h-12 w-12 rounded-full" />
-                    ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-800">
-                            <span className="text-sm font-bold">{session.user.name.charAt(0).toUpperCase()}</span>
-                        </div>
-                    )}
+        <div className="relative flex h-screen flex-col items-center justify-center gap-6 overflow-hidden px-6 text-center">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_125%_at_50%_10%,var(--background)_40%,color-mix(in_srgb,var(--primary)_35%,var(--background))_100%)]" />
 
-                    <div>
-                        <h2 className="text-lg font-bold">Hello, {session.user.name}!</h2>
-                        <p className="text-sm text-neutral-500">{session.user.email}</p>
-                    </div>
-                </div>
-            )}
+            <span className="relative z-10 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+                Free forever · No credit card
+            </span>
+
+            <h1 className="relative z-10 max-w-2xl text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+                Build a resume that gets you hired
+            </h1>
+
+            <p className="relative z-10 max-w-md text-base text-muted-foreground">
+                Pick a template, fill in your details, and export a polished PDF in minutes.
+            </p>
 
             {session?.user ? (
-                <div className="flex items-center gap-4">
-                    <Button render={<Link to="/dashboard/resumes" />}>Go to Dashboard</Button>
-                    <Button variant={"destructive"} onClick={() => authClient.signOut()}>
+                <div className="relative z-10 flex items-center gap-4">
+                    <Button size="lg" render={<Link to="/dashboard/resumes" />}>
+                        Go to Dashboard
+                    </Button>
+                    <Button size="lg" variant={"outline"} onClick={() => authClient.signOut()}>
                         Sign out
                     </Button>
                 </div>
             ) : (
-                <div className="flex items-center gap-4">
-                    <Button render={<Link to="/sign-in" />}>Sign In</Button>
-                </div>
+                <Button size="lg" render={<Link to="/sign-in" />} className="relative z-10">
+                    Get Started
+                </Button>
             )}
         </div>
     )
