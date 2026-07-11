@@ -1,7 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { createResumeFn, deleteResumeFn, getAllResumeFn, updateResumeFn } from "#/lib/server/resume.function"
 import { Button } from "#/components/ui/button"
-import { PlusIcon } from "lucide-react"
+import { FileTextIcon, PlusIcon } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
 import ResumeCard, { ResumeCardSkeleton } from "./-components/resume-card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -11,6 +11,9 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "#/hooks/form"
 import { Field, FieldGroup } from "#/components/ui/field"
+import { SidebarTrigger } from "#/components/ui/sidebar"
+import { Separator } from "#/components/ui/separator"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "#/components/ui/breadcrumb"
 
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
     beforeLoad: async () => {
@@ -92,69 +95,88 @@ function RouteComponent() {
         },
     })
     return (
-        <div className="min-h-screen bg-background text-foreground p-3 sm:p-4 lg:p-6 font-sans">
-            <div className="flex justify-between items-center">
-                <h1 className="font-semibold">Resumes</h1>
-                <Button disabled={createMutation.status === "pending"} onClick={() => setIsOpen(true)}>
-                    <PlusIcon />
-                    New
-                </Button>
+        <>
+            <header className="bg-sidebar shadow flex items-center h-16 gap-2 px-3 sm:px-4 lg:px-6">
+                <SidebarTrigger className="-ml-1" />
+                <Separator orientation="vertical" className="h-4 my-auto" />
+
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbPage className="font-medium flex items-center gap-1 text-lg">
+                                <FileTextIcon className="size-5" />
+                                Resumes
+                            </BreadcrumbPage>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
+                </Breadcrumb>
+
+                <div className="ml-auto flex items-center gap-2">
+                    <Button disabled={createMutation.status === "pending"} onClick={() => setIsOpen(true)}>
+                        <PlusIcon />
+                        Create
+                    </Button>
+                </div>
+            </header>
+            <div className="flex-1 overflow-auto p-3 sm:p-4 lg:p-6">
+                <main>
+                    <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
+                        {resumes.map((resume) => (
+                            <ResumeCard
+                                key={resume.id}
+                                resume={resume}
+                                onOpenEditDialog={() => {
+                                    form.setFieldValue("title", resume.title)
+                                    setCurrentEditing(resume)
+                                    setIsOpen(true)
+                                }}
+                                onDelete={() => {
+                                    deleteMutation.mutate({
+                                        data: { id: resume.id },
+                                    })
+                                }}
+                            />
+                        ))}
+                    </section>
+                </main>
+                <Dialog
+                    open={isOpen}
+                    onOpenChange={(change) => {
+                        if (!change) {
+                            alert("Are you sure you want to close this dialog?")
+                        }
+                        setIsOpen(change)
+                    }}
+                >
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle className={"flex gap-2 items-center"}>
+                                <PlusIcon className="size-5" />
+                                Create a new resume
+                            </DialogTitle>
+                            <DialogDescription>Start building your resume by giving it a name.</DialogDescription>
+                        </DialogHeader>
+                        <form.AppForm>
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault()
+                                    form.handleSubmit()
+                                }}
+                            >
+                                <FieldGroup>
+                                    <form.AppField
+                                        name="title"
+                                        children={(field) => <field.TextField label="Resume Title" />}
+                                    />
+                                    <Field orientation="horizontal" className="justify-end">
+                                        <form.SubscribeButton label="Add" />
+                                    </Field>
+                                </FieldGroup>
+                            </form>
+                        </form.AppForm>
+                    </DialogContent>
+                </Dialog>
             </div>
-            <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
-                {resumes.map((resume) => (
-                    <ResumeCard
-                        key={resume.id}
-                        resume={resume}
-                        onOpenEditDialog={() => {
-                            form.setFieldValue("title", resume.title)
-                            setCurrentEditing(resume)
-                            setIsOpen(true)
-                        }}
-                        onDelete={() => {
-                            deleteMutation.mutate({
-                                data: { id: resume.id },
-                            })
-                        }}
-                    />
-                ))}
-            </section>
-            <Dialog
-                open={isOpen}
-                onOpenChange={(change) => {
-                    if (!change) {
-                        alert("Are you sure you want to close this dialog?")
-                    }
-                    setIsOpen(change)
-                }}
-            >
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className={"flex gap-2 items-center"}>
-                            <PlusIcon className="size-5" />
-                            Create a new resume
-                        </DialogTitle>
-                        <DialogDescription>Start building your resume by giving it a name.</DialogDescription>
-                    </DialogHeader>
-                    <form.AppForm>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault()
-                                form.handleSubmit()
-                            }}
-                        >
-                            <FieldGroup>
-                                <form.AppField
-                                    name="title"
-                                    children={(field) => <field.TextField label="Resume Title" />}
-                                />
-                                <Field orientation="horizontal" className="justify-end">
-                                    <form.SubscribeButton label="Add" />
-                                </Field>
-                            </FieldGroup>
-                        </form>
-                    </form.AppForm>
-                </DialogContent>
-            </Dialog>
-        </div>
+        </>
     )
 }

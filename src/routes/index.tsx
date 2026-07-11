@@ -1,6 +1,7 @@
 import { Button } from "#/components/ui/button"
+import { Logo } from "#/components/logo.tsx"
 import { Link, createFileRoute } from "@tanstack/react-router"
-import { ArrowRight, FileDown, FileText, LayoutTemplate } from "lucide-react"
+import { ArrowRight, FileDown, LayoutTemplate } from "lucide-react"
 
 export const Route = createFileRoute("/")({
     component: Home,
@@ -25,12 +26,7 @@ function Home() {
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_125%_at_50%_10%,var(--background)_40%,color-mix(in_srgb,var(--primary)_35%,var(--background))_100%)]" />
 
             <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
-                <div className="flex items-center gap-2 font-heading font-semibold">
-                    <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                        <FileText className="size-4" />
-                    </span>
-                    ResumeBuilder
-                </div>
+                <Logo size="sm" tagline={false} />
                 <Button nativeButton={false} size="lg" render={<Link to="/dashboard" />}>
                     <span className="sr-only">Get Started</span>
                     <ArrowRight />
