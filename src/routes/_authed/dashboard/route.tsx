@@ -1,7 +1,6 @@
 import { SidebarInset, SidebarProvider } from "#/components/ui/sidebar"
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 import { DashboardSidebar } from "./-components/dashboard-sidebar"
-import { DashboardHeader } from "./-components/dashboard-header"
 
 export const Route = createFileRoute("/_authed/dashboard")({
     beforeLoad: async ({ context, location }) => {
@@ -26,10 +25,7 @@ function RouteComponent() {
         >
             <DashboardSidebar />
             <SidebarInset>
-                <DashboardHeader />
-                <main className="flex-1 overflow-auto">
-                    <Outlet />
-                </main>
+                <Outlet />
             </SidebarInset>
         </SidebarProvider>
     )

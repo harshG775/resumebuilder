@@ -20,7 +20,6 @@
         "db:pull": "drizzle-kit pull",
         "db:studio": "drizzle-kit studio",
         "postinstall": "node scripts/copy-typst-wasm.mjs"
-
     },
     "dependencies": {
         "@base-ui/react": "^1.5.0",
@@ -49,7 +48,7 @@
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "date-fns": "^4.4.0",
-        "drizzle-orm": "^0.45.2",
+        "drizzle-orm": "1.0.0-rc.4",
         "embla-carousel-react": "^8.6.0",
         "input-otp": "^1.4.2",
         "lucide-react": "^1.17.0",
@@ -82,7 +81,7 @@
         "@types/react-dom": "^19.2.0",
         "@vitejs/plugin-react": "^6.0.1",
         "dotenv": "^17.4.2",
-        "drizzle-kit": "^0.31.10",
+        "drizzle-kit": "1.0.0-rc.4",
         "eslint": "^9.20.0",
         "jsdom": "^28.1.0",
         "prettier": "^3.8.1",

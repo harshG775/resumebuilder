@@ -17,7 +17,8 @@ import {
 
 import { Link, useLocation } from "@tanstack/react-router"
 import { DashboardNavUser } from "./dashboard-nav-user"
-import { ClipboardListIcon, Code2Icon } from "lucide-react"
+import { FileTextIcon } from "lucide-react"
+import { Logo } from "#/components/logo.tsx"
 
 const navMain: {
     title: string
@@ -28,8 +29,8 @@ const navMain: {
     {
         title: "Resumes",
         href: "/dashboard/resumes",
-        icon: ClipboardListIcon,
-        badge: "3",
+        icon: FileTextIcon,
+        badge: "",
     },
 ]
 
@@ -40,16 +41,8 @@ export function DashboardSidebar() {
     const pathname = useLocation({ select: (location) => location.pathname })
     return (
         <Sidebar>
-            <SidebarHeader className="p-4">
-                <div className="flex items-center gap-3">
-                    <div className="flex size-9 items-center justify-center rounded-xl bg-primary">
-                        <Code2Icon className="size-4 text-primary-foreground" />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="font-semibold text-foreground text-sm leading-tight">Resume Builder</span>
-                        <span className="text-xs text-muted-foreground leading-tight">Build Your Resume</span>
-                    </div>
-                </div>
+            <SidebarHeader className="h-16  flex flex-col justify-center">
+                <Logo />
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>

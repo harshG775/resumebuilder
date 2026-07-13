@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { Button } from "#/components/ui/button"
+import { Skeleton } from "#/components/ui/skeleton"
 import { FolderIcon, MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react"
 
 import {
@@ -95,5 +96,17 @@ export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: Resum
                 </DropdownMenu>
             </div>
         </Link>
+    )
+}
+
+export function ResumeCardSkeleton() {
+    return (
+        <div className="bg-card text-card-foreground shadow-md border">
+            <Skeleton className="aspect-9/12 rounded-none" />
+            <div className="px-4 py-3 space-y-2">
+                <Skeleton className="h-4 w-2/3 rounded-sm" />
+                <Skeleton className="h-3 w-1/2 rounded-sm" />
+            </div>
+        </div>
     )
 }

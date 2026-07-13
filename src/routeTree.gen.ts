@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashboard/route'
 import { Route as AuthedBuilderRouteRouteImport } from './routes/_authed/builder/route'
 import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/index'
+import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
 import { Route as AuthedBuilderResumesResume_slugRouteImport } from './routes/_authed/builder/resumes/$resume_slug'
@@ -42,6 +43,11 @@ const PublicSignInIndexRoute = PublicSignInIndexRouteImport.update({
   path: '/sign-in/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const AuthedDashboardIndexRoute = AuthedDashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthedDashboardRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/builder': typeof AuthedBuilderRouteRouteWithChildren
   '/dashboard': typeof AuthedDashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/': typeof AuthedDashboardIndexRoute
   '/sign-in/': typeof PublicSignInIndexRoute
   '/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
   '/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
@@ -72,8 +79,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/builder': typeof AuthedBuilderRouteRouteWithChildren
-  '/dashboard': typeof AuthedDashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard': typeof AuthedDashboardIndexRoute
   '/sign-in': typeof PublicSignInIndexRoute
   '/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
   '/dashboard/resumes': typeof AuthedDashboardResumesIndexRoute
@@ -85,6 +92,7 @@ export interface FileRoutesById {
   '/_authed/builder': typeof AuthedBuilderRouteRouteWithChildren
   '/_authed/dashboard': typeof AuthedDashboardRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/_public/sign-in/': typeof PublicSignInIndexRoute
   '/_authed/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
   '/_authed/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
@@ -96,6 +104,7 @@ export interface FileRouteTypes {
     | '/builder'
     | '/dashboard'
     | '/api/auth/$'
+    | '/dashboard/'
     | '/sign-in/'
     | '/builder/resumes/$resume_slug'
     | '/dashboard/resumes/'
@@ -103,8 +112,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/builder'
-    | '/dashboard'
     | '/api/auth/$'
+    | '/dashboard'
     | '/sign-in'
     | '/builder/resumes/$resume_slug'
     | '/dashboard/resumes'
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/_authed/builder'
     | '/_authed/dashboard'
     | '/api/auth/$'
+    | '/_authed/dashboard/'
     | '/_public/sign-in/'
     | '/_authed/builder/resumes/$resume_slug'
     | '/_authed/dashboard/resumes/'
@@ -165,6 +175,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicSignInIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_authed/dashboard/': {
+      id: '/_authed/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthedDashboardIndexRouteImport
+      parentRoute: typeof AuthedDashboardRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -213,10 +230,12 @@ const AuthedBuilderRouteRouteWithChildren =
   AuthedBuilderRouteRoute._addFileChildren(AuthedBuilderRouteRouteChildren)
 
 interface AuthedDashboardRouteRouteChildren {
+  AuthedDashboardIndexRoute: typeof AuthedDashboardIndexRoute
   AuthedDashboardResumesIndexRoute: typeof AuthedDashboardResumesIndexRoute
 }
 
 const AuthedDashboardRouteRouteChildren: AuthedDashboardRouteRouteChildren = {
+  AuthedDashboardIndexRoute: AuthedDashboardIndexRoute,
   AuthedDashboardResumesIndexRoute: AuthedDashboardResumesIndexRoute,
 }
 

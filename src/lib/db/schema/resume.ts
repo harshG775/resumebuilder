@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm"
 import { pgTable, text, timestamp, index, jsonb } from "drizzle-orm/pg-core"
 import { user } from "./auth"
 import type { ResumeValues } from "#/modules/resume/schema/resume.zod-schema"
@@ -25,10 +24,3 @@ export const resume = pgTable(
     (table) => [index("resume_userId_idx").on(table.userId)],
 )
 
-// Define the relation from the resume back to the user
-export const resumeRelations = relations(resume, ({ one }) => ({
-    user: one(user, {
-        fields: [resume.userId],
-        references: [user.id],
-    }),
-}))

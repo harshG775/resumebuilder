@@ -8,8 +8,9 @@ import {
 } from "#/components/ui/breadcrumb"
 import { Button } from "#/components/ui/button"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "#/components/ui/resizable"
+import { Separator } from "#/components/ui/separator"
 import { Link } from "@tanstack/react-router"
-import { DownloadIcon, HomeIcon, RotateCcwIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react"
+import { ChevronDownIcon, DownloadIcon, HomeIcon, RotateCcwIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react"
 import type React from "react"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 
@@ -32,8 +33,11 @@ export default function BuilderLayout({
     return (
         <div className="h-screen w-screen bg-muted">
             <div className="fixed inset-0 z-20 pointer-events-none">
-                <div className="bg-sidebar shadow flex items-center h-12 gap-2 px-3 pointer-events-auto">
-                    <Breadcrumb className="flex-1 min-w-0">
+                <header className="bg-sidebar shadow flex items-center h-12 gap-2 px-3 pointer-events-auto">
+                    <div className="flex-1 flex gap-2 justify-start">
+                        <Separator orientation="vertical" className="h-4 my-auto" />
+                    </div>
+                    <Breadcrumb className=" min-w-0 flex">
                         <BreadcrumbList className="flex-nowrap">
                             <BreadcrumbItem>
                                 <BreadcrumbLink render={<Link to="/dashboard/resumes" />} className="flex items-center">
@@ -41,17 +45,25 @@ export default function BuilderLayout({
                                     <span className="sr-only">Dashboard</span>
                                 </BreadcrumbLink>
                             </BreadcrumbItem>
-                            <BreadcrumbSeparator />
+                            <BreadcrumbSeparator children={"/"}  />
                             <BreadcrumbItem className="min-w-0">
                                 <BreadcrumbPage className="truncate">{title}</BreadcrumbPage>
                             </BreadcrumbItem>
+                            <Button variant={"ghost"}>
+                                <ChevronDownIcon />
+                            </Button>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    <Button onClick={onDownload} disabled={!onDownload || isDownloading}>
-                        <DownloadIcon />
-                        <span className="sr-only sm:not-sr-only">{isDownloading ? "Downloading…" : "Download"}</span>
-                    </Button>
-                </div>
+                    <div className="flex-1 flex gap-2 justify-end">
+                        <Button onClick={onDownload} disabled={!onDownload || isDownloading}>
+                            <DownloadIcon />
+                            <span className="sr-only sm:not-sr-only">
+                                {isDownloading ? "Downloading…" : "Download"}
+                            </span>
+                        </Button>
+                        <Separator orientation="vertical" className="h-4 my-auto" />
+                    </div>
+                </header>
                 <ResizablePanelGroup orientation="horizontal">
                     <ResizablePanel
                         minSize={"16rem"}
