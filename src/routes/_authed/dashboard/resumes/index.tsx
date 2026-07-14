@@ -14,7 +14,6 @@ import { Field, FieldGroup } from "#/components/ui/field"
 import { SidebarTrigger } from "#/components/ui/sidebar"
 import { Separator } from "#/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "#/components/ui/breadcrumb"
-import { Alert } from "#/components/ui/native-alert"
 
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
     beforeLoad: async () => {
@@ -132,21 +131,9 @@ function RouteComponent() {
                                     setIsOpen(true)
                                 }}
                                 onDelete={() => {
-                                    Alert.alert(
-                                        "Are you sure you want to delete this resume?",
-                                        "This action cannot be undone.",
-                                        [
-                                            { text: "Cancel", onPress: () => console.log("cancel"), style: "cancel" },
-                                            {
-                                                text: "Confirm",
-                                                style: "destructive",
-                                                onPress: () =>
-                                                    deleteMutation.mutate({
-                                                        data: { id: resume.id },
-                                                    }),
-                                            },
-                                        ],
-                                    )
+                                    deleteMutation.mutate({
+                                        data: { id: resume.id },
+                                    })
                                 }}
                             />
                         ))}
