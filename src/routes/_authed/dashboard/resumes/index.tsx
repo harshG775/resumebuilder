@@ -280,9 +280,12 @@ function RouteComponent() {
                                 actions={{
                                     onEdit: () => setEditingResume(resume),
                                     onDelete: async () => {
-                                        await deleteMutation.mutateAsync({
-                                            data: { id: resume.id },
-                                        })
+                                        const confirmed = window.confirm("Are you sure you want to delete this resume?")
+                                        if (confirmed) {
+                                            await deleteMutation.mutateAsync({
+                                                data: { id: resume.id },
+                                            })
+                                        }
                                     },
                                 }}
                             />
