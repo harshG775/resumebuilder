@@ -50,9 +50,8 @@ export default function Builder({ resume }: BuilderProps) {
 
     async function handleDownload() {
         try {
-            const values = form.state.values
             const pdfBytes = await compileToPdf("template.render(values)")
-            downloadBlob(pdfBytes, `${values.basics.name || "resume"}.pdf`, "application/pdf")
+            downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
         } catch (err) {
             console.error(err)
             toast.error("Failed to generate PDF", {
