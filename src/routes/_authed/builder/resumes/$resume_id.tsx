@@ -1,7 +1,7 @@
 import { Button } from "#/components/ui/button"
 import { getResumeByIdFn } from "#/lib/server/resume.function"
 import Builder from "#/modules/resume/builder"
-import { createFileRoute, Link /* notFound */, useRouter } from "@tanstack/react-router"
+import { createFileRoute, Link /* notFound */ } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/_authed/builder/resumes/$resume_id")({
     beforeLoad: async ({ params }) => {
@@ -36,5 +36,13 @@ function RouteComponent() {
         )
     }
 
-    return <Builder resumeValue={resume.data.content} />
+    return (
+        <Builder
+            resume={{
+                id: resume.data.id,
+                slug: resume.data.slug,
+                content: resume.data.content,
+            }}
+        />
+    )
 }

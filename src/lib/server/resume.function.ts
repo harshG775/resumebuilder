@@ -7,6 +7,7 @@ import { eq, count, and, desc } from "drizzle-orm"
 import { generateUniqueSlug } from "../utils"
 import { authMiddleware } from "./auth.middleware"
 import { resumeDefaultValues } from "#/modules/resume/data/resume-default-values"
+import { ResumeZodSchema } from "#/modules/resume/schema/resume.zod-schema"
 
 const paginationSchema = z.object({
     page: z.number().int().min(1).default(1),
@@ -124,6 +125,7 @@ export const createResumeFn = createServerFn({ method: "POST" })
             data: newResume[0],
         }
     })
+
 export const updateResumeFn = createServerFn({ method: "POST" })
     .validator(
         z.object({
@@ -152,6 +154,7 @@ export const updateResumeFn = createServerFn({ method: "POST" })
             data: updatedResume,
         }
     })
+
 export const deleteResumeFn = createServerFn({ method: "POST" })
     .validator(z.object({ id: z.string() }))
     .middleware([authMiddleware])
@@ -166,5 +169,34 @@ export const deleteResumeFn = createServerFn({ method: "POST" })
         return {
             success: true,
             data: resp[0],
+        }
+    })
+
+export const updateResumeContentFn = createServerFn({ method: "POST" })
+    .validator(
+        z.object({
+            id: z.string(),
+            updatePayload: z.object({
+                content: ResumeZodSchema,
+            }),
+        }),
+    )
+    .middleware([authMiddleware])
+    .handler(async ({ data, context }) => {
+        const [updatedResume] = await db
+            .update(resume)
+            .set(data.updatePayload)
+            .where(and(eq(resume.id, data.id), eq(resume.userId, context.session.user.id)))
+            .returning({
+                id: resume.id,
+                title: resume.title,
+                slug: resume.slug,
+                createdAt: resume.createdAt,
+                updatedAt: resume.updatedAt,
+            })
+
+        return {
+            success: true,
+            data: updatedResume,
         }
     })

@@ -54,6 +54,7 @@ function CreateResumeDialog() {
 
     const createMutation = useMutation({
         mutationFn: createResumeFn,
+        scope: { id: "resume-create" },
         onSuccess: ({ data }) => {
             toast.success(`${data.title} created!`)
             router.invalidate()
@@ -153,6 +154,7 @@ function EditResumeDialog({
 
     const updateMutation = useMutation({
         mutationFn: updateResumeFn,
+        scope: { id: `resume-${resume.id}` },
         onSuccess: ({ data }) => {
             toast.success(`${data.title} updated!`)
             router.invalidate()
@@ -243,6 +245,7 @@ function RouteComponent() {
 
     const deleteMutation = useMutation({
         mutationFn: deleteResumeFn,
+        scope: { id: "resume-delete" },
         onSuccess: ({ data }) => {
             toast.success(`${data.title} deleted!`)
             router.invalidate()

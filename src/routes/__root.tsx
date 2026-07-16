@@ -50,7 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <body>
                 <RouteProgressBar />
                 <TooltipProvider>{children}</TooltipProvider>
-                <Toaster />
+                <Toaster richColors={true} />
                 <TanStackDevtools
                     config={{
                         position: "bottom-right",

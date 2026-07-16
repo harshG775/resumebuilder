@@ -18,23 +18,40 @@ import {
 import { getTemplate } from "./templates"
 import { toast } from "sonner"
 import { TypstPreview } from "#/lib/typst/typst-preview"
+import { updateResumeContentFn } from "#/lib/server/resume.function"
+import { useMutation } from "@tanstack/react-query"
 
 type BuilderProps = {
-    resumeValue: ResumeValues
+    resume: { id: string; slug: string; content: ResumeValues }
 }
-export default function Builder({ resumeValue }: BuilderProps) {
+export default function Builder({ resume }: BuilderProps) {
     const { compileToPdf, isCompiling } = useTypstCompileToPdf()
 
-    const form = useAppForm({
-        defaultValues: resumeValue,
-        validators: { onChange: ResumeZodSchema },
+    const updateMutation = useMutation({
+        mutationFn: updateResumeContentFn,
+        scope: { id: `resume-${resume.id}` },
     })
+
     const template = getTemplate("classic")
+    const form = useAppForm({
+        defaultValues: resume.content,
+        validators: { onChange: ResumeZodSchema },
+        listeners: {
+            onChange: ({ formApi }) => {
+                if (formApi.state.isValid && formApi.state.isDirty) {
+                    updateMutation.mutate({
+                        data: { id: resume.id, updatePayload: { content: formApi.state.values } },
+                    })
+                }
+            },
+            onChangeDebounceMs: 800,
+        },
+    })
 
     async function handleDownload() {
         try {
             const values = form.state.values
-            const pdfBytes = await compileToPdf(template.render(values))
+            const pdfBytes = await compileToPdf("template.render(values)")
             downloadBlob(pdfBytes, `${values.basics.name || "resume"}.pdf`, "application/pdf")
         } catch (err) {
             console.error(err)
@@ -46,9 +63,10 @@ export default function Builder({ resumeValue }: BuilderProps) {
 
     return (
         <BuilderLayout
+            isSaving={updateMutation.isPending}
             isDownloading={isCompiling}
             onDownload={handleDownload}
-            title={form.state.values.basics.name || "Untitled resume"}
+            title={resume.slug || "Untitled resume"}
             editor={
                 <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
                     <BasicsSection form={form} />
