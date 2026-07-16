@@ -9,7 +9,7 @@ export const CertificationsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
         <form.AppField
-            name="sections.certifications.items"
+            name="sections.certification.items"
             mode="array"
             children={(field) => {
                 const items = field.state.value
@@ -17,7 +17,7 @@ export const CertificationsSection = withForm({
                 return (
                     <FieldSet>
                         <FieldLegend className="font-bold text-2xl!">
-                            {form.state.values.sections.certifications.title}
+                            {form.state.values.sections.certification.title}
                         </FieldLegend>
                         <FieldGroup>
                             <div className="border divide-y rounded-md">
@@ -54,7 +54,7 @@ export const CertificationsSection = withForm({
                                 </SortableDragProvider>
                             </div>
                             <Button variant={"outline"} onClick={handleClickAddProject}>
-                                <Plus /> Add a new {form.state.values.sections.certifications.title}
+                                <Plus /> Add a new {form.state.values.sections.certification.title}
                             </Button>
                         </FieldGroup>
                     </FieldSet>
