@@ -13,6 +13,7 @@ import { Link } from "@tanstack/react-router"
 import { ChevronDownIcon, DownloadIcon, HomeIcon, RotateCcwIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react"
 import type React from "react"
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
+import { Spinner } from "#/components/ui/spinner"
 
 type BuilderLayoutProps = {
     title: string
@@ -21,6 +22,7 @@ type BuilderLayoutProps = {
     design: React.ReactNode
     onDownload?: () => void
     isDownloading?: boolean
+    isSaving?: boolean
 }
 export default function BuilderLayout({
     title,
@@ -29,12 +31,22 @@ export default function BuilderLayout({
     design,
     onDownload,
     isDownloading,
+    isSaving,
 }: BuilderLayoutProps) {
     return (
         <div className="h-screen w-screen bg-muted">
             <div className="fixed inset-0 z-20 pointer-events-none">
                 <header className="bg-sidebar shadow flex items-center h-12 gap-2 px-3 pointer-events-auto">
                     <div className="flex-1 flex gap-2 justify-start">
+                        <div className="flex items-center gap-1 text-xs">
+                            {isSaving ? (
+                                <>
+                                    <Spinner variant="circle" className="text-primary" /> Saving
+                                </>
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                         <Separator orientation="vertical" className="h-4 my-auto" />
                     </div>
                     <Breadcrumb className=" min-w-0 flex">
@@ -45,7 +57,7 @@ export default function BuilderLayout({
                                     <span className="sr-only">Dashboard</span>
                                 </BreadcrumbLink>
                             </BreadcrumbItem>
-                            <BreadcrumbSeparator children={"/"}  />
+                            <BreadcrumbSeparator children={"/"} />
                             <BreadcrumbItem className="min-w-0">
                                 <BreadcrumbPage className="truncate">{title}</BreadcrumbPage>
                             </BreadcrumbItem>

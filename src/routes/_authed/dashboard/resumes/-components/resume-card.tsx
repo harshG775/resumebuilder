@@ -12,6 +12,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+type ResumeCardActions = {
+    onEdit: () => void
+    onDelete: () => void
+}
+
 type ResumeCardProps = {
     resume: {
         id: string
@@ -20,15 +25,15 @@ type ResumeCardProps = {
         createdAt: Date
         updatedAt: Date
     }
-    onOpenEditDialog: () => void
-    onDelete: () => void
+    actions: ResumeCardActions
 }
-export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: ResumeCardProps) {
+
+export default function ResumeCard({ resume, actions }: ResumeCardProps) {
     return (
         <Link
-            to={"/builder/resumes/$resume_slug"}
+            to={"/builder/resumes/$resume_id"}
             params={{
-                resume_slug: resume.slug,
+                resume_id: resume.id,
             }}
             key={resume.id}
             className="relative bg-card text-card-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] border"
@@ -38,15 +43,15 @@ export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: Resum
                 <h3>{resume.title}</h3>
                 <div className="text-xs text-muted-foreground">Last Updated {resume.updatedAt.toDateString()}</div>
             </div>
-            <div className="absolute right-2 top-2">
+            <div
+                className="absolute right-2 top-2"
+                onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                }}
+            >
                 <DropdownMenu>
-                    <DropdownMenuTrigger
-                        render={<Button size="icon" variant="secondary" />}
-                        onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                        }}
-                    >
+                    <DropdownMenuTrigger render={<Button size="icon" variant="secondary" />}>
                         <MoreVerticalIcon />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -54,9 +59,9 @@ export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: Resum
                             <DropdownMenuItem
                                 render={
                                     <Link
-                                        to={"/builder/resumes/$resume_slug"}
+                                        to={"/builder/resumes/$resume_id"}
                                         params={{
-                                            resume_slug: resume.slug,
+                                            resume_id: resume.id,
                                         }}
                                     />
                                 }
@@ -67,27 +72,14 @@ export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: Resum
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    onOpenEditDialog()
-                                }}
-                            >
+                            <DropdownMenuItem onClick={actions.onEdit}>
                                 <PencilIcon />
                                 Edit Details
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                variant="destructive"
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    onDelete()
-                                }}
-                            >
+                            <DropdownMenuItem variant="destructive" onClick={actions.onDelete}>
                                 <TrashIcon />
                                 Delete
                             </DropdownMenuItem>
@@ -110,3 +102,5 @@ export function ResumeCardSkeleton() {
         </div>
     )
 }
+
+export type { ResumeCardActions }
