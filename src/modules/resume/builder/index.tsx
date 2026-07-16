@@ -51,7 +51,7 @@ export default function Builder({ resume }: BuilderProps) {
 
     async function handleDownload() {
         try {
-            const pdfBytes = await compileToPdf("template.render(values)")
+            const pdfBytes = await compileToPdf(template.render(form.state.values))
             downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
         } catch (err) {
             console.error(err)
