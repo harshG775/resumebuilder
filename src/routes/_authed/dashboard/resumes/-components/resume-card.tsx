@@ -43,15 +43,15 @@ export default function ResumeCard({ resume, actions }: ResumeCardProps) {
                 <h3>{resume.title}</h3>
                 <div className="text-xs text-muted-foreground">Last Updated {resume.updatedAt.toDateString()}</div>
             </div>
-            <div className="absolute right-2 top-2">
+            <div
+                className="absolute right-2 top-2"
+                onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                }}
+            >
                 <DropdownMenu>
-                    <DropdownMenuTrigger
-                        render={<Button size="icon" variant="secondary" />}
-                        onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                        }}
-                    >
+                    <DropdownMenuTrigger render={<Button size="icon" variant="secondary" />}>
                         <MoreVerticalIcon />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -72,27 +72,14 @@ export default function ResumeCard({ resume, actions }: ResumeCardProps) {
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    actions.onEdit()
-                                }}
-                            >
+                            <DropdownMenuItem onClick={actions.onEdit}>
                                 <PencilIcon />
                                 Edit Details
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                variant="destructive"
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    actions.onDelete()
-                                }}
-                            >
+                            <DropdownMenuItem variant="destructive" onClick={actions.onDelete}>
                                 <TrashIcon />
                                 Delete
                             </DropdownMenuItem>
