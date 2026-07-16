@@ -20,6 +20,7 @@ import { toast } from "sonner"
 import { TypstPreview } from "#/lib/typst/typst-preview"
 import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
+import { resumeSeedValues } from "../data/resume-seed-values"
 
 type BuilderProps = {
     resume: { id: string; slug: string; content: ResumeValues }
@@ -50,7 +51,7 @@ export default function Builder({ resume }: BuilderProps) {
 
     async function handleDownload() {
         try {
-            const pdfBytes = await compileToPdf("template.render(values)")
+            const pdfBytes = await compileToPdf(template.render(form.state.values))
             downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
         } catch (err) {
             console.error(err)
@@ -83,7 +84,20 @@ export default function Builder({ resume }: BuilderProps) {
                     <CertificationsSection form={form} />
                 </FieldGroup>
             }
-            design={<FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">design</FieldGroup>}
+            design={
+                <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
+                    <button
+                        onClick={() =>
+                            updateMutation.mutate({
+                                data: { id: resume.id, updatePayload: { content: resumeSeedValues } },
+                            })
+                        }
+                    >
+                        resumeSeedValues
+                    </button>
+                    design
+                </FieldGroup>
+            }
             preview={
                 <form.Subscribe selector={(state) => state.values}>
                     {(values) => (

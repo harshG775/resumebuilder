@@ -19,7 +19,7 @@ import { resumeFormOptions } from "../../data/resume-default-values"
 import { SortableDragProvider, SortableItemRow } from "../components/sortable-item"
 import type { ResumeValues } from "../../schema/resume.zod-schema"
 
-type SkillItem = ResumeValues["sections"]["skills"]["items"][0]
+type SkillItem = ResumeValues["sections"]["skill"]["items"][0]
 
 const getEmptySkill = (): SkillItem => ({
     id: crypto.randomUUID(),
@@ -45,7 +45,7 @@ export const SkillsSection = withForm({
         }
         return (
             <form.AppField
-                name="sections.skills.items"
+                name="sections.skill.items"
                 mode="array"
                 children={(field) => {
                     return (
@@ -55,7 +55,7 @@ export const SkillsSection = withForm({
                                     <Button variant={"ghost"}>
                                         <CaretDownIcon />
                                     </Button>
-                                    <div className="w-full">{form.state.values.sections.skills.title}</div>
+                                    <div className="w-full">{form.state.values.sections.skill.title}</div>
                                     <Button variant={"ghost"}>
                                         <ListIcon />
                                     </Button>

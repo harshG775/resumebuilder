@@ -54,7 +54,7 @@ export const BasicsSection = withForm({
                 />
 
                 <form.AppField
-                    name={`basics.email`}
+                    name={`basics.email.value`}
                     children={(field) => (
                         <Field>
                             <FieldLabel htmlFor={field.name}>Email</FieldLabel>
@@ -70,7 +70,7 @@ export const BasicsSection = withForm({
                     )}
                 />
                 <form.AppField
-                    name={`basics.phone`}
+                    name={`basics.phone.label`}
                     children={(field) => (
                         <Field>
                             <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
@@ -102,7 +102,7 @@ export const BasicsSection = withForm({
                     )}
                 />
                 <div className="flex gap-2 items-end">
-                    <form.AppField name={`basics.website.url`}>
+                    <form.AppField name={`basics.website.value`}>
                         {(field) => (
                             <Field>
                                 <FieldLabel htmlFor={field.name}>Website</FieldLabel>
@@ -177,11 +177,13 @@ export const BasicsSection = withForm({
 
                                                 <PopoverContent>
                                                     <FieldLabel>Enter The URL to link to</FieldLabel>
-                                                    <form.AppField name={`basics.customFields[${idx}].url`}>
-                                                        {(field) => (
+                                                    <form.AppField name={`basics.customFields[${idx}].value`}>
+                                                        {(customField) => (
                                                             <Input
-                                                                value={field.state.value}
-                                                                onChange={(e) => field.handleChange(e.target.value)}
+                                                                value={customField.state.value}
+                                                                onChange={(e) =>
+                                                                    customField.handleChange(e.target.value)
+                                                                }
                                                                 placeholder="https://"
                                                             />
                                                         )}
@@ -207,8 +209,8 @@ export const BasicsSection = withForm({
                                 onClick={() =>
                                     field.pushValue({
                                         id: crypto.randomUUID(),
-                                        url: "",
                                         label: "",
+                                        value: "",
                                     })
                                 }
                             >
