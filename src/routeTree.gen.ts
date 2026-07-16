@@ -17,7 +17,7 @@ import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
-import { Route as AuthedBuilderResumesResume_slugRouteImport } from './routes/_authed/builder/resumes/$resume_slug'
+import { Route as AuthedBuilderResumesResume_idRouteImport } from './routes/_authed/builder/resumes/$resume_id'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -59,10 +59,10 @@ const AuthedDashboardResumesIndexRoute =
     path: '/resumes/',
     getParentRoute: () => AuthedDashboardRouteRoute,
   } as any)
-const AuthedBuilderResumesResume_slugRoute =
-  AuthedBuilderResumesResume_slugRouteImport.update({
-    id: '/resumes/$resume_slug',
-    path: '/resumes/$resume_slug',
+const AuthedBuilderResumesResume_idRoute =
+  AuthedBuilderResumesResume_idRouteImport.update({
+    id: '/resumes/$resume_id',
+    path: '/resumes/$resume_id',
     getParentRoute: () => AuthedBuilderRouteRoute,
   } as any)
 
@@ -73,7 +73,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/': typeof AuthedDashboardIndexRoute
   '/sign-in/': typeof PublicSignInIndexRoute
-  '/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
+  '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
   '/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -82,7 +82,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard': typeof AuthedDashboardIndexRoute
   '/sign-in': typeof PublicSignInIndexRoute
-  '/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
+  '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
   '/dashboard/resumes': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesById {
@@ -94,7 +94,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/_public/sign-in/': typeof PublicSignInIndexRoute
-  '/_authed/builder/resumes/$resume_slug': typeof AuthedBuilderResumesResume_slugRoute
+  '/_authed/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
   '/_authed/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRouteTypes {
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/'
     | '/sign-in/'
-    | '/builder/resumes/$resume_slug'
+    | '/builder/resumes/$resume_id'
     | '/dashboard/resumes/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -115,7 +115,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard'
     | '/sign-in'
-    | '/builder/resumes/$resume_slug'
+    | '/builder/resumes/$resume_id'
     | '/dashboard/resumes'
   id:
     | '__root__'
@@ -126,7 +126,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/_authed/dashboard/'
     | '/_public/sign-in/'
-    | '/_authed/builder/resumes/$resume_slug'
+    | '/_authed/builder/resumes/$resume_id'
     | '/_authed/dashboard/resumes/'
   fileRoutesById: FileRoutesById
 }
@@ -196,11 +196,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardResumesIndexRouteImport
       parentRoute: typeof AuthedDashboardRouteRoute
     }
-    '/_authed/builder/resumes/$resume_slug': {
-      id: '/_authed/builder/resumes/$resume_slug'
-      path: '/resumes/$resume_slug'
-      fullPath: '/builder/resumes/$resume_slug'
-      preLoaderRoute: typeof AuthedBuilderResumesResume_slugRouteImport
+    '/_authed/builder/resumes/$resume_id': {
+      id: '/_authed/builder/resumes/$resume_id'
+      path: '/resumes/$resume_id'
+      fullPath: '/builder/resumes/$resume_id'
+      preLoaderRoute: typeof AuthedBuilderResumesResume_idRouteImport
       parentRoute: typeof AuthedBuilderRouteRoute
     }
   }
@@ -219,11 +219,11 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 )
 
 interface AuthedBuilderRouteRouteChildren {
-  AuthedBuilderResumesResume_slugRoute: typeof AuthedBuilderResumesResume_slugRoute
+  AuthedBuilderResumesResume_idRoute: typeof AuthedBuilderResumesResume_idRoute
 }
 
 const AuthedBuilderRouteRouteChildren: AuthedBuilderRouteRouteChildren = {
-  AuthedBuilderResumesResume_slugRoute: AuthedBuilderResumesResume_slugRoute,
+  AuthedBuilderResumesResume_idRoute: AuthedBuilderResumesResume_idRoute,
 }
 
 const AuthedBuilderRouteRouteWithChildren =

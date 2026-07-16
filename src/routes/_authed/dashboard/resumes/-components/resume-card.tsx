@@ -31,9 +31,9 @@ type ResumeCardProps = {
 export default function ResumeCard({ resume, actions }: ResumeCardProps) {
     return (
         <Link
-            to={"/builder/resumes/$resume_slug"}
+            to={"/builder/resumes/$resume_id"}
             params={{
-                resume_slug: resume.slug,
+                resume_id: resume.id,
             }}
             key={resume.id}
             className="relative bg-card text-card-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] border"
@@ -59,9 +59,9 @@ export default function ResumeCard({ resume, actions }: ResumeCardProps) {
                             <DropdownMenuItem
                                 render={
                                     <Link
-                                        to={"/builder/resumes/$resume_slug"}
+                                        to={"/builder/resumes/$resume_id"}
                                         params={{
-                                            resume_slug: resume.slug,
+                                            resume_id: resume.id,
                                         }}
                                     />
                                 }

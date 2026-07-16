@@ -2,7 +2,7 @@
 import { createServerFn } from "@tanstack/react-start"
 import z from "zod"
 import { db } from "../db"
-import { resume, user } from "../db/schema"
+import { resume } from "../db/schema"
 import { eq, count, and, desc } from "drizzle-orm"
 import { generateUniqueSlug } from "../utils"
 import { authMiddleware } from "./auth.middleware"
@@ -54,8 +54,25 @@ export const getAllResumeFn = createServerFn({ method: "GET" })
 export const getResumeByIdFn = createServerFn({ method: "GET" })
     .validator(z.object({ id: z.string() }))
     .middleware([authMiddleware])
-    .handler(async () => {
-        return
+    .handler(async ({ data, context }) => {
+        const result = await db
+            .select({
+                id: resume.id,
+                title: resume.title,
+                content: resume.content,
+                slug: resume.slug,
+                createdAt: resume.createdAt,
+                updatedAt: resume.updatedAt,
+            })
+            .from(resume)
+            .where(and(eq(resume.id, data.id), eq(resume.userId, context.session.user.id)))
+
+        if (result.length === 0) {
+            return {
+                success: false,
+            }
+        }
+        return { success: true, data: result[0] }
     })
 
 export const getResumeBySlugFn = createServerFn({ method: "GET" })
