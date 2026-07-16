@@ -12,6 +12,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+type ResumeCardActions = {
+    onEdit: () => void
+    onDelete: () => void
+}
+
 type ResumeCardProps = {
     resume: {
         id: string
@@ -20,10 +25,10 @@ type ResumeCardProps = {
         createdAt: Date
         updatedAt: Date
     }
-    onOpenEditDialog: () => void
-    onDelete: () => void
+    actions: ResumeCardActions
 }
-export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: ResumeCardProps) {
+
+export default function ResumeCard({ resume, actions }: ResumeCardProps) {
     return (
         <Link
             to={"/builder/resumes/$resume_slug"}
@@ -71,7 +76,7 @@ export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: Resum
                                 onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()
-                                    onOpenEditDialog()
+                                    actions.onEdit()
                                 }}
                             >
                                 <PencilIcon />
@@ -85,7 +90,7 @@ export default function ResumeCard({ resume, onOpenEditDialog, onDelete }: Resum
                                 onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()
-                                    onDelete()
+                                    actions.onDelete()
                                 }}
                             >
                                 <TrashIcon />
@@ -110,3 +115,5 @@ export function ResumeCardSkeleton() {
         </div>
     )
 }
+
+export type { ResumeCardActions }
