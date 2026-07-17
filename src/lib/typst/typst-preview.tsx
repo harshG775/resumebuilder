@@ -1,15 +1,17 @@
-import { useTypstSvg } from "./useTypstSvg"
+import { useEffect } from "react"
+import { useTypstWorker } from "./use-typst-worker"
 
 export function TypstPreview({ source }: { source: string }) {
-    const { svg, error, status } = useTypstSvg(source)
+    const { svg, error, isCompiling, compile } = useTypstWorker()
+    useEffect(() => {
+        compile(source)
+    }, [source])
 
-    if (error) {
-        return <pre className="text-sm text-red-500">{error}</pre>
-    }
-
-    if (status === "loading-engine" || !svg) {
-        return <div className="text-sm text-muted-foreground">Rendering preview…</div>
-    }
-
-    return <div dangerouslySetInnerHTML={{ __html: svg }} />
+    return (
+        <div>
+            {isCompiling && <span>Compiling…</span>}
+            {error && <pre>{error}</pre>}
+            {svg && <div dangerouslySetInnerHTML={{ __html: svg }} />}
+        </div>
+    )
 }
