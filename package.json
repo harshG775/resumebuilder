@@ -18,17 +18,16 @@
         "db:migrate": "drizzle-kit migrate",
         "db:push": "drizzle-kit push",
         "db:pull": "drizzle-kit pull",
-        "db:studio": "drizzle-kit studio",
-        "postinstall": "node scripts/copy-typst-wasm.mjs"
+        "db:studio": "drizzle-kit studio"
     },
     "dependencies": {
         "@base-ui/react": "^1.5.0",
         "@dnd-kit/helpers": "^0.5.0",
         "@dnd-kit/react": "^0.5.0",
         "@fontsource-variable/inter": "^5.2.8",
-        "@myriaddreamin/typst-ts-renderer": "^0.7.0",
-        "@myriaddreamin/typst-ts-web-compiler": "^0.7.0",
-        "@myriaddreamin/typst.ts": "^0.7.0",
+        "@myriaddreamin/typst-ts-renderer": "0.7.0",
+        "@myriaddreamin/typst-ts-web-compiler": "0.7.0",
+        "@myriaddreamin/typst.ts": "0.7.0",
         "@neondatabase/serverless": "^1.1.0",
         "@phosphor-icons/react": "^2.1.10",
         "@t3-oss/env-core": "^0.13.11",

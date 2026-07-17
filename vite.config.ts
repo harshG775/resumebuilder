@@ -22,6 +22,9 @@ const config = defineConfig({
         tanstackStart(),
         viteReact(),
     ],
+    worker: {
+        format: "es",
+    },
     optimizeDeps: {
         exclude: TYPST_PACKAGES,
     },
