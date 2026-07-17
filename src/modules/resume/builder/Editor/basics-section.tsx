@@ -142,65 +142,78 @@ export const BasicsSection = withForm({
                             <FieldLabel>Custom Fields</FieldLabel>
                             <div className="border divide-y rounded-md">
                                 <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
-                                    {field.state.value.map((item: any, idx: number) => (
-                                        <SortableDragItem
-                                            key={item.id}
-                                            sortableProps={{
-                                                index: idx,
-                                                id: item.id,
-                                            }}
-                                            className="h-14 flex items-center"
-                                        >
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                aria-label={`Drag to reorder ${item.title}`}
-                                                className="flex items-center p-2 mx-1 hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                            >
-                                                <DotsSixVerticalIcon aria-hidden="true" />
-                                            </div>
-                                            <form.AppField name={`basics.customFields[${idx}].label`}>
-                                                {(field_1) => (
-                                                    <Input
-                                                        value={field_1.state.value}
-                                                        onChange={(e) => field_1.handleChange(e.target.value)}
-                                                        className="h-full"
-                                                        placeholder="field..."
-                                                    />
-                                                )}
-                                            </form.AppField>
-
-                                            <Popover>
-                                                <PopoverTrigger render={<Button variant="ghost" className="h-full" />}>
-                                                    <LinkIcon />
-                                                </PopoverTrigger>
-
-                                                <PopoverContent>
-                                                    <FieldLabel>Enter The URL to link to</FieldLabel>
-                                                    <form.AppField name={`basics.customFields[${idx}].value`}>
-                                                        {(customField) => (
+                                    {(items) =>
+                                        items.map((item: any, idx: number) => {
+                                            const realIndex = field.state.value.findIndex(
+                                                (i: any) => i.id === item.id,
+                                            )
+                                            return (
+                                                <SortableDragItem
+                                                    key={item.id}
+                                                    sortableProps={{
+                                                        index: idx,
+                                                        id: item.id,
+                                                    }}
+                                                    className="h-14 flex items-center"
+                                                >
+                                                    <div
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        aria-label={`Drag to reorder ${item.title}`}
+                                                        className="flex items-center p-2 mx-1 hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                                    >
+                                                        <DotsSixVerticalIcon aria-hidden="true" />
+                                                    </div>
+                                                    <form.AppField name={`basics.customFields[${realIndex}].label`}>
+                                                        {(field_1) => (
                                                             <Input
-                                                                value={customField.state.value}
+                                                                value={field_1.state.value}
                                                                 onChange={(e) =>
-                                                                    customField.handleChange(e.target.value)
+                                                                    field_1.handleChange(e.target.value)
                                                                 }
-                                                                placeholder="https://"
+                                                                className="h-full"
+                                                                placeholder="field..."
                                                             />
                                                         )}
                                                     </form.AppField>
-                                                </PopoverContent>
-                                            </Popover>
 
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                onClick={() => field.removeValue(idx)}
-                                                className="h-full"
-                                            >
-                                                <X />
-                                            </Button>
-                                        </SortableDragItem>
-                                    ))}
+                                                    <Popover>
+                                                        <PopoverTrigger
+                                                            render={<Button variant="ghost" className="h-full" />}
+                                                        >
+                                                            <LinkIcon />
+                                                        </PopoverTrigger>
+
+                                                        <PopoverContent>
+                                                            <FieldLabel>Enter The URL to link to</FieldLabel>
+                                                            <form.AppField
+                                                                name={`basics.customFields[${realIndex}].value`}
+                                                            >
+                                                                {(customField) => (
+                                                                    <Input
+                                                                        value={customField.state.value}
+                                                                        onChange={(e) =>
+                                                                            customField.handleChange(e.target.value)
+                                                                        }
+                                                                        placeholder="https://"
+                                                                    />
+                                                                )}
+                                                            </form.AppField>
+                                                        </PopoverContent>
+                                                    </Popover>
+
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        onClick={() => field.removeValue(realIndex)}
+                                                        className="h-full"
+                                                    >
+                                                        <X />
+                                                    </Button>
+                                                </SortableDragItem>
+                                            )
+                                        })
+                                    }
                                 </SortableDragProvider>
                             </div>
                             <Button

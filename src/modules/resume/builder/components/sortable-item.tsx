@@ -16,13 +16,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
     useSortable,
     // isSortable
 } from "@dnd-kit/react/sortable"
 import { move } from "@dnd-kit/helpers"
 import { DragDropProvider } from "@dnd-kit/react"
+import { Button } from "#/components/ui/button"
 
 type SortableItemRowProps = {
     title: string
@@ -52,14 +53,14 @@ export const SortableItemRow = ({
     const { ref } = useSortable({ id: sortableProps.id, index: sortableProps.index })
 
     return (
-        <div ref={ref} className={cn("flex text-muted-foreground", className)} role="listitem">
+        <div ref={ref} className={cn("flex text-muted-foreground h-14", className)} role="listitem">
             <div
                 role="button"
                 tabIndex={0}
                 aria-label={`Drag to reorder ${title}`}
-                className="h-14 flex items-center p-2 hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className={"w-10 h-full rounded-none cursor-grab bg-muted text-muted-foreground hover:bg-muted/80 flex items-center justify-center"}
             >
-                <DotsSixVerticalIcon aria-hidden="true" />
+                <DotsSixVerticalIcon weight="bold" />
             </div>
             <button
                 type="button"
@@ -74,14 +75,16 @@ export const SortableItemRow = ({
                 {subtitle && <div className="text-xs line-clamp-1">{subtitle}</div>}
             </button>
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <button
-                        type="button"
-                        aria-label={`More options for ${title}`}
-                        className="h-14 flex items-center p-2 hover:bg-muted/80 rounded-r-md cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                        <DotsThreeVerticalIcon aria-hidden="true" />
-                    </button>
+                <DropdownMenuTrigger
+                    render={
+                        <Button
+                            variant={"ghost"}
+                            aria-label={`More options for ${title}`}
+                            className={"w-10 h-full rounded-none"}
+                        />
+                    }
+                >
+                    <DotsThreeVerticalIcon weight="bold" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuGroup>
@@ -137,39 +140,44 @@ export const SortableDragItem = ({ className, sortableProps, children }: Sortabl
 type SortableDragProviderProps<T> = {
     value: T[]
     onChange: (updater: (prev: T[]) => T[]) => void
-    children: React.ReactNode
+    children: (items: T[]) => React.ReactNode
 }
 
 export function SortableDragProvider<T>({ value, onChange, children }: SortableDragProviderProps<T>) {
-    const snapshot = useRef<T[]>([])
+    const [items, setItems] = useState(value)
+    const itemsRef = useRef(items)
+    const isDragging = useRef(false)
+
+    useEffect(() => {
+        if (!isDragging.current) {
+            itemsRef.current = value
+            setItems(value)
+        }
+    }, [value])
 
     return (
         <DragDropProvider
             onDragStart={() => {
-                snapshot.current = value
+                isDragging.current = true
             }}
             onDragOver={(event) => {
-                // onChange((items) => {
-                //     const { source } = event.operation
-                //     if (!isSortable(source)) return items
-                //     //
-                //     const { initialIndex, index } = source
-                //     if (initialIndex === index) return items
-                //     //
-                //     const next = [...items]
-                //     const [removed] = next.splice(initialIndex, 1)
-                //     next.splice(index, 0, removed)
-                //     return next
-                // })
-                onChange((prev: any) => move(prev, event))
+                setItems((prev: any) => {
+                    const next = move(prev, event) as T[]
+                    itemsRef.current = next
+                    return next
+                })
             }}
             onDragEnd={(event) => {
+                isDragging.current = false
                 if (event.canceled) {
-                    onChange(() => snapshot.current)
+                    itemsRef.current = value
+                    setItems(value)
+                    return
                 }
+                onChange(() => itemsRef.current)
             }}
         >
-            {children}
+            {children(items)}
         </DragDropProvider>
     )
 }

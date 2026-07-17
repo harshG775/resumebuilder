@@ -12,7 +12,6 @@ export const ExperienceSection = withForm({
             name="sections.experience.items"
             mode="array"
             children={(field) => {
-                const items = field.state.value
                 const handleClickAddProject = () => {}
                 return (
                     <FieldSet>
@@ -22,35 +21,39 @@ export const ExperienceSection = withForm({
                         <FieldGroup>
                             <div className="border divide-y rounded-md">
                                 <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
-                                    {items.map((item, idx) => (
-                                        <SortableItemRow
-                                            key={item.id}
-                                            sortableProps={{
-                                                index: idx,
-                                                id: item.id,
-                                            }}
-                                            title={item.company}
-                                            subtitle={item.position}
-                                            hidden={item.hidden}
-                                            actions={{
-                                                onToggleVisibility: (nextHidden) => {
-                                                    field.handleChange((prev) =>
-                                                        prev.map((i) =>
-                                                            i.id === item.id ? { ...i, hidden: nextHidden } : i,
-                                                        ),
-                                                    )
-                                                },
+                                    {(items) =>
+                                        items.map((item, idx) => (
+                                            <SortableItemRow
+                                                key={item.id}
+                                                sortableProps={{
+                                                    index: idx,
+                                                    id: item.id,
+                                                }}
+                                                title={item.company}
+                                                subtitle={item.position}
+                                                hidden={item.hidden}
+                                                actions={{
+                                                    onToggleVisibility: (nextHidden) => {
+                                                        field.handleChange((prev) =>
+                                                            prev.map((i) =>
+                                                                i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                            ),
+                                                        )
+                                                    },
 
-                                                onEdit: () => {
-                                                    alert("Update item " + item.id)
-                                                },
+                                                    onEdit: () => {
+                                                        alert("Update item " + item.id)
+                                                    },
 
-                                                onDelete: () => {
-                                                    field.handleChange((prev) => prev.filter((i) => i.id !== item.id))
-                                                },
-                                            }}
-                                        />
-                                    ))}
+                                                    onDelete: () => {
+                                                        field.handleChange((prev) =>
+                                                            prev.filter((i) => i.id !== item.id),
+                                                        )
+                                                    },
+                                                }}
+                                            />
+                                        ))
+                                    }
                                 </SortableDragProvider>
                             </div>
                             <Button variant={"outline"} onClick={handleClickAddProject}>
