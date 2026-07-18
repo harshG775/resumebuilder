@@ -18,6 +18,9 @@ import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
 import { resumeSeedValues } from "../data/resume-seed-values"
 import { ResumePreview } from "./preview"
+import { getTypst } from "#/lib/typst/typst"
+import { getTemplate } from "./preview/templates"
+import { downloadBlob } from "#/lib/download"
 
 type BuilderProps = {
     resume: { id: string; slug: string; content: ResumeValues }
@@ -45,8 +48,13 @@ export default function Builder({ resume }: BuilderProps) {
 
     async function handleDownload() {
         try {
-            // const pdfBytes = ""
-            // downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
+            const $typst = getTypst()
+            const pdfBytes = await $typst.pdf({
+                mainContent: getTemplate(form.state.values.meta.template).render(form.state.values),
+            })
+            if (pdfBytes) {
+                downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
+            }
         } catch (err) {
             console.error(err)
             toast.error("Failed to generate PDF", {
