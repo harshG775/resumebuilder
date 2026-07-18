@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import type { ResumeValues } from "../../schema/resume.zod-schema"
-import { classicTemplate } from "./templates/classic"
 import { getTypst } from "#/lib/typst/typst"
 import { Spinner } from "#/components/ui/spinner"
 import { toast } from "sonner"
