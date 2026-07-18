@@ -63,40 +63,47 @@ export const SkillsSection = withForm({
                                 <FieldGroup>
                                     <div className="border divide-y rounded-md">
                                         <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
-                                            {field.state.value.map((item, idx) => (
-                                                <SortableItemRow
-                                                    key={item.id}
-                                                    sortableProps={{
-                                                        index: idx,
-                                                        id: item.id,
-                                                    }}
-                                                    title={item.name}
-                                                    subtitle={item.keywords.join(", ")}
-                                                    hidden={item.hidden}
-                                                    actions={{
-                                                        onToggleVisibility: (nextHidden) => {
-                                                            field.handleChange((prev) =>
-                                                                prev.map((i) =>
-                                                                    i.id === item.id ? { ...i, hidden: nextHidden } : i,
-                                                                ),
-                                                            )
-                                                        },
+                                            {(items) =>
+                                                items.map((item, idx) => (
+                                                    <SortableItemRow
+                                                        key={item.id}
+                                                        sortableProps={{
+                                                            index: idx,
+                                                            id: item.id,
+                                                        }}
+                                                        title={item.name}
+                                                        subtitle={item.keywords.join(", ")}
+                                                        hidden={item.hidden}
+                                                        actions={{
+                                                            onToggleVisibility: (nextHidden) => {
+                                                                field.handleChange((prev) =>
+                                                                    prev.map((i) =>
+                                                                        i.id === item.id
+                                                                            ? { ...i, hidden: nextHidden }
+                                                                            : i,
+                                                                    ),
+                                                                )
+                                                            },
 
-                                                        onEdit: () => {
-                                                            // alert("Update item " + item.id)
-                                                            setDialogState("EDIT_ITEM")
-                                                            setEditingIndex(idx)
-                                                            dialogForm.setFieldValue("item", item)
-                                                        },
+                                                            onEdit: () => {
+                                                                // alert("Update item " + item.id)
+                                                                const realIndex = field.state.value.findIndex(
+                                                                    (i) => i.id === item.id,
+                                                                )
+                                                                setDialogState("EDIT_ITEM")
+                                                                setEditingIndex(realIndex)
+                                                                dialogForm.setFieldValue("item", item)
+                                                            },
 
-                                                        onDelete: () => {
-                                                            field.handleChange((prev) =>
-                                                                prev.filter((i) => i.id !== item.id),
-                                                            )
-                                                        },
-                                                    }}
-                                                />
-                                            ))}
+                                                            onDelete: () => {
+                                                                field.handleChange((prev) =>
+                                                                    prev.filter((i) => i.id !== item.id),
+                                                                )
+                                                            },
+                                                        }}
+                                                    />
+                                                ))
+                                            }
                                         </SortableDragProvider>
                                     </div>
                                     <Button

@@ -1,7 +1,5 @@
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
 import { useAppForm } from "#/hooks/form"
-import { downloadBlob } from "#/lib/download"
-import { useTypstCompileToPdf } from "#/lib/typst/useTypstSvg"
 import { ClientOnly } from "@tanstack/react-router"
 import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
@@ -15,25 +13,24 @@ import {
     SkillsSection,
     SummarySection,
 } from "./Editor"
-import { getTemplate } from "./templates"
 import { toast } from "sonner"
-import { TypstPreview } from "#/lib/typst/typst-preview"
 import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
 import { resumeSeedValues } from "../data/resume-seed-values"
+import { ResumePreview } from "./preview"
+import { getTypst } from "#/lib/typst/typst"
+import { getTemplate } from "./preview/templates"
+import { downloadBlob } from "#/lib/download"
 
 type BuilderProps = {
     resume: { id: string; slug: string; content: ResumeValues }
 }
 export default function Builder({ resume }: BuilderProps) {
-    const { compileToPdf, isCompiling } = useTypstCompileToPdf()
-
     const updateMutation = useMutation({
         mutationFn: updateResumeContentFn,
         scope: { id: `resume-${resume.id}` },
     })
 
-    const template = getTemplate("classic")
     const form = useAppForm({
         defaultValues: resume.content,
         validators: { onChange: ResumeZodSchema },
@@ -51,8 +48,13 @@ export default function Builder({ resume }: BuilderProps) {
 
     async function handleDownload() {
         try {
-            const pdfBytes = await compileToPdf(template.render(form.state.values))
-            downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
+            const $typst = getTypst()
+            const pdfBytes = await $typst.pdf({
+                mainContent: getTemplate(form.state.values.meta.template).render(form.state.values),
+            })
+            if (pdfBytes) {
+                downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
+            }
         } catch (err) {
             console.error(err)
             toast.error("Failed to generate PDF", {
@@ -64,7 +66,7 @@ export default function Builder({ resume }: BuilderProps) {
     return (
         <BuilderLayout
             isSaving={updateMutation.isPending}
-            isDownloading={isCompiling}
+            isDownloading={false}
             onDownload={handleDownload}
             title={resume.slug || "Untitled resume"}
             editor={
@@ -102,7 +104,7 @@ export default function Builder({ resume }: BuilderProps) {
                 <form.Subscribe selector={(state) => state.values}>
                     {(values) => (
                         <ClientOnly fallback={<div>Loading preview…</div>}>
-                            <TypstPreview source={template.render(values)} />
+                            <ResumePreview resumeData={values} />
                         </ClientOnly>
                     )}
                 </form.Subscribe>
