@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TestIndexRouteImport } from './routes/test/index'
 import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashboard/route'
 import { Route as AuthedBuilderRouteRouteImport } from './routes/_authed/builder/route'
 import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/index'
@@ -27,11 +26,6 @@ const PublicRouteRoute = PublicRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TestIndexRoute = TestIndexRouteImport.update({
-  id: '/test/',
-  path: '/test/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthedDashboardRouteRoute = AuthedDashboardRouteRouteImport.update({
@@ -76,7 +70,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/builder': typeof AuthedBuilderRouteRouteWithChildren
   '/dashboard': typeof AuthedDashboardRouteRouteWithChildren
-  '/test/': typeof TestIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/': typeof AuthedDashboardIndexRoute
   '/sign-in/': typeof PublicSignInIndexRoute
@@ -86,7 +79,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/builder': typeof AuthedBuilderRouteRouteWithChildren
-  '/test': typeof TestIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard': typeof AuthedDashboardIndexRoute
   '/sign-in': typeof PublicSignInIndexRoute
@@ -99,7 +91,6 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/_authed/builder': typeof AuthedBuilderRouteRouteWithChildren
   '/_authed/dashboard': typeof AuthedDashboardRouteRouteWithChildren
-  '/test/': typeof TestIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/_public/sign-in/': typeof PublicSignInIndexRoute
@@ -112,7 +103,6 @@ export interface FileRouteTypes {
     | '/'
     | '/builder'
     | '/dashboard'
-    | '/test/'
     | '/api/auth/$'
     | '/dashboard/'
     | '/sign-in/'
@@ -122,7 +112,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/builder'
-    | '/test'
     | '/api/auth/$'
     | '/dashboard'
     | '/sign-in'
@@ -134,7 +123,6 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_authed/builder'
     | '/_authed/dashboard'
-    | '/test/'
     | '/api/auth/$'
     | '/_authed/dashboard/'
     | '/_public/sign-in/'
@@ -147,7 +135,6 @@ export interface RootRouteChildren {
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   AuthedBuilderRouteRoute: typeof AuthedBuilderRouteRouteWithChildren
   AuthedDashboardRouteRoute: typeof AuthedDashboardRouteRouteWithChildren
-  TestIndexRoute: typeof TestIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -165,13 +152,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/test/': {
-      id: '/test/'
-      path: '/test'
-      fullPath: '/test/'
-      preLoaderRoute: typeof TestIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authed/dashboard': {
@@ -267,7 +247,6 @@ const rootRouteChildren: RootRouteChildren = {
   PublicRouteRoute: PublicRouteRouteWithChildren,
   AuthedBuilderRouteRoute: AuthedBuilderRouteRouteWithChildren,
   AuthedDashboardRouteRoute: AuthedDashboardRouteRouteWithChildren,
-  TestIndexRoute: TestIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
