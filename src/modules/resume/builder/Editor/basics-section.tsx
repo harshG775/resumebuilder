@@ -10,9 +10,10 @@ import {
     // PopoverTitle,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { LinkIcon, Plus, Tag, X } from "lucide-react"
+import { LinkIcon, Plus, X } from "lucide-react"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { SortableDragItem, SortableDragProvider } from "../components/sortable-item"
+import { WebsiteField } from "./components/website-field"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { Separator } from "#/components/ui/separator"
 import { cn } from "#/lib/utils"
@@ -103,39 +104,22 @@ export const BasicsSection = withForm({
                         </Field>
                     )}
                 />
-                <div className="flex gap-2 items-end">
-                    <form.AppField name={`basics.website.value`}>
-                        {(field) => (
-                            <Field>
-                                <FieldLabel htmlFor={field.name}>Website</FieldLabel>
-                                <Input
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    placeholder="https://"
+                <form.AppField name={`basics.website.value`}>
+                    {(valueField) => (
+                        <form.AppField name={`basics.website.label`}>
+                            {(labelField) => (
+                                <WebsiteField
+                                    id={valueField.name}
+                                    value={valueField.state.value}
+                                    onValueChange={valueField.handleChange}
+                                    onBlur={valueField.handleBlur}
+                                    linkLabel={labelField.state.value}
+                                    onLinkLabelChange={labelField.handleChange}
                                 />
-                            </Field>
-                        )}
-                    </form.AppField>
-
-                    <Popover>
-                        <PopoverTrigger render={<Button variant="ghost" />}>
-                            <Tag />
-                        </PopoverTrigger>
-
-                        <PopoverContent>
-                            <FieldLabel>Label</FieldLabel>
-                            <form.AppField name={`basics.website.label`}>
-                                {(field) => (
-                                    <Input
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                    />
-                                )}
-                            </form.AppField>
-                        </PopoverContent>
-                    </Popover>
-                </div>
+                            )}
+                        </form.AppField>
+                    )}
+                </form.AppField>
                 <form.AppField
                     name={`basics.customFields`}
                     mode="array"
