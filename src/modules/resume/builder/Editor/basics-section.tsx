@@ -10,10 +10,12 @@ import {
     // PopoverTitle,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { LinkIcon, Tag, X } from "lucide-react"
+import { LinkIcon, Plus, Tag, X } from "lucide-react"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { SortableDragItem, SortableDragProvider } from "../components/sortable-item"
 import { resumeFormOptions } from "../../data/resume-default-values"
+import { Separator } from "#/components/ui/separator"
+import { cn } from "#/lib/utils"
 
 export const BasicsSection = withForm({
     ...resumeFormOptions,
@@ -140,13 +142,13 @@ export const BasicsSection = withForm({
                     children={(field) => (
                         <Field>
                             <FieldLabel>Custom Fields</FieldLabel>
-                            <div className="border divide-y rounded-md">
-                                <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
-                                    {(items) =>
-                                        items.map((item: any, idx: number) => {
-                                            const realIndex = field.state.value.findIndex(
-                                                (i: any) => i.id === item.id,
-                                            )
+                            <div className="divide-y">
+                                <SortableDragProvider
+                                    value={field.state.value}
+                                    onChange={field.handleChange}
+                                    children={(items) => {
+                                        return items.map((item, idx: number) => {
+                                            const realIndex = field.state.value.findIndex((i) => i.id === item.id)
                                             return (
                                                 <SortableDragItem
                                                     key={item.id}
@@ -154,24 +156,24 @@ export const BasicsSection = withForm({
                                                         index: idx,
                                                         id: item.id,
                                                     }}
-                                                    className="h-14 flex items-center"
+                                                    className={cn("h-12 flex items-center border")}
                                                 >
                                                     <div
                                                         role="button"
                                                         tabIndex={0}
-                                                        aria-label={`Drag to reorder ${item.title}`}
-                                                        className="flex items-center p-2 mx-1 hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                                        aria-label={`Drag to reorder ${item.label}`}
+                                                        className="flex justify-center items-center w-10 h-full hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                                     >
                                                         <DotsSixVerticalIcon aria-hidden="true" />
                                                     </div>
+                                                    <Separator orientation="vertical" />
+
                                                     <form.AppField name={`basics.customFields[${realIndex}].label`}>
                                                         {(field_1) => (
                                                             <Input
                                                                 value={field_1.state.value}
-                                                                onChange={(e) =>
-                                                                    field_1.handleChange(e.target.value)
-                                                                }
-                                                                className="h-full"
+                                                                onChange={(e) => field_1.handleChange(e.target.value)}
+                                                                className="h-full rounded-none line-clamp-1"
                                                                 placeholder="field..."
                                                             />
                                                         )}
@@ -179,7 +181,12 @@ export const BasicsSection = withForm({
 
                                                     <Popover>
                                                         <PopoverTrigger
-                                                            render={<Button variant="ghost" className="h-full" />}
+                                                            render={
+                                                                <Button
+                                                                    variant="ghost"
+                                                                    className="h-full w-8 rounded-none "
+                                                                />
+                                                            }
                                                         >
                                                             <LinkIcon />
                                                         </PopoverTrigger>
@@ -201,20 +208,19 @@ export const BasicsSection = withForm({
                                                             </form.AppField>
                                                         </PopoverContent>
                                                     </Popover>
-
                                                     <Button
                                                         type="button"
-                                                        variant="ghost"
+                                                        variant="destructive"
+                                                        className="h-full w-8 rounded-none "
                                                         onClick={() => field.removeValue(realIndex)}
-                                                        className="h-full"
                                                     >
                                                         <X />
                                                     </Button>
                                                 </SortableDragItem>
                                             )
                                         })
-                                    }
-                                </SortableDragProvider>
+                                    }}
+                                />
                             </div>
                             <Button
                                 type="button"
@@ -227,7 +233,8 @@ export const BasicsSection = withForm({
                                     })
                                 }
                             >
-                                Add Link
+                                <Plus />
+                                Add Custom Field
                             </Button>
                         </Field>
                     )}

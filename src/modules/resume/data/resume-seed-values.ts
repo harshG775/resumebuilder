@@ -28,12 +28,12 @@ export const resumeSeedValues: ResumeValues = {
         customFields: [
             {
                 id: crypto.randomUUID(),
-                label: "GitHub",
+                label: "github.com/harshG775",
                 value: "https://github.com/harshG775",
             },
             {
                 id: crypto.randomUUID(),
-                label: "LinkedIn",
+                label: "linkedin.com/in/harshg775",
                 value: "https://linkedin.com/in/harshg775",
             },
         ],
