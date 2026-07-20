@@ -1,10 +1,11 @@
 import { Button } from "#/components/ui/button"
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
-import { PlusIcon } from "lucide-react"
+import { CalendarIcon, PlusIcon } from "lucide-react"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SortableDragProvider, SortableItemRow } from "../components/sortable-item"
 import { WebsiteField } from "./components/website-field"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "#/components/ui/input-group"
 
 import { useForm } from "@tanstack/react-form"
 import { Input } from "#/components/ui/input"
@@ -66,7 +67,11 @@ function ExperienceDialog({
     })
 
     const attemptClose = () => {
-        if (window.confirm("are you sure")) {
+        const message =
+            mode === "edit"
+                ? "Discard changes to this experience? Unsaved changes will be lost."
+                : "Discard this new experience? Unsaved changes will be lost."
+        if (!form.state.isDirty || window.confirm(message)) {
             setIsOpen(false)
         }
     }
@@ -151,38 +156,41 @@ function ExperienceDialog({
                             }}
                         />
                     </FieldSet>
-                    <FieldSet className="grid grid-cols-1 md:grid-cols-2">
-                        <form.Field
-                            name="startDate"
-                            children={(dialogField) => {
-                                return (
-                                    <Field>
-                                        <FieldLabel htmlFor="startDate">Start Date</FieldLabel>
-                                        <Input
-                                            id="startDate"
-                                            value={dialogField.state.value}
-                                            onChange={(e) => dialogField.handleChange(e.target.value)}
-                                        />
-                                    </Field>
-                                )
-                            }}
-                        />
-                        <form.Field
-                            name="endDate"
-                            children={(dialogField) => {
-                                return (
-                                    <Field>
-                                        <FieldLabel htmlFor="endDate">End Date</FieldLabel>
-                                        <Input
-                                            id="endDate"
-                                            value={dialogField.state.value}
-                                            onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="Present"
-                                        />
-                                    </Field>
-                                )
-                            }}
-                        />
+                    <FieldSet>
+                        <form.Field name="startDate">
+                            {(startField) => (
+                                <form.Field name="endDate">
+                                    {(endField) => (
+                                        <Field>
+                                            <FieldLabel>Period</FieldLabel>
+                                            <div className="flex items-center gap-2">
+                                                <InputGroup className="flex-1">
+                                                    <InputGroupAddon>
+                                                        <CalendarIcon />
+                                                    </InputGroupAddon>
+                                                    <InputGroupInput
+                                                        value={startField.state.value}
+                                                        onChange={(e) => startField.handleChange(e.target.value)}
+                                                        placeholder="e.g. Sept 2020"
+                                                    />
+                                                </InputGroup>
+                                                <span className="text-muted-foreground">–</span>
+                                                <InputGroup className="flex-1">
+                                                    <InputGroupAddon>
+                                                        <CalendarIcon />
+                                                    </InputGroupAddon>
+                                                    <InputGroupInput
+                                                        value={endField.state.value}
+                                                        onChange={(e) => endField.handleChange(e.target.value)}
+                                                        placeholder="Present"
+                                                    />
+                                                </InputGroup>
+                                            </div>
+                                        </Field>
+                                    )}
+                                </form.Field>
+                            )}
+                        </form.Field>
                     </FieldSet>
                     <FieldSet>
                         <form.Field
