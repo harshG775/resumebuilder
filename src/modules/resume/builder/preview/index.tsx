@@ -14,16 +14,13 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
         const container = containerRef.current
         if (!resumeData || !container) return
         let cancelled = false
-        const $typst = getTypst()
-
-        const RenderCanvas = async () => {
-            setIsLoading(true)
+        
+        setIsLoading(true)
+        const RenderCanvas = () => {
             try {
                 const typstResumeString = getTemplate(resumeData.meta.template).render(resumeData)
-                const vector = await $typst.vector({ mainContent: typstResumeString })
-                if (vector) {
-                    $typst.canvas(container, { vectorData: vector, pixelPerPt: 3 })
-                }
+                const $typst = getTypst()
+                $typst.canvas(container, { mainContent: typstResumeString, pixelPerPt: 3 })
             } catch (error) {
                 toast.error("Error while rendering ResumePreview")
                 console.log(error)
@@ -39,7 +36,17 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
     }, [resumeData])
 
     return (
-        <div className="min-w-7xl">
+        <div className="min-w-7xl min-h-dvh">
+            <style>{`
+                .typst-page {
+                    margin-bottom: 1.5rem;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 12px rgba(0, 0, 0, 0.08);
+                }
+
+                .typst-page:last-child {
+                    margin-bottom: 0;
+                }
+                `}</style>
             {isLoading && <Spinner className="size-15" />}
             <div ref={containerRef} />
         </div>
