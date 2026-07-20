@@ -11,6 +11,7 @@ import { Input } from "#/components/ui/input"
 import { Textarea } from "#/components/ui/textarea"
 import type { ResumeValues } from "../../schema/resume.zod-schema"
 import { useState } from "react"
+import type { ReactNode } from "react"
 import {
     Dialog,
     DialogContent,
@@ -21,33 +22,46 @@ import {
     DialogTrigger,
 } from "#/components/ui/dialog"
 
-function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["experience"]["items"][0]) => void }) {
-    const [isOpen, setIsOpen] = useState(false)
-    const form = useForm({
-        defaultValues: {
-            id: "",
-            hidden: false,
-            company: "",
-            position: "",
-            location: "",
-            startDate: "",
-            endDate: "",
-            website: {
-                hidden: false,
-                value: "",
-                label: "",
-            },
-            content: "",
-        },
+type ExperienceItem = ResumeValues["sections"]["experience"]["items"][0]
 
-        onSubmit: async ({ value, formApi }) => {
-            onCreate({
-                ...value,
-                id: crypto.randomUUID(),
-            })
+const getEmptyExperience = (): ExperienceItem => ({
+    id: "",
+    hidden: false,
+    company: "",
+    position: "",
+    location: "",
+    startDate: "",
+    endDate: "",
+    website: {
+        hidden: false,
+        value: "",
+        label: "",
+    },
+    content: "",
+})
+
+function ExperienceDialog({
+    defaultValues,
+    onSubmit,
+    trigger,
+    initialOpen = false,
+    onClosed,
+    mode = "create",
+}: {
+    defaultValues: ExperienceItem
+    onSubmit: (value: ExperienceItem) => void
+    trigger?: ReactNode | null
+    initialOpen?: boolean
+    onClosed?: () => void
+    mode?: "create" | "edit"
+}) {
+    const [isOpen, setIsOpen] = useState(initialOpen)
+    const form = useForm({
+        defaultValues,
+        onSubmit: async ({ value }) => {
+            onSubmit(value)
 
             setIsOpen(false)
-            formApi.reset()
         },
     })
 
@@ -70,12 +84,17 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
             onOpenChangeComplete={(lastOpen) => {
                 if (!lastOpen) {
                     form.reset()
+                    onClosed?.()
                 }
             }}
         >
-            <DialogTrigger render={<Button variant="outline" />}>
-                <PlusIcon /> Add a new {"Experience"}
-            </DialogTrigger>
+            {trigger === null
+                ? null
+                : (trigger ?? (
+                      <DialogTrigger render={<Button variant="outline" />}>
+                          <PlusIcon /> Add a new {"Experience"}
+                      </DialogTrigger>
+                  ))}
 
             <DialogContent
                 render={
@@ -90,7 +109,9 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
                 className="md:max-w-2xl lg:max-w-3xl h-[calc(90vh)] overflow-y-scroll"
             >
                 <DialogHeader>
-                    <DialogTitle>Add {"Experience"}</DialogTitle>
+                    <DialogTitle>
+                        {mode === "edit" ? "Edit" : "Add"} {"Experience"}
+                    </DialogTitle>
                     <DialogDescription>Fill out the {"Experience"} information details below.</DialogDescription>
                 </DialogHeader>
 
@@ -139,7 +160,6 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
                                         <FieldLabel htmlFor="startDate">Start Date</FieldLabel>
                                         <Input
                                             id="startDate"
-                                            type="month"
                                             value={dialogField.state.value}
                                             onChange={(e) => dialogField.handleChange(e.target.value)}
                                         />
@@ -155,7 +175,6 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
                                         <FieldLabel htmlFor="endDate">End Date</FieldLabel>
                                         <Input
                                             id="endDate"
-                                            type="month"
                                             value={dialogField.state.value}
                                             onChange={(e) => dialogField.handleChange(e.target.value)}
                                             placeholder="Present"
@@ -227,7 +246,7 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
                         selector={(state) => [state.canSubmit, state.isSubmitting]}
                         children={([canSubmit, isSubmitting]) => (
                             <Button disabled={!canSubmit} type="submit">
-                                {isSubmitting ? "Creating..." : "Create"}
+                                {isSubmitting ? "Saving..." : mode === "edit" ? "Save" : "Create"}
                             </Button>
                         )}
                     />
@@ -239,62 +258,86 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
 
 export const ExperienceSection = withForm({
     ...resumeFormOptions,
-    render: ({ form }) => (
-        <form.AppField
-            name="sections.experience.items"
-            mode="array"
-            children={(field) => {
-                return (
-                    <FieldSet>
-                        <FieldLegend className="font-bold text-2xl!">
-                            {form.state.values.sections.experience.title}
-                        </FieldLegend>
-                        <FieldGroup>
-                            <div className="border divide-y rounded-md">
-                                <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
-                                    {(items) =>
-                                        items.map((item, idx) => (
-                                            <SortableItemRow
-                                                key={item.id}
-                                                sortableProps={{
-                                                    index: idx,
-                                                    id: item.id,
-                                                }}
-                                                title={item.company}
-                                                subtitle={item.position}
-                                                hidden={item.hidden}
-                                                actions={{
-                                                    onToggleVisibility: (nextHidden) => {
-                                                        field.handleChange((prev) =>
-                                                            prev.map((i) =>
-                                                                i.id === item.id ? { ...i, hidden: nextHidden } : i,
-                                                            ),
-                                                        )
-                                                    },
+    render: ({ form }) => {
+        const [editingItem, setEditingItem] = useState<ExperienceItem | null>(null)
 
-                                                    onEdit: () => {
-                                                        alert("Update item " + item.id)
-                                                    },
+        return (
+            <form.AppField
+                name="sections.experience.items"
+                mode="array"
+                children={(field) => {
+                    return (
+                        <FieldSet>
+                            <FieldLegend className="font-bold text-2xl!">
+                                {form.state.values.sections.experience.title}
+                            </FieldLegend>
+                            <FieldGroup>
+                                <div className="border divide-y rounded-md">
+                                    <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
+                                        {(items) =>
+                                            items.map((item, idx) => (
+                                                <SortableItemRow
+                                                    key={item.id}
+                                                    sortableProps={{
+                                                        index: idx,
+                                                        id: item.id,
+                                                    }}
+                                                    title={item.company}
+                                                    subtitle={item.position}
+                                                    hidden={item.hidden}
+                                                    actions={{
+                                                        onToggleVisibility: (nextHidden) => {
+                                                            field.handleChange((prev) =>
+                                                                prev.map((i) =>
+                                                                    i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                                ),
+                                                            )
+                                                        },
 
-                                                    onDelete: () => {
-                                                        field.handleChange((prev) =>
-                                                            prev.filter((i) => i.id !== item.id),
-                                                        )
-                                                    },
-                                                }}
-                                            />
-                                        ))
+                                                        onEdit: () => {
+                                                            setEditingItem(item)
+                                                        },
+
+                                                        onDelete: () => {
+                                                            field.handleChange((prev) =>
+                                                                prev.filter((i) => i.id !== item.id),
+                                                            )
+                                                        },
+                                                    }}
+                                                />
+                                            ))
+                                        }
+                                    </SortableDragProvider>
+                                </div>
+                                <ExperienceDialog
+                                    defaultValues={getEmptyExperience()}
+                                    onSubmit={(value) =>
+                                        field.pushValue({
+                                            ...value,
+                                            id: crypto.randomUUID(),
+                                        })
                                     }
-                                </SortableDragProvider>
-                            </div>
-                            {/* <Button variant={"outline"} onClick={handleClickAddProject}>
-                                <PlusIcon /> Add a new {form.state.values.sections.experience.title}
-                            </Button> */}
-                            <Create onCreate={field.pushValue} />
-                        </FieldGroup>
-                    </FieldSet>
-                )
-            }}
-        />
-    ),
+                                />
+                                {editingItem && (
+                                    <ExperienceDialog
+                                        key={editingItem.id}
+                                        mode="edit"
+                                        trigger={null}
+                                        initialOpen
+                                        defaultValues={editingItem}
+                                        onSubmit={(value) => {
+                                            field.handleChange((prev) =>
+                                                prev.map((i) => (i.id === value.id ? value : i)),
+                                            )
+                                        }}
+                                        onClosed={() => setEditingItem(null)}
+                                    />
+                                )}
+                            </FieldGroup>
+                        </FieldSet>
+                    )
+                }}
+            />
+        )
+    },
 })
