@@ -67,7 +67,6 @@ export const getResumeByIdFn = createServerFn({ method: "GET" })
             })
             .from(resume)
             .where(and(eq(resume.id, data.id), eq(resume.userId, context.session.user.id)))
-
         if (result.length === 0) {
             return {
                 success: false,
