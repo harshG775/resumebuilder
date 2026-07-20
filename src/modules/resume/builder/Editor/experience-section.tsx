@@ -51,10 +51,22 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
         },
     })
 
+    const attemptClose = () => {
+        if (window.confirm("are you sure")) {
+            setIsOpen(false)
+        }
+    }
+
     return (
         <Dialog
             open={isOpen}
-            onOpenChange={setIsOpen}
+            onOpenChange={(lastOpen) => {
+                if (!lastOpen) {
+                    attemptClose()
+                } else {
+                    setIsOpen(lastOpen)
+                }
+            }}
             onOpenChangeComplete={(lastOpen) => {
                 if (!lastOpen) {
                     form.reset()
@@ -208,7 +220,7 @@ function Create({ onCreate }: { onCreate: (value: ResumeValues["sections"]["expe
                     </FieldSet>
                 </FieldSet>
                 <DialogFooter>
-                    <Button variant={"destructive"} onClick={() => setIsOpen(false)}>
+                    <Button type="button" variant={"destructive"} onClick={attemptClose}>
                         Cancel
                     </Button>
                     <form.Subscribe
