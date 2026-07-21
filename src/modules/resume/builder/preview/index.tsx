@@ -46,7 +46,7 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
             <TransformWrapper initialScale={0.4} minScale={0.2} maxScale={1.5} centerOnInit limitToBounds={false}>
                 {({ zoomIn, zoomOut, resetTransform }) => (
                     <>
-                        <div className="fixed bottom-4 left-4 right-4 z-10 flex justify-center">
+                        <div className="fixed bottom-20 left-4 right-4 z-30 flex justify-center md:bottom-4">
                             <div className="flex items-center gap-1 rounded-lg border bg-sidebar/70 p-1 shadow pointer-events-auto">
                                 <Button variant="ghost" size="icon-sm" onClick={() => resetTransform()}>
                                     <RotateCcwIcon className="size-4" />
