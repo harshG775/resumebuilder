@@ -17,7 +17,7 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
         const container = containerRef.current
         if (!resumeData || !container) return
         getTypst()
-            .canvas(container, { mainContent: getTemplate(resumeData.meta.template).render(resumeData), pixelPerPt: 3 })
+            .canvas(container, { mainContent: getTemplate(resumeData.meta.template).render(resumeData), pixelPerPt: 4 })
             .then(() => {
                 console.log("rendered")
             })
@@ -43,7 +43,7 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
                     margin-bottom: 0;
                 }
                 `}</style>
-            <TransformWrapper initialScale={0.4} minScale={0.1} maxScale={2} centerOnInit limitToBounds={false}>
+            <TransformWrapper initialScale={0.4} minScale={0.2} maxScale={1.5} centerOnInit limitToBounds={false}>
                 {({ zoomIn, zoomOut, resetTransform }) => (
                     <>
                         <div className="fixed bottom-4 left-4 right-4 z-10 flex justify-center">
@@ -68,7 +68,7 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
                                 height: "100%",
                             }}
                         >
-                            <div ref={containerRef} className="min-w-[297mm] w-full h-full" />
+                            <div ref={containerRef} className="relative min-w-7xl min-h-[200vh] w-full h-full" />
                         </TransformComponent>
                     </>
                 )}
