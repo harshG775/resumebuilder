@@ -12,16 +12,7 @@ import { Separator } from "#/components/ui/separator"
 import { useIsMobile } from "#/hooks/use-mobile"
 import { cn } from "#/lib/utils"
 import { Link } from "@tanstack/react-router"
-import {
-    ChevronDownIcon,
-    DownloadIcon,
-    EyeIcon,
-    HomeIcon,
-    PaletteIcon,
-    PanelLeftIcon,
-    PanelRightIcon,
-    SquarePenIcon,
-} from "lucide-react"
+import { ChevronDownIcon, EyeIcon, HomeIcon, PaletteIcon, PanelLeftIcon, PanelRightIcon, SquarePenIcon } from "lucide-react"
 import { useState } from "react"
 import type React from "react"
 import { usePanelRef } from "react-resizable-panels"
@@ -40,8 +31,7 @@ type BuilderLayoutProps = {
     editor: React.ReactNode
     preview: React.ReactNode
     design: React.ReactNode
-    onDownload?: () => void
-    isDownloading?: boolean
+    downloadAction?: React.ReactNode
     isSaving?: boolean
 }
 export default function BuilderLayout({
@@ -49,8 +39,7 @@ export default function BuilderLayout({
     editor,
     preview,
     design,
-    onDownload,
-    isDownloading,
+    downloadAction,
     isSaving,
 }: BuilderLayoutProps) {
     const isMobile = useIsMobile()
@@ -111,12 +100,7 @@ export default function BuilderLayout({
                         </BreadcrumbList>
                     </Breadcrumb>
                     <div className="flex-1 flex gap-2 justify-end items-center">
-                        <Button onClick={onDownload} disabled={!onDownload || isDownloading}>
-                            <DownloadIcon />
-                            <span className="sr-only sm:not-sr-only">
-                                {isDownloading ? "Downloading…" : "Download"}
-                            </span>
-                        </Button>
+                        {downloadAction}
                         <Separator orientation="vertical" className="h-4 my-auto" />
                         {!isMobile && (
                             <Button

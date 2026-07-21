@@ -1,9 +1,9 @@
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
 import { useAppForm } from "#/hooks/form"
-import { ClientOnly } from "@tanstack/react-router"
 import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
 import BuilderLayout from "./components/builder-layout"
+import { DownloadDialog } from "./components/download-dialog"
 import {
     BasicsSection,
     CertificationsSection,
@@ -13,9 +13,11 @@ import {
     SkillsSection,
     SummarySection,
 } from "./Editor"
+import { FileJsonIcon, FileTextIcon } from "lucide-react"
 import { toast } from "sonner"
 import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
+import { useState } from "react"
 import { resumeSeedValues } from "../data/resume-seed-values"
 import { ResumePreview } from "./preview"
 import { getTypst } from "#/lib/typst/typst"
@@ -46,7 +48,10 @@ export default function Builder({ resume }: BuilderProps) {
         },
     })
 
-    async function handleDownload() {
+    const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
+
+    async function handleDownloadPdf() {
+        setIsDownloadingPdf(true)
         try {
             const $typst = getTypst()
             const pdfBytes = await $typst.pdf({
@@ -60,14 +65,41 @@ export default function Builder({ resume }: BuilderProps) {
             toast.error("Failed to generate PDF", {
                 description: err instanceof Error ? err.message : "Please try again.",
             })
+        } finally {
+            setIsDownloadingPdf(false)
         }
+    }
+
+    function handleDownloadJson() {
+        const jsonBytes = new TextEncoder().encode(JSON.stringify(form.state.values, null, 2))
+        downloadBlob(jsonBytes, `${resume.slug || "resume"}.json`, "application/json")
     }
 
     return (
         <BuilderLayout
             isSaving={updateMutation.isPending}
-            isDownloading={false}
-            onDownload={handleDownload}
+            downloadAction={
+                <DownloadDialog
+                    isDownloading={isDownloadingPdf}
+                    formats={[
+                        {
+                            key: "pdf",
+                            icon: <FileTextIcon />,
+                            title: "PDF",
+                            description: "Best for applications, sharing, and printing.",
+                            onDownload: handleDownloadPdf,
+                            isDownloading: isDownloadingPdf,
+                        },
+                        {
+                            key: "json",
+                            icon: <FileJsonIcon />,
+                            title: "JSON",
+                            description: "Full resume data for backup or import.",
+                            onDownload: handleDownloadJson,
+                        },
+                    ]}
+                />
+            }
             title={resume.slug || "Untitled resume"}
             editor={
                 <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
