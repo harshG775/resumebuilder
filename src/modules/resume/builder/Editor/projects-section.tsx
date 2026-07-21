@@ -1,12 +1,14 @@
 import { Button } from "#/components/ui/button"
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
-import { CalendarIcon, LinkIcon, PlusIcon, X } from "lucide-react"
+import { CalendarIcon, PlusIcon } from "lucide-react"
+import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
-import { SortableDragProvider, SortableItemRow } from "../components/sortable-item"
+import { SortableDragItem, SortableDragProvider, SortableItemRow } from "../components/sortable-item"
 import { TagsInput } from "#/components/ui/tags-input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "#/components/ui/select"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "#/components/ui/input-group"
+import { LinkField } from "./components/link-field"
 
 import { useForm } from "@tanstack/react-form"
 import { Input } from "#/components/ui/input"
@@ -228,44 +230,61 @@ function ProjectDialog({
                                     <Field>
                                         <FieldLabel>Links</FieldLabel>
                                         <div className="flex flex-col gap-2">
-                                            {linksField.state.value.map((link, idx) => (
-                                                <div key={link.id} className="flex gap-2">
-                                                    <form.Field name={`links[${idx}].label`}>
-                                                        {(labelField) => (
-                                                            <Input
-                                                                value={labelField.state.value}
-                                                                onChange={(e) =>
-                                                                    labelField.handleChange(e.target.value)
-                                                                }
-                                                                placeholder="Label (e.g. Live Demo)"
-                                                            />
-                                                        )}
-                                                    </form.Field>
-                                                    <form.Field name={`links[${idx}].value`}>
-                                                        {(valueField) => (
-                                                            <div className="relative flex-1">
-                                                                <Input
-                                                                    value={valueField.state.value}
-                                                                    onChange={(e) =>
-                                                                        valueField.handleChange(e.target.value)
-                                                                    }
-                                                                    placeholder="https://"
-                                                                    className="pr-8"
-                                                                />
-                                                                <LinkIcon className="pointer-events-none absolute inset-y-0 right-2.5 my-auto size-3.5 text-muted-foreground" />
-                                                            </div>
-                                                        )}
-                                                    </form.Field>
-                                                    <Button
-                                                        type="button"
-                                                        variant="destructive"
-                                                        size="icon"
-                                                        onClick={() => linksField.removeValue(idx)}
-                                                    >
-                                                        <X />
-                                                    </Button>
-                                                </div>
-                                            ))}
+                                            <SortableDragProvider
+                                                value={linksField.state.value}
+                                                onChange={linksField.handleChange}
+                                            >
+                                                {(items) =>
+                                                    items.map((link, idx) => {
+                                                        const realIndex = linksField.state.value.findIndex(
+                                                            (l) => l.id === link.id,
+                                                        )
+                                                        return (
+                                                            <SortableDragItem
+                                                                key={link.id}
+                                                                sortableProps={{ index: idx, id: link.id }}
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                <div
+                                                                    role="button"
+                                                                    tabIndex={0}
+                                                                    aria-label="Drag to reorder link"
+                                                                    className="flex size-8 shrink-0 items-center justify-center text-muted-foreground cursor-grab hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                                                >
+                                                                    <DotsSixVerticalIcon aria-hidden="true" />
+                                                                </div>
+                                                                <form.Field name={`links[${realIndex}].value`}>
+                                                                    {(valueField) => (
+                                                                        <form.Field
+                                                                            name={`links[${realIndex}].label`}
+                                                                        >
+                                                                            {(labelField) => (
+                                                                                <LinkField
+                                                                                    id={valueField.name}
+                                                                                    value={valueField.state.value}
+                                                                                    onValueChange={
+                                                                                        valueField.handleChange
+                                                                                    }
+                                                                                    linkLabel={labelField.state.value}
+                                                                                    onLinkLabelChange={
+                                                                                        labelField.handleChange
+                                                                                    }
+                                                                                    onRemove={() =>
+                                                                                        linksField.removeValue(
+                                                                                            realIndex,
+                                                                                        )
+                                                                                    }
+                                                                                    className="flex-1"
+                                                                                />
+                                                                            )}
+                                                                        </form.Field>
+                                                                    )}
+                                                                </form.Field>
+                                                            </SortableDragItem>
+                                                        )
+                                                    })
+                                                }
+                                            </SortableDragProvider>
                                         </div>
                                         <Button
                                             type="button"

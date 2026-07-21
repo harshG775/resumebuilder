@@ -2,18 +2,11 @@ import { Button } from "#/components/ui/button"
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
 import { withForm } from "#/hooks/form"
-import {
-    Popover,
-    PopoverContent,
-    // PopoverDescription,
-    // PopoverHeader,
-    // PopoverTitle,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { LinkIcon, Plus, X } from "lucide-react"
+import { Plus } from "lucide-react"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { SortableDragItem, SortableDragProvider } from "../components/sortable-item"
 import { WebsiteField } from "./components/website-field"
+import { LinkField } from "./components/link-field"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { Separator } from "#/components/ui/separator"
 import { cn } from "#/lib/utils"
@@ -140,66 +133,38 @@ export const BasicsSection = withForm({
                                                         index: idx,
                                                         id: item.id,
                                                     }}
-                                                    className={cn("h-12 flex items-center border")}
+                                                    className={cn("flex items-stretch border")}
                                                 >
                                                     <div
                                                         role="button"
                                                         tabIndex={0}
                                                         aria-label={`Drag to reorder ${item.label}`}
-                                                        className="flex justify-center items-center w-10 h-full hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                                        className="flex justify-center items-center w-10 hover:bg-muted/80 cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                                     >
                                                         <DotsSixVerticalIcon aria-hidden="true" />
                                                     </div>
                                                     <Separator orientation="vertical" />
 
-                                                    <form.AppField name={`basics.customFields[${realIndex}].label`}>
-                                                        {(field_1) => (
-                                                            <Input
-                                                                value={field_1.state.value}
-                                                                onChange={(e) => field_1.handleChange(e.target.value)}
-                                                                className="h-full rounded-none line-clamp-1"
-                                                                placeholder="field..."
-                                                            />
-                                                        )}
-                                                    </form.AppField>
-
-                                                    <Popover>
-                                                        <PopoverTrigger
-                                                            render={
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    className="h-full w-8 rounded-none "
-                                                                />
-                                                            }
-                                                        >
-                                                            <LinkIcon />
-                                                        </PopoverTrigger>
-
-                                                        <PopoverContent>
-                                                            <FieldLabel>Enter The URL to link to</FieldLabel>
+                                                    <form.AppField name={`basics.customFields[${realIndex}].value`}>
+                                                        {(valueField) => (
                                                             <form.AppField
-                                                                name={`basics.customFields[${realIndex}].value`}
+                                                                name={`basics.customFields[${realIndex}].label`}
                                                             >
-                                                                {(customField) => (
-                                                                    <Input
-                                                                        value={customField.state.value}
-                                                                        onChange={(e) =>
-                                                                            customField.handleChange(e.target.value)
-                                                                        }
-                                                                        placeholder="https://"
+                                                                {(labelField) => (
+                                                                    <LinkField
+                                                                        id={valueField.name}
+                                                                        value={valueField.state.value}
+                                                                        onValueChange={valueField.handleChange}
+                                                                        linkLabel={labelField.state.value}
+                                                                        onLinkLabelChange={labelField.handleChange}
+                                                                        onRemove={() => field.removeValue(realIndex)}
+                                                                        placeholder="e.g. github.com/username"
+                                                                        className="flex-1 p-1.5"
                                                                     />
                                                                 )}
                                                             </form.AppField>
-                                                        </PopoverContent>
-                                                    </Popover>
-                                                    <Button
-                                                        type="button"
-                                                        variant="destructive"
-                                                        className="h-full w-8 rounded-none "
-                                                        onClick={() => field.removeValue(realIndex)}
-                                                    >
-                                                        <X />
-                                                    </Button>
+                                                        )}
+                                                    </form.AppField>
                                                 </SortableDragItem>
                                             )
                                         })
