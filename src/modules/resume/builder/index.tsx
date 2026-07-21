@@ -102,11 +102,7 @@ export default function Builder({ resume }: BuilderProps) {
             }
             preview={
                 <form.Subscribe selector={(state) => state.values}>
-                    {(values) => (
-                        <ClientOnly fallback={<div>Loading preview…</div>}>
-                            <ResumePreview resumeData={values} />
-                        </ClientOnly>
-                    )}
+                    {(values) => <ResumePreview resumeData={values} />}
                 </form.Subscribe>
             }
         />

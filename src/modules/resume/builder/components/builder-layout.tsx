@@ -10,9 +10,8 @@ import { Button } from "#/components/ui/button"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "#/components/ui/resizable"
 import { Separator } from "#/components/ui/separator"
 import { Link } from "@tanstack/react-router"
-import { ChevronDownIcon, DownloadIcon, HomeIcon, RotateCcwIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react"
+import { ChevronDownIcon, DownloadIcon, HomeIcon } from "lucide-react"
 import type React from "react"
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
 import { Spinner } from "#/components/ui/spinner"
 
 type BuilderLayoutProps = {
@@ -34,7 +33,7 @@ export default function BuilderLayout({
     isSaving,
 }: BuilderLayoutProps) {
     return (
-        <div className="h-screen w-screen bg-muted">
+        <>
             <div className="fixed inset-0 z-20 pointer-events-none">
                 <header className="bg-sidebar shadow flex items-center h-12 gap-2 px-3 pointer-events-auto">
                     <div className="flex-1 flex gap-2 justify-start">
@@ -98,36 +97,7 @@ export default function BuilderLayout({
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </div>
-            <TransformWrapper initialScale={0.4} minScale={0.1} maxScale={2} centerOnInit limitToBounds={false}>
-                {({ zoomIn, zoomOut, resetTransform }) => (
-                    <>
-                        <div className="fixed bottom-4 left-4 right-4 z-10 flex justify-center">
-                            <div className="flex items-center gap-1 rounded-lg border bg-sidebar/70 p-1 shadow pointer-events-auto">
-                                <Button variant="ghost" size="icon-sm" onClick={() => resetTransform()}>
-                                    <RotateCcwIcon className="size-4" />
-                                    <span className="sr-only">Reset zoom</span>
-                                </Button>
-                                <Button variant="ghost" size="icon-sm" onClick={() => zoomOut()}>
-                                    <ZoomOutIcon className="size-4" />
-                                    <span className="sr-only">Zoom out</span>
-                                </Button>
-                                <Button variant="ghost" size="icon-sm" onClick={() => zoomIn()}>
-                                    <ZoomInIcon className="size-4" />
-                                    <span className="sr-only">Zoom in</span>
-                                </Button>
-                            </div>
-                        </div>
-                        <TransformComponent
-                            wrapperStyle={{
-                                width: "100%",
-                                height: "100%",
-                            }}
-                        >
-                            {preview}
-                        </TransformComponent>
-                    </>
-                )}
-            </TransformWrapper>
-        </div>
+            <div className="flex-1 fixed inset-0">{preview}</div>
+        </>
     )
 }
