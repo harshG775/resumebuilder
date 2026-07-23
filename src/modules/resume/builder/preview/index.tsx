@@ -144,7 +144,7 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
                     }}
                 >
                     {!initRendered && <ResumeSkeleton />}
-                    <div ref={containerRef} />
+                    <div ref={containerRef} className="text-muted" />
                 </div>
             </ResumePreviewArea>
         </>
