@@ -18,6 +18,7 @@ import { Spinner } from "#/components/ui/spinner"
 import { authClient } from "#/lib/auth/auth-client"
 import { useHost } from "#/hooks/use-host"
 import { generateBaseSlug } from "#/lib/utils"
+import { copyResumeShareLink } from "#/lib/share-resume-link"
 import { EditResumeDialog, SlugField, resumeFormSchema } from "#/modules/resume/builder/components/edit-resume-dialog"
 
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
@@ -224,6 +225,7 @@ function RouteComponent() {
                                 isLastEdited={resumes.length > 1 && index === 0}
                                 actions={{
                                     onEdit: () => setEditingResume(resume),
+                                    onShare: () => copyResumeShareLink(username, resume.slug),
                                     onDelete: async () => {
                                         const confirmed = window.confirm("Are you sure you want to delete this resume?")
                                         if (confirmed) {
