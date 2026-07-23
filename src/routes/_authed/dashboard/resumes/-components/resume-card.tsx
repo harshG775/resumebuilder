@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router"
 import { Badge } from "#/components/ui/badge"
 import { Button } from "#/components/ui/button"
 import { Skeleton } from "#/components/ui/skeleton"
-import { FolderIcon, HistoryIcon, MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react"
+import { FolderIcon, HistoryIcon, MoreVerticalIcon, PencilIcon, Share2Icon, TrashIcon } from "lucide-react"
 
 import {
     DropdownMenu,
@@ -16,6 +16,7 @@ import {
 type ResumeCardActions = {
     onEdit: () => void
     onDelete: () => void
+    onShare: () => void
 }
 
 type ResumeCardProps = {
@@ -83,6 +84,10 @@ export default function ResumeCard({ resume, actions, isLastEdited }: ResumeCard
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
+                            <DropdownMenuItem onClick={actions.onShare}>
+                                <Share2Icon />
+                                Share link
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={actions.onEdit}>
                                 <PencilIcon />
                                 Edit Details

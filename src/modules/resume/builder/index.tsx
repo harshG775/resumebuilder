@@ -26,6 +26,7 @@ import { ResumePreview } from "./preview"
 import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "./preview/templates"
 import { downloadBlob } from "#/lib/download"
+import { copyResumeShareLink } from "#/lib/share-resume-link"
 import { TemplatesSection } from "./design"
 
 type BuilderProps = {
@@ -84,20 +85,8 @@ export default function Builder({ resume }: BuilderProps) {
         downloadBlob(jsonBytes, `${resume.slug || "resume"}.json`, "application/json")
     }
 
-    async function handleShare() {
-        if (!username) {
-            toast.error("Add a username in your profile to get a shareable link.")
-            return
-        }
-        const url = `${window.location.origin}/${username}/${resume.slug}`
-        try {
-            await navigator.clipboard.writeText(url)
-            toast.success("Link copied to clipboard", { description: url })
-        } catch (err) {
-            toast.error("Couldn't copy link", {
-                description: err instanceof Error ? err.message : "Please try again.",
-            })
-        }
+    function handleShare() {
+        copyResumeShareLink(username, resume.slug)
     }
 
     return (
