@@ -1,11 +1,14 @@
 import { Button } from "#/components/ui/button"
 import { Logo } from "#/components/logo.tsx"
+import { to } from "#/lib/await-to"
+import { getAllResumeFn } from "#/lib/server/resume.function"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import {
     ArrowRightIcon,
     CloudCheckIcon,
     Columns3Icon,
     FileDownIcon,
+    FileTextIcon,
     GripVerticalIcon,
     Link2Icon,
     LayoutTemplateIcon,
@@ -15,6 +18,12 @@ import {
 } from "lucide-react"
 
 export const Route = createFileRoute("/")({
+    loader: async ({ context }) => {
+        if (!context.session?.user) return { recentResume: null }
+        const [error, result] = await to(getAllResumeFn({ data: { page: 1, pageSize: 1 } }))
+        if (error) return { recentResume: null }
+        return { recentResume: result.data[0] ?? null }
+    },
     component: Home,
 })
 
@@ -71,6 +80,7 @@ const steps = [
 
 function Home() {
     const { session } = Route.useRouteContext()
+    const { recentResume } = Route.useLoaderData()
     const isSignedIn = Boolean(session?.user)
 
     return (
@@ -251,18 +261,56 @@ function Home() {
 
                 <section className="mx-auto w-full max-w-3xl px-6 pb-24 text-center">
                     <div className="rounded-3xl border border-border bg-card/60 px-8 py-12 backdrop-blur-sm">
-                        <h2 className="text-2xl font-semibold tracking-tight">
-                            {isSignedIn ? "Pick up where you left off" : "Ready to build yours?"}
-                        </h2>
-                        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-                            {isSignedIn
-                                ? "Jump back into your resumes and keep editing."
-                                : "Sign in with Google and start editing — free, no credit card required."}
-                        </p>
-                        <Button nativeButton={false} size="lg" className="mt-6" render={<Link to="/dashboard" />}>
-                            <span>{isSignedIn ? "Go to Dashboard" : "Get Started"}</span>
-                            <ArrowRightIcon />
-                        </Button>
+                        {isSignedIn && recentResume ? (
+                            <>
+                                <h2 className="text-2xl font-semibold tracking-tight">Pick up where you left off</h2>
+                                <div className="mx-auto mt-4 flex max-w-sm items-center gap-3 rounded-2xl border border-border bg-background/60 p-3 text-left">
+                                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                                        <FileTextIcon className="size-4" />
+                                    </span>
+                                    <div className="min-w-0">
+                                        <p className="truncate text-sm font-medium">{recentResume.title}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                            Last edited {new Date(recentResume.updatedAt).toDateString()}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Button
+                                    nativeButton={false}
+                                    size="lg"
+                                    className="mt-6"
+                                    render={
+                                        <Link
+                                            to="/builder/resumes/$resume_id"
+                                            params={{ resume_id: recentResume.id }}
+                                        />
+                                    }
+                                >
+                                    <span>Continue editing</span>
+                                    <ArrowRightIcon />
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <h2 className="text-2xl font-semibold tracking-tight">
+                                    {isSignedIn ? "Create your first resume" : "Ready to build yours?"}
+                                </h2>
+                                <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+                                    {isSignedIn
+                                        ? "Head to your dashboard and start from a clean template."
+                                        : "Sign in with Google and start editing — free, no credit card required."}
+                                </p>
+                                <Button
+                                    nativeButton={false}
+                                    size="lg"
+                                    className="mt-6"
+                                    render={<Link to="/dashboard" />}
+                                >
+                                    <span>{isSignedIn ? "Go to Dashboard" : "Get Started"}</span>
+                                    <ArrowRightIcon />
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </section>
             </main>

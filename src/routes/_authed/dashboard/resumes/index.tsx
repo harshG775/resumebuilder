@@ -217,10 +217,11 @@ function RouteComponent() {
             <div className="flex-1 overflow-auto p-3 sm:p-4 lg:p-6">
                 <main>
                     <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
-                        {resumes.map((resume) => (
+                        {resumes.map((resume, index) => (
                             <ResumeCard
                                 key={resume.id}
                                 resume={resume}
+                                isLastEdited={resumes.length > 1 && index === 0}
                                 actions={{
                                     onEdit: () => setEditingResume(resume),
                                     onDelete: async () => {
