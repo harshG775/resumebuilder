@@ -17,26 +17,31 @@ import {
 
 import { Link, useLocation } from "@tanstack/react-router"
 import { DashboardNavUser } from "./dashboard-nav-user"
-import { FileTextIcon } from "lucide-react"
+import { FileTextIcon, UserCircleIcon } from "lucide-react"
 import { Logo } from "#/components/logo.tsx"
 
-const navMain: {
+type NavItemType = {
     title: string
     href: LinkProps["to"]
     icon: LucideIcon
-    badge: string
-}[] = [
+}
+
+const navMain: NavItemType[] = [
     {
         title: "Resumes",
         href: "/dashboard/resumes",
         icon: FileTextIcon,
-        badge: "",
     },
 ]
 
-const navPlatforms = []
+const navSettings: NavItemType[] = [
+    {
+        title: "Profile",
+        href: "/dashboard/profile",
+        icon: UserCircleIcon,
+    },
+]
 
-const navSettings = []
 export function DashboardSidebar() {
     const pathname = useLocation({ select: (location) => location.pathname })
     return (
@@ -62,11 +67,26 @@ export function DashboardSidebar() {
                                         <item.icon />
                                         <span>{item.title}</span>
                                     </span>
-                                    {item.badge && (
-                                        <Badge variant="secondary" className="ml-auto text-xs px-1.5 py-0 h-5">
-                                            {item.badge}
-                                        </Badge>
-                                    )}
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {navSettings.map((item) => (
+                            <SidebarMenuItem key={item.href}>
+                                <SidebarMenuButton
+                                    render={<Link to={item.href} />}
+                                    isActive={pathname === item.href}
+                                    tooltip={item.title}
+                                    className="flex items-center justify-between"
+                                >
+                                    <span className="flex items-center gap-2">
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </span>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         ))}

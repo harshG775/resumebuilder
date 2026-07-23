@@ -18,6 +18,7 @@ import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
+import { Route as AuthedDashboardProfileIndexRouteImport } from './routes/_authed/dashboard/profile/index'
 import { Route as AuthedBuilderResumesResume_idRouteImport } from './routes/_authed/builder/resumes/$resume_id'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -65,6 +66,12 @@ const AuthedDashboardResumesIndexRoute =
     path: '/resumes/',
     getParentRoute: () => AuthedDashboardRouteRoute,
   } as any)
+const AuthedDashboardProfileIndexRoute =
+  AuthedDashboardProfileIndexRouteImport.update({
+    id: '/profile/',
+    path: '/profile/',
+    getParentRoute: () => AuthedDashboardRouteRoute,
+  } as any)
 const AuthedBuilderResumesResume_idRoute =
   AuthedBuilderResumesResume_idRouteImport.update({
     id: '/resumes/$resume_id',
@@ -81,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof AuthedDashboardIndexRoute
   '/sign-in/': typeof PublicSignInIndexRoute
   '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
+  '/dashboard/profile/': typeof AuthedDashboardProfileIndexRoute
   '/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthedDashboardIndexRoute
   '/sign-in': typeof PublicSignInIndexRoute
   '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
+  '/dashboard/profile': typeof AuthedDashboardProfileIndexRoute
   '/dashboard/resumes': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesById {
@@ -104,6 +113,7 @@ export interface FileRoutesById {
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/_public/sign-in/': typeof PublicSignInIndexRoute
   '/_authed/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
+  '/_authed/dashboard/profile/': typeof AuthedDashboardProfileIndexRoute
   '/_authed/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRouteTypes {
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/sign-in/'
     | '/builder/resumes/$resume_id'
+    | '/dashboard/profile/'
     | '/dashboard/resumes/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/sign-in'
     | '/builder/resumes/$resume_id'
+    | '/dashboard/profile'
     | '/dashboard/resumes'
   id:
     | '__root__'
@@ -139,6 +151,7 @@ export interface FileRouteTypes {
     | '/_authed/dashboard/'
     | '/_public/sign-in/'
     | '/_authed/builder/resumes/$resume_id'
+    | '/_authed/dashboard/profile/'
     | '/_authed/dashboard/resumes/'
   fileRoutesById: FileRoutesById
 }
@@ -216,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardResumesIndexRouteImport
       parentRoute: typeof AuthedDashboardRouteRoute
     }
+    '/_authed/dashboard/profile/': {
+      id: '/_authed/dashboard/profile/'
+      path: '/profile'
+      fullPath: '/dashboard/profile/'
+      preLoaderRoute: typeof AuthedDashboardProfileIndexRouteImport
+      parentRoute: typeof AuthedDashboardRouteRoute
+    }
     '/_authed/builder/resumes/$resume_id': {
       id: '/_authed/builder/resumes/$resume_id'
       path: '/resumes/$resume_id'
@@ -251,11 +271,13 @@ const AuthedBuilderRouteRouteWithChildren =
 
 interface AuthedDashboardRouteRouteChildren {
   AuthedDashboardIndexRoute: typeof AuthedDashboardIndexRoute
+  AuthedDashboardProfileIndexRoute: typeof AuthedDashboardProfileIndexRoute
   AuthedDashboardResumesIndexRoute: typeof AuthedDashboardResumesIndexRoute
 }
 
 const AuthedDashboardRouteRouteChildren: AuthedDashboardRouteRouteChildren = {
   AuthedDashboardIndexRoute: AuthedDashboardIndexRoute,
+  AuthedDashboardProfileIndexRoute: AuthedDashboardProfileIndexRoute,
   AuthedDashboardResumesIndexRoute: AuthedDashboardResumesIndexRoute,
 }
 
