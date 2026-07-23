@@ -33,6 +33,7 @@ function RouteComponent() {
         <Builder
             resume={{
                 id: resume.data.id,
+                title: resume.data.title,
                 slug: resume.data.slug,
                 content: resume.data.content,
             }}
