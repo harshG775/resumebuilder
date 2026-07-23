@@ -18,11 +18,11 @@ import { toast } from "sonner"
 import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
-import { resumeSeedValues } from "../data/resume-seed-values"
 import { ResumePreview } from "./preview"
 import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "./preview/templates"
 import { downloadBlob } from "#/lib/download"
+import { TemplatesSection } from "./design"
 
 type BuilderProps = {
     resume: { id: string; slug: string; content: ResumeValues }
@@ -120,16 +120,7 @@ export default function Builder({ resume }: BuilderProps) {
             }
             design={
                 <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
-                    <button
-                        onClick={() =>
-                            updateMutation.mutate({
-                                data: { id: resume.id, updatePayload: { content: resumeSeedValues } },
-                            })
-                        }
-                    >
-                        resumeSeedValues
-                    </button>
-                    design
+                    <TemplatesSection form={form} />
                 </FieldGroup>
             }
             preview={
