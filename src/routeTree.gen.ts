@@ -11,12 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UsernameSlugRouteImport } from './routes/$username/$slug'
 import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashboard/route'
 import { Route as AuthedBuilderRouteRouteImport } from './routes/_authed/builder/route'
 import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/index'
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
+import { Route as AuthedDashboardProfileIndexRouteImport } from './routes/_authed/dashboard/profile/index'
 import { Route as AuthedBuilderResumesResume_idRouteImport } from './routes/_authed/builder/resumes/$resume_id'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -26,6 +28,11 @@ const PublicRouteRoute = PublicRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsernameSlugRoute = UsernameSlugRouteImport.update({
+  id: '/$username/$slug',
+  path: '/$username/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthedDashboardRouteRoute = AuthedDashboardRouteRouteImport.update({
@@ -59,6 +66,12 @@ const AuthedDashboardResumesIndexRoute =
     path: '/resumes/',
     getParentRoute: () => AuthedDashboardRouteRoute,
   } as any)
+const AuthedDashboardProfileIndexRoute =
+  AuthedDashboardProfileIndexRouteImport.update({
+    id: '/profile/',
+    path: '/profile/',
+    getParentRoute: () => AuthedDashboardRouteRoute,
+  } as any)
 const AuthedBuilderResumesResume_idRoute =
   AuthedBuilderResumesResume_idRouteImport.update({
     id: '/resumes/$resume_id',
@@ -70,19 +83,23 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/builder': typeof AuthedBuilderRouteRouteWithChildren
   '/dashboard': typeof AuthedDashboardRouteRouteWithChildren
+  '/$username/$slug': typeof UsernameSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/': typeof AuthedDashboardIndexRoute
   '/sign-in/': typeof PublicSignInIndexRoute
   '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
+  '/dashboard/profile/': typeof AuthedDashboardProfileIndexRoute
   '/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/builder': typeof AuthedBuilderRouteRouteWithChildren
+  '/$username/$slug': typeof UsernameSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard': typeof AuthedDashboardIndexRoute
   '/sign-in': typeof PublicSignInIndexRoute
   '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
+  '/dashboard/profile': typeof AuthedDashboardProfileIndexRoute
   '/dashboard/resumes': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRoutesById {
@@ -91,10 +108,12 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/_authed/builder': typeof AuthedBuilderRouteRouteWithChildren
   '/_authed/dashboard': typeof AuthedDashboardRouteRouteWithChildren
+  '/$username/$slug': typeof UsernameSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/_public/sign-in/': typeof PublicSignInIndexRoute
   '/_authed/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
+  '/_authed/dashboard/profile/': typeof AuthedDashboardProfileIndexRoute
   '/_authed/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
 }
 export interface FileRouteTypes {
@@ -103,19 +122,23 @@ export interface FileRouteTypes {
     | '/'
     | '/builder'
     | '/dashboard'
+    | '/$username/$slug'
     | '/api/auth/$'
     | '/dashboard/'
     | '/sign-in/'
     | '/builder/resumes/$resume_id'
+    | '/dashboard/profile/'
     | '/dashboard/resumes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/builder'
+    | '/$username/$slug'
     | '/api/auth/$'
     | '/dashboard'
     | '/sign-in'
     | '/builder/resumes/$resume_id'
+    | '/dashboard/profile'
     | '/dashboard/resumes'
   id:
     | '__root__'
@@ -123,10 +146,12 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_authed/builder'
     | '/_authed/dashboard'
+    | '/$username/$slug'
     | '/api/auth/$'
     | '/_authed/dashboard/'
     | '/_public/sign-in/'
     | '/_authed/builder/resumes/$resume_id'
+    | '/_authed/dashboard/profile/'
     | '/_authed/dashboard/resumes/'
   fileRoutesById: FileRoutesById
 }
@@ -135,6 +160,7 @@ export interface RootRouteChildren {
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   AuthedBuilderRouteRoute: typeof AuthedBuilderRouteRouteWithChildren
   AuthedDashboardRouteRoute: typeof AuthedDashboardRouteRouteWithChildren
+  UsernameSlugRoute: typeof UsernameSlugRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -152,6 +178,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$username/$slug': {
+      id: '/$username/$slug'
+      path: '/$username/$slug'
+      fullPath: '/$username/$slug'
+      preLoaderRoute: typeof UsernameSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authed/dashboard': {
@@ -196,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardResumesIndexRouteImport
       parentRoute: typeof AuthedDashboardRouteRoute
     }
+    '/_authed/dashboard/profile/': {
+      id: '/_authed/dashboard/profile/'
+      path: '/profile'
+      fullPath: '/dashboard/profile/'
+      preLoaderRoute: typeof AuthedDashboardProfileIndexRouteImport
+      parentRoute: typeof AuthedDashboardRouteRoute
+    }
     '/_authed/builder/resumes/$resume_id': {
       id: '/_authed/builder/resumes/$resume_id'
       path: '/resumes/$resume_id'
@@ -231,11 +271,13 @@ const AuthedBuilderRouteRouteWithChildren =
 
 interface AuthedDashboardRouteRouteChildren {
   AuthedDashboardIndexRoute: typeof AuthedDashboardIndexRoute
+  AuthedDashboardProfileIndexRoute: typeof AuthedDashboardProfileIndexRoute
   AuthedDashboardResumesIndexRoute: typeof AuthedDashboardResumesIndexRoute
 }
 
 const AuthedDashboardRouteRouteChildren: AuthedDashboardRouteRouteChildren = {
   AuthedDashboardIndexRoute: AuthedDashboardIndexRoute,
+  AuthedDashboardProfileIndexRoute: AuthedDashboardProfileIndexRoute,
   AuthedDashboardResumesIndexRoute: AuthedDashboardResumesIndexRoute,
 }
 
@@ -247,6 +289,7 @@ const rootRouteChildren: RootRouteChildren = {
   PublicRouteRoute: PublicRouteRouteWithChildren,
   AuthedBuilderRouteRoute: AuthedBuilderRouteRouteWithChildren,
   AuthedDashboardRouteRoute: AuthedDashboardRouteRouteWithChildren,
+  UsernameSlugRoute: UsernameSlugRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

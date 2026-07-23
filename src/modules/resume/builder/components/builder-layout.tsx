@@ -12,7 +12,7 @@ import { Separator } from "#/components/ui/separator"
 import { useIsMobile } from "#/hooks/use-mobile"
 import { cn } from "#/lib/utils"
 import { Link } from "@tanstack/react-router"
-import { ChevronDownIcon, EyeIcon, HomeIcon, PaletteIcon, PanelLeftIcon, PanelRightIcon, SquarePenIcon } from "lucide-react"
+import { EyeIcon, HomeIcon, PaletteIcon, PanelLeftIcon, PanelRightIcon, PencilIcon, SquarePenIcon } from "lucide-react"
 import { useState } from "react"
 import type React from "react"
 import { usePanelRef } from "react-resizable-panels"
@@ -31,16 +31,20 @@ type BuilderLayoutProps = {
     editor: React.ReactNode
     preview: React.ReactNode
     design: React.ReactNode
+    shareAction?: React.ReactNode
     downloadAction?: React.ReactNode
     isSaving?: boolean
+    onEditTitle?: () => void
 }
 export default function BuilderLayout({
     title,
     editor,
     preview,
     design,
+    shareAction,
     downloadAction,
     isSaving,
+    onEditTitle,
 }: BuilderLayoutProps) {
     const isMobile = useIsMobile()
     const [activePanel, setActivePanel] = useState<PanelKey>("preview")
@@ -94,12 +98,16 @@ export default function BuilderLayout({
                             <BreadcrumbItem className="min-w-0">
                                 <BreadcrumbPage className="truncate">{title}</BreadcrumbPage>
                             </BreadcrumbItem>
-                            <Button variant={"ghost"}>
-                                <ChevronDownIcon />
-                            </Button>
+                            {onEditTitle && (
+                                <Button variant={"ghost"} size="icon-sm" onClick={onEditTitle}>
+                                    <PencilIcon />
+                                    <span className="sr-only">Edit resume name and link</span>
+                                </Button>
+                            )}
                         </BreadcrumbList>
                     </Breadcrumb>
                     <div className="flex-1 flex gap-2 justify-end items-center">
+                        {shareAction}
                         {downloadAction}
                         <Separator orientation="vertical" className="h-4 my-auto" />
                         {!isMobile && (

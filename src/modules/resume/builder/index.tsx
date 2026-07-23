@@ -1,9 +1,13 @@
+import { Button } from "#/components/ui/button"
 import { FieldGroup, FieldSeparator } from "#/components/ui/field"
 import { useAppForm } from "#/hooks/form"
+import { useHost } from "#/hooks/use-host"
+import { authClient } from "#/lib/auth/auth-client"
 import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
 import BuilderLayout from "./components/builder-layout"
 import { DownloadDialog } from "./components/download-dialog"
+import { EditResumeDialog } from "./components/edit-resume-dialog"
 import {
     BasicsSection,
     CertificationsSection,
@@ -13,7 +17,7 @@ import {
     SkillsSection,
     SummarySection,
 } from "./Editor"
-import { FileJsonIcon, FileTextIcon } from "lucide-react"
+import { FileJsonIcon, FileTextIcon, Share2Icon } from "lucide-react"
 import { toast } from "sonner"
 import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
@@ -25,9 +29,14 @@ import { downloadBlob } from "#/lib/download"
 import { TemplatesSection } from "./design"
 
 type BuilderProps = {
-    resume: { id: string; slug: string; content: ResumeValues }
+    resume: { id: string; title: string; slug: string; content: ResumeValues }
 }
 export default function Builder({ resume }: BuilderProps) {
+    const host = useHost()
+    const { data: session } = authClient.useSession()
+    const username = session?.user.username ?? ""
+    const [isEditingTitle, setIsEditingTitle] = useState(false)
+
     const updateMutation = useMutation({
         mutationFn: updateResumeContentFn,
         scope: { id: `resume-${resume.id}` },
@@ -75,59 +84,95 @@ export default function Builder({ resume }: BuilderProps) {
         downloadBlob(jsonBytes, `${resume.slug || "resume"}.json`, "application/json")
     }
 
+    async function handleShare() {
+        if (!username) {
+            toast.error("Add a username in your profile to get a shareable link.")
+            return
+        }
+        const url = `${window.location.origin}/${username}/${resume.slug}`
+        try {
+            await navigator.clipboard.writeText(url)
+            toast.success("Link copied to clipboard", { description: url })
+        } catch (err) {
+            toast.error("Couldn't copy link", {
+                description: err instanceof Error ? err.message : "Please try again.",
+            })
+        }
+    }
+
     return (
-        <BuilderLayout
-            isSaving={updateMutation.isPending}
-            downloadAction={
-                <DownloadDialog
-                    isDownloading={isDownloadingPdf}
-                    formats={[
-                        {
-                            key: "pdf",
-                            icon: <FileTextIcon />,
-                            title: "PDF",
-                            description: "Best for applications, sharing, and printing.",
-                            onDownload: handleDownloadPdf,
-                            isDownloading: isDownloadingPdf,
-                        },
-                        {
-                            key: "json",
-                            icon: <FileJsonIcon />,
-                            title: "JSON",
-                            description: "Full resume data for backup or import.",
-                            onDownload: handleDownloadJson,
-                        },
-                    ]}
+        <>
+            <BuilderLayout
+                isSaving={updateMutation.isPending}
+                onEditTitle={() => setIsEditingTitle(true)}
+                shareAction={
+                    <Button variant="outline" size="sm" onClick={handleShare}>
+                        <Share2Icon />
+                        <span className="sr-only sm:not-sr-only">Share</span>
+                    </Button>
+                }
+                downloadAction={
+                    <DownloadDialog
+                        isDownloading={isDownloadingPdf}
+                        formats={[
+                            {
+                                key: "pdf",
+                                icon: <FileTextIcon />,
+                                title: "PDF",
+                                description: "Best for applications, sharing, and printing.",
+                                onDownload: handleDownloadPdf,
+                                isDownloading: isDownloadingPdf,
+                            },
+                            {
+                                key: "json",
+                                icon: <FileJsonIcon />,
+                                title: "JSON",
+                                description: "Full resume data for backup or import.",
+                                onDownload: handleDownloadJson,
+                            },
+                        ]}
+                    />
+                }
+                title={resume.title || "Untitled resume"}
+                editor={
+                    <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
+                        <BasicsSection form={form} />
+                        <FieldSeparator />
+                        <SummarySection form={form} />
+                        <FieldSeparator />
+                        <SkillsSection form={form} />
+                        <FieldSeparator />
+                        <ExperienceSection form={form} />
+                        <FieldSeparator />
+                        <ProjectsSection form={form} />
+                        <FieldSeparator />
+                        <EducationSection form={form} />
+                        <FieldSeparator />
+                        <CertificationsSection form={form} />
+                    </FieldGroup>
+                }
+                design={
+                    <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
+                        <TemplatesSection form={form} />
+                    </FieldGroup>
+                }
+                preview={
+                    <form.Subscribe selector={(state) => state.values}>
+                        {(values) => <ResumePreview resumeData={values} />}
+                    </form.Subscribe>
+                }
+            />
+            {isEditingTitle && (
+                <EditResumeDialog
+                    resume={{ id: resume.id, title: resume.title, slug: resume.slug }}
+                    host={host}
+                    username={username}
+                    open
+                    onOpenChange={(open) => {
+                        if (!open) setIsEditingTitle(false)
+                    }}
                 />
-            }
-            title={resume.slug || "Untitled resume"}
-            editor={
-                <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
-                    <BasicsSection form={form} />
-                    <FieldSeparator />
-                    <SummarySection form={form} />
-                    <FieldSeparator />
-                    <SkillsSection form={form} />
-                    <FieldSeparator />
-                    <ExperienceSection form={form} />
-                    <FieldSeparator />
-                    <ProjectsSection form={form} />
-                    <FieldSeparator />
-                    <EducationSection form={form} />
-                    <FieldSeparator />
-                    <CertificationsSection form={form} />
-                </FieldGroup>
-            }
-            design={
-                <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
-                    <TemplatesSection form={form} />
-                </FieldGroup>
-            }
-            preview={
-                <form.Subscribe selector={(state) => state.values}>
-                    {(values) => <ResumePreview resumeData={values} />}
-                </form.Subscribe>
-            }
-        />
+            )}
+        </>
     )
 }

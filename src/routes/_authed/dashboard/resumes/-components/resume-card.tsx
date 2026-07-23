@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router"
+import { Badge } from "#/components/ui/badge"
 import { Button } from "#/components/ui/button"
 import { Skeleton } from "#/components/ui/skeleton"
-import { FolderIcon, MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react"
+import { FolderIcon, HistoryIcon, MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react"
 
 import {
     DropdownMenu,
@@ -26,9 +27,10 @@ type ResumeCardProps = {
         updatedAt: Date
     }
     actions: ResumeCardActions
+    isLastEdited?: boolean
 }
 
-export default function ResumeCard({ resume, actions }: ResumeCardProps) {
+export default function ResumeCard({ resume, actions, isLastEdited }: ResumeCardProps) {
     return (
         <Link
             to={"/builder/resumes/$resume_id"}
@@ -36,9 +38,18 @@ export default function ResumeCard({ resume, actions }: ResumeCardProps) {
                 resume_id: resume.id,
             }}
             key={resume.id}
-            className="relative bg-card text-card-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] border"
+            className={`relative bg-card text-card-foreground shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] border ${
+                isLastEdited ? "ring-2 ring-primary/50" : ""
+            }`}
         >
-            <div className="aspect-9/12 bg-muted"></div>
+            <div className="relative aspect-9/12 bg-muted">
+                {isLastEdited && (
+                    <Badge className="absolute left-2 top-2">
+                        <HistoryIcon />
+                        Last edited
+                    </Badge>
+                )}
+            </div>
             <div className="px-4 py-3">
                 <h3>{resume.title}</h3>
                 <div className="text-xs text-muted-foreground">Last Updated {resume.updatedAt.toDateString()}</div>

@@ -1,13 +1,13 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
-import { createResumeFn, deleteResumeFn, getAllResumeFn, updateResumeFn } from "#/lib/server/resume.function"
+import { createResumeFn, deleteResumeFn, getAllResumeFn } from "#/lib/server/resume.function"
 import { Button } from "#/components/ui/button"
-import { FileTextIcon, PencilIcon, PlusIcon } from "lucide-react"
+import { FileTextIcon, PlusIcon } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
 import ResumeCard, { ResumeCardSkeleton } from "./-components/resume-card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Skeleton } from "#/components/ui/skeleton"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "#/hooks/form"
 import { Field, FieldGroup } from "#/components/ui/field"
@@ -15,7 +15,10 @@ import { SidebarTrigger } from "#/components/ui/sidebar"
 import { Separator } from "#/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "#/components/ui/breadcrumb"
 import { Spinner } from "#/components/ui/spinner"
-import { z } from "zod"
+import { authClient } from "#/lib/auth/auth-client"
+import { useHost } from "#/hooks/use-host"
+import { generateBaseSlug } from "#/lib/utils"
+import { EditResumeDialog, SlugField, resumeFormSchema } from "#/modules/resume/builder/components/edit-resume-dialog"
 
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
     beforeLoad: async () => {
@@ -27,10 +30,6 @@ export const Route = createFileRoute("/_authed/dashboard/resumes/")({
 })
 
 type Resume = Awaited<ReturnType<typeof getAllResumeFn>>["data"][number]
-
-const resumeFormSchema = z.object({
-    title: z.string().min(1, "Resume title is required"),
-})
 
 function RoutePendingComponent() {
     return (
@@ -48,24 +47,35 @@ function RoutePendingComponent() {
     )
 }
 
-function CreateResumeDialog() {
+function CreateResumeDialog({ host, username }: { host: string; username: string }) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
+    const slugTouchedRef = useRef(false)
 
     const createMutation = useMutation({
         mutationFn: createResumeFn,
         scope: { id: "resume-create" },
-        onSuccess: ({ data }) => {
-            toast.success(`${data.title} created!`)
+        onSuccess: (result) => {
+            if (!result.success) {
+                toast.error(result.error)
+                return
+            }
+            toast.success(`${result.data.title} created!`)
             router.invalidate()
             form.reset()
             setIsOpen(false)
+        },
+        onError: (err) => {
+            toast.error("Failed to create resume", {
+                description: err instanceof Error ? err.message : "Please try again.",
+            })
         },
     })
 
     const form = useAppForm({
         defaultValues: {
             title: "",
+            slug: "",
         },
         validators: {
             onMount: resumeFormSchema,
@@ -73,7 +83,7 @@ function CreateResumeDialog() {
         },
         onSubmit: async ({ value }) => {
             await createMutation.mutateAsync({
-                data: { title: value.title },
+                data: { title: value.title, slug: value.slug },
             })
         },
     })
@@ -84,6 +94,7 @@ function CreateResumeDialog() {
                 const confirmed = window.confirm("Discard this new resume?")
                 if (!confirmed) return
             }
+            slugTouchedRef.current = false
             form.reset()
         }
         setIsOpen(nextOpen)
@@ -114,7 +125,31 @@ function CreateResumeDialog() {
                             <FieldGroup>
                                 <form.AppField
                                     name="title"
+                                    listeners={{
+                                        onChange: ({ value }) => {
+                                            if (!slugTouchedRef.current) {
+                                                form.setFieldValue("slug", generateBaseSlug(value))
+                                            }
+                                        },
+                                    }}
                                     children={(field) => <field.TextField label="Resume Title" />}
+                                />
+                                <form.AppField
+                                    name="slug"
+                                    children={(field) => (
+                                        <SlugField
+                                            field={field}
+                                            host={host}
+                                            username={username}
+                                            onManualEdit={() => {
+                                                slugTouchedRef.current = true
+                                            }}
+                                            onRegenerate={() => {
+                                                slugTouchedRef.current = false
+                                                field.handleChange(generateBaseSlug(form.state.values.title))
+                                            }}
+                                        />
+                                    )}
                                 />
                                 <Field orientation="horizontal" className="justify-end">
                                     <form.Subscribe selector={(s) => [s.isSubmitting, s.canSubmit] as const}>
@@ -141,107 +176,13 @@ function CreateResumeDialog() {
     )
 }
 
-function EditResumeDialog({
-    resume,
-    open,
-    onOpenChange,
-}: {
-    resume: Resume
-    open: boolean
-    onOpenChange: (open: boolean) => void
-}) {
-    const router = useRouter()
-
-    const updateMutation = useMutation({
-        mutationFn: updateResumeFn,
-        scope: { id: `resume-${resume.id}` },
-        onSuccess: ({ data }) => {
-            toast.success(`${data.title} updated!`)
-            router.invalidate()
-            onOpenChange(false)
-        },
-    })
-
-    const form = useAppForm({
-        defaultValues: {
-            title: resume.title,
-        },
-        validators: {
-            onMount: resumeFormSchema,
-            onChange: resumeFormSchema,
-        },
-        onSubmit: async ({ value }) => {
-            await updateMutation.mutateAsync({
-                data: {
-                    id: resume.id,
-                    updatePayload: { title: value.title },
-                },
-            })
-        },
-    })
-
-    function handleOpenChange(nextOpen: boolean) {
-        const hasChanges = JSON.stringify(form.state.values) !== JSON.stringify({ title: resume.title })
-
-        if (!nextOpen && hasChanges) {
-            const confirmed = window.confirm("Discard your changes?")
-            if (!confirmed) return
-        }
-        onOpenChange(nextOpen)
-    }
-
-    return (
-        <Dialog open={open} onOpenChange={handleOpenChange}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle className="flex gap-2 items-center">
-                        <PencilIcon className="size-5" />
-                        Update Resume
-                    </DialogTitle>
-                    <DialogDescription>
-                        Changed your mind? Rename your resume to something more descriptive.
-                    </DialogDescription>
-                </DialogHeader>
-                <form.AppForm>
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault()
-                            form.handleSubmit()
-                        }}
-                    >
-                        <FieldGroup>
-                            <form.AppField
-                                name="title"
-                                children={(field) => <field.TextField label="Resume Title" />}
-                            />
-                            <Field orientation="horizontal" className="justify-end">
-                                <form.Subscribe selector={(s) => [s.isSubmitting, s.canSubmit] as const}>
-                                    {([isSubmitting, canSubmit]) => (
-                                        <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                                            {isSubmitting ? (
-                                                <>
-                                                    <Spinner />
-                                                    Saving...
-                                                </>
-                                            ) : (
-                                                "Save"
-                                            )}
-                                        </Button>
-                                    )}
-                                </form.Subscribe>
-                            </Field>
-                        </FieldGroup>
-                    </form>
-                </form.AppForm>
-            </DialogContent>
-        </Dialog>
-    )
-}
-
 function RouteComponent() {
     const router = useRouter()
     const { resumes } = Route.useRouteContext()
     const [editingResume, setEditingResume] = useState<Resume | null>(null)
+    const host = useHost()
+    const { data: session } = authClient.useSession()
+    const username = session?.user.username ?? ""
 
     const deleteMutation = useMutation({
         mutationFn: deleteResumeFn,
@@ -270,16 +211,17 @@ function RouteComponent() {
                 </Breadcrumb>
 
                 <div className="ml-auto flex items-center gap-2">
-                    <CreateResumeDialog />
+                    <CreateResumeDialog host={host} username={username} />
                 </div>
             </header>
             <div className="flex-1 overflow-auto p-3 sm:p-4 lg:p-6">
                 <main>
                     <section className="mt-4 grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
-                        {resumes.map((resume) => (
+                        {resumes.map((resume, index) => (
                             <ResumeCard
                                 key={resume.id}
                                 resume={resume}
+                                isLastEdited={resumes.length > 1 && index === 0}
                                 actions={{
                                     onEdit: () => setEditingResume(resume),
                                     onDelete: async () => {
@@ -299,6 +241,8 @@ function RouteComponent() {
                     <EditResumeDialog
                         key={editingResume.id}
                         resume={editingResume}
+                        host={host}
+                        username={username}
                         open
                         onOpenChange={(open) => {
                             if (!open) setEditingResume(null)
