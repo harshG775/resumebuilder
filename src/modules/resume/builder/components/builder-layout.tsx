@@ -198,7 +198,7 @@ export default function BuilderLayout({
                     </nav>
                 )}
             </div>
-            <div className="flex-1 fixed inset-0">{preview}</div>
+            <div className="flex-1 fixed inset-0 bg-muted">{preview}</div>
         </>
     )
 }
