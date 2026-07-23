@@ -10,9 +10,9 @@ export function cn(...inputs: ClassValue[]) {
 
 function generateBaseSlug(text: string): string {
     return slugify(text, {
-        lower: true, // Force lowercase
-        strict: true, // Strip special characters like symbols, emojis, and punctuation
-        trim: true, // Remove leading/trailing spaces
+        lower: true,
+        strict: true,
+        trim: true,
     })
 }
 
