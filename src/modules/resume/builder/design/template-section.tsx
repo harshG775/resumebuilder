@@ -17,7 +17,7 @@ import type { TemplateId } from "../preview/templates"
 
 const isSameTemplate = (a: TemplateId, b: TemplateId): boolean => (a as string) === (b as string)
 
-const COMING_SOON_TEMPLATES = ["Modern", "Minimal", "Creative"]
+const COMING_SOON_TEMPLATES = ["Minimal", "Creative"]
 
 function TemplateThumbnail({ thumbnail }: { thumbnail?: string }) {
     if (thumbnail) {

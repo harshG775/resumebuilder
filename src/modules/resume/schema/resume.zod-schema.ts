@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 //
-const TemplateZodSchema = z.enum(["classic"])
+const TemplateZodSchema = z.enum(["classic", "modern"])
 
 const WebsiteSchema = z.object({
     hidden: z.boolean(),
