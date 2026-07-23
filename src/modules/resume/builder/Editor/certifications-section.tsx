@@ -110,7 +110,7 @@ function CertificationDialog({
                         }}
                     />
                 }
-                className="md:max-w-2xl lg:max-w-3xl h-[calc(90vh)] overflow-y-scroll"
+                className="md:max-w-2xl lg:max-w-3xl max-h-[calc(90vh)] overflow-y-auto"
             >
                 <DialogHeader>
                     <DialogTitle>

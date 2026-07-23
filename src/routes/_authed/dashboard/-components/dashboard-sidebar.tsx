@@ -42,7 +42,9 @@ export function DashboardSidebar() {
     return (
         <Sidebar>
             <SidebarHeader className="h-16  flex flex-col justify-center">
-                <Logo />
+                <Link to="/">
+                    <Logo />
+                </Link>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>

@@ -1,6 +1,6 @@
 import type { ResumeValues } from "#/modules/resume/schema/resume.zod-schema"
 
-export type TemplateId = "classic"
+export type TemplateId = "classic" | "modern"
 
 export type TemplateMeta = {
     id: TemplateId

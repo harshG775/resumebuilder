@@ -5,19 +5,19 @@ type SectionKey = ResumeValues["meta"]["layout"]["pages"][number]["main"][number
 
 const DEFAULT_SECTION_ORDER: SectionKey[] = ["summary", "skill", "experience", "project", "education", "certification"]
 
-const mutedSeparator = ` #text(fill: color-muted)[ | ] `
+const mutedSeparator = ` #text(fill: color-muted)[ • ] `
 
 const linkMarkup = (url: string, label: string) =>
-    `#link("${url}")[#underline(stroke: 0.5pt + color-muted, evade: true)[#text(fill: color-muted)[${escapeTypst(label)}]]]`
+    `#link("${url}")[#text(fill: color-accent, weight: 600)[${escapeTypst(label)}]]`
 
 // `basics.website.value` is stored without a scheme (the editor UI shows "https://" as a
 // fixed prefix). Add it back here, unless the value already carries one from older data.
 const withScheme = (url: string, scheme = "https://") => (/^[a-z][a-z0-9+.-]*:/i.test(url) ? url : `${scheme}${url}`)
 
 // ── SECTIONS ────────────────────────────────────────────────────────────
-// Each section is a standalone function of the full resume values so it can be
-// looked up and reordered by key via `meta.layout.pages[].main`. `basics` is
-// the only section not driven by that list — it's always rendered first.
+// Same shape as the classic template: each section is a standalone function of
+// the full resume values, looked up and reordered by key via `meta.layout.pages[].main`.
+// `basics` is the only section not driven by that list — it's always rendered first.
 const template = {
     basics(values: ResumeValues): string {
         const { basics } = values
@@ -42,7 +42,7 @@ const template = {
 = ${escapeTypst(basics.name)}
 ${
     basics.headline
-        ? `#text(size: 11pt, weight: 600)[${escapeTypst(basics.headline)}] \\
+        ? `#text(size: 11pt, fill: color-accent, weight: 600)[${escapeTypst(basics.headline)}] \\
 #v(-2pt)`
         : ""
 }
@@ -53,6 +53,8 @@ ${
 ]`
         : ""
 }
+#v(2pt)
+#line(length: 100%, stroke: 2pt + color-accent)
 `
     },
 
@@ -80,7 +82,7 @@ ${sections.summary.content}
 ${visibleSkills
     .map(
         (skill) =>
-            `#text(weight: 700)[${escapeTypst(skill.name)}:] ${skill.keywords.map(escapeTypst).join(", ")}\n#v(-3pt)`,
+            `#text(weight: 700, fill: color-accent)[${escapeTypst(skill.name)}:] ${skill.keywords.map(escapeTypst).join(", ")}\n#v(-3pt)`,
     )
     .join("\n")}
 `
@@ -100,7 +102,7 @@ ${visibleExperience
         (e) => `
 #block(breakable: false, width: 100%)[
     === ${escapeTypst(e.position)} #h(1fr) #date-range[${escapeTypst(e.startDate)}][${escapeTypst(e.endDate)}]
-    #text(fill: color-text)[${escapeTypst(e.company)}]${
+    #text(fill: color-accent, weight: 600)[${escapeTypst(e.company)}]${
         e.location ? ` #text(fill: color-muted)[| #text(style: "italic")[${escapeTypst(e.location)}]]` : ""
     }
     ${e.content}
@@ -130,7 +132,7 @@ ${visibleProjects
         return `
 #block(breakable: false, width: 100%)[
     === ${escapeTypst(p.name)}${linkHeader}
-    ${tech ? `#text(fill: color-muted, style: "italic")[${tech}]` : ""}
+    ${tech ? `#text(fill: color-accent, style: "italic")[${tech}]` : ""}
     ${p.content}
 ]
 #v(0.4em)
@@ -154,7 +156,7 @@ ${visibleEducation
         (e) => `
 #block(breakable: false, width: 100%)[
     === ${escapeTypst(e.degree)}${e.area ? `, ${escapeTypst(e.area)}` : ""} #h(1fr) #date-range[${escapeTypst(e.startDate)}][${escapeTypst(e.endDate)}]
-    #text(fill: color-muted, style: "italic")[${escapeTypst(e.school)}]
+    #text(fill: color-accent, style: "italic")[${escapeTypst(e.school)}]
     ${e.grade ? `#text(size: 8.5pt, fill: color-muted)[Grade: ${escapeTypst(e.grade)}]` : ""}
     ${e.content}
 ]
@@ -179,7 +181,7 @@ ${visibleCertifications
         (c) => `
 #block(breakable: false, width: 100%)[
     === ${escapeTypst(c.title)} #h(1fr) #text(size: 9pt, fill: color-date)[${escapeTypst(c.date)}]
-    #text(fill: color-muted, style: "italic")[${escapeTypst(c.issuer)}]
+    #text(fill: color-accent, style: "italic")[${escapeTypst(c.issuer)}]
     ${c.content}
 ]
 #v(0.4em)
@@ -190,10 +192,10 @@ ${visibleCertifications
     },
 } satisfies Record<SectionKey | "basics", (values: ResumeValues) => string>
 
-export const classicTemplate: ResumeTemplate = {
+export const modernTemplate: ResumeTemplate = {
     meta: {
-        id: "classic",
-        label: "Classic",
+        id: "modern",
+        label: "Modern",
     },
 
     render: (values) => {
@@ -208,40 +210,40 @@ export const classicTemplate: ResumeTemplate = {
 #set document(author: "${escapeTypst(basics.name)}", title: "${escapeTypst(basics.name)}")
 #set page(
     paper: "a4",
-    margin: 0.25in,
+    margin: 0.4in,
     fill: white,
 )
 
-#let color-heading = rgb("#1e3a8a")
-#let color-text = rgb("#111827")
-#let color-muted = rgb("#374151")
+#let color-heading = rgb("#111827")
+#let color-accent = rgb("#0d9488")
+#let color-text = rgb("#1f2937")
+#let color-muted = rgb("#6b7280")
 #let color-date = rgb("#6b7280")
 
-#let font-serif = "Georgia"
 #let font-sans = "Arial"
 
 #set text(font: font-sans, size: 9.4pt, fill: color-text, ligatures: false)
 #set par(leading: 0.70em, justify: false)
 
-#show link: set text(fill: color-muted)
+#show link: set text(fill: color-accent)
 
-#show heading.where(level: 1): it => block(below: 6pt)[
-    #set text(font: font-serif, size: 20pt, weight: 800, fill: color-heading)
+#show heading.where(level: 1): it => block(below: 4pt)[
+    #set text(font: font-sans, size: 21pt, weight: 800, fill: color-heading)
     #it.body
 ]
 
-#show heading.where(level: 2): it => block(above: 8pt)[
-    #pad(top: 0.6em, bottom: -8pt)[ #text(font: font-serif, weight: 800, fill: color-heading)[#upper(it.body)] ]
-    #line(length: 100%, stroke: 0.8pt + luma(30%).transparentize(30%))
-    #v(-2pt)
+#show heading.where(level: 2): it => block(above: 10pt, below: 4pt)[
+    #text(font: font-sans, size: 10.5pt, weight: 800, fill: color-accent)[#upper(it.body)]
+    #v(-6pt)
+    #line(length: 100%, stroke: 0.6pt + color-accent.transparentize(50%))
 ]
 
 #show heading.where(level: 3): it => [
-    #set text(size: 9.8pt, weight: 700, fill: color-text)
+    #set text(size: 9.8pt, weight: 700, fill: color-heading)
     #block(width: 100%, it.body)
 ]
 
-#let date-range(s, e) = text(size: 9pt, fill: color-date)[ #s - #e ]
+#let date-range(s, e) = text(size: 9pt, fill: color-date)[ #s – #e ]
 
 // ── HEADER ──────────────────────────────────────────────────────────────
 ${template.basics(values)}

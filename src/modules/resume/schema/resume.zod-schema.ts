@@ -1,11 +1,13 @@
 import { z } from "zod"
 
 //
-const TemplateZodSchema = z.enum(["classic"])
+const TemplateZodSchema = z.enum(["classic", "modern"])
 
 const WebsiteSchema = z.object({
     hidden: z.boolean(),
-    value: z.url().or(z.literal("")),
+    // Stored without a scheme (e.g. "harshgaur.in") — the "https://" prefix is
+    // attached by the field UI and re-attached by the template at render time.
+    value: z.string(),
     label: z.string(),
 })
 
