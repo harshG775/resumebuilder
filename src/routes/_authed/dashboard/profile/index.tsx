@@ -10,11 +10,12 @@ import { SidebarTrigger } from "#/components/ui/sidebar"
 import { Skeleton } from "#/components/ui/skeleton"
 import { Spinner } from "#/components/ui/spinner"
 import { useAppForm } from "#/hooks/form"
+import { useHost } from "#/hooks/use-host"
 import { getCurrentUserFn, updateProfileFn } from "#/lib/server/user.function"
 import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { CalendarIcon, Link2Icon, PencilIcon, UserCircleIcon } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -42,14 +43,6 @@ const profileFormSchema = z.object({
 
 function formatMemberSince(date: string | Date) {
     return new Date(date).toLocaleDateString(undefined, { month: "long", year: "numeric" })
-}
-
-function useHost() {
-    const [host, setHost] = useState("")
-    useEffect(() => {
-        setHost(window.location.host)
-    }, [])
-    return host
 }
 
 function PublicLink({ host, username }: { host: string; username: string }) {

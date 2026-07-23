@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
-function generateBaseSlug(text: string): string {
+export function generateBaseSlug(text: string): string {
     return slugify(text, {
         lower: true,
         strict: true,

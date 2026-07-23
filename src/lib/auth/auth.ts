@@ -5,6 +5,7 @@ import { db } from "../db"
 import * as schema from "#/lib/db/schema/index"
 import { env } from "#/env"
 import { generateUniqueSlug } from "#/lib/utils"
+// import { customSession } from "better-auth/plugins"
 
 export const auth = betterAuth({
     baseURL: env.SERVER_URL,
@@ -23,6 +24,15 @@ export const auth = betterAuth({
             prompt: "select_account",
             clientId: env.GOOGLE_CLIENT_ID,
             clientSecret: env.GOOGLE_CLIENT_SECRET,
+        },
+    },
+    user: {
+        additionalFields: {
+            username: {
+                type: "string",
+                required: false,
+                input: false,
+            },
         },
     },
     databaseHooks: {

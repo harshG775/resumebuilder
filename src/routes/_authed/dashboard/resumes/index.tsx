@@ -1,21 +1,27 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { createResumeFn, deleteResumeFn, getAllResumeFn, updateResumeFn } from "#/lib/server/resume.function"
 import { Button } from "#/components/ui/button"
-import { FileTextIcon, PencilIcon, PlusIcon } from "lucide-react"
+import { FileTextIcon, Link2Icon, PencilIcon, PlusIcon, RefreshCwIcon } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
 import ResumeCard, { ResumeCardSkeleton } from "./-components/resume-card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Skeleton } from "#/components/ui/skeleton"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "#/hooks/form"
 import { Field, FieldGroup } from "#/components/ui/field"
+import { Label } from "#/components/ui/label"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "#/components/ui/input-group"
 import { SidebarTrigger } from "#/components/ui/sidebar"
 import { Separator } from "#/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "#/components/ui/breadcrumb"
 import { Spinner } from "#/components/ui/spinner"
+import { authClient } from "#/lib/auth/auth-client"
+import { useHost } from "#/hooks/use-host"
+import { generateBaseSlug } from "#/lib/utils"
 import { z } from "zod"
+import type { AnyFieldApi } from "@tanstack/react-form"
 
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
     beforeLoad: async () => {
@@ -28,8 +34,15 @@ export const Route = createFileRoute("/_authed/dashboard/resumes/")({
 
 type Resume = Awaited<ReturnType<typeof getAllResumeFn>>["data"][number]
 
+const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+
 const resumeFormSchema = z.object({
     title: z.string().min(1, "Resume title is required"),
+    slug: z
+        .string()
+        .min(1, "Slug is required")
+        .max(60, "Slug is too long")
+        .regex(slugRegex, "Lowercase letters, numbers, and hyphens only"),
 })
 
 function RoutePendingComponent() {
@@ -48,24 +61,92 @@ function RoutePendingComponent() {
     )
 }
 
-function CreateResumeDialog() {
+function SlugField({
+    field,
+    host,
+    username,
+    onManualEdit,
+    onRegenerate,
+}: {
+    field: AnyFieldApi
+    host: string
+    username: string
+    onManualEdit: () => void
+    onRegenerate: () => void
+}) {
+    const errors = field.state.meta.errors as Array<string | { message: string }>
+
+    return (
+        <div>
+            <div className="mb-2 flex items-center justify-between">
+                <Label htmlFor="slug" className="text-md font-bold">
+                    Slug
+                </Label>
+                <button
+                    type="button"
+                    onClick={onRegenerate}
+                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                >
+                    <RefreshCwIcon className="size-3" />
+                    Regenerate from title
+                </button>
+            </div>
+            <InputGroup>
+                <InputGroupAddon>
+                    <Link2Icon />
+                    <span className="truncate">
+                        {host}/{username}/
+                    </span>
+                </InputGroupAddon>
+                <InputGroupInput
+                    id="slug"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => {
+                        onManualEdit()
+                        field.handleChange(e.target.value)
+                    }}
+                />
+            </InputGroup>
+            {field.state.meta.isTouched && errors.length > 0 && (
+                <div className="mt-1 font-bold text-red-500">
+                    {errors.map((error) => (typeof error === "string" ? error : error.message)).join(", ")}
+                </div>
+            )}
+            <p className="mt-1 text-xs text-muted-foreground">This is the public URL for your resume.</p>
+        </div>
+    )
+}
+
+function CreateResumeDialog({ host, username }: { host: string; username: string }) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
+    const slugTouchedRef = useRef(false)
 
     const createMutation = useMutation({
         mutationFn: createResumeFn,
         scope: { id: "resume-create" },
-        onSuccess: ({ data }) => {
-            toast.success(`${data.title} created!`)
+        onSuccess: (result) => {
+            if (!result.success) {
+                toast.error(result.error)
+                return
+            }
+            toast.success(`${result.data.title} created!`)
             router.invalidate()
             form.reset()
             setIsOpen(false)
+        },
+        onError: (err) => {
+            toast.error("Failed to create resume", {
+                description: err instanceof Error ? err.message : "Please try again.",
+            })
         },
     })
 
     const form = useAppForm({
         defaultValues: {
             title: "",
+            slug: "",
         },
         validators: {
             onMount: resumeFormSchema,
@@ -73,7 +154,7 @@ function CreateResumeDialog() {
         },
         onSubmit: async ({ value }) => {
             await createMutation.mutateAsync({
-                data: { title: value.title },
+                data: { title: value.title, slug: value.slug },
             })
         },
     })
@@ -84,6 +165,7 @@ function CreateResumeDialog() {
                 const confirmed = window.confirm("Discard this new resume?")
                 if (!confirmed) return
             }
+            slugTouchedRef.current = false
             form.reset()
         }
         setIsOpen(nextOpen)
@@ -114,7 +196,31 @@ function CreateResumeDialog() {
                             <FieldGroup>
                                 <form.AppField
                                     name="title"
+                                    listeners={{
+                                        onChange: ({ value }) => {
+                                            if (!slugTouchedRef.current) {
+                                                form.setFieldValue("slug", generateBaseSlug(value))
+                                            }
+                                        },
+                                    }}
                                     children={(field) => <field.TextField label="Resume Title" />}
+                                />
+                                <form.AppField
+                                    name="slug"
+                                    children={(field) => (
+                                        <SlugField
+                                            field={field}
+                                            host={host}
+                                            username={username}
+                                            onManualEdit={() => {
+                                                slugTouchedRef.current = true
+                                            }}
+                                            onRegenerate={() => {
+                                                slugTouchedRef.current = false
+                                                field.handleChange(generateBaseSlug(form.state.values.title))
+                                            }}
+                                        />
+                                    )}
                                 />
                                 <Field orientation="horizontal" className="justify-end">
                                     <form.Subscribe selector={(s) => [s.isSubmitting, s.canSubmit] as const}>
@@ -143,10 +249,14 @@ function CreateResumeDialog() {
 
 function EditResumeDialog({
     resume,
+    host,
+    username,
     open,
     onOpenChange,
 }: {
     resume: Resume
+    host: string
+    username: string
     open: boolean
     onOpenChange: (open: boolean) => void
 }) {
@@ -155,17 +265,26 @@ function EditResumeDialog({
     const updateMutation = useMutation({
         mutationFn: updateResumeFn,
         scope: { id: `resume-${resume.id}` },
-        onSuccess: ({ data }) => {
-            toast.success(`${data.title} updated!`)
+        onSuccess: (result) => {
+            if (!result.success) {
+                toast.error(result.error)
+                return
+            }
+            toast.success(`${result.data.title} updated!`)
             router.invalidate()
             onOpenChange(false)
         },
+        onError: (err) => {
+            toast.error("Failed to update resume", {
+                description: err instanceof Error ? err.message : "Please try again.",
+            })
+        },
     })
 
+    const defaultValues = { title: resume.title, slug: resume.slug }
+
     const form = useAppForm({
-        defaultValues: {
-            title: resume.title,
-        },
+        defaultValues,
         validators: {
             onMount: resumeFormSchema,
             onChange: resumeFormSchema,
@@ -174,14 +293,14 @@ function EditResumeDialog({
             await updateMutation.mutateAsync({
                 data: {
                     id: resume.id,
-                    updatePayload: { title: value.title },
+                    updatePayload: { title: value.title, slug: value.slug },
                 },
             })
         },
     })
 
     function handleOpenChange(nextOpen: boolean) {
-        const hasChanges = JSON.stringify(form.state.values) !== JSON.stringify({ title: resume.title })
+        const hasChanges = JSON.stringify(form.state.values) !== JSON.stringify(defaultValues)
 
         if (!nextOpen && hasChanges) {
             const confirmed = window.confirm("Discard your changes?")
@@ -199,7 +318,7 @@ function EditResumeDialog({
                         Update Resume
                     </DialogTitle>
                     <DialogDescription>
-                        Changed your mind? Rename your resume to something more descriptive.
+                        Changed your mind? Rename your resume or update its public link.
                     </DialogDescription>
                 </DialogHeader>
                 <form.AppForm>
@@ -213,6 +332,20 @@ function EditResumeDialog({
                             <form.AppField
                                 name="title"
                                 children={(field) => <field.TextField label="Resume Title" />}
+                            />
+                            <form.AppField
+                                name="slug"
+                                children={(field) => (
+                                    <SlugField
+                                        field={field}
+                                        host={host}
+                                        username={username}
+                                        onManualEdit={() => {}}
+                                        onRegenerate={() => {
+                                            field.handleChange(generateBaseSlug(form.state.values.title))
+                                        }}
+                                    />
+                                )}
                             />
                             <Field orientation="horizontal" className="justify-end">
                                 <form.Subscribe selector={(s) => [s.isSubmitting, s.canSubmit] as const}>
@@ -242,6 +375,9 @@ function RouteComponent() {
     const router = useRouter()
     const { resumes } = Route.useRouteContext()
     const [editingResume, setEditingResume] = useState<Resume | null>(null)
+    const host = useHost()
+    const { data: session } = authClient.useSession()
+    const username = session?.user.username ?? ""
 
     const deleteMutation = useMutation({
         mutationFn: deleteResumeFn,
@@ -270,7 +406,7 @@ function RouteComponent() {
                 </Breadcrumb>
 
                 <div className="ml-auto flex items-center gap-2">
-                    <CreateResumeDialog />
+                    <CreateResumeDialog host={host} username={username} />
                 </div>
             </header>
             <div className="flex-1 overflow-auto p-3 sm:p-4 lg:p-6">
@@ -299,6 +435,8 @@ function RouteComponent() {
                     <EditResumeDialog
                         key={editingResume.id}
                         resume={editingResume}
+                        host={host}
+                        username={username}
                         open
                         onOpenChange={(open) => {
                             if (!open) setEditingResume(null)
