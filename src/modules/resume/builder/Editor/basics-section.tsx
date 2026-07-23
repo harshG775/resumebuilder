@@ -49,38 +49,48 @@ export const BasicsSection = withForm({
                     )}
                 />
 
-                <form.AppField
-                    name={`basics.email.value`}
-                    children={(field) => (
-                        <Field>
-                            <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                            <Input
-                                type="email"
-                                id={field.name}
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                autoComplete="off"
-                            />
-                        </Field>
+                <form.AppField name={`basics.email.value`}>
+                    {(valueField) => (
+                        <form.AppField name={`basics.email.label`}>
+                            {(labelField) => (
+                                <WebsiteField
+                                    id={valueField.name}
+                                    label="Email"
+                                    type="email"
+                                    prefix="mailto:"
+                                    value={valueField.state.value}
+                                    onValueChange={valueField.handleChange}
+                                    onBlur={valueField.handleBlur}
+                                    linkLabel={labelField.state.value}
+                                    onLinkLabelChange={labelField.handleChange}
+                                    placeholder="you@example.com"
+                                    labelPlaceholder="e.g. Work Email"
+                                />
+                            )}
+                        </form.AppField>
                     )}
-                />
-                <form.AppField
-                    name={`basics.phone.label`}
-                    children={(field) => (
-                        <Field>
-                            <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
-                            <Input
-                                type="tel"
-                                id={field.name}
-                                value={field.state.value}
-                                onBlur={field.handleBlur}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                autoComplete="off"
-                            />
-                        </Field>
+                </form.AppField>
+                <form.AppField name={`basics.phone.value`}>
+                    {(valueField) => (
+                        <form.AppField name={`basics.phone.label`}>
+                            {(labelField) => (
+                                <WebsiteField
+                                    id={valueField.name}
+                                    label="Phone"
+                                    type="tel"
+                                    prefix="tel:"
+                                    value={valueField.state.value}
+                                    onValueChange={valueField.handleChange}
+                                    onBlur={valueField.handleBlur}
+                                    linkLabel={labelField.state.value}
+                                    onLinkLabelChange={labelField.handleChange}
+                                    placeholder="+1 (555) 000-0000"
+                                    labelPlaceholder="e.g. Mobile"
+                                />
+                            )}
+                        </form.AppField>
                     )}
-                />
+                </form.AppField>
 
                 <form.AppField
                     name={`basics.location`}
@@ -103,11 +113,13 @@ export const BasicsSection = withForm({
                             {(labelField) => (
                                 <WebsiteField
                                     id={valueField.name}
+                                    prefix="https://"
                                     value={valueField.state.value}
                                     onValueChange={valueField.handleChange}
                                     onBlur={valueField.handleBlur}
                                     linkLabel={labelField.state.value}
                                     onLinkLabelChange={labelField.handleChange}
+                                    placeholder="harshgaur.in"
                                 />
                             )}
                         </form.AppField>
