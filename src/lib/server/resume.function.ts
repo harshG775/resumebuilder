@@ -69,6 +69,7 @@ export const getResumeByIdFn = createServerFn({ method: "GET" })
                 title: resume.title,
                 content: resume.content,
                 slug: resume.slug,
+                thumbnail: resume.thumbnail,
                 createdAt: resume.createdAt,
                 updatedAt: resume.updatedAt,
             })

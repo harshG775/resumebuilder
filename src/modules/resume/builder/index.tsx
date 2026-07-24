@@ -21,7 +21,7 @@ import { FileJsonIcon, FileTextIcon, Share2Icon } from "lucide-react"
 import { toast } from "sonner"
 import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ResumePreview } from "./preview"
 import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "./preview/templates"
@@ -29,8 +29,15 @@ import { downloadBlob } from "#/lib/download"
 import { copyResumeShareLink } from "#/lib/share-resume-link"
 import { TemplatesSection } from "./design"
 
+async function generateResumeThumbnail(values: ResumeValues) {
+    const $typst = getTypst()
+    return $typst.svg({
+        mainContent: getTemplate(values.meta.template).render(values),
+    })
+}
+
 type BuilderProps = {
-    resume: { id: string; title: string; slug: string; content: ResumeValues }
+    resume: { id: string; title: string; slug: string; content: ResumeValues; thumbnail?: string | null }
 }
 export default function Builder({ resume }: BuilderProps) {
     const host = useHost()
@@ -43,6 +50,22 @@ export default function Builder({ resume }: BuilderProps) {
         scope: { id: `resume-${resume.id}` },
     })
 
+    const hasRequestedInitialThumbnail = useRef(false)
+    useEffect(() => {
+        if (resume.thumbnail || hasRequestedInitialThumbnail.current) return
+        hasRequestedInitialThumbnail.current = true
+
+        generateResumeThumbnail(resume.content)
+            .then((thumbnail) => {
+                updateMutation.mutate({
+                    data: { id: resume.id, updatePayload: { content: resume.content, thumbnail } },
+                })
+            })
+            .catch((err) => {
+                console.error("Failed to generate initial resume thumbnail", err)
+            })
+    }, [])
+
     const form = useAppForm({
         defaultValues: resume.content,
         validators: { onChange: ResumeZodSchema },
@@ -53,10 +76,7 @@ export default function Builder({ resume }: BuilderProps) {
                 const values = formApi.state.values
                 let thumbnail: string | undefined
                 try {
-                    const $typst = getTypst()
-                    thumbnail = await $typst.svg({
-                        mainContent: getTemplate(values.meta.template).render(values),
-                    })
+                    thumbnail = await generateResumeThumbnail(values)
                 } catch (err) {
                     console.error("Failed to generate resume thumbnail", err)
                 }
