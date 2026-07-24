@@ -47,12 +47,23 @@ export default function Builder({ resume }: BuilderProps) {
         defaultValues: resume.content,
         validators: { onChange: ResumeZodSchema },
         listeners: {
-            onChange: ({ formApi }) => {
-                if (formApi.state.isValid && formApi.state.isDirty) {
-                    updateMutation.mutate({
-                        data: { id: resume.id, updatePayload: { content: formApi.state.values } },
+            onChange: async ({ formApi }) => {
+                if (!formApi.state.isValid || !formApi.state.isDirty) return
+
+                const values = formApi.state.values
+                let thumbnail: string | undefined
+                try {
+                    const $typst = getTypst()
+                    thumbnail = await $typst.svg({
+                        mainContent: getTemplate(values.meta.template).render(values),
                     })
+                } catch (err) {
+                    console.error("Failed to generate resume thumbnail", err)
                 }
+
+                updateMutation.mutate({
+                    data: { id: resume.id, updatePayload: { content: values, thumbnail } },
+                })
             },
             onChangeDebounceMs: 800,
         },

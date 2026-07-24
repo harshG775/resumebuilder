@@ -14,6 +14,7 @@ export const resume = pgTable(
         slug: text("slug").notNull(),
 
         content: jsonb("content").$type<ResumeValues>().notNull().default(resumeDefaultValues),
+        thumbnail: text("thumbnail"),
 
         createdAt: timestamp("created_at").defaultNow().notNull(),
         updatedAt: timestamp("updated_at")
