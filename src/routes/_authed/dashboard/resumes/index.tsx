@@ -62,9 +62,12 @@ function CreateResumeDialog({ host, username }: { host: string; username: string
                 return
             }
             toast.success(`${result.data.title} created!`)
-            router.invalidate()
             form.reset()
             setIsOpen(false)
+            router.navigate({
+                to: "/builder/resumes/$resume_id",
+                params: { resume_id: result.data.id },
+            })
         },
         onError: (err) => {
             toast.error("Failed to create resume", {

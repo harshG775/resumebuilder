@@ -36,6 +36,7 @@ function RouteComponent() {
                 title: resume.data.title,
                 slug: resume.data.slug,
                 content: resume.data.content,
+                thumbnail: resume.data.thumbnail,
             }}
         />
     )

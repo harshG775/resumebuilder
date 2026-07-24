@@ -33,6 +33,7 @@ export const getAllResumeFn = createServerFn({ method: "GET" })
                     id: resume.id,
                     title: resume.title,
                     slug: resume.slug,
+                    thumbnail: resume.thumbnail,
                     createdAt: resume.createdAt,
                     updatedAt: resume.updatedAt,
                 })
@@ -68,6 +69,7 @@ export const getResumeByIdFn = createServerFn({ method: "GET" })
                 title: resume.title,
                 content: resume.content,
                 slug: resume.slug,
+                thumbnail: resume.thumbnail,
                 createdAt: resume.createdAt,
                 updatedAt: resume.updatedAt,
             })
@@ -238,6 +240,7 @@ export const updateResumeContentFn = createServerFn({ method: "POST" })
             id: z.string(),
             updatePayload: z.object({
                 content: ResumeZodSchema,
+                thumbnail: z.string().optional(),
             }),
         }),
     )
