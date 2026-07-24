@@ -31,19 +31,19 @@ export const resumeDefaultValues: ResumeValues = {
         },
         design: {
             colors: {
-                primary: "",
-                text: "",
-                background: "",
+                primary: "#1e3a8a",
+                text: "#111827",
+                background: "#ffffff",
             },
         },
         typography: {
             heading: {
-                fontFamily: "",
-                fontWeight: "",
+                fontFamily: "Georgia",
+                fontWeight: "800",
             },
             body: {
-                fontFamily: "",
-                fontWeight: "",
+                fontFamily: "Arial",
+                fontWeight: "400",
             },
         },
     },
