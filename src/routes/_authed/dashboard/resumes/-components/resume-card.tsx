@@ -77,7 +77,7 @@ export default function ResumeCard({ resume, actions, isLastEdited }: ResumeCard
                     <h3 className="truncate text-sm font-semibold">{resume.title}</h3>
                     <p className="flex items-center gap-1 text-xs text-muted-foreground">
                         <ClockIcon className="size-3" />
-                        {formatRelativeTime(resume.updatedAt)}
+                        <span suppressHydrationWarning>{formatRelativeTime(resume.updatedAt)}</span>
                     </p>
                 </div>
             </div>
