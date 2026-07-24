@@ -2,6 +2,7 @@ import { Button } from "#/components/ui/button"
 import { Logo } from "#/components/logo.tsx"
 import { to } from "#/lib/await-to"
 import { getAllResumeFn } from "#/lib/server/resume.function"
+import { formatRelativeTime } from "#/lib/utils"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import {
     ArrowRightIcon,
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/")({
         if (!context.session?.user) return { recentResume: null }
         const [error, result] = await to(getAllResumeFn({ data: { page: 1, pageSize: 1 } }))
         if (error) return { recentResume: null }
-        return { recentResume: result.data[0] ?? null }
+        return { recentResume: result?.data[0] ?? null }
     },
     component: Home,
 })
@@ -271,7 +272,7 @@ function Home() {
                                     <div className="min-w-0">
                                         <p className="truncate text-sm font-medium">{recentResume.title}</p>
                                         <p className="text-xs text-muted-foreground">
-                                            Last edited {new Date(recentResume.updatedAt).toDateString()}
+                                            Last edited {formatRelativeTime(new Date(recentResume.updatedAt))}
                                         </p>
                                     </div>
                                 </div>
