@@ -27,7 +27,7 @@ import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "./preview/templates"
 import { downloadBlob } from "#/lib/download"
 import { copyResumeShareLink } from "#/lib/share-resume-link"
-import { TemplatesSection } from "./design"
+import { LayoutSection, TemplatesSection } from "./design"
 
 async function generateResumeThumbnail(values: ResumeValues) {
     const $typst = getTypst()
@@ -174,6 +174,7 @@ export default function Builder({ resume }: BuilderProps) {
                 design={
                     <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
                         <TemplatesSection form={form} />
+                        <LayoutSection form={form} />
                     </FieldGroup>
                 }
                 preview={

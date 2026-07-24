@@ -174,7 +174,13 @@ export function SortableDragProvider<T>({ value, onChange, children }: SortableD
                     setItems(value)
                     return
                 }
-                onChange(() => itemsRef.current)
+                const next = itemsRef.current
+                const unchanged =
+                    next.length === value.length && next.every((item, idx) => item === value[idx])
+                if (unchanged) {
+                    return
+                }
+                onChange(() => next)
             }}
         >
             {children(items)}
