@@ -58,7 +58,9 @@ export const SortableItemRow = ({
                 role="button"
                 tabIndex={0}
                 aria-label={`Drag to reorder ${title}`}
-                className={"w-10 h-full rounded-none cursor-grab bg-muted text-muted-foreground hover:bg-muted/80 flex items-center justify-center"}
+                className={
+                    "w-10 h-full rounded-none cursor-grab bg-muted text-muted-foreground hover:bg-muted/80 flex items-center justify-center"
+                }
             >
                 <DotsSixVerticalIcon weight="bold" />
             </div>
@@ -175,8 +177,7 @@ export function SortableDragProvider<T>({ value, onChange, children }: SortableD
                     return
                 }
                 const next = itemsRef.current
-                const unchanged =
-                    next.length === value.length && next.every((item, idx) => item === value[idx])
+                const unchanged = next.length === value.length && next.every((item, idx) => item === value[idx])
                 if (unchanged) {
                     return
                 }
