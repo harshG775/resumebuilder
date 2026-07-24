@@ -272,7 +272,10 @@ function Home() {
                                     <div className="min-w-0">
                                         <p className="truncate text-sm font-medium">{recentResume.title}</p>
                                         <p className="text-xs text-muted-foreground">
-                                            Last edited {formatRelativeTime(new Date(recentResume.updatedAt))}
+                                            Last edited{" "}
+                                            <span suppressHydrationWarning>
+                                                {formatRelativeTime(new Date(recentResume.updatedAt))}
+                                            </span>
                                         </p>
                                     </div>
                                 </div>

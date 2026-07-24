@@ -1,9 +1,10 @@
 import { Button } from "#/components/ui/button"
-import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
+import { Field, FieldLabel, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { CalendarIcon, PlusIcon } from "lucide-react"
-import { DotsSixVerticalIcon } from "@phosphor-icons/react"
+import { DotsSixVerticalIcon, ListIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
+import { SectionFieldSet } from "../components/section-field-set"
 import { SortableDragItem, SortableDragProvider, SortableItemRow } from "../components/sortable-item"
 import { TagsInput } from "#/components/ui/tags-input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "#/components/ui/select"
@@ -255,9 +256,7 @@ function ProjectDialog({
                                                                 </div>
                                                                 <form.Field name={`links[${realIndex}].value`}>
                                                                     {(valueField) => (
-                                                                        <form.Field
-                                                                            name={`links[${realIndex}].label`}
-                                                                        >
+                                                                        <form.Field name={`links[${realIndex}].label`}>
                                                                             {(labelField) => (
                                                                                 <LinkField
                                                                                     id={valueField.name}
@@ -352,74 +351,74 @@ export const ProjectsSection = withForm({
                 mode="array"
                 children={(field) => {
                     return (
-                        <FieldSet>
-                            <FieldLegend className="font-bold text-2xl!">
-                                {form.state.values.sections.project.title}
-                            </FieldLegend>
-                            <FieldGroup>
-                                <div className="border divide-y rounded-md">
-                                    <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
-                                        {(items) =>
-                                            items.map((item, idx) => (
-                                                <SortableItemRow
-                                                    key={item.id}
-                                                    sortableProps={{
-                                                        index: idx,
-                                                        id: item.id,
-                                                    }}
-                                                    title={item.name}
-                                                    subtitle={`${item.startDate} - ${item.endDate}`}
-                                                    hidden={item.hidden}
-                                                    actions={{
-                                                        onToggleVisibility: (nextHidden) => {
-                                                            field.handleChange((prev) =>
-                                                                prev.map((i) =>
-                                                                    i.id === item.id ? { ...i, hidden: nextHidden } : i,
-                                                                ),
-                                                            )
-                                                        },
+                        <SectionFieldSet
+                            title={form.state.values.sections.project.title}
+                            actions={
+                                <Button variant={"ghost"}>
+                                    <ListIcon />
+                                </Button>
+                            }
+                        >
+                            <div className="border divide-y rounded-md">
+                                <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
+                                    {(items) =>
+                                        items.map((item, idx) => (
+                                            <SortableItemRow
+                                                key={item.id}
+                                                sortableProps={{
+                                                    index: idx,
+                                                    id: item.id,
+                                                }}
+                                                title={item.name}
+                                                subtitle={`${item.startDate} - ${item.endDate}`}
+                                                hidden={item.hidden}
+                                                actions={{
+                                                    onToggleVisibility: (nextHidden) => {
+                                                        field.handleChange((prev) =>
+                                                            prev.map((i) =>
+                                                                i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                            ),
+                                                        )
+                                                    },
 
-                                                        onEdit: () => {
-                                                            setEditingItem(item)
-                                                        },
+                                                    onEdit: () => {
+                                                        setEditingItem(item)
+                                                    },
 
-                                                        onDelete: () => {
-                                                            field.handleChange((prev) =>
-                                                                prev.filter((i) => i.id !== item.id),
-                                                            )
-                                                        },
-                                                    }}
-                                                />
-                                            ))
-                                        }
-                                    </SortableDragProvider>
-                                </div>
-                                <ProjectDialog
-                                    defaultValues={getEmptyProject()}
-                                    onSubmit={(value) =>
-                                        field.pushValue({
-                                            ...value,
-                                            id: crypto.randomUUID(),
-                                        })
+                                                    onDelete: () => {
+                                                        field.handleChange((prev) =>
+                                                            prev.filter((i) => i.id !== item.id),
+                                                        )
+                                                    },
+                                                }}
+                                            />
+                                        ))
                                     }
+                                </SortableDragProvider>
+                            </div>
+                            <ProjectDialog
+                                defaultValues={getEmptyProject()}
+                                onSubmit={(value) =>
+                                    field.pushValue({
+                                        ...value,
+                                        id: crypto.randomUUID(),
+                                    })
+                                }
+                            />
+                            {editingItem && (
+                                <ProjectDialog
+                                    key={editingItem.id}
+                                    mode="edit"
+                                    trigger={null}
+                                    initialOpen
+                                    defaultValues={editingItem}
+                                    onSubmit={(value) => {
+                                        field.handleChange((prev) => prev.map((i) => (i.id === value.id ? value : i)))
+                                    }}
+                                    onClosed={() => setEditingItem(null)}
                                 />
-                                {editingItem && (
-                                    <ProjectDialog
-                                        key={editingItem.id}
-                                        mode="edit"
-                                        trigger={null}
-                                        initialOpen
-                                        defaultValues={editingItem}
-                                        onSubmit={(value) => {
-                                            field.handleChange((prev) =>
-                                                prev.map((i) => (i.id === value.id ? value : i)),
-                                            )
-                                        }}
-                                        onClosed={() => setEditingItem(null)}
-                                    />
-                                )}
-                            </FieldGroup>
-                        </FieldSet>
+                            )}
+                        </SectionFieldSet>
                     )
                 }}
             />

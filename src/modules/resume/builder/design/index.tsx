@@ -1,1 +1,4 @@
+export { ColorsSection } from "./colors-section"
 export { TemplatesSection } from "./template-section"
+export { LayoutSection } from "./layout-section"
+export { TypographySection } from "./typography-section"

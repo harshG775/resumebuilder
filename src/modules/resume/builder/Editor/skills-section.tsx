@@ -1,15 +1,16 @@
 import { Button } from "#/components/ui/button"
-import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "#/components/ui/field"
+import { Field, FieldDescription, FieldLabel, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { PlusIcon } from "lucide-react"
 import { resumeFormOptions } from "../../data/resume-default-values"
+import { SectionFieldSet } from "../components/section-field-set"
 import { SortableDragProvider, SortableItemRow } from "../components/sortable-item"
 
 import { useForm } from "@tanstack/react-form"
 import { Input } from "#/components/ui/input"
 import { Slider } from "#/components/ui/slider"
 import { TagsInput } from "#/components/ui/tags-input"
-import { CaretDownIcon, ListIcon } from "@phosphor-icons/react"
+import { ListIcon } from "@phosphor-icons/react"
 import type { ResumeValues } from "../../schema/resume.zod-schema"
 import { useState } from "react"
 import type { ReactNode } from "react"
@@ -167,7 +168,11 @@ function SkillDialog({
                                             step={1}
                                         />
                                         <FieldDescription>
-                                            ({dialogField.state.value - 1 > 0 ? `${dialogField.state.value - 1}/5` : "hidden"})
+                                            (
+                                            {dialogField.state.value - 1 > 0
+                                                ? `${dialogField.state.value - 1}/5`
+                                                : "hidden"}
+                                            )
                                         </FieldDescription>
                                     </Field>
                                 )
@@ -222,80 +227,74 @@ export const SkillsSection = withForm({
                 mode="array"
                 children={(field) => {
                     return (
-                        <FieldSet>
-                            <FieldLegend className="font-bold text-2xl! flex items-center w-full">
-                                <Button variant={"ghost"}>
-                                    <CaretDownIcon />
-                                </Button>
-                                <div className="w-full">{form.state.values.sections.skill.title}</div>
+                        <SectionFieldSet
+                            title={form.state.values.sections.skill.title}
+                            actions={
                                 <Button variant={"ghost"}>
                                     <ListIcon />
                                 </Button>
-                            </FieldLegend>
-                            <FieldGroup>
-                                <div className="border divide-y rounded-md">
-                                    <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
-                                        {(items) =>
-                                            items.map((item, idx) => (
-                                                <SortableItemRow
-                                                    key={item.id}
-                                                    sortableProps={{
-                                                        index: idx,
-                                                        id: item.id,
-                                                    }}
-                                                    title={item.name}
-                                                    subtitle={item.keywords.join(", ")}
-                                                    hidden={item.hidden}
-                                                    actions={{
-                                                        onToggleVisibility: (nextHidden) => {
-                                                            field.handleChange((prev) =>
-                                                                prev.map((i) =>
-                                                                    i.id === item.id ? { ...i, hidden: nextHidden } : i,
-                                                                ),
-                                                            )
-                                                        },
+                            }
+                        >
+                            <div className="border divide-y rounded-md">
+                                <SortableDragProvider value={field.state.value} onChange={field.handleChange}>
+                                    {(items) =>
+                                        items.map((item, idx) => (
+                                            <SortableItemRow
+                                                key={item.id}
+                                                sortableProps={{
+                                                    index: idx,
+                                                    id: item.id,
+                                                }}
+                                                title={item.name}
+                                                subtitle={item.keywords.join(", ")}
+                                                hidden={item.hidden}
+                                                actions={{
+                                                    onToggleVisibility: (nextHidden) => {
+                                                        field.handleChange((prev) =>
+                                                            prev.map((i) =>
+                                                                i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                            ),
+                                                        )
+                                                    },
 
-                                                        onEdit: () => {
-                                                            setEditingItem(item)
-                                                        },
+                                                    onEdit: () => {
+                                                        setEditingItem(item)
+                                                    },
 
-                                                        onDelete: () => {
-                                                            field.handleChange((prev) =>
-                                                                prev.filter((i) => i.id !== item.id),
-                                                            )
-                                                        },
-                                                    }}
-                                                />
-                                            ))
-                                        }
-                                    </SortableDragProvider>
-                                </div>
-                                <SkillDialog
-                                    defaultValues={getEmptySkill()}
-                                    onSubmit={(value) =>
-                                        field.pushValue({
-                                            ...value,
-                                            id: crypto.randomUUID(),
-                                        })
+                                                    onDelete: () => {
+                                                        field.handleChange((prev) =>
+                                                            prev.filter((i) => i.id !== item.id),
+                                                        )
+                                                    },
+                                                }}
+                                            />
+                                        ))
                                     }
+                                </SortableDragProvider>
+                            </div>
+                            <SkillDialog
+                                defaultValues={getEmptySkill()}
+                                onSubmit={(value) =>
+                                    field.pushValue({
+                                        ...value,
+                                        id: crypto.randomUUID(),
+                                    })
+                                }
+                            />
+                            {editingItem && (
+                                <SkillDialog
+                                    key={editingItem.id}
+                                    mode="edit"
+                                    trigger={null}
+                                    initialOpen
+                                    defaultValues={editingItem}
+                                    onSubmit={(value) => {
+                                        field.handleChange((prev) => prev.map((i) => (i.id === value.id ? value : i)))
+                                    }}
+                                    onClosed={() => setEditingItem(null)}
                                 />
-                                {editingItem && (
-                                    <SkillDialog
-                                        key={editingItem.id}
-                                        mode="edit"
-                                        trigger={null}
-                                        initialOpen
-                                        defaultValues={editingItem}
-                                        onSubmit={(value) => {
-                                            field.handleChange((prev) =>
-                                                prev.map((i) => (i.id === value.id ? value : i)),
-                                            )
-                                        }}
-                                        onClosed={() => setEditingItem(null)}
-                                    />
-                                )}
-                            </FieldGroup>
-                        </FieldSet>
+                            )}
+                        </SectionFieldSet>
                     )
                 }}
             />

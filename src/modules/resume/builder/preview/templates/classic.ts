@@ -1,5 +1,6 @@
 import type { ResumeValues } from "#/modules/resume/schema/resume.zod-schema"
 import type { ResumeTemplate } from "./template.type"
+import { safeFontFamily, safeFontWeight, safeHex } from "./template-style"
 
 type SectionKey = ResumeValues["meta"]["layout"]["pages"][number]["main"][number]
 
@@ -197,41 +198,51 @@ export const classicTemplate: ResumeTemplate = {
     },
 
     render: (values) => {
-        const { basics } = values
+        const { basics, meta } = values
         const pages = values.meta.layout.pages.length > 0 ? values.meta.layout.pages : [{ main: DEFAULT_SECTION_ORDER }]
 
         const pagesMarkup = pages
             .map((page) => page.main.map((key) => template[key](values)).join("\n"))
             .join("\n#pagebreak()\n")
 
+        const primaryColor = safeHex(meta.design.colors.primary, "#1e3a8a")
+        const textColor = safeHex(meta.design.colors.text, "#111827")
+        const backgroundColor = safeHex(meta.design.colors.background, "#ffffff")
+
+        const headingFont = safeFontFamily(meta.typography.heading.fontFamily, "Georgia")
+        const headingWeight = safeFontWeight(meta.typography.heading.fontWeight, "800")
+        const bodyFont = safeFontFamily(meta.typography.body.fontFamily, "Arial")
+        const bodyWeight = safeFontWeight(meta.typography.body.fontWeight, "400")
+
         return `
 #set document(author: "${escapeTypst(basics.name)}", title: "${escapeTypst(basics.name)}")
 #set page(
     paper: "a4",
     margin: 0.25in,
-    fill: white,
+    fill: rgb("${backgroundColor}"),
 )
 
-#let color-heading = rgb("#1e3a8a")
-#let color-text = rgb("#111827")
+#let color-heading = rgb("${primaryColor}")
+#let color-text = rgb("${textColor}")
 #let color-muted = rgb("#374151")
 #let color-date = rgb("#6b7280")
 
-#let font-serif = "Georgia"
-#let font-sans = "Arial"
+#let font-serif = "${headingFont}"
+#let font-sans = "${bodyFont}"
 
-#set text(font: font-sans, size: 9.4pt, fill: color-text, ligatures: false)
+#set text(font: font-sans, size: 9.4pt, weight: ${bodyWeight}, fill: color-text, ligatures: false)
 #set par(leading: 0.70em, justify: false)
+#set list(spacing: 0.45em)
 
 #show link: set text(fill: color-muted)
 
 #show heading.where(level: 1): it => block(below: 6pt)[
-    #set text(font: font-serif, size: 20pt, weight: 800, fill: color-heading)
+    #set text(font: font-serif, size: 20pt, weight: ${headingWeight}, fill: color-heading)
     #it.body
 ]
 
 #show heading.where(level: 2): it => block(above: 8pt)[
-    #pad(top: 0.6em, bottom: -8pt)[ #text(font: font-serif, weight: 800, fill: color-heading)[#upper(it.body)] ]
+    #pad(top: 0.6em, bottom: -8pt)[ #text(font: font-serif, weight: ${headingWeight}, fill: color-heading)[#upper(it.body)] ]
     #line(length: 100%, stroke: 0.8pt + luma(30%).transparentize(30%))
     #v(-2pt)
 ]
