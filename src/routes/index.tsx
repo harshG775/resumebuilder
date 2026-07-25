@@ -1,5 +1,6 @@
 import { Button } from "#/components/ui/button"
 import { Logo } from "#/components/logo.tsx"
+import { siteConfig } from "#/config/site"
 import { to } from "#/lib/await-to"
 import { getAllResumeFn } from "#/lib/server/resume.function"
 import { formatRelativeTime } from "#/lib/utils"
@@ -27,6 +28,16 @@ export const Route = createFileRoute("/")({
     },
     component: Home,
 })
+
+/** Screenshot of the builder in action — drop a real image at e.g. public/hero-screenshot.png and set this. */
+const heroImage: string | null = null
+
+/** PLACEHOLDER — replace with real numbers once you have them. Set to null to hide the row. */
+const stats: { value: string; label: string }[] | null = [
+    { value: "10,000+", label: "Resumes created" },
+    { value: "100%", label: "Free forever" },
+    { value: "< 15 min", label: "Avg. time to build" },
+]
 
 const features = [
     {
@@ -57,7 +68,7 @@ const features = [
     {
         icon: Link2Icon,
         title: "Your own shareable link",
-        description: "Publish at resumebuilder.app/you/resume and send one link instead of an attachment",
+        description: `Publish at ${siteConfig.domain}/you/resume and send one link instead of an attachment`,
     },
 ]
 
@@ -125,13 +136,13 @@ function Home() {
                             Free forever · No credit card
                         </span>
 
-                        <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+                        <h1 className="max-w-2xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
                             Build a resume
                             <br />
                             <span className="text-muted-foreground">that gets you hired</span>
                         </h1>
 
-                        <p className="max-w-md text-base text-muted-foreground">
+                        <p className="max-w-md text-sm text-muted-foreground sm:text-base">
                             Edit, preview, and style your resume side-by-side. Export a print-ready PDF or share a
                             personal link — no attachments required.
                         </p>
@@ -152,73 +163,96 @@ function Home() {
                                 </Button>
                             )}
                         </div>
+
+                        {stats && (
+                            <div className="mt-2 grid w-full max-w-md grid-cols-3 gap-4 border-t border-border/60 pt-6">
+                                {stats.map((stat) => (
+                                    <div key={stat.label} className="flex flex-col items-center gap-0.5">
+                                        <span className="text-lg font-semibold tracking-tight sm:text-xl">
+                                            {stat.value}
+                                        </span>
+                                        <span className="text-[11px] text-muted-foreground sm:text-xs">
+                                            {stat.label}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </section>
 
-                <section className="mx-auto w-full max-w-4xl px-6 pb-14">
+                <section className="mx-auto w-full max-w-4xl px-4 pb-14 sm:px-6">
                     <div className="relative mx-auto w-full max-w-2xl">
                         <div
                             aria-hidden="true"
                             className="absolute -inset-4 -z-10 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--primary)_18%,transparent)_0%,transparent_70%)]"
                         />
-                        <div className="overflow-hidden rounded-3xl border border-border bg-card/60 text-left shadow-xl backdrop-blur-sm">
-                            <div className="flex items-center gap-2 border-b border-border bg-muted/40 px-4 py-3">
-                                <span className="size-2.5 rounded-full bg-destructive/50" />
-                                <span className="size-2.5 rounded-full bg-primary/40" />
-                                <span className="size-2.5 rounded-full bg-primary/60" />
-                                <span className="ml-3 flex items-center gap-1.5 text-xs text-muted-foreground">
-                                    <Link2Icon className="size-3" />
-                                    resumebuilder.app/alex/software-engineer
-                                </span>
-                                <span className="ml-auto flex items-center gap-1.5 text-[10px] font-medium text-primary">
-                                    <span className="size-1.5 animate-pulse rounded-full bg-primary" />
-                                    Live preview
-                                </span>
-                            </div>
-                            <div className="grid h-56 grid-cols-2 divide-x divide-border sm:h-64 sm:grid-cols-3">
-                                <div className="flex flex-col gap-2 p-3">
-                                    <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
-                                        Editor
+                        {heroImage ? (
+                            <img
+                                src={heroImage}
+                                alt="Resume Builder editor, live preview, and design panel"
+                                className="w-full rounded-3xl border border-border shadow-xl"
+                            />
+                        ) : (
+                            <div className="overflow-hidden rounded-3xl border border-border bg-card/60 text-left shadow-xl backdrop-blur-sm">
+                                <div className="flex items-center gap-2 border-b border-border bg-muted/40 px-3 py-2.5 sm:px-4 sm:py-3">
+                                    <span className="size-2.5 shrink-0 rounded-full bg-destructive/50" />
+                                    <span className="size-2.5 shrink-0 rounded-full bg-primary/40" />
+                                    <span className="size-2.5 shrink-0 rounded-full bg-primary/60" />
+                                    <span className="ml-2 flex min-w-0 flex-1 items-center gap-1.5 truncate text-xs text-muted-foreground sm:ml-3">
+                                        <Link2Icon className="size-3 shrink-0" />
+                                        <span className="truncate">{siteConfig.domain}/alex/software-engineer</span>
                                     </span>
-                                    {[...Array(5)].map((_, i) => (
-                                        <span
-                                            key={i}
-                                            className="h-2 rounded-full bg-muted"
-                                            style={{ width: `${80 - i * 10}%` }}
-                                        />
-                                    ))}
+                                    <span className="ml-auto hidden shrink-0 items-center gap-1.5 text-[10px] font-medium text-primary sm:flex">
+                                        <span className="size-1.5 animate-pulse rounded-full bg-primary" />
+                                        Live preview
+                                    </span>
                                 </div>
-                                <div className="flex items-center justify-center bg-background p-4">
-                                    <div className="flex h-full w-3/4 flex-col gap-1.5 rounded-md bg-card p-3 shadow-sm">
-                                        <span className="mb-1 h-2.5 w-2/3 rounded-full bg-primary/60" />
-                                        {[...Array(6)].map((_, i) => (
+                                <div className="grid h-56 grid-cols-2 divide-x divide-border sm:h-64 sm:grid-cols-3">
+                                    <div className="flex flex-col gap-2 p-2.5 sm:p-3">
+                                        <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                                            Editor
+                                        </span>
+                                        {[...Array(5)].map((_, i) => (
                                             <span
                                                 key={i}
-                                                className="h-1.5 rounded-full bg-muted"
-                                                style={{ width: `${90 - (i % 3) * 15}%` }}
+                                                className="h-2 rounded-full bg-muted"
+                                                style={{ width: `${80 - i * 10}%` }}
+                                            />
+                                        ))}
+                                    </div>
+                                    <div className="flex items-center justify-center bg-background p-3 sm:p-4">
+                                        <div className="flex h-full w-3/4 flex-col gap-1.5 rounded-md bg-card p-3 shadow-sm">
+                                            <span className="mb-1 h-2.5 w-2/3 rounded-full bg-primary/60" />
+                                            {[...Array(6)].map((_, i) => (
+                                                <span
+                                                    key={i}
+                                                    className="h-1.5 rounded-full bg-muted"
+                                                    style={{ width: `${90 - (i % 3) * 15}%` }}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="hidden flex-col gap-3 p-3 sm:flex">
+                                        <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                                            Design
+                                        </span>
+                                        <div className="flex gap-1.5">
+                                            <span className="size-4 rounded-full bg-primary" />
+                                            <span className="size-4 rounded-full bg-primary/50" />
+                                            <span className="size-4 rounded-full border border-border" />
+                                        </div>
+                                        {[...Array(3)].map((_, i) => (
+                                            <span
+                                                key={i}
+                                                className="h-2 rounded-full bg-muted"
+                                                style={{ width: `${70 - i * 10}%` }}
                                             />
                                         ))}
                                     </div>
                                 </div>
-                                <div className="hidden flex-col gap-3 p-3 sm:flex">
-                                    <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
-                                        Design
-                                    </span>
-                                    <div className="flex gap-1.5">
-                                        <span className="size-4 rounded-full bg-primary" />
-                                        <span className="size-4 rounded-full bg-primary/50" />
-                                        <span className="size-4 rounded-full border border-border" />
-                                    </div>
-                                    {[...Array(3)].map((_, i) => (
-                                        <span
-                                            key={i}
-                                            className="h-2 rounded-full bg-muted"
-                                            style={{ width: `${70 - i * 10}%` }}
-                                        />
-                                    ))}
-                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </section>
 
@@ -320,7 +354,19 @@ function Home() {
             </main>
 
             <footer className="border-t border-border/60 px-6 py-8 text-center text-xs text-muted-foreground">
-                © {new Date().getFullYear()} resumebuilder.app — free forever, no credit card required.
+                <p>
+                    © {new Date().getFullYear()} {siteConfig.domain} — free forever, no credit card required.
+                </p>
+                {siteConfig.links.donate && (
+                    <a
+                        href={siteConfig.links.donate}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 inline-block underline underline-offset-2 hover:text-foreground"
+                    >
+                        Support this project ☕
+                    </a>
+                )}
             </footer>
         </div>
     )
