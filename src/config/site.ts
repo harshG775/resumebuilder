@@ -5,6 +5,7 @@ export const siteConfig = {
     links: {
         github: null as string | null,
         linkedin: null as string | null,
-        donate: null as string | null,
+        // PLACEHOLDER — swap for your real donation link (Buy Me a Coffee, Ko-fi, GitHub Sponsors, etc.)
+        donate: "https://buymeacoffee.com/your-handle" as string | null,
     },
 }

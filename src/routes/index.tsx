@@ -1,4 +1,6 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "#/components/ui/accordion"
 import { Button } from "#/components/ui/button"
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "#/components/ui/sheet"
 import { Logo } from "#/components/logo.tsx"
 import { siteConfig } from "#/config/site"
 import { to } from "#/lib/await-to"
@@ -9,11 +11,14 @@ import {
     ArrowRightIcon,
     CloudCheckIcon,
     Columns3Icon,
+    CoffeeIcon,
     FileDownIcon,
     FileTextIcon,
     GripVerticalIcon,
+    HeartHandshakeIcon,
     Link2Icon,
     LayoutTemplateIcon,
+    MenuIcon,
     PaletteIcon,
     PlusIcon,
     Share2Icon,
@@ -32,18 +37,14 @@ export const Route = createFileRoute("/")({
 /** Screenshot of the builder in action — drop a real image at e.g. public/hero-screenshot.png and set this. */
 const heroImage: string | null = null
 
-/** PLACEHOLDER — replace with real numbers once you have them. Set to null to hide the row. */
-const stats: { value: string; label: string }[] | null = [
-    { value: "10,000+", label: "Resumes created" },
-    { value: "100%", label: "Free forever" },
-    { value: "< 15 min", label: "Avg. time to build" },
-]
+/** No real numbers yet — set to a real array once you have them, this hides the row until then. */
+const stats: { value: string; label: string }[] | null = null
 
 const features = [
     {
         icon: LayoutTemplateIcon,
         title: "Polished templates",
-        description: "Classic and Modern layouts, designed to read cleanly and parse well in ATS software",
+        description: "Classic and Modern layouts with a clean, single-column structure that's easy to scan",
     },
     {
         icon: Columns3Icon,
@@ -69,6 +70,60 @@ const features = [
         icon: Link2Icon,
         title: "Your own shareable link",
         description: `Publish at ${siteConfig.domain}/you/resume and send one link instead of an attachment`,
+    },
+]
+
+/** Anchors into sections on this page — add a matching `id` on the section once it exists. */
+const NAV_LINKS = [
+    { label: "Features", href: "#features" },
+    { label: "How it works", href: "#how-it-works" },
+    { label: "Templates", href: "#templates" },
+    { label: "FAQ", href: "#faq" },
+    { label: "Support", href: "#support" },
+]
+
+/** The two templates in `modules/resume/builder/preview/templates` — illustrative mockups, not real screenshots. */
+const templates = [
+    {
+        id: "classic",
+        name: "Classic",
+        description:
+            "A traditional single-column layout with clean rules and generous whitespace — reads well for corporate and conservative roles.",
+        accentClassName: "bg-foreground/70",
+    },
+    {
+        id: "modern",
+        name: "Modern",
+        description:
+            "Tighter spacing with bold accent color and a stronger visual hierarchy — suits tech, design, and creative roles.",
+        accentClassName: "bg-secondary",
+    },
+]
+
+const faqs = [
+    {
+        question: "Is it actually free?",
+        answer: "Yes — every feature, including PDF export, your shareable link, and both templates, is free with no credit card required.",
+    },
+    {
+        question: "Are the templates ATS-friendly?",
+        answer: "Both templates use a clean, single-column layout with no tables or graphics — the kind of structure that's generally easier for parsers to read. We haven't run them through formal ATS testing, so results can still vary by employer.",
+    },
+    {
+        question: "What can I export?",
+        answer: "A print-ready PDF for applications, or your raw resume data as JSON if you want to back it up or move it elsewhere.",
+    },
+    {
+        question: "Do I need to create an account?",
+        answer: "You can sign in with Google to save your resume, autosave changes, and get your own shareable link. Without an account, changes won't be saved.",
+    },
+    {
+        question: "Can I switch templates after I've started?",
+        answer: "Yes — your content stays the same, so you can preview it in Classic or Modern and switch anytime from the design panel.",
+    },
+    {
+        question: "What happens to my resume after I share the link?",
+        answer: "Your link always reflects your latest saved version — if you keep editing, anyone with the link sees the updated resume automatically.",
     },
 ]
 
@@ -100,7 +155,20 @@ function Home() {
             <header className="sticky top-0 z-20 border-b border-border/60 bg-background/80 backdrop-blur-sm">
                 <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
                     <Logo size="sm" tagline={false} />
-                    <nav className="flex items-center gap-2">
+
+                    <nav className="hidden items-center gap-8 md:flex">
+                        {NAV_LINKS.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                    </nav>
+
+                    <div className="hidden items-center gap-2 md:flex">
                         {!isSignedIn && (
                             <Button nativeButton={false} variant="ghost" render={<Link to="/sign-in" />}>
                                 Sign in
@@ -110,7 +178,44 @@ function Home() {
                             {isSignedIn ? "Dashboard" : "Get Started"}
                             <ArrowRightIcon />
                         </Button>
-                    </nav>
+                    </div>
+
+                    <Sheet>
+                        <SheetTrigger
+                            render={<Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu" />}
+                        >
+                            <MenuIcon />
+                        </SheetTrigger>
+                        <SheetContent side="right" className="flex w-full flex-col">
+                            <SheetHeader>
+                                <SheetTitle>
+                                    <Logo size="sm" tagline={false} />
+                                </SheetTitle>
+                            </SheetHeader>
+                            <nav className="flex flex-col gap-1 px-6">
+                                {NAV_LINKS.map((link) => (
+                                    <SheetClose
+                                        key={link.href}
+                                        render={<a href={link.href} />}
+                                        className="rounded-md px-2 py-2.5 text-sm text-foreground hover:bg-accent"
+                                    >
+                                        {link.label}
+                                    </SheetClose>
+                                ))}
+                            </nav>
+                            <div className="mt-auto flex flex-col gap-2 p-6">
+                                {!isSignedIn && (
+                                    <Button nativeButton={false} variant="ghost" render={<Link to="/sign-in" />}>
+                                        Sign in
+                                    </Button>
+                                )}
+                                <Button nativeButton={false} render={<Link to="/dashboard" />}>
+                                    {isSignedIn ? "Dashboard" : "Get Started"}
+                                    <ArrowRightIcon />
+                                </Button>
+                            </div>
+                        </SheetContent>
+                    </Sheet>
                 </div>
             </header>
 
@@ -131,15 +236,30 @@ function Home() {
                     />
 
                     <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-6 pt-16 pb-16 text-center">
-                        <span className="flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur-sm">
+                        <span className="flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur-sm">
                             <span className="size-1.5 rounded-full bg-primary" />
                             Free forever · No credit card
                         </span>
 
-                        <h1 className="max-w-2xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
-                            Build a resume
-                            <br />
-                            <span className="text-muted-foreground">that gets you hired</span>
+                        <h1 className="max-w-2xl font-heading text-4xl font-medium tracking-tight text-balance sm:text-5xl lg:text-6xl">
+                            Build a resume that{" "}
+                            <span className="relative inline-block whitespace-nowrap">
+                                gets you hired
+                                <svg
+                                    viewBox="0 0 210 12"
+                                    className="absolute -bottom-1 left-0 h-2.5 w-full text-secondary"
+                                    preserveAspectRatio="none"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M2 8.5C40 2.5 90 2 105 5.5C120 9 165 9.5 208 4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="3"
+                                        strokeLinecap="round"
+                                    />
+                                </svg>
+                            </span>
                         </h1>
 
                         <p className="max-w-md text-sm text-muted-foreground sm:text-base">
@@ -168,7 +288,7 @@ function Home() {
                             <div className="mt-2 grid w-full max-w-md grid-cols-3 gap-4 border-t border-border/60 pt-6">
                                 {stats.map((stat) => (
                                     <div key={stat.label} className="flex flex-col items-center gap-0.5">
-                                        <span className="text-lg font-semibold tracking-tight sm:text-xl">
+                                        <span className="font-mono text-lg font-medium tracking-tight sm:text-xl">
                                             {stat.value}
                                         </span>
                                         <span className="text-[11px] text-muted-foreground sm:text-xs">
@@ -210,7 +330,7 @@ function Home() {
                                 </div>
                                 <div className="grid h-56 grid-cols-2 divide-x divide-border sm:h-64 sm:grid-cols-3">
                                     <div className="flex flex-col gap-2 p-2.5 sm:p-3">
-                                        <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                                        <span className="font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
                                             Editor
                                         </span>
                                         {[...Array(5)].map((_, i) => (
@@ -234,7 +354,7 @@ function Home() {
                                         </div>
                                     </div>
                                     <div className="hidden flex-col gap-3 p-3 sm:flex">
-                                        <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                                        <span className="font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
                                             Design
                                         </span>
                                         <div className="flex gap-1.5">
@@ -256,9 +376,11 @@ function Home() {
                     </div>
                 </section>
 
-                <section className="mx-auto w-full max-w-4xl px-6 pb-20">
+                <section id="how-it-works" className="mx-auto w-full max-w-4xl scroll-mt-20 px-6 pb-20">
                     <div className="mb-10 text-center">
-                        <h2 className="text-2xl font-semibold tracking-tight">From blank page to published link</h2>
+                        <h2 className="font-heading text-2xl font-medium tracking-tight">
+                            From blank page to published link
+                        </h2>
                         <p className="mt-2 text-sm text-muted-foreground">Three steps, no exporting back and forth.</p>
                     </div>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -275,7 +397,7 @@ function Home() {
                     </div>
                 </section>
 
-                <section className="mx-auto w-full max-w-4xl px-6 pb-24">
+                <section id="features" className="mx-auto w-full max-w-4xl scroll-mt-20 px-6 pb-24">
                     <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         {features.map(({ icon: Icon, title, description }) => (
                             <div
@@ -294,11 +416,102 @@ function Home() {
                     </div>
                 </section>
 
+                <section id="templates" className="mx-auto w-full max-w-4xl scroll-mt-20 px-6 pb-24">
+                    <div className="mb-10 text-center">
+                        <h2 className="font-heading text-2xl font-medium tracking-tight">Two templates to choose from</h2>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                            Same content, different look — switch anytime from the design panel.
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        {templates.map((template) => (
+                            <div
+                                key={template.id}
+                                className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card/60 text-left backdrop-blur-sm"
+                            >
+                                <div className="flex flex-col gap-2 border-b border-border bg-background/60 p-5">
+                                    <span className={`h-2.5 w-1/2 rounded-full ${template.accentClassName}`} />
+                                    <span className="h-1.5 w-1/3 rounded-full bg-muted" />
+                                    <div className="mt-2 space-y-1.5">
+                                        {[...Array(4)].map((_, i) => (
+                                            <span
+                                                key={i}
+                                                className="block h-1.5 rounded-full bg-muted"
+                                                style={{ width: `${85 - i * 12}%` }}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="flex flex-1 flex-col gap-1 p-5">
+                                    <p className="text-sm font-medium">{template.name}</p>
+                                    <p className="flex-1 text-xs text-muted-foreground">{template.description}</p>
+                                    <Button
+                                        nativeButton={false}
+                                        variant="outline"
+                                        size="sm"
+                                        className="mt-4 self-start"
+                                        render={<Link to="/dashboard" />}
+                                    >
+                                        <span>Get started</span>
+                                        <ArrowRightIcon />
+                                    </Button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section id="support" className="mx-auto w-full max-w-3xl scroll-mt-20 px-6 pb-24 text-center">
+                    <div className="rounded-3xl border border-border bg-card/60 px-8 py-12 backdrop-blur-sm">
+                        <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                            <HeartHandshakeIcon className="size-5" />
+                        </span>
+                        <h2 className="mt-4 font-heading text-2xl font-medium tracking-tight">
+                            Free forever, kept running by you
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+                            {siteConfig.domain} has no ads and no paywalls. If it helped you land your next role, a
+                            small donation goes toward hosting and keeping it free for everyone else.
+                        </p>
+                        {siteConfig.links.donate && (
+                            <Button
+                                nativeButton={false}
+                                size="lg"
+                                variant="secondary"
+                                className="mt-6"
+                                render={<a href={siteConfig.links.donate} target="_blank" rel="noreferrer" />}
+                            >
+                                <CoffeeIcon />
+                                <span>Support this project</span>
+                            </Button>
+                        )}
+                    </div>
+                </section>
+
+                <section id="faq" className="mx-auto w-full max-w-2xl scroll-mt-20 px-6 pb-24">
+                    <div className="mb-10 text-center">
+                        <h2 className="font-heading text-2xl font-medium tracking-tight">Frequently asked questions</h2>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                            Everything else you might be wondering about.
+                        </p>
+                    </div>
+                    <Accordion>
+                        {faqs.map((faq) => (
+                            <AccordionItem key={faq.question} value={faq.question}>
+                                <AccordionTrigger>{faq.question}</AccordionTrigger>
+                                <AccordionContent>{faq.answer}</AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </section>
+                
                 <section className="mx-auto w-full max-w-3xl px-6 pb-24 text-center">
                     <div className="rounded-3xl border border-border bg-card/60 px-8 py-12 backdrop-blur-sm">
                         {isSignedIn && recentResume ? (
                             <>
-                                <h2 className="text-2xl font-semibold tracking-tight">Pick up where you left off</h2>
+                                <h2 className="font-heading text-2xl font-medium tracking-tight">
+                                    Pick up where you left off
+                                </h2>
                                 <div className="mx-auto mt-4 flex max-w-sm items-center gap-3 rounded-2xl border border-border bg-background/60 p-3 text-left">
                                     <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                                         <FileTextIcon className="size-4" />
@@ -330,7 +543,7 @@ function Home() {
                             </>
                         ) : (
                             <>
-                                <h2 className="text-2xl font-semibold tracking-tight">
+                                <h2 className="font-heading text-2xl font-medium tracking-tight">
                                     {isSignedIn ? "Create your first resume" : "Ready to build yours?"}
                                 </h2>
                                 <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
@@ -353,20 +566,70 @@ function Home() {
                 </section>
             </main>
 
-            <footer className="border-t border-border/60 px-6 py-8 text-center text-xs text-muted-foreground">
-                <p>
+            <footer className="border-t border-border/60 px-6 py-12 text-sm">
+                <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 sm:grid-cols-3">
+                    <div className="flex flex-col gap-3">
+                        <Logo size="sm" tagline={false} />
+                        <p className="max-w-xs text-xs text-muted-foreground">
+                            Build a polished resume for free — no credit card required.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                            Explore
+                        </span>
+                        {NAV_LINKS.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                            Connect
+                        </span>
+                        {siteConfig.links.github && (
+                            <a
+                                href={siteConfig.links.github}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                                GitHub
+                            </a>
+                        )}
+                        {siteConfig.links.linkedin && (
+                            <a
+                                href={siteConfig.links.linkedin}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                                LinkedIn
+                            </a>
+                        )}
+                        {siteConfig.links.donate && (
+                            <a
+                                href={siteConfig.links.donate}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                                Support this project ☕
+                            </a>
+                        )}
+                    </div>
+                </div>
+
+                <div className="mx-auto mt-10 w-full max-w-6xl border-t border-border/60 pt-6 text-center text-xs text-muted-foreground">
                     © {new Date().getFullYear()} {siteConfig.domain} — free forever, no credit card required.
-                </p>
-                {siteConfig.links.donate && (
-                    <a
-                        href={siteConfig.links.donate}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-2 inline-block underline underline-offset-2 hover:text-foreground"
-                    >
-                        Support this project ☕
-                    </a>
-                )}
+                </div>
             </footer>
         </div>
     )
