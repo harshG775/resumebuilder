@@ -3,34 +3,28 @@ import { Button } from "#/components/ui/button"
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "#/components/ui/sheet"
 import { Logo } from "#/components/logo.tsx"
 import { siteConfig } from "#/config/site"
-import { to } from "#/lib/await-to"
-import { getAllResumeFn } from "#/lib/server/resume.function"
-import { formatRelativeTime } from "#/lib/utils"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import {
     ArrowRightIcon,
+    ChevronDownIcon,
     CloudCheckIcon,
     Columns3Icon,
     CoffeeIcon,
+    EllipsisVerticalIcon,
     FileDownIcon,
-    FileTextIcon,
     GripVerticalIcon,
     HeartHandshakeIcon,
     Link2Icon,
     LayoutTemplateIcon,
+    LockIcon,
     MenuIcon,
     PaletteIcon,
     PlusIcon,
     Share2Icon,
+    StarIcon,
 } from "lucide-react"
 
 export const Route = createFileRoute("/")({
-    loader: async ({ context }) => {
-        if (!context.session?.user) return { recentResume: null }
-        const [error, result] = await to(getAllResumeFn({ data: { page: 1, pageSize: 1 } }))
-        if (error) return { recentResume: null }
-        return { recentResume: result?.data[0] ?? null }
-    },
     component: Home,
 })
 
@@ -90,6 +84,7 @@ const templates = [
         description:
             "A traditional single-column layout with clean rules and generous whitespace — reads well for corporate and conservative roles.",
         accentClassName: "bg-foreground/70",
+        dark: false,
     },
     {
         id: "modern",
@@ -97,6 +92,7 @@ const templates = [
         description:
             "Tighter spacing with bold accent color and a stronger visual hierarchy — suits tech, design, and creative roles.",
         accentClassName: "bg-secondary",
+        dark: true,
     },
 ]
 
@@ -147,7 +143,6 @@ const steps = [
 
 function Home() {
     const { session } = Route.useRouteContext()
-    const { recentResume } = Route.useLoaderData()
     const isSignedIn = Boolean(session?.user)
 
     return (
@@ -235,13 +230,8 @@ function Home() {
                         }}
                     />
 
-                    <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-6 pt-16 pb-16 text-center">
-                        <span className="flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 font-mono text-xs text-muted-foreground backdrop-blur-sm">
-                            <span className="size-1.5 rounded-full bg-primary" />
-                            Free forever · No credit card
-                        </span>
-
-                        <h1 className="max-w-2xl font-heading text-4xl font-medium tracking-tight text-balance sm:text-5xl lg:text-6xl">
+                    <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-6 pt-16 pb-12 text-center sm:pt-20 sm:pb-16 lg:pt-24 lg:pb-16">
+                        <h1 className="max-w-2xl font-heading text-5xl font-medium tracking-tight text-balance sm:text-6xl lg:text-7xl">
                             Build a resume that{" "}
                             <span className="relative inline-block whitespace-nowrap">
                                 gets you hired
@@ -262,27 +252,10 @@ function Home() {
                             </span>
                         </h1>
 
-                        <p className="max-w-md text-sm text-muted-foreground sm:text-base">
+                        <p className="max-w-lg text-base text-muted-foreground sm:text-lg">
                             Edit, preview, and style your resume side-by-side. Export a print-ready PDF or share a
                             personal link — no attachments required.
                         </p>
-
-                        <div className="flex flex-wrap items-center justify-center gap-3">
-                            <Button nativeButton={false} size="lg" render={<Link to="/dashboard" />}>
-                                <span>{isSignedIn ? "Go to Dashboard" : "Get Started"}</span>
-                                <ArrowRightIcon />
-                            </Button>
-                            {!isSignedIn && (
-                                <Button
-                                    nativeButton={false}
-                                    size="lg"
-                                    variant="outline"
-                                    render={<Link to="/sign-in" />}
-                                >
-                                    Sign in
-                                </Button>
-                            )}
-                        </div>
 
                         {stats && (
                             <div className="mt-2 grid w-full max-w-md grid-cols-3 gap-4 border-t border-border/60 pt-6">
@@ -301,8 +274,8 @@ function Home() {
                     </div>
                 </section>
 
-                <section className="mx-auto w-full max-w-4xl px-4 pb-14 sm:px-6">
-                    <div className="relative mx-auto w-full max-w-2xl">
+                <section className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6 sm:pb-20">
+                    <div className="relative mx-auto w-full max-w-4xl">
                         <div
                             aria-hidden="true"
                             className="absolute -inset-4 -z-10 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--primary)_18%,transparent)_0%,transparent_70%)]"
@@ -311,64 +284,111 @@ function Home() {
                             <img
                                 src={heroImage}
                                 alt="Resume Builder editor, live preview, and design panel"
-                                className="w-full rounded-3xl border border-border shadow-xl"
+                                className="w-full rounded-xl border border-border shadow-xl"
                             />
                         ) : (
-                            <div className="overflow-hidden rounded-3xl border border-border bg-card/60 text-left shadow-xl backdrop-blur-sm">
+                            <div className="overflow-hidden rounded-xl border border-border bg-card text-left shadow-(--shadow-elevated)">
                                 <div className="flex items-center gap-2 border-b border-border bg-muted/40 px-3 py-2.5 sm:px-4 sm:py-3">
                                     <span className="size-2.5 shrink-0 rounded-full bg-destructive/50" />
                                     <span className="size-2.5 shrink-0 rounded-full bg-primary/40" />
                                     <span className="size-2.5 shrink-0 rounded-full bg-primary/60" />
-                                    <span className="ml-2 flex min-w-0 flex-1 items-center gap-1.5 truncate text-xs text-muted-foreground sm:ml-3">
-                                        <Link2Icon className="size-3 shrink-0" />
+                                    <span className="ml-2 flex min-w-0 flex-1 items-center gap-1.5 truncate rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground sm:ml-4">
+                                        <LockIcon className="size-3 shrink-0" />
                                         <span className="truncate">{siteConfig.domain}/alex/software-engineer</span>
                                     </span>
-                                    <span className="ml-auto hidden shrink-0 items-center gap-1.5 text-[10px] font-medium text-primary sm:flex">
-                                        <span className="size-1.5 animate-pulse rounded-full bg-primary" />
-                                        Live preview
+                                    <span className="ml-2 hidden shrink-0 items-center gap-2 text-muted-foreground sm:flex">
+                                        <StarIcon className="size-3.5" />
+                                        <EllipsisVerticalIcon className="size-3.5" />
                                     </span>
                                 </div>
-                                <div className="grid h-56 grid-cols-2 divide-x divide-border sm:h-64 sm:grid-cols-3">
-                                    <div className="flex flex-col gap-2 p-2.5 sm:p-3">
+                                <div className="grid grid-cols-2 divide-x divide-border sm:grid-cols-3">
+                                    <div className="flex flex-col gap-4 p-3 sm:p-5">
                                         <span className="font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
                                             Editor
                                         </span>
-                                        {[...Array(5)].map((_, i) => (
-                                            <span
-                                                key={i}
-                                                className="h-2 rounded-full bg-muted"
-                                                style={{ width: `${80 - i * 10}%` }}
-                                            />
-                                        ))}
-                                    </div>
-                                    <div className="flex items-center justify-center bg-background p-3 sm:p-4">
-                                        <div className="flex h-full w-3/4 flex-col gap-1.5 rounded-md bg-card p-3 shadow-sm">
-                                            <span className="mb-1 h-2.5 w-2/3 rounded-full bg-primary/60" />
-                                            {[...Array(6)].map((_, i) => (
-                                                <span
-                                                    key={i}
-                                                    className="h-1.5 rounded-full bg-muted"
-                                                    style={{ width: `${90 - (i % 3) * 15}%` }}
-                                                />
-                                            ))}
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-xs font-medium">Personal</span>
+                                            <span className="h-2 w-3/4 rounded-full bg-muted" />
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-xs font-medium">Summary</span>
+                                            <span className="h-2 w-full rounded-full bg-muted" />
+                                            <span className="h-2 w-5/6 rounded-full bg-muted" />
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-xs font-medium">Work Experience</span>
+                                            <span className="h-1.5 w-1/3 rounded-full bg-secondary" />
+                                            <span className="h-2 w-full rounded-full bg-muted" />
                                         </div>
                                     </div>
-                                    <div className="hidden flex-col gap-3 p-3 sm:flex">
+
+                                    <div className="flex flex-col gap-3 bg-background p-3 sm:p-5">
+                                        <span className="font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                                            Live preview
+                                        </span>
+                                        <div className="flex flex-1 flex-col gap-3 rounded-md bg-card p-3 shadow-sm">
+                                            <span className="h-2.5 w-2/3 rounded-full bg-primary" />
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div className="flex flex-col gap-1.5">
+                                                    <span className="font-mono text-[8px] font-medium tracking-wide text-muted-foreground uppercase">
+                                                        Personal
+                                                    </span>
+                                                    <span className="h-1.5 w-full rounded-full bg-muted" />
+                                                    <span className="h-1.5 w-2/3 rounded-full bg-muted" />
+                                                </div>
+                                                <div className="flex flex-col gap-1.5">
+                                                    <span className="font-mono text-[8px] font-medium tracking-wide text-muted-foreground uppercase">
+                                                        Skills
+                                                    </span>
+                                                    <span className="h-1.5 w-full rounded-full bg-muted" />
+                                                    <span className="h-1.5 w-4/5 rounded-full bg-muted" />
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-1.5">
+                                                <span className="font-mono text-[8px] font-medium tracking-wide text-muted-foreground uppercase">
+                                                    Summary
+                                                </span>
+                                                <span className="h-1.5 w-full rounded-full bg-muted" />
+                                                <span className="h-1.5 w-5/6 rounded-full bg-muted" />
+                                            </div>
+                                            <div className="flex flex-col gap-1.5">
+                                                <span className="font-mono text-[8px] font-medium tracking-wide text-muted-foreground uppercase">
+                                                    Experience
+                                                </span>
+                                                <span className="h-1.5 w-full rounded-full bg-muted" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="hidden flex-col gap-5 p-5 sm:flex">
                                         <span className="font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
                                             Design
                                         </span>
-                                        <div className="flex gap-1.5">
-                                            <span className="size-4 rounded-full bg-primary" />
-                                            <span className="size-4 rounded-full bg-primary/50" />
-                                            <span className="size-4 rounded-full border border-border" />
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-xs text-muted-foreground">Typography</span>
+                                            <span className="flex items-center justify-between rounded-md border border-border px-2.5 py-1.5 text-xs">
+                                                Fraunces
+                                                <ChevronDownIcon className="size-3 text-muted-foreground" />
+                                            </span>
                                         </div>
-                                        {[...Array(3)].map((_, i) => (
-                                            <span
-                                                key={i}
-                                                className="h-2 rounded-full bg-muted"
-                                                style={{ width: `${70 - i * 10}%` }}
-                                            />
-                                        ))}
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-xs text-muted-foreground">Color</span>
+                                            <div className="flex gap-1.5">
+                                                <span className="size-5 rounded-full border border-border bg-background" />
+                                                <span className="size-5 rounded-full bg-foreground" />
+                                                <span className="size-5 rounded-full bg-secondary ring-2 ring-secondary/30 ring-offset-2 ring-offset-card" />
+                                                <span className="size-5 rounded-full" style={{ backgroundColor: "#7c4a2d" }} />
+                                                <span className="size-5 rounded-full bg-primary" />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-xs text-muted-foreground">Spacing</span>
+                                            <div className="flex gap-1.5">
+                                                <span className="h-6 flex-1 rounded-md border border-border" />
+                                                <span className="h-6 flex-1 rounded-md border-2 border-foreground" />
+                                                <span className="h-6 flex-1 rounded-md border border-border" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -376,78 +396,104 @@ function Home() {
                     </div>
                 </section>
 
-                <section id="how-it-works" className="mx-auto w-full max-w-4xl scroll-mt-20 px-6 pb-20">
+                <section id="how-it-works" className="mx-auto w-full max-w-5xl scroll-mt-20 px-6 pb-20 sm:pb-24">
                     <div className="mb-10 text-center">
-                        <h2 className="font-heading text-2xl font-medium tracking-tight">
+                        <h2 className="font-heading text-2xl font-medium tracking-tight sm:text-3xl">
                             From blank page to published link
                         </h2>
                         <p className="mt-2 text-sm text-muted-foreground">Three steps, no exporting back and forth.</p>
                     </div>
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <div className="relative grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
+                        <div
+                            aria-hidden="true"
+                            className="absolute top-5 right-[16.6%] left-[16.6%] hidden border-t border-dashed border-border sm:block"
+                        />
                         {steps.map(({ icon: Icon, title, description }, i) => (
                             <div key={title} className="relative flex flex-col items-center gap-3 text-center">
-                                <span className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                                    <Icon className="size-5" />
+                                <span className="relative z-10 flex size-10 items-center justify-center rounded-full border border-border bg-background font-mono text-sm font-medium">
+                                    {i + 1}
                                 </span>
-                                <span className="text-xs font-medium text-muted-foreground">Step {i + 1}</span>
+                                <Icon className="size-4 text-secondary" strokeWidth={1.75} />
                                 <p className="text-sm font-medium">{title}</p>
-                                <p className="text-xs text-muted-foreground">{description}</p>
+                                <p className="max-w-50 text-xs text-muted-foreground">{description}</p>
                             </div>
                         ))}
                     </div>
-                </section>
 
-                <section id="features" className="mx-auto w-full max-w-4xl scroll-mt-20 px-6 pb-24">
-                    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {features.map(({ icon: Icon, title, description }) => (
-                            <div
-                                key={title}
-                                className="flex items-start gap-3 rounded-2xl border border-border bg-card/60 p-4 text-left backdrop-blur-sm"
-                            >
-                                <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                                    <Icon className="size-4" />
-                                </span>
-                                <div>
-                                    <p className="text-sm font-medium">{title}</p>
-                                    <p className="text-xs text-muted-foreground">{description}</p>
-                                </div>
-                            </div>
-                        ))}
+                    <div
+                        id="features"
+                        className="mt-14 scroll-mt-20 overflow-hidden rounded-lg border border-border bg-card shadow-(--shadow-elevated) sm:mt-16"
+                    >
+                        <div className="grid grid-cols-1 sm:grid-cols-3">
+                            {features.map(({ icon: Icon, title, description }, i) => {
+                                const lastColumn = (i + 1) % 3 === 0
+                                const lastRow = i >= features.length - 3
+                                const cellClassName = [
+                                    "flex flex-col gap-1.5 border-border p-6 text-left",
+                                    i !== features.length - 1 ? "border-b" : "",
+                                    lastRow ? "sm:border-b-0" : "",
+                                    !lastColumn ? "sm:border-r" : "",
+                                ].join(" ")
+                                return (
+                                    <div key={title} className={cellClassName}>
+                                        <div className="flex items-center gap-2">
+                                            <Icon className="size-4 shrink-0 text-secondary" strokeWidth={1.75} />
+                                            <p className="text-sm font-medium">{title}</p>
+                                        </div>
+                                        <p className="text-xs text-muted-foreground">{description}</p>
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
                 </section>
 
-                <section id="templates" className="mx-auto w-full max-w-4xl scroll-mt-20 px-6 pb-24">
+                <section id="templates" className="mx-auto w-full max-w-5xl scroll-mt-20 px-6 pb-20 sm:pb-24">
                     <div className="mb-10 text-center">
-                        <h2 className="font-heading text-2xl font-medium tracking-tight">Two templates to choose from</h2>
+                        <h2 className="font-heading text-2xl font-medium tracking-tight sm:text-3xl">Templates</h2>
                         <p className="mt-2 text-sm text-muted-foreground">
-                            Same content, different look — switch anytime from the design panel.
+                            Classic and Modern are ready today — more styles are on the way.
                         </p>
                     </div>
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {templates.map((template) => (
                             <div
                                 key={template.id}
-                                className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card/60 text-left backdrop-blur-sm"
+                                className={`flex flex-col overflow-hidden rounded-lg text-left shadow-(--shadow-elevated) ${
+                                    template.dark ? "bg-foreground text-background" : "border border-border bg-card"
+                                }`}
                             >
-                                <div className="flex flex-col gap-2 border-b border-border bg-background/60 p-5">
+                                <div
+                                    className={`flex flex-col gap-2 border-b p-6 ${
+                                        template.dark
+                                            ? "border-background/10 bg-background/5"
+                                            : "border-border bg-background/60"
+                                    }`}
+                                >
                                     <span className={`h-2.5 w-1/2 rounded-full ${template.accentClassName}`} />
-                                    <span className="h-1.5 w-1/3 rounded-full bg-muted" />
+                                    <span
+                                        className={`h-1.5 w-1/3 rounded-full ${template.dark ? "bg-background/20" : "bg-muted"}`}
+                                    />
                                     <div className="mt-2 space-y-1.5">
                                         {[...Array(4)].map((_, i) => (
                                             <span
                                                 key={i}
-                                                className="block h-1.5 rounded-full bg-muted"
+                                                className={`block h-1.5 rounded-full ${template.dark ? "bg-background/20" : "bg-muted"}`}
                                                 style={{ width: `${85 - i * 12}%` }}
                                             />
                                         ))}
                                     </div>
                                 </div>
-                                <div className="flex flex-1 flex-col gap-1 p-5">
-                                    <p className="text-sm font-medium">{template.name}</p>
-                                    <p className="flex-1 text-xs text-muted-foreground">{template.description}</p>
+                                <div className="flex flex-1 flex-col gap-2 p-6">
+                                    <p className="text-base font-medium">{template.name}</p>
+                                    <p
+                                        className={`flex-1 text-sm ${template.dark ? "text-background/70" : "text-muted-foreground"}`}
+                                    >
+                                        {template.description}
+                                    </p>
                                     <Button
                                         nativeButton={false}
-                                        variant="outline"
+                                        variant="secondary"
                                         size="sm"
                                         className="mt-4 self-start"
                                         render={<Link to="/dashboard" />}
@@ -458,110 +504,72 @@ function Home() {
                                 </div>
                             </div>
                         ))}
+                        <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border bg-muted/40 p-6 text-center">
+                            <span className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground">
+                                <PlusIcon className="size-4" />
+                            </span>
+                            <p className="text-base font-medium">More templates</p>
+                            <p className="text-sm text-muted-foreground">
+                                Creative, executive, and academic styles are on the way.
+                            </p>
+                            <span className="mt-1 rounded-full border border-border px-2.5 py-1 font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                                Coming soon
+                            </span>
+                        </div>
                     </div>
                 </section>
 
-                <section id="support" className="mx-auto w-full max-w-3xl scroll-mt-20 px-6 pb-24 text-center">
-                    <div className="rounded-3xl border border-border bg-card/60 px-8 py-12 backdrop-blur-sm">
-                        <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                            <HeartHandshakeIcon className="size-5" />
-                        </span>
-                        <h2 className="mt-4 font-heading text-2xl font-medium tracking-tight">
-                            Free forever, kept running by you
-                        </h2>
-                        <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-                            {siteConfig.domain} has no ads and no paywalls. If it helped you land your next role, a
-                            small donation goes toward hosting and keeping it free for everyone else.
-                        </p>
-                        {siteConfig.links.donate && (
-                            <Button
-                                nativeButton={false}
-                                size="lg"
-                                variant="secondary"
-                                className="mt-6"
-                                render={<a href={siteConfig.links.donate} target="_blank" rel="noreferrer" />}
-                            >
-                                <CoffeeIcon />
-                                <span>Support this project</span>
-                            </Button>
-                        )}
-                    </div>
-                </section>
+                <section id="support" className="mx-auto w-full max-w-5xl scroll-mt-20 px-6 pb-20 sm:pb-24">
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
+                        <div className="relative overflow-hidden rounded-lg bg-primary px-8 py-12 text-center text-primary-foreground sm:py-14">
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute inset-0 opacity-[0.06]"
+                                style={{
+                                    backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+                                    backgroundSize: "16px 16px",
+                                }}
+                            />
+                            <span className="relative mx-auto flex size-11 items-center justify-center rounded-full border border-primary-foreground/25">
+                                <HeartHandshakeIcon className="size-5" />
+                            </span>
+                            <h2 className="relative mt-4 font-heading text-2xl font-medium tracking-tight sm:text-3xl">
+                                Free forever, kept running by you
+                            </h2>
+                            <p className="relative mx-auto mt-3 max-w-xs text-sm text-primary-foreground/80">
+                                {siteConfig.domain} has no ads and no paywalls. If it helped you land your next role,
+                                a small donation goes toward hosting and keeping it free for everyone else.
+                            </p>
+                            {siteConfig.links.donate && (
+                                <Button
+                                    nativeButton={false}
+                                    size="lg"
+                                    variant="secondary"
+                                    className="relative mt-6"
+                                    render={<a href={siteConfig.links.donate} target="_blank" rel="noreferrer" />}
+                                >
+                                    <CoffeeIcon />
+                                    <span>Support this project</span>
+                                </Button>
+                            )}
+                        </div>
 
-                <section id="faq" className="mx-auto w-full max-w-2xl scroll-mt-20 px-6 pb-24">
-                    <div className="mb-10 text-center">
-                        <h2 className="font-heading text-2xl font-medium tracking-tight">Frequently asked questions</h2>
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            Everything else you might be wondering about.
-                        </p>
-                    </div>
-                    <Accordion>
-                        {faqs.map((faq) => (
-                            <AccordionItem key={faq.question} value={faq.question}>
-                                <AccordionTrigger>{faq.question}</AccordionTrigger>
-                                <AccordionContent>{faq.answer}</AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                </section>
-                
-                <section className="mx-auto w-full max-w-3xl px-6 pb-24 text-center">
-                    <div className="rounded-3xl border border-border bg-card/60 px-8 py-12 backdrop-blur-sm">
-                        {isSignedIn && recentResume ? (
-                            <>
-                                <h2 className="font-heading text-2xl font-medium tracking-tight">
-                                    Pick up where you left off
-                                </h2>
-                                <div className="mx-auto mt-4 flex max-w-sm items-center gap-3 rounded-2xl border border-border bg-background/60 p-3 text-left">
-                                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                                        <FileTextIcon className="size-4" />
-                                    </span>
-                                    <div className="min-w-0">
-                                        <p className="truncate text-sm font-medium">{recentResume.title}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                            Last edited{" "}
-                                            <span suppressHydrationWarning>
-                                                {formatRelativeTime(new Date(recentResume.updatedAt))}
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <Button
-                                    nativeButton={false}
-                                    size="lg"
-                                    className="mt-6"
-                                    render={
-                                        <Link
-                                            to="/builder/resumes/$resume_id"
-                                            params={{ resume_id: recentResume.id }}
-                                        />
-                                    }
-                                >
-                                    <span>Continue editing</span>
-                                    <ArrowRightIcon />
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <h2 className="font-heading text-2xl font-medium tracking-tight">
-                                    {isSignedIn ? "Create your first resume" : "Ready to build yours?"}
-                                </h2>
-                                <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-                                    {isSignedIn
-                                        ? "Head to your dashboard and start from a clean template."
-                                        : "Sign in with Google and start editing — free, no credit card required."}
-                                </p>
-                                <Button
-                                    nativeButton={false}
-                                    size="lg"
-                                    className="mt-6"
-                                    render={<Link to="/dashboard" />}
-                                >
-                                    <span>{isSignedIn ? "Go to Dashboard" : "Get Started"}</span>
-                                    <ArrowRightIcon />
-                                </Button>
-                            </>
-                        )}
+                        <div id="faq" className="scroll-mt-20">
+                            <h2 className="font-heading text-2xl font-medium tracking-tight sm:text-3xl">
+                                Frequently asked questions
+                            </h2>
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                Everything else you might be wondering about.
+                            </p>
+                            <Accordion className="mt-6">
+                                {faqs.map((faq) => (
+                                    <AccordionItem key={faq.question} value={faq.question}>
+                                        <AccordionTrigger>{faq.question}</AccordionTrigger>
+                                        <AccordionContent>{faq.answer}</AccordionContent>
+                                    </AccordionItem>
+                                ))}
+                            </Accordion>
+                        </div>
                     </div>
                 </section>
             </main>
@@ -627,8 +635,13 @@ function Home() {
                     </div>
                 </div>
 
-                <div className="mx-auto mt-10 w-full max-w-6xl border-t border-border/60 pt-6 text-center text-xs text-muted-foreground">
-                    © {new Date().getFullYear()} {siteConfig.domain} — free forever, no credit card required.
+                <div className="mx-auto mt-10 flex w-full max-w-6xl flex-col items-center justify-between gap-4 border-t border-border/60 pt-6 text-center text-xs text-muted-foreground sm:flex-row sm:text-left">
+                    <p>
+                        © {new Date().getFullYear()} {siteConfig.domain} — free forever, no credit card required.
+                    </p>
+                    <span className="rounded-full border border-border px-3 py-1 font-mono text-[10px] tracking-wide uppercase">
+                        Made with love
+                    </span>
                 </div>
             </footer>
         </div>
