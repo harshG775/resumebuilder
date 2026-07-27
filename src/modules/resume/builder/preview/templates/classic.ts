@@ -224,6 +224,7 @@ export const classicTemplate: ResumeTemplate = {
     meta: {
         id: "classic",
         label: "Classic",
+        thumbnail: "/templates/classic.svg",
     },
 
     render: (values) => {

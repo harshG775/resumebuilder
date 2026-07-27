@@ -28,6 +28,7 @@ import { getTemplate } from "./preview/templates"
 import { downloadBlob } from "#/lib/download"
 import { copyResumeShareLink } from "#/lib/share-resume-link"
 import { ColorsSection, LayoutSection, PageSection, TemplatesSection, TypographySection } from "./design"
+import { resumeShowcaseValues } from "../data/resume-seed-values"
 
 async function generateResumeThumbnail(values: ResumeValues) {
     const $typst = getTypst()
@@ -186,6 +187,15 @@ export default function Builder({ resume }: BuilderProps) {
                 }
                 design={
                     <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
+                        <button
+                            onClick={() => {
+                                updateMutation.mutate({
+                                    data: { id: resume.id, updatePayload: { content: resumeShowcaseValues, thumbnail:"" } },
+                                })
+                            }}
+                        >
+                            seed
+                        </button>
                         <TemplatesSection form={form} />
                         <LayoutSection form={form} />
                         <FieldSeparator />

@@ -31,9 +31,9 @@ export const resumeDefaultValues: ResumeValues = {
         },
         page: {
             gapX: 4,
-            gapY: 6,
-            marginX: 16,
-            marginY: 16,
+            gapY: 4,
+            marginX: 14,
+            marginY: 12,
             format: "a4",
             locale: "en-US",
             hideLinkUnderline: false,
@@ -51,13 +51,13 @@ export const resumeDefaultValues: ResumeValues = {
             heading: {
                 fontFamily: "Georgia",
                 fontWeight: "800",
-                fontSize: 10.5,
+                fontSize: 14,
                 lineHeight: 1.5,
             },
             body: {
                 fontFamily: "Arial",
                 fontWeight: "400",
-                fontSize: 10.5,
+                fontSize: 10,
                 lineHeight: 1.5,
             },
         },

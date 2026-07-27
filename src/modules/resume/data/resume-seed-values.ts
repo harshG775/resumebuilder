@@ -7,8 +7,8 @@ export const resumeShowcaseValues: ResumeValues = {
 
         email: {
             hidden: false,
-            label: "alex.morgan@example.com",
-            value: "alex.morgan@example.com",
+            label: "alex@example.com",
+            value: "alex@example.com",
         },
 
         phone: {
@@ -21,8 +21,8 @@ export const resumeShowcaseValues: ResumeValues = {
 
         website: {
             hidden: false,
-            label: "alexmorgan.dev",
-            value: "https://alexmorgan.dev",
+            label: "",
+            value: "",
         },
 
         customFields: [
@@ -143,7 +143,7 @@ export const resumeShowcaseValues: ResumeValues = {
                         label: "",
                         value: "",
                     },
-                    content: `- Built and maintained #strong[core billing infrastructure] processing #strong[$2M+ in monthly transactions] with #strong[99.99% uptime].
+                    content: `- Built and maintained #strong[core billing infrastructure] processing #strong[\\$2M+ in monthly transactions] with #strong[99.99% uptime].
 
 - Migrated a monolithic #strong[Express] API to a #strong[microservices architecture], reducing average response time by #strong[35%].
 
@@ -259,7 +259,6 @@ export const resumeShowcaseValues: ResumeValues = {
 
     meta: {
         template: "classic",
-
         layout: {
             pages: [
                 {
@@ -267,38 +266,35 @@ export const resumeShowcaseValues: ResumeValues = {
                 },
             ],
         },
-
         page: {
-            gapX: 4,
-            gapY: 6,
-            marginX: 16,
-            marginY: 16,
+            gapX: 1,
+            gapY: 1,
+            marginX: 12,
+            marginY: 10,
             format: "a4",
             locale: "en-US",
             hideLinkUnderline: false,
             hideIcons: false,
             hideSectionIcons: true,
         },
-
         design: {
             colors: {
-                primary: "#16324f",
+                primary: "#1e3a8a",
                 text: "#111827",
                 background: "#ffffff",
             },
         },
-
         typography: {
             heading: {
-                fontFamily: "Fraunces",
-                fontWeight: "700",
-                fontSize: 10.5,
+                fontFamily: "Georgia",
+                fontWeight: "800",
+                fontSize: 14,
                 lineHeight: 1.5,
             },
             body: {
-                fontFamily: "Inter",
+                fontFamily: "Arial",
                 fontWeight: "400",
-                fontSize: 10.5,
+                fontSize: 10,
                 lineHeight: 1.5,
             },
         },
@@ -580,7 +576,6 @@ export const harshGaurResumeSeedValues: ResumeValues = {
 
     meta: {
         template: "classic",
-
         layout: {
             pages: [
                 {
@@ -588,19 +583,17 @@ export const harshGaurResumeSeedValues: ResumeValues = {
                 },
             ],
         },
-
         page: {
             gapX: 4,
-            gapY: 6,
-            marginX: 16,
-            marginY: 16,
+            gapY: 4,
+            marginX: 14,
+            marginY: 12,
             format: "a4",
             locale: "en-US",
             hideLinkUnderline: false,
             hideIcons: false,
             hideSectionIcons: true,
         },
-
         design: {
             colors: {
                 primary: "#1e3a8a",
@@ -608,18 +601,17 @@ export const harshGaurResumeSeedValues: ResumeValues = {
                 background: "#ffffff",
             },
         },
-
         typography: {
             heading: {
-                fontFamily: "Cal Sans",
-                fontWeight: "700",
-                fontSize: 10.5,
+                fontFamily: "Georgia",
+                fontWeight: "800",
+                fontSize: 14,
                 lineHeight: 1.5,
             },
             body: {
-                fontFamily: "Inter",
+                fontFamily: "Arial",
                 fontWeight: "400",
-                fontSize: 10.5,
+                fontSize: 10,
                 lineHeight: 1.5,
             },
         },

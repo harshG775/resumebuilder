@@ -226,6 +226,7 @@ export const modernTemplate: ResumeTemplate = {
     meta: {
         id: "modern",
         label: "Modern",
+        thumbnail: "/templates/modern.svg",
     },
 
     render: (values) => {
