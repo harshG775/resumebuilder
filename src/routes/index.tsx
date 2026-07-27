@@ -11,7 +11,6 @@ import {
     ColumnsIcon,
     CoffeeIcon,
     DotsSixVerticalIcon,
-    DotsThreeVerticalIcon,
     FileArrowDownIcon,
     GithubLogoIcon,
     HandshakeIcon,
@@ -19,19 +18,18 @@ import {
     LayoutIcon,
     LinkedinLogoIcon,
     ListIcon,
-    LockIcon,
     PaletteIcon,
     PlusIcon,
     ShareNetworkIcon,
-    StarIcon,
 } from "@phosphor-icons/react"
+import { BrowserFrame } from "./-components/browser-frame"
 
 export const Route = createFileRoute("/")({
     component: Home,
 })
 
 /** Screenshot of the builder in action — drop a real image at e.g. public/hero-screenshot.png and set this. */
-const heroImage: string | null = null
+const heroImage: string | null = "/images/hero-screenshot-1.png"
 
 /** No real numbers yet — set to a real array once you have them, this hides the row until then. */
 const stats: { value: string; label: string }[] | null = null
@@ -292,27 +290,14 @@ function Home() {
                             aria-hidden="true"
                             className="absolute -inset-4 -z-10 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--primary)_18%,transparent)_0%,transparent_70%)]"
                         />
-                        {heroImage ? (
-                            <img
-                                src={heroImage}
-                                alt="Resume Builder editor, live preview, and design panel"
-                                className="w-full rounded-xl border border-border shadow-xl"
-                            />
-                        ) : (
-                            <div className="overflow-hidden rounded-xl border border-border bg-card text-left shadow-(--shadow-elevated)">
-                                <div className="flex items-center gap-2 border-b border-border bg-muted/40 px-3 py-2.5 sm:px-4 sm:py-3">
-                                    <span className="size-2.5 shrink-0 rounded-full bg-destructive/50" />
-                                    <span className="size-2.5 shrink-0 rounded-full bg-primary/40" />
-                                    <span className="size-2.5 shrink-0 rounded-full bg-primary/60" />
-                                    <span className="ml-2 flex min-w-0 flex-1 items-center gap-1.5 truncate rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground sm:ml-4">
-                                        <LockIcon className="size-3 shrink-0" />
-                                        <span className="truncate">{siteConfig.domain}/alex/software-engineer</span>
-                                    </span>
-                                    <span className="ml-2 hidden shrink-0 items-center gap-2 text-muted-foreground sm:flex">
-                                        <StarIcon className="size-3.5" />
-                                        <DotsThreeVerticalIcon className="size-3.5" />
-                                    </span>
-                                </div>
+                        <BrowserFrame url={`${siteConfig.domain}/builder/resumes/software-engineer`}>
+                            {heroImage ? (
+                                <img
+                                    src={heroImage}
+                                    alt="Resume Builder editor, live preview, and design panel"
+                                    className="w-full"
+                                />
+                            ) : (
                                 <div className="grid grid-cols-2 divide-x divide-border sm:grid-cols-3">
                                     <div className="flex flex-col gap-4 p-3 sm:p-5">
                                         <span className="font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
@@ -403,8 +388,8 @@ function Home() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </BrowserFrame>
                     </div>
                 </section>
 
