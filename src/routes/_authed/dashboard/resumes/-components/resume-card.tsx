@@ -57,14 +57,17 @@ export default function ResumeCard({ resume, actions, isLastEdited }: ResumeCard
         >
             <div className="relative aspect-9/12 overflow-hidden bg-muted">
                 {resume.thumbnail ? (
-                    <div
-                        className="absolute inset-3 overflow-hidden rounded-lg shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-[1.015] [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:bg-white"
-                    >
-                        <iframe
+                    <div className="absolute inset-3 overflow-hidden rounded-lg shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-[1.015] [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:bg-white">
+                        {/* <iframe
                             title={`${resume.title} preview`}
                             srcDoc={`<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:#fff;}svg{display:block;width:100%;height:auto;}</style></head><body>${resume.thumbnail}</body></html>`}
                             sandbox=""
                             className=" w-full h-full"
+                        /> */}
+                        <img
+                            src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(resume.thumbnail.replace(/<script[\s\S]*?<\/script>/, ""))}`}
+                            alt={`${resume.title} preview`}
+                            className="w-full"
                         />
                     </div>
                 ) : (
