@@ -5,8 +5,6 @@ const TemplateZodSchema = z.enum(["classic", "modern"])
 
 const WebsiteSchema = z.object({
     hidden: z.boolean(),
-    // Stored without a scheme (e.g. "harshgaur.in") — the "https://" prefix is
-    // attached by the field UI and re-attached by the template at render time.
     value: z.string(),
     label: z.string(),
 })
@@ -15,6 +13,25 @@ const LinkSchema = z.object({
     id: z.string(),
     value: z.url().or(z.literal("")),
     label: z.string(),
+})
+
+const PageSchema = z.object({
+    gapX: z.number().min(0).max(40),
+    gapY: z.number().min(0).max(40),
+    marginX: z.number().min(0).max(50),
+    marginY: z.number().min(0).max(50),
+    format: z.enum(["a4", "us-letter", "us-legal"]),
+    locale: z.string(),
+    hideLinkUnderline: z.boolean(),
+    hideIcons: z.boolean(),
+    hideSectionIcons: z.boolean(),
+})
+
+const FontStyleSchema = z.object({
+    fontFamily: z.string(),
+    fontWeight: z.string(),
+    fontSize: z.number().min(6).max(24),
+    lineHeight: z.number().min(1).max(3),
 })
 
 const SectionBaseSchema = z.object({
@@ -118,6 +135,7 @@ export const ResumeZodSchema = z.object({
         layout: z.object({
             pages: z.array(z.object({ main: z.array(SectionKeySchema) })),
         }),
+        page: PageSchema,
         design: z.object({
             colors: z.object({
                 primary: z.string(),
@@ -126,14 +144,8 @@ export const ResumeZodSchema = z.object({
             }),
         }),
         typography: z.object({
-            heading: z.object({
-                fontFamily: z.string(),
-                fontWeight: z.string(),
-            }),
-            body: z.object({
-                fontFamily: z.string(),
-                fontWeight: z.string(),
-            }),
+            heading: FontStyleSchema,
+            body: FontStyleSchema,
         }),
     }),
 })

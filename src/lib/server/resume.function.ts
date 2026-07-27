@@ -80,30 +80,7 @@ export const getResumeByIdFn = createServerFn({ method: "GET" })
                 success: false,
             }
         }
-        return { success: true, data: result[0] }
-    })
-
-export const getResumeBySlugFn = createServerFn({ method: "GET" })
-    .validator(z.object({ slug: z.string() }))
-    .middleware([authMiddleware])
-    .handler(async ({ data, context }) => {
-        const result = await db
-            .select({
-                id: resume.id,
-                title: resume.title,
-                content: resume.content,
-                slug: resume.slug,
-                createdAt: resume.createdAt,
-                updatedAt: resume.updatedAt,
-            })
-            .from(resume)
-            .where(and(eq(resume.slug, data.slug), eq(resume.userId, context.session.user.id)))
-
-        if (result.length === 0) {
-            return {
-                success: false,
-            }
-        }
+        console.log(JSON.stringify(result[0].content, null, 2))
 
         return { success: true, data: result[0] }
     })

@@ -14,7 +14,7 @@ export const ColorsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
         <SectionFieldSet title="Colors">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-col gap-4">
                 {COLOR_FIELDS.map(({ name, label }) => (
                     <form.AppField key={name} name={`meta.design.colors.${name}`}>
                         {(field) => (
