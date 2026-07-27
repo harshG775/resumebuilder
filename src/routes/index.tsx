@@ -3,6 +3,8 @@ import { Button } from "#/components/ui/button"
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "#/components/ui/sheet"
 import { Logo } from "#/components/logo.tsx"
 import { siteConfig } from "#/config/site"
+import { useActiveSection } from "#/hooks/use-active-section"
+import { cn } from "#/lib/utils"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import {
     ArrowRightIcon,
@@ -11,7 +13,6 @@ import {
     ColumnsIcon,
     CoffeeIcon,
     DotsSixVerticalIcon,
-    DotsThreeVerticalIcon,
     FileArrowDownIcon,
     GithubLogoIcon,
     HandshakeIcon,
@@ -19,19 +20,18 @@ import {
     LayoutIcon,
     LinkedinLogoIcon,
     ListIcon,
-    LockIcon,
     PaletteIcon,
     PlusIcon,
     ShareNetworkIcon,
-    StarIcon,
 } from "@phosphor-icons/react"
+import { BrowserFrame } from "./-components/browser-frame"
 
 export const Route = createFileRoute("/")({
     component: Home,
 })
 
 /** Screenshot of the builder in action — drop a real image at e.g. public/hero-screenshot.png and set this. */
-const heroImage: string | null = null
+const heroImage: string | null = "/images/hero-screenshot-1.png"
 
 /** No real numbers yet — set to a real array once you have them, this hides the row until then. */
 const stats: { value: string; label: string }[] | null = null
@@ -69,14 +69,16 @@ const features = [
     },
 ]
 
-/** Anchors into sections on this page — add a matching `id` on the section once it exists. */
+/** Sections on this page — each id is registered with `useActiveSection` via `registerSection`. */
 const NAV_LINKS = [
-    { label: "Features", href: "#features" },
-    { label: "How it works", href: "#how-it-works" },
-    { label: "Templates", href: "#templates" },
-    { label: "FAQ", href: "#faq" },
-    { label: "Support", href: "#support" },
+    { label: "Features", id: "features" },
+    { label: "How it works", id: "how-it-works" },
+    { label: "Templates", id: "templates" },
+    { label: "FAQ", id: "faq" },
+    { label: "Support", id: "support" },
 ]
+
+const SECTION_IDS = NAV_LINKS.map((link) => link.id)
 
 /** The two templates in `modules/resume/builder/preview/templates` — illustrative mockups, not real screenshots. */
 const templates = [
@@ -146,22 +148,29 @@ const steps = [
 function Home() {
     const { session } = Route.useRouteContext()
     const isSignedIn = Boolean(session?.user)
+    const { activeId, registerSection, scrollTo } = useActiveSection(SECTION_IDS)
 
     return (
         <div className="flex min-h-screen flex-col">
             <header className="sticky top-0 z-20 border-b border-border/60 bg-background/80 backdrop-blur-sm">
                 <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
-                    <Logo size="sm" tagline={false} />
+                    <button type="button" onClick={() => scrollTo("hero")} aria-label="Scroll to top">
+                        <Logo size="sm" tagline={false} />
+                    </button>
 
                     <nav className="hidden items-center gap-8 md:flex">
                         {NAV_LINKS.map((link) => (
-                            <a
-                                key={link.href}
-                                href={link.href}
-                                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                            <button
+                                key={link.id}
+                                type="button"
+                                onClick={() => scrollTo(link.id)}
+                                className={cn(
+                                    "border-b-2 border-transparent pb-0.5 text-sm text-muted-foreground transition-colors hover:text-foreground",
+                                    activeId === link.id && "border-primary text-foreground",
+                                )}
                             >
                                 {link.label}
-                            </a>
+                            </button>
                         ))}
                     </nav>
 
@@ -192,9 +201,12 @@ function Home() {
                             <nav className="flex flex-col gap-1 px-6">
                                 {NAV_LINKS.map((link) => (
                                     <SheetClose
-                                        key={link.href}
-                                        render={<a href={link.href} />}
-                                        className="rounded-md px-2 py-2.5 text-sm text-foreground hover:bg-accent"
+                                        key={link.id}
+                                        render={<button type="button" onClick={() => scrollTo(link.id)} />}
+                                        className={cn(
+                                            "rounded-md px-2 py-2.5 text-left text-sm text-foreground hover:bg-accent",
+                                            activeId === link.id && "font-medium",
+                                        )}
                                     >
                                         {link.label}
                                     </SheetClose>
@@ -217,7 +229,7 @@ function Home() {
             </header>
 
             <main className="flex flex-1 flex-col">
-                <section className="relative overflow-hidden">
+                <section ref={registerSection("hero")} data-section-id="hero" className="relative overflow-hidden">
                     <div
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0 bg-[radial-gradient(125%_125%_at_50%_10%,var(--background)_40%,color-mix(in_srgb,var(--primary)_35%,var(--background))_100%)] mask-[linear-gradient(to_bottom,black_0%,black_65%,transparent_100%)]"
@@ -264,7 +276,7 @@ function Home() {
                                 Create resume
                                 <ArrowRightIcon />
                             </Button>
-                            <Button nativeButton={false} size="lg" variant="outline" render={<a href="#templates" />}>
+                            <Button size="lg" variant="outline" onClick={() => scrollTo("templates")}>
                                 Browse templates
                             </Button>
                         </div>
@@ -292,27 +304,14 @@ function Home() {
                             aria-hidden="true"
                             className="absolute -inset-4 -z-10 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--primary)_18%,transparent)_0%,transparent_70%)]"
                         />
-                        {heroImage ? (
-                            <img
-                                src={heroImage}
-                                alt="Resume Builder editor, live preview, and design panel"
-                                className="w-full rounded-xl border border-border shadow-xl"
-                            />
-                        ) : (
-                            <div className="overflow-hidden rounded-xl border border-border bg-card text-left shadow-(--shadow-elevated)">
-                                <div className="flex items-center gap-2 border-b border-border bg-muted/40 px-3 py-2.5 sm:px-4 sm:py-3">
-                                    <span className="size-2.5 shrink-0 rounded-full bg-destructive/50" />
-                                    <span className="size-2.5 shrink-0 rounded-full bg-primary/40" />
-                                    <span className="size-2.5 shrink-0 rounded-full bg-primary/60" />
-                                    <span className="ml-2 flex min-w-0 flex-1 items-center gap-1.5 truncate rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground sm:ml-4">
-                                        <LockIcon className="size-3 shrink-0" />
-                                        <span className="truncate">{siteConfig.domain}/alex/software-engineer</span>
-                                    </span>
-                                    <span className="ml-2 hidden shrink-0 items-center gap-2 text-muted-foreground sm:flex">
-                                        <StarIcon className="size-3.5" />
-                                        <DotsThreeVerticalIcon className="size-3.5" />
-                                    </span>
-                                </div>
+                        <BrowserFrame url={`${siteConfig.domain}/builder/resumes/software-engineer`}>
+                            {heroImage ? (
+                                <img
+                                    src={heroImage}
+                                    alt="Resume Builder editor, live preview, and design panel"
+                                    className="w-full"
+                                />
+                            ) : (
                                 <div className="grid grid-cols-2 divide-x divide-border sm:grid-cols-3">
                                     <div className="flex flex-col gap-4 p-3 sm:p-5">
                                         <span className="font-mono text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
@@ -403,12 +402,16 @@ function Home() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </BrowserFrame>
                     </div>
                 </section>
 
-                <section id="how-it-works" className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24">
+                <section
+                    ref={registerSection("how-it-works")}
+                    data-section-id="how-it-works"
+                    className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24"
+                >
                     <div className="rounded-2xl border border-border bg-muted/30 px-6 py-12 sm:px-10 sm:py-14">
                         <div className="mb-10 text-center">
                             <h2 className="font-heading text-2xl font-medium tracking-tight sm:text-3xl">
@@ -436,7 +439,11 @@ function Home() {
                         </div>
                     </div>
 
-                    <div id="features" className="mt-14 scroll-mt-20 sm:mt-16">
+                    <div
+                        ref={registerSection("features")}
+                        data-section-id="features"
+                        className="mt-14 scroll-mt-20 sm:mt-16"
+                    >
                         <div className="mb-10 text-center">
                             <h2 className="font-heading text-2xl font-medium tracking-tight sm:text-3xl">
                                 Build your resume with the best builder online
@@ -468,7 +475,11 @@ function Home() {
                     </div>
                 </section>
 
-                <section id="templates" className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24">
+                <section
+                    ref={registerSection("templates")}
+                    data-section-id="templates"
+                    className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24"
+                >
                     <div className="mb-10 text-center">
                         <h2 className="font-heading text-2xl font-medium tracking-tight sm:text-3xl">Templates</h2>
                         <p className="mt-2 text-sm text-muted-foreground">
@@ -532,7 +543,11 @@ function Home() {
                     </div>
                 </section>
 
-                <section id="support" className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24">
+                <section
+                    ref={registerSection("support")}
+                    data-section-id="support"
+                    className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24"
+                >
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
                         <div className="relative overflow-hidden rounded-lg bg-primary px-8 py-12 text-center text-primary-foreground sm:py-14">
                             <div
@@ -567,7 +582,7 @@ function Home() {
                             )}
                         </div>
 
-                        <div id="faq" className="scroll-mt-20">
+                        <div ref={registerSection("faq")} data-section-id="faq" className="scroll-mt-20">
                             <h2 className="font-heading text-2xl font-medium tracking-tight sm:text-3xl">
                                 Frequently asked questions
                             </h2>
@@ -601,13 +616,14 @@ function Home() {
                             Explore
                         </span>
                         {NAV_LINKS.map((link) => (
-                            <a
-                                key={link.href}
-                                href={link.href}
-                                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                            <button
+                                key={link.id}
+                                type="button"
+                                onClick={() => scrollTo(link.id)}
+                                className="text-left text-xs text-muted-foreground transition-colors hover:text-foreground"
                             >
                                 {link.label}
-                            </a>
+                            </button>
                         ))}
                     </div>
 
