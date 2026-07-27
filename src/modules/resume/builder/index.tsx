@@ -48,6 +48,13 @@ export default function Builder({ resume }: BuilderProps) {
     const updateMutation = useMutation({
         mutationFn: updateResumeContentFn,
         scope: { id: `resume-${resume.id}` },
+        onError: (err) => {
+            console.error("Failed to save resume", err)
+            toast.error("Failed to save changes", {
+                id: "resume-save-error",
+                description: err instanceof Error ? err.message : "Please check your connection and try again.",
+            })
+        },
     })
 
     const hasRequestedInitialThumbnail = useRef(false)
@@ -71,7 +78,13 @@ export default function Builder({ resume }: BuilderProps) {
         validators: { onChange: ResumeZodSchema },
         listeners: {
             onChange: async ({ formApi }) => {
-                if (!formApi.state.isValid || !formApi.state.isDirty) return
+                if (!formApi.state.isDirty) return
+
+                if (!formApi.state.isValid) {
+                    toast.error("Can't save — fix the highlighted errors first", { id: "resume-invalid" })
+                    return
+                }
+                toast.dismiss("resume-invalid")
 
                 const values = formApi.state.values
                 let thumbnail: string | undefined
