@@ -6,6 +6,7 @@ import { siteConfig } from "#/config/site"
 import { useActiveSection } from "#/hooks/use-active-section"
 import { cn } from "#/lib/utils"
 import { Link, createFileRoute } from "@tanstack/react-router"
+import { useState } from "react"
 import {
     ArrowRightIcon,
     CaretDownIcon,
@@ -25,6 +26,8 @@ import {
     ShareNetworkIcon,
 } from "@phosphor-icons/react"
 import { BrowserFrame } from "./-components/browser-frame"
+import { templateList } from "#/modules/resume/builder/preview/templates"
+import type { TemplateId } from "#/modules/resume/builder/preview/templates"
 
 export const Route = createFileRoute("/")({
     component: Home,
@@ -80,25 +83,26 @@ const NAV_LINKS = [
 
 const SECTION_IDS = NAV_LINKS.map((link) => link.id)
 
-/** The two templates in `modules/resume/builder/preview/templates` — illustrative mockups, not real screenshots. */
-const templates = [
-    {
-        id: "classic",
-        name: "Classic",
+/**
+ * Marketing copy for each template in the registry (`modules/resume/builder/preview/templates`).
+ * `id`/`label`/`thumbnail` come from the registry itself so the landing page never drifts from
+ * what the builder's template picker actually offers — this only adds presentation-only copy
+ * plus a fallback mockup style for templates that don't have a generated `thumbnail` yet.
+ */
+const templateMarketingCopy: Record<TemplateId, { description: string; accentClassName: string; dark: boolean }> = {
+    classic: {
         description:
             "A traditional single-column layout with clean rules and generous whitespace — reads well for corporate and conservative roles.",
         accentClassName: "bg-foreground/70",
         dark: false,
     },
-    {
-        id: "modern",
-        name: "Modern",
+    modern: {
         description:
             "Tighter spacing with bold accent color and a stronger visual hierarchy — suits tech, design, and creative roles.",
         accentClassName: "bg-secondary",
         dark: true,
     },
-]
+}
 
 const faqs = [
     {
@@ -144,6 +148,52 @@ const steps = [
         description: "Export a polished PDF or hand out your personal link — updates reflect instantly.",
     },
 ]
+
+
+function TemplatePreviewThumbnail({
+    thumbnail,
+    label,
+    dark,
+    accentClassName,
+}: {
+    thumbnail?: string
+    label: string
+    dark: boolean
+    accentClassName: string
+}) {
+    const [isLoaded, setIsLoaded] = useState(false)
+
+    return (
+        <div
+            className={`relative aspect-210/297 overflow-hidden rounded-lg p-5 shadow-(--shadow-elevated) transition-transform duration-200 group-hover:-translate-y-1 ${
+                dark ? "bg-foreground text-background" : "border border-border bg-card"
+            }`}
+        >
+            <span className={`h-2.5 w-1/2 rounded-full ${accentClassName}`} />
+            <span className={`mt-2 block h-1.5 w-1/3 rounded-full ${dark ? "bg-background/20" : "bg-muted"}`} />
+            <div className="mt-4 space-y-1.5">
+                {[...Array(6)].map((_, i) => (
+                    <span
+                        key={i}
+                        className={`block h-1.5 rounded-full ${dark ? "bg-background/20" : "bg-muted"}`}
+                        style={{ width: `${90 - i * 9}%` }}
+                    />
+                ))}
+            </div>
+
+            {thumbnail && (
+                <img
+                    src={thumbnail}
+                    alt={`${label} template preview`}
+                    onLoad={() => setIsLoaded(true)}
+                    className={`absolute inset-0 size-full bg-card object-cover transition-opacity duration-300 ${
+                        isLoaded ? "opacity-100" : "opacity-0"
+                    }`}
+                />
+            )}
+        </div>
+    )
+}
 
 function Home() {
     const { session } = Route.useRouteContext()
@@ -487,43 +537,34 @@ function Home() {
                         </p>
                     </div>
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-                        {templates.map((template) => (
-                            <div key={template.id} className="group flex flex-col gap-3 text-left">
-                                <div
-                                    className={`aspect-3/4 overflow-hidden rounded-lg p-5 shadow-(--shadow-elevated) transition-transform duration-200 group-hover:-translate-y-1 ${
-                                        template.dark ? "bg-foreground text-background" : "border border-border bg-card"
-                                    }`}
-                                >
-                                    <span className={`h-2.5 w-1/2 rounded-full ${template.accentClassName}`} />
-                                    <span
-                                        className={`mt-2 block h-1.5 w-1/3 rounded-full ${template.dark ? "bg-background/20" : "bg-muted"}`}
+                        {templateList.map((template) => {
+                            const copy = templateMarketingCopy[template.meta.id]
+
+                            return (
+                                <div key={template.meta.id} className="group flex flex-col gap-3 text-left">
+                                    <TemplatePreviewThumbnail
+                                        thumbnail={template.meta.thumbnail}
+                                        label={template.meta.label}
+                                        dark={copy.dark}
+                                        accentClassName={copy.accentClassName}
                                     />
-                                    <div className="mt-4 space-y-1.5">
-                                        {[...Array(6)].map((_, i) => (
-                                            <span
-                                                key={i}
-                                                className={`block h-1.5 rounded-full ${template.dark ? "bg-background/20" : "bg-muted"}`}
-                                                style={{ width: `${90 - i * 9}%` }}
-                                            />
-                                        ))}
+                                    <div className="flex flex-col gap-1 px-1">
+                                        <p className="text-sm font-medium">{template.meta.label}</p>
+                                        <p className="text-xs text-muted-foreground">{copy.description}</p>
                                     </div>
+                                    <Button
+                                        nativeButton={false}
+                                        variant="secondary"
+                                        size="sm"
+                                        className="mx-1 self-start"
+                                        render={<Link to="/dashboard" />}
+                                    >
+                                        <span>Get started</span>
+                                        <ArrowRightIcon />
+                                    </Button>
                                 </div>
-                                <div className="flex flex-col gap-1 px-1">
-                                    <p className="text-sm font-medium">{template.name}</p>
-                                    <p className="text-xs text-muted-foreground">{template.description}</p>
-                                </div>
-                                <Button
-                                    nativeButton={false}
-                                    variant="secondary"
-                                    size="sm"
-                                    className="mx-1 self-start"
-                                    render={<Link to="/dashboard" />}
-                                >
-                                    <span>Get started</span>
-                                    <ArrowRightIcon />
-                                </Button>
-                            </div>
-                        ))}
+                            )
+                        })}
                         <div className="flex flex-col gap-3 text-left">
                             <div className="flex aspect-3/4 flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border bg-muted/40 p-6 text-center">
                                 <span className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground">

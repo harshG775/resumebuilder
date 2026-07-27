@@ -1,15 +1,29 @@
 import type { ResumeValues } from "#/modules/resume/schema/resume.zod-schema"
 import type { ResumeTemplate } from "./template.type"
-import { safeFontFamily, safeFontWeight, safeHex } from "./template-style"
+import {
+    localeToLang,
+    round2,
+    safeFontFamily,
+    safeFontWeight,
+    safeHex,
+    safeNumber,
+    safePaperFormat,
+} from "./template-style"
 
 type SectionKey = ResumeValues["meta"]["layout"]["pages"][number]["main"][number]
 
 const DEFAULT_SECTION_ORDER: SectionKey[] = ["summary", "skill", "experience", "project", "education", "certification"]
 
-const mutedSeparator = ` #text(fill: color-muted)[ • ] `
+const getGapX = (values: ResumeValues): number => safeNumber(values.meta.page.gapX, 4, 0, 40)
+const getGapY = (values: ResumeValues): number => safeNumber(values.meta.page.gapY, 6, 0, 40)
 
-const linkMarkup = (url: string, label: string) =>
-    `#link("${url}")[#text(fill: color-accent, weight: 600)[${escapeTypst(label)}]]`
+const mutedSeparator = (gapMm: number) => ` #h(${gapMm}mm) #text(fill: color-muted)[•] #h(${gapMm}mm) `
+
+const linkMarkup = (url: string, label: string, underline: boolean) => {
+    const styledLabel = `#text(fill: color-accent, weight: 600)[${escapeTypst(label)}]`
+    const body = underline ? `#underline(stroke: 0.5pt + color-accent, evade: true)[${styledLabel}]` : styledLabel
+    return `#link("${url}")[${body}]`
+}
 
 // `basics.website.value` is stored without a scheme (the editor UI shows "https://" as a
 // fixed prefix). Add it back here, unless the value already carries one from older data.
@@ -21,7 +35,9 @@ const withScheme = (url: string, scheme = "https://") => (/^[a-z][a-z0-9+.-]*:/i
 // `basics` is the only section not driven by that list — it's always rendered first.
 const template = {
     basics(values: ResumeValues): string {
-        const { basics } = values
+        const { basics, meta } = values
+        const showUnderline = !meta.page.hideLinkUnderline
+        const separator = mutedSeparator(getGapX(values))
 
         const contactParts = [
             !basics.email.hidden && basics.email.value
@@ -32,12 +48,16 @@ const template = {
                 : "",
             basics.location ? escapeTypst(basics.location) : "",
             !basics.website.hidden && basics.website.value
-                ? linkMarkup(withScheme(basics.website.value), basics.website.label || basics.website.value)
+                ? linkMarkup(
+                      withScheme(basics.website.value),
+                      basics.website.label || basics.website.value,
+                      showUnderline,
+                  )
                 : "",
-            ...basics.customFields.filter((f) => f.value).map((f) => linkMarkup(f.value, f.label)),
+            ...basics.customFields.filter((f) => f.value).map((f) => linkMarkup(f.value, f.label, showUnderline)),
         ].filter(Boolean)
 
-        const contactLine = contactParts.join(mutedSeparator)
+        const contactLine = contactParts.join(separator)
 
         return `
 = ${escapeTypst(basics.name)}
@@ -95,6 +115,8 @@ ${visibleSkills
         const showExperience = !sections.experience.hidden && visibleExperience.length > 0
         if (!showExperience) return ""
 
+        const gapY = getGapY(values)
+
         return `
 == ${sections.experience.title}
 
@@ -108,7 +130,7 @@ ${visibleExperience
     }
     ${e.content}
 ]
-#v(0.4em)
+#v(${gapY}mm)
 `,
     )
     .join("\n")}
@@ -121,13 +143,16 @@ ${visibleExperience
         const showProject = !sections.project.hidden && visibleProjects.length > 0
         if (!showProject) return ""
 
+        const gapY = getGapY(values)
+        const separator = mutedSeparator(getGapX(values))
+
         return `
 == ${sections.project.title}
 
 ${visibleProjects
     .map((p) => {
         const links = p.links.filter((l) => l.value).map((l) => `#link("${l.value}")[${escapeTypst(l.label)}]`)
-        const linkHeader = links.length ? ` #h(1fr) #text(size: 8.5pt, weight: 400)[${links.join(mutedSeparator)}]` : ""
+        const linkHeader = links.length ? ` #h(1fr) #text(size: 8.5pt, weight: 400)[${links.join(separator)}]` : ""
         const tech = p.keywords.filter(Boolean).map(escapeTypst).join(" • ")
 
         return `
@@ -136,7 +161,7 @@ ${visibleProjects
     ${tech ? `#text(fill: color-accent, style: "italic")[${tech}]` : ""}
     ${p.content}
 ]
-#v(0.4em)
+#v(${gapY}mm)
 `
     })
     .join("\n")}
@@ -148,6 +173,8 @@ ${visibleProjects
         const visibleEducation = sections.education.items.filter((e) => !e.hidden)
         const showEducation = !sections.education.hidden && visibleEducation.length > 0
         if (!showEducation) return ""
+
+        const gapY = getGapY(values)
 
         return `
 == ${sections.education.title}
@@ -161,7 +188,7 @@ ${visibleEducation
     ${e.grade ? `#text(size: 8.5pt, fill: color-muted)[Grade: ${escapeTypst(e.grade)}]` : ""}
     ${e.content}
 ]
-#v(0.4em)
+#v(${gapY}mm)
 `,
     )
     .join("\n")}
@@ -174,6 +201,8 @@ ${visibleEducation
         const showCertification = !sections.certification.hidden && visibleCertifications.length > 0
         if (!showCertification) return ""
 
+        const gapY = getGapY(values)
+
         return `
 == ${sections.certification.title}
 
@@ -185,7 +214,7 @@ ${visibleCertifications
     #text(fill: color-accent, style: "italic")[${escapeTypst(c.issuer)}]
     ${c.content}
 ]
-#v(0.4em)
+#v(${gapY}mm)
 `,
     )
     .join("\n")}
@@ -197,6 +226,7 @@ export const modernTemplate: ResumeTemplate = {
     meta: {
         id: "modern",
         label: "Modern",
+        thumbnail: "/templates/modern.svg",
     },
 
     render: (values) => {
@@ -216,11 +246,30 @@ export const modernTemplate: ResumeTemplate = {
         const bodyFont = safeFontFamily(meta.typography.body.fontFamily, "Arial")
         const bodyWeight = safeFontWeight(meta.typography.body.fontWeight, "400")
 
+        const headingFontSize = safeNumber(meta.typography.heading.fontSize, 10.5, 6, 24)
+        const bodyFontSize = safeNumber(meta.typography.body.fontSize, 10.5, 6, 24)
+        const bodyLineHeight = safeNumber(meta.typography.body.lineHeight, 1.5, 1, 3)
+
+        // Heading levels keep their original relative hierarchy — this scale is anchored so
+        // the schema default (10.5) reproduces the template's original fixed sizes exactly.
+        const headingScale = headingFontSize / 10.5
+        const nameFontSize = round2(21 * headingScale)
+        const sectionTitleFontSize = round2(10.5 * headingScale)
+        const jobTitleFontSize = round2(9.8 * headingScale)
+        // Anchored the same way against the original hardcoded 0.70em leading at the
+        // schema's default lineHeight of 1.5.
+        const bodyLeading = round2(0.7 * (bodyLineHeight / 1.5))
+
+        const format = safePaperFormat(meta.page.format, "a4")
+        const marginX = safeNumber(meta.page.marginX, 16, 0, 50)
+        const marginY = safeNumber(meta.page.marginY, 16, 0, 50)
+        const lang = localeToLang(meta.page.locale)
+
         return `
 #set document(author: "${escapeTypst(basics.name)}", title: "${escapeTypst(basics.name)}")
 #set page(
-    paper: "a4",
-    margin: 0.4in,
+    paper: "${format}",
+    margin: (x: ${marginX}mm, y: ${marginY}mm),
     fill: rgb("${backgroundColor}"),
 )
 
@@ -233,25 +282,25 @@ export const modernTemplate: ResumeTemplate = {
 #let font-heading = "${headingFont}"
 #let font-sans = "${bodyFont}"
 
-#set text(font: font-sans, size: 9.4pt, weight: ${bodyWeight}, fill: color-text, ligatures: false)
-#set par(leading: 0.70em, justify: false)
+#set text(font: font-sans, size: ${bodyFontSize}pt, weight: ${bodyWeight}, fill: color-text, ligatures: false, lang: "${lang}")
+#set par(leading: ${bodyLeading}em, justify: false)
 #set list(spacing: 0.45em)
 
 #show link: set text(fill: color-accent)
 
 #show heading.where(level: 1): it => block(below: 4pt)[
-    #set text(font: font-heading, size: 21pt, weight: ${headingWeight}, fill: color-heading)
+    #set text(font: font-heading, size: ${nameFontSize}pt, weight: ${headingWeight}, fill: color-heading)
     #it.body
 ]
 
 #show heading.where(level: 2): it => block(above: 10pt, below: 4pt)[
-    #text(font: font-heading, size: 10.5pt, weight: ${headingWeight}, fill: color-accent)[#upper(it.body)]
+    #text(font: font-heading, size: ${sectionTitleFontSize}pt, weight: ${headingWeight}, fill: color-accent)[#upper(it.body)]
     #v(-6pt)
     #line(length: 100%, stroke: 0.6pt + color-accent.transparentize(50%))
 ]
 
 #show heading.where(level: 3): it => [
-    #set text(size: 9.8pt, weight: 700, fill: color-heading)
+    #set text(size: ${jobTitleFontSize}pt, weight: 700, fill: color-heading)
     #block(width: 100%, it.body)
 ]
 

@@ -27,7 +27,8 @@ import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "./preview/templates"
 import { downloadBlob } from "#/lib/download"
 import { copyResumeShareLink } from "#/lib/share-resume-link"
-import { ColorsSection, LayoutSection, TemplatesSection, TypographySection } from "./design"
+import { ColorsSection, LayoutSection, PageSection, TemplatesSection, TypographySection } from "./design"
+import { resumeShowcaseValues } from "../data/resume-seed-values"
 
 async function generateResumeThumbnail(values: ResumeValues) {
     const $typst = getTypst()
@@ -48,6 +49,13 @@ export default function Builder({ resume }: BuilderProps) {
     const updateMutation = useMutation({
         mutationFn: updateResumeContentFn,
         scope: { id: `resume-${resume.id}` },
+        onError: (err) => {
+            console.error("Failed to save resume", err)
+            toast.error("Failed to save changes", {
+                id: "resume-save-error",
+                description: err instanceof Error ? err.message : "Please check your connection and try again.",
+            })
+        },
     })
 
     const hasRequestedInitialThumbnail = useRef(false)
@@ -71,7 +79,13 @@ export default function Builder({ resume }: BuilderProps) {
         validators: { onChange: ResumeZodSchema },
         listeners: {
             onChange: async ({ formApi }) => {
-                if (!formApi.state.isValid || !formApi.state.isDirty) return
+                if (!formApi.state.isDirty) return
+
+                if (!formApi.state.isValid) {
+                    toast.error("Can't save — fix the highlighted errors first", { id: "resume-invalid" })
+                    return
+                }
+                toast.dismiss("resume-invalid")
 
                 const values = formApi.state.values
                 let thumbnail: string | undefined
@@ -173,8 +187,19 @@ export default function Builder({ resume }: BuilderProps) {
                 }
                 design={
                     <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
+                        <button
+                            onClick={() => {
+                                updateMutation.mutate({
+                                    data: { id: resume.id, updatePayload: { content: resumeShowcaseValues, thumbnail:"" } },
+                                })
+                            }}
+                        >
+                            seed
+                        </button>
                         <TemplatesSection form={form} />
                         <LayoutSection form={form} />
+                        <FieldSeparator />
+                        <PageSection form={form} />
                         <FieldSeparator />
                         <ColorsSection form={form} />
                         <FieldSeparator />

@@ -1,4 +1,5 @@
 import { Field, FieldLabel } from "#/components/ui/field"
+import { Input } from "#/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "#/components/ui/select"
 import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "../../data/resume-default-values"
@@ -25,15 +26,15 @@ const FONT_WEIGHTS = [
 ] as const
 
 const TYPOGRAPHY_GROUPS = [
-    { name: "heading", label: "Heading" },
     { name: "body", label: "Body" },
+    { name: "heading", label: "Heading" },
 ] as const
 
 export const TypographySection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
         <SectionFieldSet title="Typography">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-6">
                 {TYPOGRAPHY_GROUPS.map(({ name, label }) => (
                     <div key={name} className="flex flex-col gap-4">
                         <form.AppField name={`meta.typography.${name}.fontFamily`}>
@@ -80,6 +81,40 @@ export const TypographySection = withForm({
                                 </Field>
                             )}
                         </form.AppField>
+                        <div className="grid grid-cols-2 gap-4">
+                            <form.AppField name={`meta.typography.${name}.fontSize`}>
+                                {(field) => (
+                                    <Field>
+                                        <FieldLabel htmlFor={field.name}>Font size</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            type="number"
+                                            min={6}
+                                            max={24}
+                                            step={0.5}
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.valueAsNumber)}
+                                        />
+                                    </Field>
+                                )}
+                            </form.AppField>
+                            <form.AppField name={`meta.typography.${name}.lineHeight`}>
+                                {(field) => (
+                                    <Field>
+                                        <FieldLabel htmlFor={field.name}>Line height</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            type="number"
+                                            min={1}
+                                            max={3}
+                                            step={0.1}
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.valueAsNumber)}
+                                        />
+                                    </Field>
+                                )}
+                            </form.AppField>
+                        </div>
                     </div>
                 ))}
             </div>

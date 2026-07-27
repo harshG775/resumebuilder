@@ -1,6 +1,307 @@
 import type { ResumeValues } from "../schema/resume.zod-schema"
 
-export const resumeSeedValues: ResumeValues = {
+export const resumeShowcaseValues: ResumeValues = {
+    basics: {
+        name: "Alex Morgan",
+        headline: "Senior Software Engineer",
+
+        email: {
+            hidden: false,
+            label: "alex@example.com",
+            value: "alex@example.com",
+        },
+
+        phone: {
+            hidden: false,
+            label: "(555) 123-4567",
+            value: "+15551234567",
+        },
+
+        location: "San Francisco, CA",
+
+        website: {
+            hidden: false,
+            label: "",
+            value: "",
+        },
+
+        customFields: [
+            {
+                id: crypto.randomUUID(),
+                label: "github.com/alexmorgan",
+                value: "https://github.com/alexmorgan",
+            },
+            {
+                id: crypto.randomUUID(),
+                label: "linkedin.com/in/alexmorgan",
+                value: "https://linkedin.com/in/alexmorgan",
+            },
+        ],
+    },
+
+    sections: {
+        summary: {
+            title: "Summary",
+            hidden: false,
+            columns: 1,
+            icon: "",
+            content: `Software engineer with #strong[6+ years of experience] designing and shipping #strong[web applications] used by millions of people. Specializes in #strong[React], #strong[TypeScript], and #strong[distributed systems], with a track record of leading small teams from idea to production. Passionate about #strong[developer experience], #strong[performance], and building products people enjoy using.`,
+        },
+
+        skill: {
+            title: "Skills",
+            hidden: false,
+            columns: 1,
+            icon: "",
+
+            items: [
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    icon: "",
+                    name: "Languages",
+                    proficiency: "",
+                    level: 5,
+                    keywords: ["TypeScript", "JavaScript", "Python", "Go"],
+                },
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    icon: "",
+                    name: "Frontend",
+                    proficiency: "",
+                    level: 5,
+                    keywords: ["React", "Next.js", "Redux", "Tailwind CSS", "GraphQL"],
+                },
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    icon: "",
+                    name: "Backend",
+                    proficiency: "",
+                    level: 4,
+                    keywords: ["Node.js", "PostgreSQL", "Redis", "REST APIs"],
+                },
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    icon: "",
+                    name: "Infrastructure",
+                    proficiency: "",
+                    level: 4,
+                    keywords: ["AWS", "Docker", "Kubernetes", "CI/CD"],
+                },
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    icon: "",
+                    name: "Practices",
+                    proficiency: "",
+                    level: 4,
+                    keywords: ["Agile", "Code Review", "Mentoring", "System Design"],
+                },
+            ],
+        },
+
+        experience: {
+            title: "Experience",
+            hidden: false,
+            columns: 1,
+            icon: "",
+
+            items: [
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    company: "Nimbus Cloud",
+                    position: "Senior Software Engineer",
+                    location: "San Francisco, CA",
+                    startDate: "Mar 2022",
+                    endDate: "Present",
+                    website: {
+                        hidden: true,
+                        label: "",
+                        value: "",
+                    },
+                    content: `- Led the rebuild of the #strong[customer dashboard] in #strong[Next.js] and #strong[TypeScript], improving page load times by #strong[45%] and cutting bug reports by #strong[30%].
+
+- Designed and shipped a #strong[real-time collaboration feature] used by over #strong[200,000 monthly active users], built on #strong[WebSockets] and #strong[CRDTs].
+
+- Mentored #strong[4 junior engineers] and introduced a peer code-review process that raised release confidence across the team.`,
+                },
+
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    company: "Brightline Labs",
+                    position: "Software Engineer",
+                    location: "Austin, TX",
+                    startDate: "Jul 2019",
+                    endDate: "Feb 2022",
+                    website: {
+                        hidden: true,
+                        label: "",
+                        value: "",
+                    },
+                    content: `- Built and maintained #strong[core billing infrastructure] processing #strong[\\$2M+ in monthly transactions] with #strong[99.99% uptime].
+
+- Migrated a monolithic #strong[Express] API to a #strong[microservices architecture], reducing average response time by #strong[35%].
+
+- Partnered with design to launch a #strong[self-serve onboarding flow], increasing trial-to-paid conversion by #strong[18%].`,
+                },
+
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    company: "Fieldstone Digital",
+                    position: "Junior Developer",
+                    location: "Remote",
+                    startDate: "Jun 2018",
+                    endDate: "Jun 2019",
+                    website: {
+                        hidden: true,
+                        label: "",
+                        value: "",
+                    },
+                    content: `- Developed responsive marketing sites for #strong[10+ clients] using #strong[React] and #strong[Sass].
+
+- Set up automated #strong[testing] and #strong[deployment pipelines], cutting release time from days to hours.`,
+                },
+            ],
+        },
+
+        project: {
+            title: "Projects",
+            hidden: false,
+            columns: 1,
+            icon: "",
+
+            items: [
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    name: "OpenBoard",
+                    type: "open-source",
+                    links: [],
+                    keywords: ["React", "TypeScript", "WebRTC", "Node.js"],
+                    startDate: "",
+                    endDate: "",
+                    content: `- Built an #strong[open-source collaborative whiteboard] with real-time cursors and drawing sync, used by #strong[1,200+ stars] on GitHub.
+
+- Implemented #strong[conflict-free replicated data types (CRDTs)] to support offline editing and multi-user sync.`,
+                },
+
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    name: "Recipe Vault",
+                    type: "personal",
+                    links: [],
+                    keywords: ["Next.js", "PostgreSQL", "Tailwind CSS"],
+                    startDate: "",
+                    endDate: "",
+                    content: `- Designed and built a #strong[personal recipe manager] with search, tagging, and meal planning.
+
+- Deployed on #strong[Vercel] with a #strong[Postgres] backend, supporting image uploads and full-text search.`,
+                },
+            ],
+        },
+
+        education: {
+            title: "Education",
+            hidden: false,
+            columns: 1,
+            icon: "",
+
+            items: [
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    school: "University of Texas at Austin",
+                    degree: "B.S. Computer Science",
+                    area: "",
+                    grade: "",
+                    location: "",
+                    startDate: "2014",
+                    endDate: "2018",
+                    website: {
+                        hidden: true,
+                        label: "",
+                        value: "",
+                    },
+                    content: "",
+                },
+            ],
+        },
+
+        certification: {
+            title: "Certifications",
+            hidden: false,
+            columns: 1,
+            icon: "",
+            items: [
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    title: "AWS Certified Solutions Architect – Associate",
+                    issuer: "Amazon Web Services",
+                    date: "2023",
+                    website: {
+                        hidden: true,
+                        label: "",
+                        value: "",
+                    },
+                    content: "",
+                },
+            ],
+        },
+    },
+
+    meta: {
+        template: "classic",
+        layout: {
+            pages: [
+                {
+                    main: ["summary", "skill", "experience", "project", "education", "certification"],
+                },
+            ],
+        },
+        page: {
+            gapX: 1,
+            gapY: 1,
+            marginX: 12,
+            marginY: 10,
+            format: "a4",
+            locale: "en-US",
+            hideLinkUnderline: false,
+            hideIcons: false,
+            hideSectionIcons: true,
+        },
+        design: {
+            colors: {
+                primary: "#1e3a8a",
+                text: "#111827",
+                background: "#ffffff",
+            },
+        },
+        typography: {
+            heading: {
+                fontFamily: "Georgia",
+                fontWeight: "800",
+                fontSize: 14,
+                lineHeight: 1.5,
+            },
+            body: {
+                fontFamily: "Arial",
+                fontWeight: "400",
+                fontSize: 10,
+                lineHeight: 1.5,
+            },
+        },
+    },
+}
+
+export const harshGaurResumeSeedValues: ResumeValues = {
     basics: {
         name: "Harsh Gaur",
         headline: "Frontend Engineer | React • Next.js • TypeScript • TanStack",
@@ -275,7 +576,6 @@ export const resumeSeedValues: ResumeValues = {
 
     meta: {
         template: "classic",
-
         layout: {
             pages: [
                 {
@@ -283,7 +583,17 @@ export const resumeSeedValues: ResumeValues = {
                 },
             ],
         },
-
+        page: {
+            gapX: 4,
+            gapY: 4,
+            marginX: 14,
+            marginY: 12,
+            format: "a4",
+            locale: "en-US",
+            hideLinkUnderline: false,
+            hideIcons: false,
+            hideSectionIcons: true,
+        },
         design: {
             colors: {
                 primary: "#1e3a8a",
@@ -291,15 +601,18 @@ export const resumeSeedValues: ResumeValues = {
                 background: "#ffffff",
             },
         },
-
         typography: {
             heading: {
-                fontFamily: "Cal Sans",
-                fontWeight: "700",
+                fontFamily: "Georgia",
+                fontWeight: "800",
+                fontSize: 14,
+                lineHeight: 1.5,
             },
             body: {
-                fontFamily: "Inter",
+                fontFamily: "Arial",
                 fontWeight: "400",
+                fontSize: 10,
+                lineHeight: 1.5,
             },
         },
     },
