@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "#/components/ui/dialog"
-import { DownloadIcon } from "lucide-react"
+import { DownloadIcon } from "@phosphor-icons/react"
 import type { ReactElement, ReactNode } from "react"
 
 export type DownloadFormatOption = {

@@ -3,7 +3,7 @@ import { FieldLabel } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "#/components/ui/popover"
 import { cn } from "#/lib/utils"
-import { Tag, X } from "lucide-react"
+import { TagIcon, XIcon } from "@phosphor-icons/react"
 
 export function LinkField({
     id,
@@ -48,7 +48,7 @@ export function LinkField({
                             />
                         }
                     >
-                        <Tag className="size-3.5" />
+                        <TagIcon className="size-3.5" />
                     </PopoverTrigger>
                     <PopoverContent className="w-56" align="end">
                         <FieldLabel htmlFor={id ? `${id}-label` : undefined}>Label</FieldLabel>
@@ -64,7 +64,7 @@ export function LinkField({
             </div>
             {onRemove && (
                 <Button type="button" variant="destructive" size="icon" onClick={onRemove}>
-                    <X />
+                    <XIcon />
                 </Button>
             )}
         </div>

@@ -2,7 +2,7 @@ import { Button } from "#/components/ui/button"
 import { Field, FieldLabel } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
 import { withForm } from "#/hooks/form"
-import { Plus } from "lucide-react"
+import { PlusIcon } from "@phosphor-icons/react"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { SectionFieldSet } from "../components/section-field-set"
 import { SortableDragItem, SortableDragProvider } from "../components/sortable-item"
@@ -191,7 +191,7 @@ export const BasicsSection = withForm({
                                 })
                             }
                         >
-                            <Plus />
+                            <PlusIcon />
                             Add Custom Field
                         </Button>
                     </Field>

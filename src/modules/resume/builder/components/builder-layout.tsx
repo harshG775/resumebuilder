@@ -12,7 +12,7 @@ import { Separator } from "#/components/ui/separator"
 import { useIsMobile } from "#/hooks/use-mobile"
 import { cn } from "#/lib/utils"
 import { Link } from "@tanstack/react-router"
-import { EyeIcon, HomeIcon, PaletteIcon, PanelLeftIcon, PanelRightIcon, PencilIcon, SquarePenIcon } from "lucide-react"
+import { EyeIcon, HouseIcon, NotePencilIcon, PaletteIcon, PencilIcon, SidebarSimpleIcon } from "@phosphor-icons/react"
 import { useState } from "react"
 import type React from "react"
 import { usePanelRef } from "react-resizable-panels"
@@ -21,7 +21,7 @@ import { Spinner } from "#/components/ui/spinner"
 type PanelKey = "editor" | "preview" | "design"
 
 const MOBILE_TABS: { key: PanelKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { key: "editor", label: "Edit", icon: SquarePenIcon },
+    { key: "editor", label: "Edit", icon: NotePencilIcon },
     { key: "preview", label: "Preview", icon: EyeIcon },
     { key: "design", label: "Design", icon: PaletteIcon },
 ]
@@ -71,7 +71,7 @@ export default function BuilderLayout({
                                     }
                                 }}
                             >
-                                <PanelLeftIcon />
+                                <SidebarSimpleIcon />
                                 <span className="sr-only">Toggle editor panel</span>
                             </Button>
                         )}
@@ -90,7 +90,7 @@ export default function BuilderLayout({
                         <BreadcrumbList className="flex-nowrap">
                             <BreadcrumbItem>
                                 <BreadcrumbLink render={<Link to="/dashboard/resumes" />} className="flex items-center">
-                                    <HomeIcon className="size-4" />
+                                    <HouseIcon className="size-4" />
                                     <span className="sr-only">Dashboard</span>
                                 </BreadcrumbLink>
                             </BreadcrumbItem>
@@ -122,7 +122,7 @@ export default function BuilderLayout({
                                     }
                                 }}
                             >
-                                <PanelRightIcon />
+                                <SidebarSimpleIcon mirrored />
                                 <span className="sr-only">Toggle design panel</span>
                             </Button>
                         )}

@@ -10,7 +10,7 @@ import {
 import { Field, FieldDescription } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { cn } from "#/lib/utils"
-import { CheckIcon, PencilIcon } from "lucide-react"
+import { CheckIcon, PencilIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
 import { getTemplate, templateList } from "../preview/templates"

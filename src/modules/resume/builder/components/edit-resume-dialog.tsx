@@ -10,7 +10,7 @@ import { generateBaseSlug } from "#/lib/utils"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import type { AnyFieldApi } from "@tanstack/react-form"
-import { Link2Icon, PencilIcon, RefreshCwIcon } from "lucide-react"
+import { ArrowsClockwiseIcon, LinkSimpleIcon, PencilIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -51,13 +51,13 @@ export function SlugField({
                     onClick={onRegenerate}
                     className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
                 >
-                    <RefreshCwIcon className="size-3" />
+                    <ArrowsClockwiseIcon className="size-3" />
                     Regenerate from title
                 </button>
             </div>
             <InputGroup>
                 <InputGroupAddon>
-                    <Link2Icon />
+                    <LinkSimpleIcon />
                     <span className="truncate">
                         {host}/{username}/
                     </span>

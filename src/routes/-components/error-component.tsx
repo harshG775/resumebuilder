@@ -6,14 +6,14 @@
 
 import { Link } from "@tanstack/react-router"
 import type { ErrorComponentProps } from "@tanstack/react-router"
-import { Home, RefreshCw, ServerCrash } from "lucide-react"
+import { ArrowsClockwiseIcon, HouseIcon, WarningOctagonIcon } from "@phosphor-icons/react"
 import { Button } from "#/components/ui/button"
 
 export default function ErrorComponent({ error, reset }: ErrorComponentProps) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background p-8 text-center font-sans">
             <div className="flex size-16 items-center justify-center rounded-full bg-destructive/10">
-                <ServerCrash className="size-8 text-destructive" />
+                <WarningOctagonIcon className="size-8 text-destructive" />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -31,11 +31,11 @@ export default function ErrorComponent({ error, reset }: ErrorComponentProps) {
 
             <div className="flex flex-wrap items-center justify-center gap-2">
                 <Button onClick={() => reset()}>
-                    <RefreshCw />
+                    <ArrowsClockwiseIcon />
                     Try again
                 </Button>
                 <Button render={<Link to="/dashboard" />} nativeButton={false} variant="secondary">
-                    <Home />
+                    <HouseIcon />
                     Go to Dashboard
                 </Button>
             </div>

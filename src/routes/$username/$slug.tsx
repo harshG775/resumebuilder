@@ -6,7 +6,7 @@ import { getResumeByUsernameAndSlugFn } from "#/lib/server/resume.function"
 import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "#/modules/resume/builder/preview/templates"
 import { createFileRoute, Link, notFound } from "@tanstack/react-router"
-import { DownloadIcon } from "lucide-react"
+import { DownloadIcon } from "@phosphor-icons/react"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 

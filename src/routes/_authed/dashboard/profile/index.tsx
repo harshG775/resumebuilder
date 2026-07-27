@@ -14,7 +14,7 @@ import { useHost } from "#/hooks/use-host"
 import { getCurrentUserFn, updateProfileFn } from "#/lib/server/user.function"
 import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
-import { CalendarIcon, Link2Icon, PencilIcon, UserCircleIcon } from "lucide-react"
+import { CalendarIcon, LinkSimpleIcon, PencilIcon, UserCircleIcon } from "@phosphor-icons/react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -50,7 +50,7 @@ function PublicLink({ host, username }: { host: string; username: string }) {
 
     return (
         <div className="flex items-center gap-2 rounded-xl border bg-muted/40 px-3 py-2">
-            <Link2Icon className="size-4 shrink-0 text-muted-foreground" />
+            <LinkSimpleIcon className="size-4 shrink-0 text-muted-foreground" />
             <span className="min-w-0 flex-1 truncate font-mono text-sm">
                 <span className="text-muted-foreground">{host}/</span>
                 <span className="text-foreground">{displayUsername}/</span>

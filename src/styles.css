@@ -6,13 +6,17 @@
 @import "shadcn/tailwind.css";
 
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource/ibm-plex-mono";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
+    --font-heading: "Fraunces Variable", serif;
 
     --font-sans: "Inter Variable", sans-serif;
+
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
     --color-sidebar-ring: var(--sidebar-ring);
 
@@ -94,41 +98,43 @@
 :root {
     color-scheme: light;
 
-    --background: oklch(1 0 0);
+    --background: #faf9f4;
 
-    --foreground: oklch(0.145 0 0);
+    --foreground: #1a1a1f;
 
-    --card: oklch(1 0 0);
+    --card: #ffffff;
 
-    --card-foreground: oklch(0.145 0 0);
+    --card-foreground: #1a1a1f;
 
-    --popover: oklch(1 0 0);
+    --popover: #ffffff;
 
-    --popover-foreground: oklch(0.145 0 0);
+    --popover-foreground: #1a1a1f;
 
-    --primary: oklch(0.457 0.24 277.023);
+    --primary: #16324f;
 
-    --primary-foreground: oklch(0.962 0.018 272.314);
+    --primary-foreground: #faf9f4;
 
-    --secondary: oklch(0.967 0.001 286.375);
+    --secondary: #b8924a;
 
-    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --secondary-foreground: #1a1a1f;
 
-    --muted: oklch(0.97 0 0);
+    --muted: #f1efe7;
 
-    --muted-foreground: oklch(0.556 0 0);
+    --muted-foreground: #5c594e;
 
-    --accent: oklch(0.97 0 0);
+    --accent: #efe7d8;
 
-    --accent-foreground: oklch(0.205 0 0);
+    --accent-foreground: #16324f;
 
     --destructive: oklch(0.577 0.245 27.325);
 
-    --border: oklch(0.922 0 0);
+    --border: #e2dfd5;
 
-    --input: oklch(0.922 0 0);
+    --input: #e2dfd5;
 
-    --ring: oklch(0.708 0 0);
+    --ring: #16324f;
+
+    --shadow-elevated: 0 1px 2px rgb(0 0 0 / 0.04), 0 16px 32px -20px rgb(0 0 0 / 0.18);
 
     --chart-1: oklch(0.87 0 0);
 

@@ -9,25 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as UsernameSlugRouteImport } from './routes/$username/$slug'
-import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashboard/route'
 import { Route as AuthedBuilderRouteRouteImport } from './routes/_authed/builder/route'
-import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/index'
+import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashboard/route'
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
+import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
-import { Route as AuthedDashboardProfileIndexRouteImport } from './routes/_authed/dashboard/profile/index'
 import { Route as AuthedBuilderResumesResume_idRouteImport } from './routes/_authed/builder/resumes/$resume_id'
+import { Route as AuthedDashboardProfileIndexRouteImport } from './routes/_authed/dashboard/profile/index'
+import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
 
-const PublicRouteRoute = PublicRouteRouteImport.update({
-  id: '/_public',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsernameSlugRoute = UsernameSlugRouteImport.update({
@@ -35,36 +35,36 @@ const UsernameSlugRoute = UsernameSlugRouteImport.update({
   path: '/$username/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthedDashboardRouteRoute = AuthedDashboardRouteRouteImport.update({
-  id: '/_authed/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthedBuilderRouteRoute = AuthedBuilderRouteRouteImport.update({
   id: '/_authed/builder',
   path: '/builder',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicSignInIndexRoute = PublicSignInIndexRouteImport.update({
-  id: '/sign-in/',
-  path: '/sign-in/',
-  getParentRoute: () => PublicRouteRoute,
+const AuthedDashboardRouteRoute = AuthedDashboardRouteRouteImport.update({
+  id: '/_authed/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthedDashboardIndexRoute = AuthedDashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthedDashboardRouteRoute,
 } as any)
+const PublicSignInIndexRoute = PublicSignInIndexRouteImport.update({
+  id: '/sign-in/',
+  path: '/sign-in/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthedDashboardResumesIndexRoute =
-  AuthedDashboardResumesIndexRouteImport.update({
-    id: '/resumes/',
-    path: '/resumes/',
-    getParentRoute: () => AuthedDashboardRouteRoute,
+const AuthedBuilderResumesResume_idRoute =
+  AuthedBuilderResumesResume_idRouteImport.update({
+    id: '/resumes/$resume_id',
+    path: '/resumes/$resume_id',
+    getParentRoute: () => AuthedBuilderRouteRoute,
   } as any)
 const AuthedDashboardProfileIndexRoute =
   AuthedDashboardProfileIndexRouteImport.update({
@@ -72,11 +72,11 @@ const AuthedDashboardProfileIndexRoute =
     path: '/profile/',
     getParentRoute: () => AuthedDashboardRouteRoute,
   } as any)
-const AuthedBuilderResumesResume_idRoute =
-  AuthedBuilderResumesResume_idRouteImport.update({
-    id: '/resumes/$resume_id',
-    path: '/resumes/$resume_id',
-    getParentRoute: () => AuthedBuilderRouteRoute,
+const AuthedDashboardResumesIndexRoute =
+  AuthedDashboardResumesIndexRouteImport.update({
+    id: '/resumes/',
+    path: '/resumes/',
+    getParentRoute: () => AuthedDashboardRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -166,18 +166,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_public': {
-      id: '/_public'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof PublicRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$username/$slug': {
@@ -187,13 +187,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsernameSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authed/dashboard': {
-      id: '/_authed/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthedDashboardRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authed/builder': {
       id: '/_authed/builder'
       path: '/builder'
@@ -201,12 +194,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedBuilderRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_public/sign-in/': {
-      id: '/_public/sign-in/'
-      path: '/sign-in'
-      fullPath: '/sign-in/'
-      preLoaderRoute: typeof PublicSignInIndexRouteImport
-      parentRoute: typeof PublicRouteRoute
+    '/_authed/dashboard': {
+      id: '/_authed/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthedDashboardRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authed/dashboard/': {
       id: '/_authed/dashboard/'
@@ -215,6 +208,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardIndexRouteImport
       parentRoute: typeof AuthedDashboardRouteRoute
     }
+    '/_public/sign-in/': {
+      id: '/_public/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in/'
+      preLoaderRoute: typeof PublicSignInIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -222,12 +222,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authed/dashboard/resumes/': {
-      id: '/_authed/dashboard/resumes/'
-      path: '/resumes'
-      fullPath: '/dashboard/resumes/'
-      preLoaderRoute: typeof AuthedDashboardResumesIndexRouteImport
-      parentRoute: typeof AuthedDashboardRouteRoute
+    '/_authed/builder/resumes/$resume_id': {
+      id: '/_authed/builder/resumes/$resume_id'
+      path: '/resumes/$resume_id'
+      fullPath: '/builder/resumes/$resume_id'
+      preLoaderRoute: typeof AuthedBuilderResumesResume_idRouteImport
+      parentRoute: typeof AuthedBuilderRouteRoute
     }
     '/_authed/dashboard/profile/': {
       id: '/_authed/dashboard/profile/'
@@ -236,12 +236,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardProfileIndexRouteImport
       parentRoute: typeof AuthedDashboardRouteRoute
     }
-    '/_authed/builder/resumes/$resume_id': {
-      id: '/_authed/builder/resumes/$resume_id'
-      path: '/resumes/$resume_id'
-      fullPath: '/builder/resumes/$resume_id'
-      preLoaderRoute: typeof AuthedBuilderResumesResume_idRouteImport
-      parentRoute: typeof AuthedBuilderRouteRoute
+    '/_authed/dashboard/resumes/': {
+      id: '/_authed/dashboard/resumes/'
+      path: '/resumes'
+      fullPath: '/dashboard/resumes/'
+      preLoaderRoute: typeof AuthedDashboardResumesIndexRouteImport
+      parentRoute: typeof AuthedDashboardRouteRoute
     }
   }
 }

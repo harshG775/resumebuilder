@@ -2,7 +2,7 @@ import { Field, FieldLabel } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "#/components/ui/input-group"
 import { Popover, PopoverContent, PopoverTrigger } from "#/components/ui/popover"
-import { Tag } from "lucide-react"
+import { TagIcon } from "@phosphor-icons/react"
 
 export function WebsiteField({
     id,
@@ -60,7 +60,7 @@ export function WebsiteField({
                                 />
                             }
                         >
-                            <Tag className="size-3.5" />
+                            <TagIcon className="size-3.5" />
                         </PopoverTrigger>
                         <PopoverContent className="w-56" align="end">
                             <FieldLabel htmlFor={id ? `${id}-label` : undefined}>Label</FieldLabel>

@@ -1,9 +1,9 @@
 import { cn } from "#/lib/utils.ts"
-import { LoaderIcon, LoaderCircleIcon } from "lucide-react"
+import { CircleNotchIcon, SpinnerIcon } from "@phosphor-icons/react"
 
 const spinnerVariants = {
-    default: LoaderIcon,
-    circle: LoaderCircleIcon,
+    default: SpinnerIcon,
+    circle: CircleNotchIcon,
 } as const
 
 type SpinnerVariant = keyof typeof spinnerVariants
