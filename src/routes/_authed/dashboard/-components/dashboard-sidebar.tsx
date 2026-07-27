@@ -1,5 +1,5 @@
 import type { LinkProps } from "@tanstack/react-router"
-import type { LucideIcon } from "lucide-react"
+import type { Icon } from "@phosphor-icons/react"
 
 import { Badge } from "#/components/ui/badge"
 import {
@@ -17,13 +17,13 @@ import {
 
 import { Link, useLocation } from "@tanstack/react-router"
 import { DashboardNavUser } from "./dashboard-nav-user"
-import { FileTextIcon, UserCircleIcon } from "lucide-react"
+import { FileTextIcon, UserCircleIcon } from "@phosphor-icons/react"
 import { Logo } from "#/components/logo.tsx"
 
 type NavItemType = {
     title: string
     href: LinkProps["to"]
-    icon: LucideIcon
+    icon: Icon
 }
 
 const navMain: NavItemType[] = [

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { X } from "lucide-react"
+import { XIcon } from "@phosphor-icons/react"
 import { cn } from "#/lib/utils"
 import { Input } from "./input"
 import { Badge } from "./badge"
@@ -38,7 +38,7 @@ export function TagsInput({ value, onValueChange, placeholder, className }: Tags
                         onClick={() => onValueChange(value.filter((t) => t !== tag))}
                         className="hover:text-destructive rounded-full"
                     >
-                        <X className="h-3 w-3" />
+                        <XIcon className="h-3 w-3" />
                     </button>
                 </Badge>
             ))}

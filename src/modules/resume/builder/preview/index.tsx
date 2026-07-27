@@ -3,7 +3,7 @@ import type { ReactNode } from "react"
 import type { ResumeValues } from "../../schema/resume.zod-schema"
 import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "./templates"
-import { RotateCcwIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react"
+import { ArrowCounterClockwiseIcon, MagnifyingGlassMinusIcon, MagnifyingGlassPlusIcon } from "@phosphor-icons/react"
 import { useDebouncedCallback } from "@tanstack/react-pacer"
 
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch"
@@ -23,15 +23,15 @@ function ResumePreviewArea({ children }: { children: ReactNode }) {
                     <div className="fixed bottom-20 left-4 right-4 z-30 flex justify-center md:bottom-4">
                         <div className="pointer-events-auto flex items-center gap-1 rounded-lg border bg-sidebar/70 p-1 shadow">
                             <Button variant="ghost" size="icon-sm" onClick={() => resetTransform()}>
-                                <RotateCcwIcon className="size-4" />
+                                <ArrowCounterClockwiseIcon className="size-4" />
                                 <span className="sr-only">Reset zoom</span>
                             </Button>
                             <Button variant="ghost" size="icon-sm" onClick={() => zoomOut()}>
-                                <ZoomOutIcon className="size-4" />
+                                <MagnifyingGlassMinusIcon className="size-4" />
                                 <span className="sr-only">Zoom out</span>
                             </Button>
                             <Button variant="ghost" size="icon-sm" onClick={() => zoomIn()}>
-                                <ZoomInIcon className="size-4" />
+                                <MagnifyingGlassPlusIcon className="size-4" />
                                 <span className="sr-only">Zoom in</span>
                             </Button>
                         </div>

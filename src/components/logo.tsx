@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority"
 import type { VariantProps } from "class-variance-authority"
-import { FileTextIcon } from "lucide-react"
+import { FileTextIcon } from "@phosphor-icons/react"
 import type { ComponentPropsWithRef, ComponentType } from "react"
 
 import { cn } from "#/lib/utils.ts"

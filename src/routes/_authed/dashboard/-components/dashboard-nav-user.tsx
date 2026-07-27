@@ -10,7 +10,7 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { Skeleton } from "#/components/ui/skeleton"
 import { authClient } from "#/lib/auth/auth-client"
-import { ChevronDownIcon, ChevronRightIcon, LogOutIcon, PaletteIcon } from "lucide-react"
+import { CaretDownIcon, CaretRightIcon, PaletteIcon, SignOutIcon } from "@phosphor-icons/react"
 import { useRouter } from "@tanstack/react-router"
 
 export function DashboardNavUser() {
@@ -56,14 +56,14 @@ export function DashboardNavUser() {
                                 <span className="truncate font-medium">{user.name}</span>
                                 <span className="truncate text-xs text-muted-foreground">{user.email}</span>
                             </div>
-                            <ChevronDownIcon className="ml-auto size-4" />
+                            <CaretDownIcon className="ml-auto size-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="min-w-56 rounded-lg" side={"top"} align="end" sideOffset={4}>
                             <DropdownMenuGroup>
                                 <DropdownMenuItem>
                                     <PaletteIcon />
                                     Theme
-                                    <ChevronRightIcon className="ml-auto" />
+                                    <CaretRightIcon className="ml-auto" />
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
@@ -78,7 +78,7 @@ export function DashboardNavUser() {
                                 }}
                                 variant="destructive"
                             >
-                                <LogOutIcon />
+                                <SignOutIcon />
                                 Log out
                             </DropdownMenuItem>
                         </DropdownMenuContent>

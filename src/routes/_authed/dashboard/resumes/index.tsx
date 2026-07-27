@@ -1,7 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { createResumeFn, deleteResumeFn, getAllResumeFn } from "#/lib/server/resume.function"
 import { Button } from "#/components/ui/button"
-import { FileTextIcon, PlusIcon } from "lucide-react"
+import { FileTextIcon, PlusIcon } from "@phosphor-icons/react"
 import { useMutation } from "@tanstack/react-query"
 import ResumeCard, { ResumeCardSkeleton } from "./-components/resume-card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -22,7 +22,7 @@ import { copyResumeShareLink } from "#/lib/share-resume-link"
 import { EditResumeDialog, SlugField, resumeFormSchema } from "#/modules/resume/builder/components/edit-resume-dialog"
 
 export const Route = createFileRoute("/_authed/dashboard/resumes/")({
-    beforeLoad: async () => {
+    loader: async () => {
         const { data } = await getAllResumeFn({ data: { page: 1, pageSize: 10 } })
         return { resumes: data }
     },
@@ -182,7 +182,7 @@ function CreateResumeDialog({ host, username }: { host: string; username: string
 
 function RouteComponent() {
     const router = useRouter()
-    const { resumes } = Route.useRouteContext()
+    const { resumes } = Route.useLoaderData()
     const [editingResume, setEditingResume] = useState<Resume | null>(null)
     const host = useHost()
     const { data: session } = authClient.useSession()

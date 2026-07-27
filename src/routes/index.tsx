@@ -6,24 +6,25 @@ import { siteConfig } from "#/config/site"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import {
     ArrowRightIcon,
-    ChevronDownIcon,
+    CaretDownIcon,
     CloudCheckIcon,
-    Columns3Icon,
+    ColumnsIcon,
     CoffeeIcon,
-    EllipsisVerticalIcon,
-    FileDownIcon,
-    GripVerticalIcon,
-    HeartHandshakeIcon,
-    Link2Icon,
-    LayoutTemplateIcon,
+    DotsSixVerticalIcon,
+    DotsThreeVerticalIcon,
+    FileArrowDownIcon,
+    GithubLogoIcon,
+    HandshakeIcon,
+    LinkSimpleIcon,
+    LayoutIcon,
+    LinkedinLogoIcon,
+    ListIcon,
     LockIcon,
-    MenuIcon,
     PaletteIcon,
     PlusIcon,
-    Share2Icon,
+    ShareNetworkIcon,
     StarIcon,
-} from "lucide-react"
-import { GithubLogoIcon, LinkedinLogoIcon } from "@phosphor-icons/react"
+} from "@phosphor-icons/react"
 
 export const Route = createFileRoute("/")({
     component: Home,
@@ -37,17 +38,17 @@ const stats: { value: string; label: string }[] | null = null
 
 const features = [
     {
-        icon: LayoutTemplateIcon,
+        icon: LayoutIcon,
         title: "Polished templates",
         description: "Classic and Modern layouts with a clean, single-column structure that's easy to scan",
     },
     {
-        icon: Columns3Icon,
+        icon: ColumnsIcon,
         title: "Edit, preview & design side-by-side",
         description: "A resizable three-pane workspace — see exactly what you're building as you type",
     },
     {
-        icon: GripVerticalIcon,
+        icon: DotsSixVerticalIcon,
         title: "Drag-and-drop sections",
         description: "Reorder experience, projects, skills, and more without leaving the editor",
     },
@@ -57,12 +58,12 @@ const features = [
         description: "Every change is saved automatically — no save button, nothing to remember",
     },
     {
-        icon: FileDownIcon,
+        icon: FileArrowDownIcon,
         title: "PDF & JSON export",
         description: "Download a print-ready PDF or your raw resume data, whenever you need it",
     },
     {
-        icon: Link2Icon,
+        icon: LinkSimpleIcon,
         title: "Your own shareable link",
         description: `Publish at ${siteConfig.domain}/you/resume and send one link instead of an attachment`,
     },
@@ -136,7 +137,7 @@ const steps = [
         description: "Fill in your sections, drag to reorder, and pick a design that fits.",
     },
     {
-        icon: Share2Icon,
+        icon: ShareNetworkIcon,
         title: "Share",
         description: "Export a polished PDF or hand out your personal link — updates reflect instantly.",
     },
@@ -180,7 +181,7 @@ function Home() {
                         <SheetTrigger
                             render={<Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu" />}
                         >
-                            <MenuIcon />
+                            <ListIcon />
                         </SheetTrigger>
                         <SheetContent side="right" className="flex w-full flex-col">
                             <SheetHeader>
@@ -309,7 +310,7 @@ function Home() {
                                     </span>
                                     <span className="ml-2 hidden shrink-0 items-center gap-2 text-muted-foreground sm:flex">
                                         <StarIcon className="size-3.5" />
-                                        <EllipsisVerticalIcon className="size-3.5" />
+                                        <DotsThreeVerticalIcon className="size-3.5" />
                                     </span>
                                 </div>
                                 <div className="grid grid-cols-2 divide-x divide-border sm:grid-cols-3">
@@ -379,7 +380,7 @@ function Home() {
                                             <span className="text-xs text-muted-foreground">Typography</span>
                                             <span className="flex items-center justify-between rounded-md border border-border px-2.5 py-1.5 text-xs">
                                                 Fraunces
-                                                <ChevronDownIcon className="size-3 text-muted-foreground" />
+                                                <CaretDownIcon className="size-3 text-muted-foreground" />
                                             </span>
                                         </div>
                                         <div className="flex flex-col gap-1.5">
@@ -543,7 +544,7 @@ function Home() {
                                 }}
                             />
                             <span className="relative mx-auto flex size-11 items-center justify-center rounded-full border border-primary-foreground/25">
-                                <HeartHandshakeIcon className="size-5" />
+                                <HandshakeIcon className="size-5" />
                             </span>
                             <h2 className="relative mt-4 font-heading text-2xl font-medium tracking-tight sm:text-3xl">
                                 Free forever, kept running by you

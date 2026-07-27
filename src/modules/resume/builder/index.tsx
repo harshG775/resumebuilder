@@ -17,7 +17,7 @@ import {
     SkillsSection,
     SummarySection,
 } from "./Editor"
-import { FileJsonIcon, FileTextIcon, Share2Icon } from "lucide-react"
+import { FileCodeIcon, FileTextIcon, ShareNetworkIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { updateResumeContentFn } from "#/lib/server/resume.function"
 import { useMutation } from "@tanstack/react-query"
@@ -127,7 +127,7 @@ export default function Builder({ resume }: BuilderProps) {
                 onEditTitle={() => setIsEditingTitle(true)}
                 shareAction={
                     <Button variant="outline" size="sm" onClick={handleShare}>
-                        <Share2Icon />
+                        <ShareNetworkIcon />
                         <span className="sr-only sm:not-sr-only">Share</span>
                     </Button>
                 }
@@ -145,7 +145,7 @@ export default function Builder({ resume }: BuilderProps) {
                             },
                             {
                                 key: "json",
-                                icon: <FileJsonIcon />,
+                                icon: <FileCodeIcon />,
                                 title: "JSON",
                                 description: "Full resume data for backup or import.",
                                 onDownload: handleDownloadJson,

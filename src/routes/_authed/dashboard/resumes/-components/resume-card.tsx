@@ -2,7 +2,15 @@ import { Link } from "@tanstack/react-router"
 import { Badge } from "#/components/ui/badge"
 import { Button } from "#/components/ui/button"
 import { Skeleton } from "#/components/ui/skeleton"
-import { ClockIcon, FileTextIcon, FolderIcon, MoreVerticalIcon, PencilIcon, Share2Icon, TrashIcon } from "lucide-react"
+import {
+    ClockIcon,
+    DotsThreeVerticalIcon,
+    FileTextIcon,
+    FolderIcon,
+    PencilIcon,
+    ShareNetworkIcon,
+    TrashIcon,
+} from "@phosphor-icons/react"
 import { cn, formatRelativeTime } from "#/lib/utils"
 
 import {
@@ -51,8 +59,14 @@ export default function ResumeCard({ resume, actions, isLastEdited }: ResumeCard
                 {resume.thumbnail ? (
                     <div
                         className="absolute inset-3 overflow-hidden rounded-lg shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-[1.015] [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:bg-white"
-                        dangerouslySetInnerHTML={{ __html: resume.thumbnail }}
-                    />
+                    >
+                        <iframe
+                            title={`${resume.title} preview`}
+                            srcDoc={`<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:#fff;}svg{display:block;width:100%;height:auto;}</style></head><body>${resume.thumbnail}</body></html>`}
+                            sandbox=""
+                            className=" w-full h-full"
+                        />
+                    </div>
                 ) : (
                     <div className="relative flex h-full items-center justify-center">
                         <FileTextIcon className="size-10 text-muted-foreground/30 transition-opacity duration-300 group-hover:opacity-0" />
@@ -98,7 +112,7 @@ export default function ResumeCard({ resume, actions, isLastEdited }: ResumeCard
                             />
                         }
                     >
-                        <MoreVerticalIcon className="size-4" />
+                        <DotsThreeVerticalIcon className="size-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuGroup>
@@ -119,7 +133,7 @@ export default function ResumeCard({ resume, actions, isLastEdited }: ResumeCard
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem onClick={actions.onShare}>
-                                <Share2Icon />
+                                <ShareNetworkIcon />
                                 Share link
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={actions.onEdit}>

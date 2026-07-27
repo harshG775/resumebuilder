@@ -1,7 +1,7 @@
 import { Button } from "#/components/ui/button"
 import { Field, FieldLabel, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
-import { CalendarIcon, PlusIcon } from "lucide-react"
+import { CalendarIcon, PlusIcon } from "@phosphor-icons/react"
 import { DotsSixVerticalIcon, ListIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
