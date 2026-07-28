@@ -366,7 +366,7 @@ function Home() {
                             {heroImage ? (
                                 <img
                                     src={heroImage}
-                                    alt="Resume Builder editor, live preview, and design panel"
+                                    alt={`${siteConfig.name} editor, live preview, and design panel`}
                                     className="w-full"
                                 />
                             ) : (

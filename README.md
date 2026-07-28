@@ -1,6 +1,6 @@
-# Resume Builder
+# Anchor
 
-<!-- ![Resume Builder screenshot](./public/screenshot.png) -->
+<!-- ![Anchor screenshot](./public/screenshot.png) -->
 <!-- TODO: add screenshot image at public/screenshot.png showing the builder editor + live preview, then uncomment the line above -->
 
 A resume builder built on TanStack Start, with a section-based editor, live preview, and PDF export powered by a client-side Typst rendering engine. Resume content is structured data (validated by a shared zod schema) that gets compiled to Typst markup and rendered to canvas/PDF entirely in the browser.

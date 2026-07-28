@@ -1,6 +1,7 @@
 export const siteConfig = {
-    name: "Resume Builder",
-    domain: "resumebuilder.app",
+    name: "Anchor",
+    // PLACEHOLDER — swap for the real domain once registered.
+    domain: "anchor.app",
 
     links: {
         github: "https://github.com/harshG775" as string | null,

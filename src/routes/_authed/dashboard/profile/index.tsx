@@ -9,6 +9,7 @@ import { Separator } from "#/components/ui/separator"
 import { SidebarTrigger } from "#/components/ui/sidebar"
 import { Skeleton } from "#/components/ui/skeleton"
 import { Spinner } from "#/components/ui/spinner"
+import { siteConfig } from "#/config/site"
 import { useAppForm } from "#/hooks/form"
 import { useHost } from "#/hooks/use-host"
 import { getCurrentUserFn, updateProfileFn } from "#/lib/server/user.function"
@@ -220,7 +221,7 @@ function RouteComponent() {
                         <Card className="max-w-xl">
                             <CardHeader>
                                 <CardTitle className="text-base">Your profile</CardTitle>
-                                <CardDescription>This is how you appear across Resume Builder.</CardDescription>
+                                <CardDescription>This is how you appear across {siteConfig.name}.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="flex items-center gap-4">
