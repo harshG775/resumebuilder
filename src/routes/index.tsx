@@ -6,7 +6,7 @@ import { siteConfig } from "#/config/site"
 import { useActiveSection } from "#/hooks/use-active-section"
 import { cn } from "#/lib/utils"
 import { Link, createFileRoute } from "@tanstack/react-router"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
     ArrowRightIcon,
     CaretDownIcon,
@@ -33,10 +33,8 @@ export const Route = createFileRoute("/")({
     component: Home,
 })
 
-/** Screenshot of the builder in action — drop a real image at e.g. public/hero-screenshot.png and set this. */
 const heroImage: string | null = "/images/hero-screenshot-1.png"
 
-/** No real numbers yet — set to a real array once you have them, this hides the row until then. */
 const stats: { value: string; label: string }[] | null = null
 
 const features = [
@@ -72,7 +70,6 @@ const features = [
     },
 ]
 
-/** Sections on this page — each id is registered with `useActiveSection` via `registerSection`. */
 const NAV_LINKS = [
     { label: "Features", id: "features" },
     { label: "How it works", id: "how-it-works" },
@@ -83,12 +80,6 @@ const NAV_LINKS = [
 
 const SECTION_IDS = NAV_LINKS.map((link) => link.id)
 
-/**
- * Marketing copy for each template in the registry (`modules/resume/builder/preview/templates`).
- * `id`/`label`/`thumbnail` come from the registry itself so the landing page never drifts from
- * what the builder's template picker actually offers — this only adds presentation-only copy
- * plus a fallback mockup style for templates that don't have a generated `thumbnail` yet.
- */
 const templateMarketingCopy: Record<TemplateId, { description: string; accentClassName: string; dark: boolean }> = {
     classic: {
         description:
@@ -162,6 +153,11 @@ function TemplatePreviewThumbnail({
     accentClassName: string
 }) {
     const [isLoaded, setIsLoaded] = useState(false)
+    const imgRef = useRef<HTMLImageElement>(null)
+
+    useEffect(() => {
+        if (imgRef.current?.complete) setIsLoaded(true)
+    }, [])
 
     return (
         <div
@@ -169,20 +165,23 @@ function TemplatePreviewThumbnail({
                 dark ? "bg-foreground text-background" : "border border-border bg-card"
             }`}
         >
-            <span className={`h-2.5 w-1/2 rounded-full ${accentClassName}`} />
-            <span className={`mt-2 block h-1.5 w-1/3 rounded-full ${dark ? "bg-background/20" : "bg-muted"}`} />
-            <div className="mt-4 space-y-1.5">
-                {[...Array(6)].map((_, i) => (
-                    <span
-                        key={i}
-                        className={`block h-1.5 rounded-full ${dark ? "bg-background/20" : "bg-muted"}`}
-                        style={{ width: `${90 - i * 9}%` }}
-                    />
-                ))}
+            <div className={isLoaded ? undefined : "animate-pulse"}>
+                <span className={`h-2.5 w-1/2 rounded-full ${accentClassName}`} />
+                <span className={`mt-2 block h-1.5 w-1/3 rounded-full ${dark ? "bg-background/20" : "bg-muted"}`} />
+                <div className="mt-4 space-y-1.5">
+                    {[...Array(6)].map((_, i) => (
+                        <span
+                            key={i}
+                            className={`block h-1.5 rounded-full ${dark ? "bg-background/20" : "bg-muted"}`}
+                            style={{ width: `${90 - i * 9}%` }}
+                        />
+                    ))}
+                </div>
             </div>
 
             {thumbnail && (
                 <img
+                    ref={imgRef}
                     src={thumbnail}
                     alt={`${label} template preview`}
                     onLoad={() => setIsLoaded(true)}

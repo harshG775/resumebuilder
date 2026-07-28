@@ -25,14 +25,8 @@ const linkMarkup = (url: string, label: string, underline: boolean) => {
     return `#link("${url}")[${body}]`
 }
 
-// `basics.website.value` is stored without a scheme (the editor UI shows "https://" as a
-// fixed prefix). Add it back here, unless the value already carries one from older data.
 const withScheme = (url: string, scheme = "https://") => (/^[a-z][a-z0-9+.-]*:/i.test(url) ? url : `${scheme}${url}`)
 
-// ── SECTIONS ────────────────────────────────────────────────────────────
-// Same shape as the classic template: each section is a standalone function of
-// the full resume values, looked up and reordered by key via `meta.layout.pages[].main`.
-// `basics` is the only section not driven by that list — it's always rendered first.
 const template = {
     basics(values: ResumeValues): string {
         const { basics, meta } = values
