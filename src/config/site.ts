@@ -1,7 +1,14 @@
+import { env } from "#/env"
+
+const FALLBACK_URL = "https://anchor-resume.vercel.app/"
+
+const url = env.VITE_SERVER_URL ?? FALLBACK_URL
+const domain = new URL(url).host
+
 export const siteConfig = {
     name: "Anchor",
-    // PLACEHOLDER — swap for the real domain once registered.
-    domain: "anchor.app",
+    url,
+    domain,
 
     links: {
         github: "https://github.com/harshG775" as string | null,
