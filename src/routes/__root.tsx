@@ -10,6 +10,8 @@ import { TooltipProvider } from "#/components/ui/tooltip"
 import ErrorComponent from "./-components/error-component"
 import NotFoundComponent from "./-components/not-found-component"
 import { Toaster } from "#/components/ui/sonner"
+import { siteConfig } from "#/config/site"
+import { seo } from "#/lib/utils"
 
 export const Route = createRootRoute({
     beforeLoad: async () => {
@@ -25,9 +27,10 @@ export const Route = createRootRoute({
                 name: "viewport",
                 content: "width=device-width, initial-scale=1",
             },
-            {
-                title: "TanStack Start Starter",
-            },
+            ...seo({
+                title: siteConfig.name,
+                description: "Build, preview, and share a polished resume — free forever, no credit card required.",
+            }),
         ],
         links: [
             {
