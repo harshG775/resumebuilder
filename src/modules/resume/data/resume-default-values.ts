@@ -49,13 +49,13 @@ export const resumeDefaultValues: ResumeValues = {
         },
         typography: {
             heading: {
-                fontFamily: "Georgia",
+                fontFamily: "New Computer Modern",
                 fontWeight: "800",
                 fontSize: 14,
                 lineHeight: 1.5,
             },
             body: {
-                fontFamily: "Arial",
+                fontFamily: "Libertinus Serif",
                 fontWeight: "400",
                 fontSize: 10,
                 lineHeight: 1.5,

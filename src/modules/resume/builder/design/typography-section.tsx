@@ -5,16 +5,7 @@ import { withForm } from "#/hooks/form"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
 
-const FONT_FAMILIES = [
-    "Arial",
-    "Helvetica",
-    "Verdana",
-    "Trebuchet MS",
-    "Georgia",
-    "Times New Roman",
-    "Garamond",
-    "Courier New",
-] as const
+const FONT_FAMILIES = ["Libertinus Serif", "New Computer Modern", "DejaVu Sans Mono"] as const
 
 const FONT_WEIGHTS = [
     { value: "400", label: "Regular" },
