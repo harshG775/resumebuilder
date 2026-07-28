@@ -33,7 +33,8 @@ export const Route = createFileRoute("/")({
     head: () => ({
         meta: seo({
             title: `${siteConfig.name} — Build a resume that gets you hired`,
-            description: "Edit, preview, and style your resume side-by-side. Export a PDF or share your link — free forever.",
+            description:
+                "Edit, preview, and style your resume side-by-side. Export a PDF or share your link — free forever.",
             keywords: "resume builder, resume maker, free resume builder, ATS resume, CV builder",
             image: `${siteConfig.url}/images/hero-screenshot-2.png`,
             url: siteConfig.url,
@@ -80,11 +81,11 @@ const features = [
 ]
 
 const NAV_LINKS = [
-    { label: "Features", id: "features" },
     { label: "How it works", id: "how-it-works" },
+    { label: "Features", id: "features" },
     { label: "Templates", id: "templates" },
-    { label: "FAQ", id: "faq" },
     { label: "Support", id: "support" },
+    { label: "FAQ", id: "faq" },
 ]
 
 const SECTION_IDS = NAV_LINKS.map((link) => link.id)
@@ -148,7 +149,6 @@ const steps = [
         description: "Export a polished PDF or hand out your personal link — updates reflect instantly.",
     },
 ]
-
 
 function TemplatePreviewThumbnail({
     thumbnail,
@@ -224,7 +224,7 @@ function Home() {
                                 onClick={() => scrollTo(link.id)}
                                 className={cn(
                                     "border-b-2 border-transparent pb-0.5 text-sm text-muted-foreground transition-colors hover:text-foreground",
-                                    activeId === link.id && "border-primary text-foreground",
+                                    activeId === link.id && "border-secondary text-foreground",
                                 )}
                             >
                                 {link.label}
@@ -302,8 +302,8 @@ function Home() {
                         }}
                     />
 
-                    <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-6 pt-16 pb-12 text-center sm:pt-20 sm:pb-16 lg:pt-24 lg:pb-16">
-                        <h1 className="max-w-2xl font-heading text-5xl font-medium tracking-tight text-balance sm:text-6xl lg:text-7xl">
+                    <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center gap-7 px-6 pt-20 pb-14 text-center sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24">
+                        <h1 className="max-w-3xl font-heading text-6xl leading-[1.05] font-medium tracking-tight text-balance sm:text-7xl lg:text-[5.25rem]">
                             Build a resume that{" "}
                             <span className="relative inline-block whitespace-nowrap">
                                 gets you hired
@@ -324,7 +324,7 @@ function Home() {
                             </span>
                         </h1>
 
-                        <p className="max-w-lg text-base text-muted-foreground sm:text-lg">
+                        <p className="max-w-xl text-lg text-muted-foreground sm:text-xl">
                             Edit, preview, and style your resume side-by-side. Export a print-ready PDF or share a
                             personal link — no attachments required.
                         </p>
@@ -361,6 +361,14 @@ function Home() {
                         <div
                             aria-hidden="true"
                             className="absolute -inset-4 -z-10 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--primary)_18%,transparent)_0%,transparent_70%)]"
+                        />
+                        <div
+                            aria-hidden="true"
+                            className="absolute inset-6 -z-10 -rotate-2 rounded-2xl border border-border bg-card shadow-sm sm:inset-10"
+                        />
+                        <div
+                            aria-hidden="true"
+                            className="absolute inset-3 -z-10 rotate-1 rounded-2xl border border-border bg-card shadow-sm sm:inset-5"
                         />
                         <BrowserFrame url={`${siteConfig.domain}/builder/resumes/software-engineer`}>
                             {heroImage ? (
@@ -446,7 +454,10 @@ function Home() {
                                                 <span className="size-5 rounded-full border border-border bg-background" />
                                                 <span className="size-5 rounded-full bg-foreground" />
                                                 <span className="size-5 rounded-full bg-secondary ring-2 ring-secondary/30 ring-offset-2 ring-offset-card" />
-                                                <span className="size-5 rounded-full" style={{ backgroundColor: "#7c4a2d" }} />
+                                                <span
+                                                    className="size-5 rounded-full"
+                                                    style={{ backgroundColor: "#7c4a2d" }}
+                                                />
                                                 <span className="size-5 rounded-full bg-primary" />
                                             </div>
                                         </div>
@@ -479,19 +490,28 @@ function Home() {
                                 Three steps, no exporting back and forth.
                             </p>
                         </div>
-                        <div className="relative grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
+                        <div className="relative grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-6">
                             <div
                                 aria-hidden="true"
                                 className="absolute top-5 right-[16.6%] left-[16.6%] hidden border-t border-dashed border-border sm:block"
                             />
                             {steps.map(({ icon: Icon, title, description }, i) => (
-                                <div key={title} className="relative flex flex-col items-center gap-3 text-center">
-                                    <span className="relative z-10 flex size-10 items-center justify-center rounded-full border border-border bg-background font-mono text-sm font-medium">
+                                <div
+                                    key={title}
+                                    className="relative flex flex-row items-start gap-4 text-left sm:flex-col sm:items-center sm:gap-3 sm:text-center"
+                                >
+                                    <span className="relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-sm font-medium">
                                         {i + 1}
+                                        <Icon
+                                            className="absolute -right-1 -bottom-1 size-4 rounded-full bg-background p-0.5 text-secondary sm:hidden"
+                                            strokeWidth={1.75}
+                                        />
                                     </span>
-                                    <Icon className="size-4 text-secondary" strokeWidth={1.75} />
-                                    <p className="text-sm font-medium">{title}</p>
-                                    <p className="max-w-50 text-xs text-muted-foreground">{description}</p>
+                                    <Icon className="hidden size-4 text-secondary sm:block" strokeWidth={1.75} />
+                                    <div className="flex flex-col gap-1 sm:items-center sm:gap-1.5">
+                                        <p className="text-sm font-medium">{title}</p>
+                                        <p className="text-xs text-muted-foreground sm:max-w-50">{description}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -512,19 +532,25 @@ function Home() {
                         </div>
                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             {features.map(({ icon: Icon, title, description }, i) => {
-                                const tints = ["bg-primary/10 text-primary", "bg-secondary/15 text-secondary", "bg-foreground/8 text-foreground"]
+                                const tints = [
+                                    "bg-primary/10 text-primary",
+                                    "bg-secondary/15 text-secondary",
+                                    "bg-foreground/8 text-foreground",
+                                ]
                                 const tint = tints[i % tints.length]
                                 return (
                                     <div
                                         key={title}
-                                        className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-left shadow-sm transition-shadow hover:shadow-(--shadow-elevated)"
+                                        className="flex flex-col gap-5 rounded-xl border border-border bg-card p-7 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-(--shadow-elevated)"
                                     >
-                                        <span className={`flex size-10 items-center justify-center rounded-full ${tint}`}>
-                                            <Icon className="size-4.5" strokeWidth={1.75} />
+                                        <span
+                                            className={`flex size-12 items-center justify-center rounded-full ${tint}`}
+                                        >
+                                            <Icon className="size-5" strokeWidth={1.75} />
                                         </span>
                                         <div className="flex flex-col gap-1.5">
-                                            <p className="text-sm font-medium">{title}</p>
-                                            <p className="text-xs text-muted-foreground">{description}</p>
+                                            <p className="text-base font-medium">{title}</p>
+                                            <p className="text-sm text-muted-foreground">{description}</p>
                                         </div>
                                     </div>
                                 )
@@ -592,7 +618,7 @@ function Home() {
                     </div>
                 </section>
 
-                <section
+                {/* <section
                     ref={registerSection("support")}
                     data-section-id="support"
                     className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24"
@@ -614,8 +640,8 @@ function Home() {
                                 Free forever, kept running by you
                             </h2>
                             <p className="relative mx-auto mt-3 max-w-xs text-sm text-primary-foreground/80">
-                                {siteConfig.domain} has no ads and no paywalls. If it helped you land your next role,
-                                a small donation goes toward hosting and keeping it free for everyone else.
+                                {siteConfig.domain} has no ads and no paywalls. If it helped you land your next role, a
+                                small donation goes toward hosting and keeping it free for everyone else.
                             </p>
                             {siteConfig.links.donate && (
                                 <Button
@@ -648,6 +674,67 @@ function Home() {
                             </Accordion>
                         </div>
                     </div>
+                </section> */}
+                <section
+                    ref={registerSection("support")}
+                    data-section-id="support"
+                    className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24"
+                >
+                    <div className="relative overflow-hidden rounded-2xl bg-primary px-8 py-14 text-center text-primary-foreground sm:py-16">
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-0 opacity-[0.06]"
+                            style={{
+                                backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
+                                backgroundSize: "16px 16px",
+                            }}
+                        />
+                        <span className="relative mx-auto flex size-11 items-center justify-center rounded-full border border-primary-foreground/25">
+                            <HandshakeIcon className="size-5" />
+                        </span>
+                        <h2 className="relative mx-auto mt-4 max-w-md font-heading text-3xl font-medium tracking-tight sm:text-4xl">
+                            Free forever, kept running by you
+                        </h2>
+                        <p className="relative mx-auto mt-3 max-w-md text-base text-primary-foreground/80">
+                            {siteConfig.domain} has no ads and no paywalls. If it helped you land your next role, a
+                            small donation goes toward hosting and keeping it free for everyone else.
+                        </p>
+                        {siteConfig.links.donate && (
+                            <Button
+                                nativeButton={false}
+                                size="lg"
+                                variant="secondary"
+                                className="relative mt-6"
+                                render={<a href={siteConfig.links.donate} target="_blank" rel="noreferrer" />}
+                            >
+                                <CoffeeIcon />
+                                <span>Support this project</span>
+                            </Button>
+                        )}
+                    </div>
+                </section>
+
+                <section
+                    ref={registerSection("faq")}
+                    data-section-id="faq"
+                    className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 pb-20 sm:pb-24"
+                >
+                    <div className="mx-auto max-w-2xl text-center">
+                        <h2 className="font-heading text-3xl font-medium tracking-tight sm:text-4xl">
+                            Frequently asked questions
+                        </h2>
+                        <p className="mt-3 text-base text-muted-foreground">
+                            Everything else you might be wondering about.
+                        </p>
+                    </div>
+                    <Accordion className="mx-auto mt-8 max-w-2xl">
+                        {faqs.map((faq) => (
+                            <AccordionItem key={faq.question} value={faq.question}>
+                                <AccordionTrigger>{faq.question}</AccordionTrigger>
+                                <AccordionContent>{faq.answer}</AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
                 </section>
             </main>
 
