@@ -15,7 +15,6 @@ import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
 import { getTemplate, templateList } from "../preview/templates"
 import type { TemplateId } from "../preview/templates"
-import { DevGenerateTemplatePreviews } from "./dev-generate-template-previews"
 
 const isSameTemplate = (a: TemplateId, b: TemplateId): boolean => (a as string) === (b as string)
 
@@ -62,7 +61,6 @@ export const TemplatesSection = withForm({
 
                     return (
                         <Field>
-                            <DevGenerateTemplatePreviews />
                             <Dialog>
                                 <DialogTrigger
                                     render={

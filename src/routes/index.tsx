@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
     component: Home,
 })
 
-const heroImage: string | null = "/images/hero-screenshot-1.png"
+const heroImage: string | null = "/images/hero-screenshot-2.png"
 
 const stats: { value: string; label: string }[] | null = null
 

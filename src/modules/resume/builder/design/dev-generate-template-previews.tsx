@@ -10,7 +10,7 @@ import { templateList } from "../preview/templates"
 // Dev-only: renders every template with the showcase resume data and writes
 // the resulting SVGs to public/templates/, so thumbnails can be regenerated
 // after a template edit without a manual screenshot.
-export function DevGenerateTemplatePreviews() {
+export function DevGenerateTemplatePreviews({ onSeed }: { onSeed: () => void }) {
     const [isGenerating, setIsGenerating] = useState(false)
 
     if (!import.meta.env.DEV) return null
@@ -44,9 +44,14 @@ export function DevGenerateTemplatePreviews() {
     }
 
     return (
-        <Button type="button" variant="outline" size="sm" onClick={handleGenerate} disabled={isGenerating}>
-            <ArrowsClockwiseIcon className={isGenerating ? "animate-spin" : undefined} />
-            {isGenerating ? "Generating previews…" : "Generate previews (dev)"}
-        </Button>
+        <div className="flex gap-2 items-center">
+            <Button type="button" size="sm" onClick={onSeed}>
+                Seed
+            </Button>
+            <Button type="button" variant="outline" size="sm" onClick={handleGenerate} disabled={isGenerating}>
+                <ArrowsClockwiseIcon className={isGenerating ? "animate-spin" : undefined} />
+                {isGenerating ? "Generating previews…" : "Generate previews (dev)"}
+            </Button>
+        </div>
     )
 }
