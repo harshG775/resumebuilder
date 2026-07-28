@@ -33,10 +33,10 @@ export const Route = createFileRoute("/")({
     head: () => ({
         meta: seo({
             title: `${siteConfig.name} — Build a resume that gets you hired`,
-            description:
-                "Edit, preview, and style your resume side-by-side. Export a print-ready PDF or share a personal link — no attachments required, free forever.",
+            description: "Edit, preview, and style your resume side-by-side. Export a PDF or share your link — free forever.",
             keywords: "resume builder, resume maker, free resume builder, ATS resume, CV builder",
-            image: `https://${siteConfig.domain}/images/hero-screenshot-2.png`,
+            image: `${siteConfig.url}/images/hero-screenshot-2.png`,
+            url: siteConfig.url,
         }),
     }),
     component: Home,
@@ -366,7 +366,7 @@ function Home() {
                             {heroImage ? (
                                 <img
                                     src={heroImage}
-                                    alt="Resume Builder editor, live preview, and design panel"
+                                    alt={`${siteConfig.name} editor, live preview, and design panel`}
                                     className="w-full"
                                 />
                             ) : (

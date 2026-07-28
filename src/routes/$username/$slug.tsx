@@ -3,6 +3,7 @@ import { Skeleton } from "#/components/ui/skeleton"
 import { to } from "#/lib/await-to"
 import { downloadBlob } from "#/lib/download"
 import { getResumeByUsernameAndSlugFn } from "#/lib/server/resume.function"
+import { siteConfig } from "#/config/site"
 import { seo } from "#/lib/utils"
 import { getTypst } from "#/lib/typst/typst"
 import { getTemplate } from "#/modules/resume/builder/preview/templates"
@@ -31,11 +32,12 @@ export const Route = createFileRoute("/$username/$slug")({
             </div>
         </div>
     ),
-    head: ({ loaderData }) => ({
+    head: ({ loaderData, params }) => ({
         meta: loaderData
             ? seo({
                   title: `${loaderData.resume.data.title} · ${loaderData.resume.data.ownerName}`,
                   description: `View ${loaderData.resume.data.ownerName}'s resume — ${loaderData.resume.data.title}.`,
+                  url: `${siteConfig.url}/${params.username}/${params.slug}`,
               })
             : undefined,
     }),

@@ -1,30 +1,28 @@
 import { cva } from "class-variance-authority"
 import type { VariantProps } from "class-variance-authority"
-import { FileTextIcon } from "@phosphor-icons/react"
 import type { ComponentPropsWithRef, ComponentType } from "react"
 
 import { cn } from "#/lib/utils.ts"
+import { LogoMark } from "#/components/icons/logo-mark.tsx"
+import { siteConfig } from "#/config/site.ts"
 
-// Swap these two to re-skin the brand mark for a new project.
-const DEFAULT_ICON = FileTextIcon
-const DEFAULT_NAME = "Resume Builder"
+// Swap the icon to re-skin the brand mark for a new project; name comes from siteConfig.
+const DEFAULT_ICON = LogoMark
+const DEFAULT_NAME = siteConfig.name
 const DEFAULT_TAGLINE = "Build Your Resume"
 
-const logoMarkVariants = cva(
-    "flex shrink-0 items-center justify-center bg-primary text-primary-foreground [&_svg]:size-4",
-    {
-        variants: {
-            size: {
-                sm: "size-7 rounded-lg",
-                default: "size-9 rounded-xl",
-                lg: "size-11 rounded-xl [&_svg]:size-5",
-            },
-        },
-        defaultVariants: {
-            size: "default",
+const logoMarkVariants = cva("flex shrink-0 items-center justify-center", {
+    variants: {
+        size: {
+            sm: "size-7",
+            default: "size-9",
+            lg: "size-11",
         },
     },
-)
+    defaultVariants: {
+        size: "default",
+    },
+})
 
 type LogoIcon = ComponentType<{ className?: string }>
 
@@ -52,7 +50,7 @@ function Logo({
     return (
         <div ref={ref} className={cn("flex items-center gap-3", className)} {...props}>
             <div className={cn(logoMarkVariants({ size }))}>
-                <Icon />
+                <Icon className="size-full" />
             </div>
             {variant === "full" &&
                 (tagline ? (

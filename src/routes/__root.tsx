@@ -30,12 +30,26 @@ export const Route = createRootRoute({
             ...seo({
                 title: siteConfig.name,
                 description: "Build, preview, and share a polished resume — free forever, no credit card required.",
+                url: siteConfig.url,
             }),
         ],
         links: [
             {
                 rel: "stylesheet",
                 href: appCss,
+            },
+            {
+                rel: "icon",
+                href: "/favicon.ico",
+                type: "image/x-icon",
+            },
+            {
+                rel: "apple-touch-icon",
+                href: "/logo192.png",
+            },
+            {
+                rel: "manifest",
+                href: "/manifest.json",
             },
         ],
     }),
