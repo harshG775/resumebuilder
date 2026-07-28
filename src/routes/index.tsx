@@ -4,7 +4,7 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger 
 import { Logo } from "#/components/logo.tsx"
 import { siteConfig } from "#/config/site"
 import { useActiveSection } from "#/hooks/use-active-section"
-import { cn } from "#/lib/utils"
+import { cn, seo } from "#/lib/utils"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import { useEffect, useRef, useState } from "react"
 import {
@@ -30,6 +30,15 @@ import { templateList } from "#/modules/resume/builder/preview/templates"
 import type { TemplateId } from "#/modules/resume/builder/preview/templates"
 
 export const Route = createFileRoute("/")({
+    head: () => ({
+        meta: seo({
+            title: `${siteConfig.name} — Build a resume that gets you hired`,
+            description:
+                "Edit, preview, and style your resume side-by-side. Export a print-ready PDF or share a personal link — no attachments required, free forever.",
+            keywords: "resume builder, resume maker, free resume builder, ATS resume, CV builder",
+            image: `https://${siteConfig.domain}/images/hero-screenshot-2.png`,
+        }),
+    }),
     component: Home,
 })
 
