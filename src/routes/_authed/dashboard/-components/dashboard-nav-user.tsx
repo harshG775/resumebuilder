@@ -71,8 +71,10 @@ export function DashboardNavUser() {
                                 onClick={() => {
                                     authClient.signOut().then(() => {
                                         router.navigate({
-                                            from: "/dashboard/resumes/",
                                             to: "/sign-in",
+                                            search: {
+                                                from: router.state.location.href,
+                                            },
                                         })
                                     })
                                 }}
