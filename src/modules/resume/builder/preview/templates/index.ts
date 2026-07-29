@@ -1,3 +1,4 @@
+// https://www.greatfrontend.com/blog/how-to-write-frontend-developer-resume
 // index.ts
 import { classicTemplate } from "./classic"
 import { modernTemplate } from "./modern"
