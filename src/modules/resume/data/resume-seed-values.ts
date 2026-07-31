@@ -372,23 +372,22 @@ export const harshGaurResumeSeedValues: ResumeValues = {
                     name: "Frontend",
                     proficiency: "",
                     level: 5,
-                    keywords: [
-                        "React.js",
-                        "Next.js",
-                        "HTML5",
-                        "CSS3",
-                        "Tailwind CSS",
-                        "TanStack Router",
-                        "TanStack Query",
-                        "TanStack Form",
-                        "Zustand",
-                    ],
+                    keywords: ["React.js", "Next.js", "HTML5", "CSS3", "Tailwind CSS"],
                 },
                 {
                     id: crypto.randomUUID(),
                     hidden: false,
                     icon: "",
-                    name: "Backend",
+                    name: "React Ecosystem",
+                    proficiency: "",
+                    level: 5,
+                    keywords: ["TanStack Router", "TanStack Query", "TanStack Form", "Zustand"],
+                },
+                {
+                    id: crypto.randomUUID(),
+                    hidden: false,
+                    icon: "",
+                    name: "Backend & APIs",
                     proficiency: "",
                     level: 4,
                     keywords: ["Node.js", "Express.js", "Flask", "REST APIs", "WebSockets"],
@@ -397,23 +396,22 @@ export const harshGaurResumeSeedValues: ResumeValues = {
                     id: crypto.randomUUID(),
                     hidden: false,
                     icon: "",
-                    name: "Databases",
+                    name: "Data & Authentication",
                     proficiency: "",
                     level: 4,
-                    keywords: ["PostgreSQL", "MongoDB"],
+                    keywords: ["PostgreSQL", "MongoDB", "Drizzle ORM", "Better Auth"],
                 },
                 {
                     id: crypto.randomUUID(),
                     hidden: false,
                     icon: "",
-                    name: "Tools",
+                    name: "Developer Tools",
                     proficiency: "",
                     level: 4,
-                    keywords: ["Git", "GitHub", "Docker", "Drizzle ORM", "Better Auth"],
+                    keywords: ["Git", "GitHub", "Docker"],
                 },
             ],
         },
-
         experience: {
             title: "Experience",
             hidden: false,
@@ -493,7 +491,13 @@ export const harshGaurResumeSeedValues: ResumeValues = {
                     hidden: false,
                     name: "Resume Builder Platform",
                     type: "personal",
-                    links: [],
+                    links: [
+                        {
+                            id: crypto.randomUUID(),
+                            label: "anchor.harshgaur.in",
+                            value: "https://anchor.harshgaur.in",
+                        },
+                    ],
                     keywords: ["TanStack Start", "TanStack Form", "Zod", "dnd-kit", "Typst (WASM)", "Tiptap"],
                     startDate: "",
                     endDate: "",
@@ -509,7 +513,13 @@ export const harshGaurResumeSeedValues: ResumeValues = {
                     hidden: false,
                     name: "Multi-Tenant Architecture Boilerplate",
                     type: "open-source",
-                    links: [],
+                    links: [
+                        {
+                            id: crypto.randomUUID(),
+                            label: "github.com/harshG775/multi-tenant-saas",
+                            value: "https://github.com/harshG775/multi-tenant-saas",
+                        },
+                    ],
                     keywords: ["TanStack Start", "TanStack Router", "TypeScript", "Tailwind CSS"],
                     startDate: "",
                     endDate: "",
@@ -573,13 +583,12 @@ export const harshGaurResumeSeedValues: ResumeValues = {
             items: [],
         },
     },
-
     meta: {
         template: "classic",
         layout: {
             pages: [
                 {
-                    main: ["summary", "skill", "experience", "project", "education", "certification"],
+                    main: ["summary", "experience", "project", "skill", "education", "certification"],
                 },
             ],
         },
@@ -596,9 +605,9 @@ export const harshGaurResumeSeedValues: ResumeValues = {
         },
         design: {
             colors: {
-                primary: "#1e3a8a",
-                text: "#111827",
-                background: "#ffffff",
+                primary: "oklch(35%, 0.08, 250deg)",
+                text: "oklch(20%, 0.01, 250deg)",
+                background: "oklch(100%, 0, 0deg)",
             },
         },
         typography: {

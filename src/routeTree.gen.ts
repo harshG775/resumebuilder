@@ -17,6 +17,7 @@ import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashb
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
 import { Route as PublicSignInIndexRouteImport } from './routes/_public/sign-in/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as TestTemplateIndexRouteImport } from './routes/test/template/index'
 import { Route as AuthedBuilderResumesResume_idRouteImport } from './routes/_authed/builder/resumes/$resume_id'
 import { Route as AuthedDashboardProfileIndexRouteImport } from './routes/_authed/dashboard/profile/index'
 import { Route as AuthedDashboardResumesIndexRouteImport } from './routes/_authed/dashboard/resumes/index'
@@ -60,6 +61,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TestTemplateIndexRoute = TestTemplateIndexRouteImport.update({
+  id: '/test/template/',
+  path: '/test/template/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthedBuilderResumesResume_idRoute =
   AuthedBuilderResumesResume_idRouteImport.update({
     id: '/resumes/$resume_id',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/': typeof AuthedDashboardIndexRoute
   '/sign-in/': typeof PublicSignInIndexRoute
+  '/test/template/': typeof TestTemplateIndexRoute
   '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
   '/dashboard/profile/': typeof AuthedDashboardProfileIndexRoute
   '/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard': typeof AuthedDashboardIndexRoute
   '/sign-in': typeof PublicSignInIndexRoute
+  '/test/template': typeof TestTemplateIndexRoute
   '/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
   '/dashboard/profile': typeof AuthedDashboardProfileIndexRoute
   '/dashboard/resumes': typeof AuthedDashboardResumesIndexRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/_public/sign-in/': typeof PublicSignInIndexRoute
+  '/test/template/': typeof TestTemplateIndexRoute
   '/_authed/builder/resumes/$resume_id': typeof AuthedBuilderResumesResume_idRoute
   '/_authed/dashboard/profile/': typeof AuthedDashboardProfileIndexRoute
   '/_authed/dashboard/resumes/': typeof AuthedDashboardResumesIndexRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/'
     | '/sign-in/'
+    | '/test/template/'
     | '/builder/resumes/$resume_id'
     | '/dashboard/profile/'
     | '/dashboard/resumes/'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard'
     | '/sign-in'
+    | '/test/template'
     | '/builder/resumes/$resume_id'
     | '/dashboard/profile'
     | '/dashboard/resumes'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/_authed/dashboard/'
     | '/_public/sign-in/'
+    | '/test/template/'
     | '/_authed/builder/resumes/$resume_id'
     | '/_authed/dashboard/profile/'
     | '/_authed/dashboard/resumes/'
@@ -162,6 +174,7 @@ export interface RootRouteChildren {
   AuthedDashboardRouteRoute: typeof AuthedDashboardRouteRouteWithChildren
   UsernameSlugRoute: typeof UsernameSlugRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  TestTemplateIndexRoute: typeof TestTemplateIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -220,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test/template/': {
+      id: '/test/template/'
+      path: '/test/template'
+      fullPath: '/test/template/'
+      preLoaderRoute: typeof TestTemplateIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authed/builder/resumes/$resume_id': {
@@ -291,6 +311,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthedDashboardRouteRoute: AuthedDashboardRouteRouteWithChildren,
   UsernameSlugRoute: UsernameSlugRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  TestTemplateIndexRoute: TestTemplateIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
