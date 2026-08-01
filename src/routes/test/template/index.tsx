@@ -5,7 +5,6 @@ import type { TypstSnippet } from "@myriaddreamin/typst.ts/dist/esm/contrib/snip
 import rendererWasmUrl from "@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm?url"
 import compilerWasmUrl from "@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm?url"
 import { useQuery } from "@tanstack/react-query"
-import { ResumeZodSchema } from "#/modules/resume/schema/resume.zod-schema"
 import type { ResumeValues } from "#/modules/resume/schema/resume.zod-schema"
 
 export const Route = createFileRoute("/test/template/")({
@@ -90,34 +89,198 @@ const createResume = ({ content }: { content: ResumeValues }) => {
 #let link-item(label, url) = link(url)[#label]
 #let email-item(address) = link("mailto:" + address)[#address]
 
+#let work(title: "", company: "", location: "", start: "", end: "") = block(breakable: false, width: 100%)[
+    #row(
+        left-content: [
+            #subheading-text(title)
+            #if company != "" [ #text(fill: theme.color.text-muted)[· #company]]
+            #if location != "" [ #text(fill: theme.color.text-muted)[· #location]]
+        ],
+        right-content: meta-text(date-range(start: start, end: end)),
+    )
+]
+
+#let edu(institution: "", degree: "", location: "", start: "", end: "") = block(breakable: false, width: 100%)[
+    #row(
+        left-content: [
+            #subheading-text(degree)
+            #if institution != "" [ #text(fill: theme.color.text-muted)[· #institution]]
+            #if location != "" [ #text(fill: theme.color.text-muted)[· #location]]
+        ],
+        right-content: meta-text(date-range(start: start, end: end)),
+    )
+]
+
+#let skills(items: ()) = items.join(", ")
+
 
 `
+    const contactItems: string[] = []
+    if (content.basics.location) {
+        contactItems.push(`"${escapeTypstString(content.basics.location)}"`)
+    }
+    if (!content.basics.email.hidden && content.basics.email.value) {
+        contactItems.push(`email-item("${escapeTypstString(content.basics.email.value)}")`)
+    }
+    if (!content.basics.phone.hidden && content.basics.phone.value) {
+        contactItems.push(
+            `link("tel:${escapeTypstString(content.basics.phone.value)}")[${escapeTypstMarkup(content.basics.phone.label)}]`,
+        )
+    }
+    if (!content.basics.website.hidden && content.basics.website.value) {
+        contactItems.push(
+            `link-item("${escapeTypstString(content.basics.website.label)}", "${escapeTypstString(content.basics.website.value)}")`,
+        )
+    }
+    for (const cf of content.basics.customFields) {
+        if (cf.value) {
+            contactItems.push(`link-item("${escapeTypstString(cf.label)}", "${escapeTypstString(cf.value)}")`)
+        }
+    }
+
     const basics = `
+= ${escapeTypstMarkup(content.basics.name)}
+${
+    content.basics.headline
+        ? `#text(size: theme.size.subheading, weight: theme.weight.subheading, fill: theme.color.primary)[${escapeTypstMarkup(content.basics.headline)}]`
+        : ""
+}
 
+#contact-line(items: (
+    ${contactItems.join(",\n    ")}${contactItems.length > 0 ? "," : ""}
+))
     `
-    const summary = `
 
+    const summary =
+        content.sections.summary.hidden || !content.sections.summary.content
+            ? ""
+            : `
+== ${escapeTypstMarkup(content.sections.summary.title)}
+${content.sections.summary.content}
     `
-    const skill = `
 
+    const experience =
+        content.sections.experience.hidden || content.sections.experience.items.length === 0
+            ? ""
+            : `
+== ${escapeTypstMarkup(content.sections.experience.title)}
+${content.sections.experience.items
+    .filter((item) => !item.hidden)
+    .map(
+        (item) => `
+#work(
+    title: "${escapeTypstString(item.position)}",
+    company: "${escapeTypstString(item.company)}",
+    location: "${escapeTypstString(item.location)}",
+    start: "${escapeTypstString(item.startDate)}",
+    end: "${escapeTypstString(item.endDate)}",
+)
+${item.content}
+#v(theme.space.item-gap)
+    `,
+    )
+    .join("\n")}
     `
-    const experience = `
 
+    const project =
+        content.sections.project.hidden || content.sections.project.items.length === 0
+            ? ""
+            : `
+== ${escapeTypstMarkup(content.sections.project.title)}
+${content.sections.project.items
+    .filter((item) => !item.hidden)
+    .map((item) => {
+        const links = item.links.filter((l) => l.value)
+        const linksTypst =
+            links.length > 0
+                ? `(${links.map((l) => `#link-item("${escapeTypstString(l.label)}", "${escapeTypstString(l.value)}")`).join(", ")})`
+                : ""
+        const keywords = item.keywords.filter((k) => k)
+        return `
+#row(
+    left-content: [
+        #subheading-text("${escapeTypstString(item.name)}")
+        ${linksTypst}
+    ],
+    right-content: meta-text(date-range(start: "${escapeTypstString(item.startDate)}", end: "${escapeTypstString(item.endDate)}")),
+)
+${keywords.length > 0 ? `#meta-text("${escapeTypstString(keywords.join(", "))}")` : ""}
+${item.content}
+#v(theme.space.item-gap)
     `
-    const project = `
+    })
+    .join("\n")}
+    `
 
+    const skill =
+        content.sections.skill.hidden || content.sections.skill.items.length === 0
+            ? ""
+            : `
+== ${escapeTypstMarkup(content.sections.skill.title)}
+${content.sections.skill.items
+    .filter((item) => !item.hidden)
+    .map(
+        (item) =>
+            `#text(weight: theme.weight.subheading)[${escapeTypstMarkup(item.name)}:] #skills(items: (${item.keywords.map((k) => `"${escapeTypstString(k)}"`).join(", ")}))`,
+    )
+    .join("\n")}
     `
-    const education = `
 
+    const education =
+        content.sections.education.hidden || content.sections.education.items.length === 0
+            ? ""
+            : `
+== ${escapeTypstMarkup(content.sections.education.title)}
+${content.sections.education.items
+    .filter((item) => !item.hidden)
+    .map(
+        (item) => `
+#edu(
+    institution: "${escapeTypstString(item.school)}",
+    degree: "${escapeTypstString(item.degree)}",
+    location: "${escapeTypstString(item.location)}",
+    start: "${escapeTypstString(item.startDate)}",
+    end: "${escapeTypstString(item.endDate)}",
+)
+${item.content}
+#v(theme.space.item-gap)
+    `,
+    )
+    .join("\n")}
     `
-    const certification = `
 
+    const certification =
+        content.sections.certification.hidden || content.sections.certification.items.length === 0
+            ? ""
+            : `
+== ${escapeTypstMarkup(content.sections.certification.title)}
+${content.sections.certification.items
+    .filter((item) => !item.hidden)
+    .map(
+        (item) => `
+#row(
+    left-content: [#subheading-text("${escapeTypstString(item.title)}")${item.issuer ? ` #text(fill: theme.color.text-muted)[· ${escapeTypstMarkup(item.issuer)}]` : ""}],
+    right-content: meta-text("${escapeTypstString(item.date)}"),
+)
+${item.content}
+#v(theme.space.item-gap)
+    `,
+    )
+    .join("\n")}
     `
+
     return `
 ${resume}
 // ---------------------------------------------------------------------------------------------------------------------
+#show: resume.with(title: "${escapeTypstString(content.basics.name)}", author: "${escapeTypstString(content.basics.name)}")
+
 ${basics}
-    
+${summary}
+${experience}
+${project}
+${skill}
+${education}
+${certification}
     `
 }
 
@@ -162,22 +325,261 @@ function Test({ typst }: { typst: TypstSnippet }) {
                 mainContent: createResume({
                     content: {
                         basics: {
-                            name: "",
-                            headline: "",
-                            email: { hidden: false, label: "", value: "" },
-                            phone: { hidden: false, label: "", value: "" },
-                            location: "",
-                            website: { hidden: false, value: "", label: "" },
-                            customFields: [],
+                            name: "Alex Morgan",
+                            headline: "Senior Software Engineer",
+
+                            email: {
+                                hidden: false,
+                                label: "alex@example.com",
+                                value: "alex@example.com",
+                            },
+
+                            phone: {
+                                hidden: false,
+                                label: "(555) 123-4567",
+                                value: "+15551234567",
+                            },
+
+                            location: "San Francisco, CA",
+
+                            website: {
+                                hidden: false,
+                                label: "",
+                                value: "",
+                            },
+
+                            customFields: [
+                                {
+                                    id: crypto.randomUUID(),
+                                    label: "github.com/alexmorgan",
+                                    value: "https://github.com/alexmorgan",
+                                },
+                                {
+                                    id: crypto.randomUUID(),
+                                    label: "linkedin.com/in/alexmorgan",
+                                    value: "https://linkedin.com/in/alexmorgan",
+                                },
+                            ],
                         },
+
                         sections: {
-                            summary: { title: "Summary", hidden: false, columns: 1, icon: "", content: "" },
-                            skill: { title: "Skills", hidden: false, columns: 1, icon: "", items: [] },
-                            experience: { title: "Experience", hidden: false, columns: 1, icon: "", items: [] },
-                            project: { title: "Projects", hidden: false, columns: 1, icon: "", items: [] },
-                            education: { title: "Education", hidden: false, columns: 1, icon: "", items: [] },
-                            certification: { title: "Certifications", hidden: false, columns: 1, icon: "", items: [] },
+                            summary: {
+                                title: "Summary",
+                                hidden: false,
+                                columns: 1,
+                                icon: "",
+                                content: `Software engineer with #strong[6+ years of experience] designing and shipping #strong[web applications] used by millions of people. Specializes in #strong[React], #strong[TypeScript], and #strong[distributed systems], with a track record of leading small teams from idea to production. Passionate about #strong[developer experience], #strong[performance], and building products people enjoy using.`,
+                            },
+
+                            skill: {
+                                title: "Skills",
+                                hidden: false,
+                                columns: 1,
+                                icon: "",
+
+                                items: [
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        icon: "",
+                                        name: "Languages",
+                                        proficiency: "",
+                                        level: 5,
+                                        keywords: ["TypeScript", "JavaScript", "Python", "Go"],
+                                    },
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        icon: "",
+                                        name: "Frontend",
+                                        proficiency: "",
+                                        level: 5,
+                                        keywords: ["React", "Next.js", "Redux", "Tailwind CSS", "GraphQL"],
+                                    },
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        icon: "",
+                                        name: "Backend",
+                                        proficiency: "",
+                                        level: 4,
+                                        keywords: ["Node.js", "PostgreSQL", "Redis", "REST APIs"],
+                                    },
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        icon: "",
+                                        name: "Infrastructure",
+                                        proficiency: "",
+                                        level: 4,
+                                        keywords: ["AWS", "Docker", "Kubernetes", "CI/CD"],
+                                    },
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        icon: "",
+                                        name: "Practices",
+                                        proficiency: "",
+                                        level: 4,
+                                        keywords: ["Agile", "Code Review", "Mentoring", "System Design"],
+                                    },
+                                ],
+                            },
+
+                            experience: {
+                                title: "Experience",
+                                hidden: false,
+                                columns: 1,
+                                icon: "",
+
+                                items: [
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        company: "Nimbus Cloud",
+                                        position: "Senior Software Engineer",
+                                        location: "San Francisco, CA",
+                                        startDate: "Mar 2022",
+                                        endDate: "Present",
+                                        website: {
+                                            hidden: true,
+                                            label: "",
+                                            value: "",
+                                        },
+                                        content: `- Led the rebuild of the #strong[customer dashboard] in #strong[Next.js] and #strong[TypeScript], improving page load times by #strong[45%] and cutting bug reports by #strong[30%].
+
+- Designed and shipped a #strong[real-time collaboration feature] used by over #strong[200,000 monthly active users], built on #strong[WebSockets] and #strong[CRDTs].
+
+- Mentored #strong[4 junior engineers] and introduced a peer code-review process that raised release confidence across the team.`,
+                                    },
+
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        company: "Brightline Labs",
+                                        position: "Software Engineer",
+                                        location: "Austin, TX",
+                                        startDate: "Jul 2019",
+                                        endDate: "Feb 2022",
+                                        website: {
+                                            hidden: true,
+                                            label: "",
+                                            value: "",
+                                        },
+                                        content: `- Built and maintained #strong[core billing infrastructure] processing #strong[\\$2M+ in monthly transactions] with #strong[99.99% uptime].
+
+- Migrated a monolithic #strong[Express] API to a #strong[microservices architecture], reducing average response time by #strong[35%].
+
+- Partnered with design to launch a #strong[self-serve onboarding flow], increasing trial-to-paid conversion by #strong[18%].`,
+                                    },
+
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        company: "Fieldstone Digital",
+                                        position: "Junior Developer",
+                                        location: "Remote",
+                                        startDate: "Jun 2018",
+                                        endDate: "Jun 2019",
+                                        website: {
+                                            hidden: true,
+                                            label: "",
+                                            value: "",
+                                        },
+                                        content: `- Developed responsive marketing sites for #strong[10+ clients] using #strong[React] and #strong[Sass].
+
+- Set up automated #strong[testing] and #strong[deployment pipelines], cutting release time from days to hours.`,
+                                    },
+                                ],
+                            },
+
+                            project: {
+                                title: "Projects",
+                                hidden: false,
+                                columns: 1,
+                                icon: "",
+
+                                items: [
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        name: "OpenBoard",
+                                        type: "open-source",
+                                        links: [],
+                                        keywords: ["React", "TypeScript", "WebRTC", "Node.js"],
+                                        startDate: "",
+                                        endDate: "",
+                                        content: `- Built an #strong[open-source collaborative whiteboard] with real-time cursors and drawing sync, used by #strong[1,200+ stars] on GitHub.
+
+- Implemented #strong[conflict-free replicated data types (CRDTs)] to support offline editing and multi-user sync.`,
+                                    },
+
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        name: "Recipe Vault",
+                                        type: "personal",
+                                        links: [],
+                                        keywords: ["Next.js", "PostgreSQL", "Tailwind CSS"],
+                                        startDate: "",
+                                        endDate: "",
+                                        content: `- Designed and built a #strong[personal recipe manager] with search, tagging, and meal planning.
+
+- Deployed on #strong[Vercel] with a #strong[Postgres] backend, supporting image uploads and full-text search.`,
+                                    },
+                                ],
+                            },
+
+                            education: {
+                                title: "Education",
+                                hidden: false,
+                                columns: 1,
+                                icon: "",
+
+                                items: [
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        school: "University of Texas at Austin",
+                                        degree: "B.S. Computer Science",
+                                        area: "",
+                                        grade: "",
+                                        location: "",
+                                        startDate: "2014",
+                                        endDate: "2018",
+                                        website: {
+                                            hidden: true,
+                                            label: "",
+                                            value: "",
+                                        },
+                                        content: "",
+                                    },
+                                ],
+                            },
+
+                            certification: {
+                                title: "Certifications",
+                                hidden: false,
+                                columns: 1,
+                                icon: "",
+                                items: [
+                                    {
+                                        id: crypto.randomUUID(),
+                                        hidden: false,
+                                        title: "AWS Certified Solutions Architect – Associate",
+                                        issuer: "Amazon Web Services",
+                                        date: "2023",
+                                        website: {
+                                            hidden: true,
+                                            label: "",
+                                            value: "",
+                                        },
+                                        content: "",
+                                    },
+                                ],
+                            },
                         },
+
                         meta: {
                             template: "classic",
                             theme: {
@@ -191,7 +593,7 @@ function Test({ typst }: { typst: TypstSnippet }) {
                                 },
                                 font: {
                                     body: "Libertinus Serif",
-                                    heading: "New Computer Modern",
+                                    heading: "Libertinus Serif",
                                 },
                                 size: {
                                     name: 20,
@@ -214,7 +616,7 @@ function Test({ typst }: { typst: TypstSnippet }) {
                                 },
                                 layout: {
                                     paper: "a4",
-                                    margin: { x: 40, y: 34 },
+                                    margin: { x: 0.5, y: 0.4 },
                                 },
                                 lang: "en",
                                 leading: 1.5,
