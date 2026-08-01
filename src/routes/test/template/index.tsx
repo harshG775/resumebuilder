@@ -275,12 +275,12 @@ ${resume}
 #show: resume.with(title: "${escapeTypstString(content.basics.name)}", author: "${escapeTypstString(content.basics.name)}")
 
 ${basics}
-${summary}
-${experience}
-${project}
-${skill}
-${education}
-${certification}
+${content.meta.layout.pages[0].main
+    .map((section) => {
+        return { summary, experience, project, skill, education, certification }[section]
+    })
+    .join("\n")}
+// ---------------------------------------------------------------------------------------------------------------------
     `
 }
 
