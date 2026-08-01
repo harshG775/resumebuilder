@@ -18,8 +18,6 @@ const ThemeColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/)
  * Length values are plain numbers representing points.
  * merge-theme on the Typst side converts them via multiplication by 1pt.
  */
-const ThemeLengthSchema = z.number()
-
 const ResumeThemeZodSchema = z.object({
     version: z.literal(RESUME_THEME_VERSION),
     color: z.object({
@@ -34,31 +32,32 @@ const ResumeThemeZodSchema = z.object({
         heading: z.string(),
     }),
     size: z.object({
-        name: ThemeLengthSchema,
-        heading: ThemeLengthSchema,
-        subheading: ThemeLengthSchema,
-        body: ThemeLengthSchema,
-        meta: ThemeLengthSchema,
+        name: z.number(),
+        heading: z.number(),
+        subheading: z.number(),
+        body: z.number(),
+        meta: z.number(),
     }),
     weight: z.object({
         heading: z.number(),
         subheading: z.number(),
     }),
     space: z.object({
-        itemGap: ThemeLengthSchema,
+        sectionGap: z.number().nonnegative(),
+        sectionGapAfter: z.number().nonnegative(),
+        itemGap: z.number(),
     }),
     border: z.object({
-        thickness: ThemeLengthSchema,
+        thickness: z.number(),
     }),
     layout: z.object({
         paper: z.enum(["us-letter", "a4", "us-legal"]),
         margin: z.object({
-            x: ThemeLengthSchema,
-            y: ThemeLengthSchema,
+            x: z.number(),
+            y: z.number(),
         }),
     }),
     lang: z.string(),
-    /** Unitless line-height multiplier for body paragraphs (Typst `par(leading:)`, in em). */
     leading: z.number(),
 })
 

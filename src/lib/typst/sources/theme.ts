@@ -22,14 +22,13 @@ export const themeSource = `
         meta: 9pt,
     ),
     weight: (heading: 800, subheading: 700),
-    space: (item-gap: 6pt),
+    space: (section-gap: 8pt, section-gap-after: 2pt, item-gap: 4pt),
     border: (thickness: 0.5pt),
     layout: (
         paper: "a4",
         margin: (x: 40pt, y: 34pt),
     ),
     lang: "en",
-    // Unitless line-height multiplier, anchored the same way \`resume()\` applies it to \`par(leading:)\`.
     leading: 1.5,
 )
 
