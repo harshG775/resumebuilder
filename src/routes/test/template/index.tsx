@@ -70,7 +70,7 @@ const createResume = ({ content }: { content: ResumeValues }) => {
         ligatures: false,
         hyphenate: false,
     )
-    set par(justify: false, leading: theme.leading)
+    set par(justify: false, leading: theme.leading * 1em)
 
     show link: underline
 
