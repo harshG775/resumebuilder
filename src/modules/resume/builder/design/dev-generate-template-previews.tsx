@@ -5,7 +5,7 @@ import { resumeShowcaseValues } from "#/modules/resume/data/resume-seed-values"
 import { ArrowsClockwiseIcon } from "@phosphor-icons/react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { templateList } from "../preview/templates"
+import { templateList } from "../../templates"
 
 // Dev-only: renders every template with the showcase resume data and writes
 // the resulting SVGs to public/templates/, so thumbnails can be regenerated
@@ -18,7 +18,7 @@ export function DevGenerateTemplatePreviews({ onSeed }: { onSeed: () => void }) 
     async function handleGenerate() {
         setIsGenerating(true)
         try {
-            const $typst = getTypst()
+            const $typst = await getTypst()
 
             for (const template of templateList) {
                 const values = {
@@ -26,7 +26,8 @@ export function DevGenerateTemplatePreviews({ onSeed }: { onSeed: () => void }) 
                     meta: { ...resumeShowcaseValues.meta, template: template.meta.id },
                 }
                 const svg = await $typst.svg({
-                    mainContent: template.render(values),
+                    mainFilePath: template.mainFilePath,
+                    inputs: template.buildInputs(values),
                     data_selection: { body: true, defs: true, css: true, js: false },
                 })
                 await saveTemplatePreviewFn({ data: { id: template.meta.id, svg } })

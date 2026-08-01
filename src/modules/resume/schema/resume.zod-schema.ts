@@ -3,6 +3,66 @@ import { z } from "zod"
 //
 const TemplateZodSchema = z.enum(["classic", "modern"])
 
+export const RESUME_THEME_VERSION = 1
+
+/**
+ * Color values are hex strings (e.g. "#1a1a1a"), coerced via rgb() on the Typst
+ * side. Chosen over oklch/oklab/cmyk/hsl as the wire format because rgb() is the
+ * only Typst color constructor with an unambiguous single-string form - the others
+ * take multiple positional args with mixed units (e.g. oklch mixes % and deg).
+ * A UI may author colors in any colorspace; it must convert to hex before storing.
+ */
+const ThemeColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/)
+
+/**
+ * Length values are plain numbers representing points.
+ * merge-theme on the Typst side converts them via multiplication by 1pt.
+ */
+const ThemeLengthSchema = z.number()
+
+const ResumeThemeZodSchema = z.object({
+    version: z.literal(RESUME_THEME_VERSION),
+    color: z.object({
+        text: ThemeColorSchema,
+        textMuted: ThemeColorSchema,
+        primary: ThemeColorSchema,
+        background: ThemeColorSchema,
+        border: ThemeColorSchema,
+    }),
+    font: z.object({
+        body: z.string(),
+        heading: z.string(),
+    }),
+    size: z.object({
+        name: ThemeLengthSchema,
+        heading: ThemeLengthSchema,
+        subheading: ThemeLengthSchema,
+        body: ThemeLengthSchema,
+        meta: ThemeLengthSchema,
+    }),
+    weight: z.object({
+        heading: z.number(),
+        subheading: z.number(),
+    }),
+    space: z.object({
+        itemGap: ThemeLengthSchema,
+    }),
+    border: z.object({
+        thickness: ThemeLengthSchema,
+    }),
+    layout: z.object({
+        paper: z.enum(["us-letter", "a4", "us-legal"]),
+        margin: z.object({
+            x: ThemeLengthSchema,
+            y: ThemeLengthSchema,
+        }),
+    }),
+    lang: z.string(),
+    /** Unitless line-height multiplier for body paragraphs (Typst `par(leading:)`, in em). */
+    leading: z.number(),
+})
+
+//
 const WebsiteSchema = z.object({
     hidden: z.boolean(),
     value: z.string(),
@@ -15,23 +75,10 @@ const LinkSchema = z.object({
     label: z.string(),
 })
 
-const PageSchema = z.object({
-    gapX: z.number().min(0).max(40),
-    gapY: z.number().min(0).max(40),
-    marginX: z.number().min(0).max(50),
-    marginY: z.number().min(0).max(50),
-    format: z.enum(["a4", "us-letter", "us-legal"]),
-    locale: z.string(),
+const DisplaySchema = z.object({
     hideLinkUnderline: z.boolean(),
     hideIcons: z.boolean(),
     hideSectionIcons: z.boolean(),
-})
-
-const FontStyleSchema = z.object({
-    fontFamily: z.string(),
-    fontWeight: z.string(),
-    fontSize: z.number().min(6).max(24),
-    lineHeight: z.number().min(1).max(3),
 })
 
 const SectionBaseSchema = z.object({
@@ -132,20 +179,10 @@ export const ResumeZodSchema = z.object({
     //
     meta: z.object({
         template: TemplateZodSchema,
+        theme: ResumeThemeZodSchema,
+        display: DisplaySchema,
         layout: z.object({
             pages: z.array(z.object({ main: z.array(SectionKeySchema) })),
-        }),
-        page: PageSchema,
-        design: z.object({
-            colors: z.object({
-                primary: z.string(),
-                text: z.string(),
-                background: z.string(),
-            }),
-        }),
-        typography: z.object({
-            heading: FontStyleSchema,
-            body: FontStyleSchema,
         }),
     }),
 })

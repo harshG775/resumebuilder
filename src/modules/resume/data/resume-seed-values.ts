@@ -1,3 +1,4 @@
+import { RESUME_THEME_VERSION } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
 
 export const resumeShowcaseValues: ResumeValues = {
@@ -259,44 +260,54 @@ export const resumeShowcaseValues: ResumeValues = {
 
     meta: {
         template: "classic",
+        theme: {
+            version: RESUME_THEME_VERSION,
+            color: {
+                text: "#111827",
+                textMuted: "#6b7280",
+                primary: "#1e3a8a",
+                background: "#ffffff",
+                border: "#e5e7eb",
+            },
+            font: {
+                body: "Libertinus Serif",
+                heading: "New Computer Modern",
+            },
+            size: {
+                name: 20,
+                heading: 14,
+                subheading: 10.5,
+                body: 10,
+                meta: 9,
+            },
+            weight: {
+                heading: 800,
+                subheading: 700,
+            },
+            space: {
+                itemGap: 3,
+            },
+            border: {
+                thickness: 0.5,
+            },
+            layout: {
+                paper: "a4",
+                margin: { x: 34, y: 28 },
+            },
+            lang: "en",
+            leading: 1.5,
+        },
+        display: {
+            hideLinkUnderline: false,
+            hideIcons: false,
+            hideSectionIcons: true,
+        },
         layout: {
             pages: [
                 {
                     main: ["summary", "skill", "experience", "project", "education", "certification"],
                 },
             ],
-        },
-        page: {
-            gapX: 1,
-            gapY: 1,
-            marginX: 12,
-            marginY: 10,
-            format: "a4",
-            locale: "en-US",
-            hideLinkUnderline: false,
-            hideIcons: false,
-            hideSectionIcons: true,
-        },
-        design: {
-            colors: {
-                primary: "#1e3a8a",
-                text: "#111827",
-                background: "#ffffff",
-            },
-        },
-        typography: {
-            heading: {
-                fontFamily: "New Computer Modern",
-                fontWeight: "800",
-                fontSize: 14,
-                lineHeight: 1.5,
-            },
-            body: {
-                fontFamily: "Libertinus Serif",
-                fontWeight: "400",
-                fontSize: 10,
-                lineHeight: 1.5,
-            },
         },
     },
 }
@@ -585,44 +596,54 @@ export const harshGaurResumeSeedValues: ResumeValues = {
     },
     meta: {
         template: "classic",
+        theme: {
+            version: RESUME_THEME_VERSION,
+            color: {
+                text: "#1a1a1a",
+                textMuted: "#6b7280",
+                primary: "#1e3a5f",
+                background: "#ffffff",
+                border: "#e5e7eb",
+            },
+            font: {
+                body: "Libertinus Serif",
+                heading: "New Computer Modern",
+            },
+            size: {
+                name: 20,
+                heading: 14,
+                subheading: 10.5,
+                body: 10,
+                meta: 9,
+            },
+            weight: {
+                heading: 800,
+                subheading: 700,
+            },
+            space: {
+                itemGap: 6,
+            },
+            border: {
+                thickness: 0.5,
+            },
+            layout: {
+                paper: "a4",
+                margin: { x: 40, y: 34 },
+            },
+            lang: "en",
+            leading: 1.5,
+        },
+        display: {
+            hideLinkUnderline: false,
+            hideIcons: false,
+            hideSectionIcons: true,
+        },
         layout: {
             pages: [
                 {
                     main: ["summary", "experience", "project", "skill", "education", "certification"],
                 },
             ],
-        },
-        page: {
-            gapX: 4,
-            gapY: 4,
-            marginX: 14,
-            marginY: 12,
-            format: "a4",
-            locale: "en-US",
-            hideLinkUnderline: false,
-            hideIcons: false,
-            hideSectionIcons: true,
-        },
-        design: {
-            colors: {
-                primary: "oklch(35%, 0.08, 250deg)",
-                text: "oklch(20%, 0.01, 250deg)",
-                background: "oklch(100%, 0, 0deg)",
-            },
-        },
-        typography: {
-            heading: {
-                fontFamily: "New Computer Modern",
-                fontWeight: "800",
-                fontSize: 14,
-                lineHeight: 1.5,
-            },
-            body: {
-                fontFamily: "Libertinus Serif",
-                fontWeight: "400",
-                fontSize: 10,
-                lineHeight: 1.5,
-            },
         },
     },
 }

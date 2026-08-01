@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import type { ReactNode } from "react"
 import type { ResumeValues } from "../../schema/resume.zod-schema"
 import { getTypst } from "#/lib/typst/typst"
-import { getTemplate } from "./templates"
+import { getTemplate } from "../../templates"
 import { ArrowCounterClockwiseIcon, MagnifyingGlassMinusIcon, MagnifyingGlassPlusIcon } from "@phosphor-icons/react"
 import { useDebouncedCallback } from "@tanstack/react-pacer"
 
@@ -91,9 +91,11 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
 
         isRenderingRef.current = true
         try {
-            const typst = getTypst()
+            const typst = await getTypst()
+            const template = getTemplate(data.meta.template)
             await typst.canvas(container, {
-                mainContent: getTemplate(data.meta.template).render(data),
+                mainFilePath: template.mainFilePath,
+                inputs: template.buildInputs(data),
                 pixelPerPt: 4,
             })
         } catch (error) {

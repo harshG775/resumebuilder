@@ -24,7 +24,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useEffect, useRef, useState } from "react"
 import { ResumePreview } from "./preview"
 import { getTypst } from "#/lib/typst/typst"
-import { getTemplate } from "./preview/templates"
+import { getTemplate } from "../templates"
 import { downloadBlob } from "#/lib/download"
 import { copyResumeShareLink } from "#/lib/share-resume-link"
 import { ColorsSection, LayoutSection, PageSection, TemplatesSection, TypographySection } from "./design"
@@ -32,9 +32,11 @@ import { resumeShowcaseValues } from "../data/resume-seed-values"
 import { DevGenerateTemplatePreviews } from "./design/dev-generate-template-previews"
 
 async function generateResumeThumbnail(values: ResumeValues) {
-    const $typst = getTypst()
+    const $typst = await getTypst()
+    const template = getTemplate(values.meta.template)
     return $typst.svg({
-        mainContent: getTemplate(values.meta.template).render(values),
+        mainFilePath: template.mainFilePath,
+        inputs: template.buildInputs(values),
     })
 }
 
@@ -109,9 +111,11 @@ export default function Builder({ resume }: BuilderProps) {
     async function handleDownloadPdf() {
         setIsDownloadingPdf(true)
         try {
-            const $typst = getTypst()
+            const $typst = await getTypst()
+            const template = getTemplate(form.state.values.meta.template)
             const pdfBytes = await $typst.pdf({
-                mainContent: getTemplate(form.state.values.meta.template).render(form.state.values),
+                mainFilePath: template.mainFilePath,
+                inputs: template.buildInputs(form.state.values),
             })
             if (pdfBytes) {
                 downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")

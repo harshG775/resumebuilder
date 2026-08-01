@@ -6,7 +6,7 @@ import { getResumeByUsernameAndSlugFn } from "#/lib/server/resume.function"
 import { siteConfig } from "#/config/site"
 import { seo } from "#/lib/utils"
 import { getTypst } from "#/lib/typst/typst"
-import { getTemplate } from "#/modules/resume/builder/preview/templates"
+import { getTemplate } from "#/modules/resume/templates"
 import { createFileRoute, Link, notFound } from "@tanstack/react-router"
 import { DownloadIcon } from "@phosphor-icons/react"
 import { useEffect, useRef, useState } from "react"
@@ -55,9 +55,11 @@ function RouteComponent() {
         const container = containerRef.current
         if (!container) return
         const run = async () => {
-            const typst = getTypst()
+            const typst = await getTypst()
+            const template = getTemplate(resume.data.content.meta.template)
             const result = await typst.svg({
-                mainContent: getTemplate(resume.data.content.meta.template).render(resume.data.content),
+                mainFilePath: template.mainFilePath,
+                inputs: template.buildInputs(resume.data.content),
             })
             container.innerHTML = result
             setIsRendered(true)
@@ -68,9 +70,11 @@ function RouteComponent() {
     async function handleDownloadPdf() {
         setIsDownloading(true)
         try {
-            const typst = getTypst()
+            const typst = await getTypst()
+            const template = getTemplate(resume.data.content.meta.template)
             const pdfBytes = await typst.pdf({
-                mainContent: getTemplate(resume.data.content.meta.template).render(resume.data.content),
+                mainFilePath: template.mainFilePath,
+                inputs: template.buildInputs(resume.data.content),
             })
             if (pdfBytes) {
                 downloadBlob(pdfBytes, `${resume.data.slug || "resume"}.pdf`, "application/pdf")

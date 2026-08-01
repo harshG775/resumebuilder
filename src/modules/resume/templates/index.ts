@@ -1,12 +1,11 @@
 // https://www.greatfrontend.com/blog/how-to-write-frontend-developer-resume
 // index.ts
 import { classicTemplate } from "./classic"
-import { modernTemplate } from "./modern"
 import type { ResumeTemplate, TemplateId } from "./template.type"
 
 export const templateRegistry: Record<TemplateId, ResumeTemplate> = {
     classic: classicTemplate,
-    modern: modernTemplate,
+    modern: classicTemplate,
 }
 
 export const templateList: ResumeTemplate[] = Object.values(templateRegistry)

@@ -26,8 +26,8 @@ import {
     ShareNetworkIcon,
 } from "@phosphor-icons/react"
 import { BrowserFrame } from "./-components/browser-frame"
-import { templateList } from "#/modules/resume/builder/preview/templates"
-import type { TemplateId } from "#/modules/resume/builder/preview/templates"
+import { templateList } from "#/modules/resume/templates"
+import type { TemplateId } from "#/modules/resume/templates"
 
 export const Route = createFileRoute("/")({
     head: () => ({

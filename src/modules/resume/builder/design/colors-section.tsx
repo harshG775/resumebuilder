@@ -7,7 +7,9 @@ import { SectionFieldSet } from "../components/section-field-set"
 const COLOR_FIELDS = [
     { name: "primary", label: "Primary" },
     { name: "text", label: "Text" },
+    { name: "textMuted", label: "Text (muted)" },
     { name: "background", label: "Background" },
+    { name: "border", label: "Border" },
 ] as const
 
 export const ColorsSection = withForm({
@@ -16,7 +18,7 @@ export const ColorsSection = withForm({
         <SectionFieldSet title="Colors">
             <div className="flex flex-col gap-4">
                 {COLOR_FIELDS.map(({ name, label }) => (
-                    <form.AppField key={name} name={`meta.design.colors.${name}`}>
+                    <form.AppField key={name} name={`meta.theme.color.${name}`}>
                         {(field) => (
                             <Field>
                                 <FieldLabel htmlFor={field.name}>{label}</FieldLabel>

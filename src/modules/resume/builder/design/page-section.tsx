@@ -12,14 +12,13 @@ const PAGE_FORMATS = [
     { value: "us-legal", label: "US Legal" },
 ] as const
 
-const LOCALES = [
-    { value: "en-US", label: "English (US)" },
-    { value: "en-GB", label: "English (UK)" },
-    { value: "fr-FR", label: "French" },
-    { value: "de-DE", label: "German" },
-    { value: "es-ES", label: "Spanish" },
-    { value: "pt-BR", label: "Portuguese (Brazil)" },
-    { value: "hi-IN", label: "Hindi" },
+const LANGUAGES = [
+    { value: "en", label: "English" },
+    { value: "fr", label: "French" },
+    { value: "de", label: "German" },
+    { value: "es", label: "Spanish" },
+    { value: "pt", label: "Portuguese" },
+    { value: "hi", label: "Hindi" },
 ] as const
 
 const TOGGLE_FIELDS = [
@@ -33,7 +32,7 @@ export const PageSection = withForm({
     render: ({ form }) => (
         <SectionFieldSet title="Page">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <form.AppField name="meta.page.format">
+                <form.AppField name="meta.theme.layout.paper">
                     {(field) => (
                         <Field>
                             <FieldLabel htmlFor={field.name}>Paper format</FieldLabel>
@@ -55,21 +54,21 @@ export const PageSection = withForm({
                         </Field>
                     )}
                 </form.AppField>
-                <form.AppField name="meta.page.locale">
+                <form.AppField name="meta.theme.lang">
                     {(field) => (
                         <Field>
-                            <FieldLabel htmlFor={field.name}>Locale</FieldLabel>
+                            <FieldLabel htmlFor={field.name}>Language</FieldLabel>
                             <Select
                                 value={field.state.value}
-                                onValueChange={(value) => field.handleChange(value ?? "en-US")}
+                                onValueChange={(value) => field.handleChange(value ?? "en")}
                             >
                                 <SelectTrigger id={field.name} className="w-full">
-                                    <SelectValue placeholder="Select a locale" />
+                                    <SelectValue placeholder="Select a language" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {LOCALES.map((locale) => (
-                                        <SelectItem key={locale.value} value={locale.value}>
-                                            {locale.label}
+                                    {LANGUAGES.map((language) => (
+                                        <SelectItem key={language.value} value={language.value}>
+                                            {language.label}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -80,42 +79,7 @@ export const PageSection = withForm({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-                <form.AppField name="meta.page.gapX">
-                    {(field) => (
-                        <Field>
-                            <FieldLabel htmlFor={field.name}>Column gap</FieldLabel>
-                            <Input
-                                id={field.name}
-                                type="number"
-                                min={0}
-                                max={40}
-                                step={1}
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.valueAsNumber)}
-                            />
-                        </Field>
-                    )}
-                </form.AppField>
-                <form.AppField name="meta.page.gapY">
-                    {(field) => (
-                        <Field>
-                            <FieldLabel htmlFor={field.name}>Row gap</FieldLabel>
-                            <Input
-                                id={field.name}
-                                type="number"
-                                min={0}
-                                max={40}
-                                step={1}
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.valueAsNumber)}
-                            />
-                        </Field>
-                    )}
-                </form.AppField>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-                <form.AppField name="meta.page.marginX">
+                <form.AppField name="meta.theme.layout.margin.x">
                     {(field) => (
                         <Field>
                             <FieldLabel htmlFor={field.name}>Horizontal margin</FieldLabel>
@@ -123,7 +87,7 @@ export const PageSection = withForm({
                                 id={field.name}
                                 type="number"
                                 min={0}
-                                max={50}
+                                max={150}
                                 step={1}
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.valueAsNumber)}
@@ -131,7 +95,7 @@ export const PageSection = withForm({
                         </Field>
                     )}
                 </form.AppField>
-                <form.AppField name="meta.page.marginY">
+                <form.AppField name="meta.theme.layout.margin.y">
                     {(field) => (
                         <Field>
                             <FieldLabel htmlFor={field.name}>Vertical margin</FieldLabel>
@@ -139,7 +103,7 @@ export const PageSection = withForm({
                                 id={field.name}
                                 type="number"
                                 min={0}
-                                max={50}
+                                max={150}
                                 step={1}
                                 value={field.state.value}
                                 onChange={(e) => field.handleChange(e.target.valueAsNumber)}
@@ -149,8 +113,25 @@ export const PageSection = withForm({
                 </form.AppField>
             </div>
 
+            <form.AppField name="meta.theme.space.itemGap">
+                {(field) => (
+                    <Field>
+                        <FieldLabel htmlFor={field.name}>Item spacing</FieldLabel>
+                        <Input
+                            id={field.name}
+                            type="number"
+                            min={0}
+                            max={40}
+                            step={1}
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.valueAsNumber)}
+                        />
+                    </Field>
+                )}
+            </form.AppField>
+
             {TOGGLE_FIELDS.map(({ name, label }) => (
-                <form.AppField key={name} name={`meta.page.${name}`}>
+                <form.AppField key={name} name={`meta.display.${name}`}>
                     {(field) => (
                         <Field orientation="horizontal">
                             <FieldLabel htmlFor={field.name}>{label}</FieldLabel>

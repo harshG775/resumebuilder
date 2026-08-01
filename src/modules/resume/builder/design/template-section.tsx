@@ -13,8 +13,8 @@ import { cn } from "#/lib/utils"
 import { CheckIcon, PencilIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
-import { getTemplate, templateList } from "../preview/templates"
-import type { TemplateId } from "../preview/templates"
+import { getTemplate, templateList } from "../../templates"
+import type { TemplateId } from "../../templates"
 
 const isSameTemplate = (a: TemplateId, b: TemplateId): boolean => (a as string) === (b as string)
 

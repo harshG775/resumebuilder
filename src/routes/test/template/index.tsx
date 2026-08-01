@@ -240,7 +240,7 @@ function RouteComponent() {
         if (!container) return
 
         try {
-            const typst = getTypst()
+            const typst = await getTypst()
             const result = await typst.svg({
                 mainContent,
                 inputs: { data: JSON.stringify(harshGaurResumeSeedValues) },
