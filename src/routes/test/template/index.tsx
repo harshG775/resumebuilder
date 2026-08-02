@@ -23,6 +23,7 @@ function escapeTypstString(text: string): string {
 
 const createResume = ({ content }: { content: ResumeValues }) => {
     const resume = `
+// ---------------------------------------------------------------------------------------------------------------------
 #let theme = (
     color: (
         text: rgb("${content.meta.theme.color.text}"),
@@ -72,15 +73,28 @@ const createResume = ({ content }: { content: ResumeValues }) => {
     set par(justify: false, leading: theme.leading * 1em)
 
     show link: underline
+    show link: set text(fill: theme.color.primary)
+
+    show heading.where(level: 1): it => {
+        set text(font: theme.font.heading, size: theme.size.name, weight: theme.weight.heading, fill: theme.color.text)
+        block(it.body)
+    }
+
+    show heading.where(level: 2): it => {
+        set text(font: theme.font.heading, size: theme.size.heading, weight: theme.weight.heading, fill: theme.color.primary)
+        pad(top: theme.space.section-gap, bottom: theme.space.section-gap-after)[#smallcaps(it.body)]
+        line(length: 100%, stroke: theme.border.thickness + theme.color.border)
+    }
 
     body
 }
+// ---------------------------------------------------------------------------------------------------------------------
 
 
 #let row(left-content: none, right-content: none) = [#left-content #h(1fr) #right-content]
 
 #let dash = "-"
-#let date-range(start: "", end: "", sep: "-") = start + " " + sep + " " + end
+#let date-range(start: "", end: "") = start + " " + dash + " " + end
 
 #let meta-text(body) = text(size: theme.size.meta, fill: theme.color.text-muted)[#body]
 #let subheading-text(body) = text(size: theme.size.subheading, weight: theme.weight.subheading)[#body]
@@ -90,28 +104,18 @@ const createResume = ({ content }: { content: ResumeValues }) => {
 #let email-item(address) = link("mailto:" + address)[#address]
 
 #let work(title: "", company: "", location: "", start: "", end: "") = block(breakable: false, width: 100%)[
-    #row(
-        left-content: [
-            #subheading-text(title)
-            #if company != "" [ #text(fill: theme.color.text-muted)[· #company]]
-            #if location != "" [ #text(fill: theme.color.text-muted)[· #location]]
-        ],
-        right-content: meta-text(date-range(start: start, end: end)),
-    )
+    #row(left-content: subheading-text(title), right-content: meta-text(date-range(start: start, end: end)))
+    #linebreak()
+    #row(left-content: emph(company), right-content: meta-text(location))
 ]
 
 #let edu(institution: "", degree: "", location: "", start: "", end: "") = block(breakable: false, width: 100%)[
-    #row(
-        left-content: [
-            #subheading-text(degree)
-            #if institution != "" [ #text(fill: theme.color.text-muted)[· #institution]]
-            #if location != "" [ #text(fill: theme.color.text-muted)[· #location]]
-        ],
-        right-content: meta-text(date-range(start: start, end: end)),
-    )
+    #row(left-content: subheading-text(institution), right-content: meta-text(date-range(start: start, end: end)))
+    #linebreak()
+    #row(left-content: emph(degree), right-content: meta-text(location))
 ]
 
-#let skills(items: ()) = items.join(", ")
+#let skills(items: ()) = items.join("  •  ")
 
 
 `
@@ -196,14 +200,17 @@ ${content.sections.project.items
                 ? `(${links.map((l) => `#link-item("${escapeTypstString(l.label)}", "${escapeTypstString(l.value)}")`).join(", ")})`
                 : ""
         const keywords = item.keywords.filter((k) => k)
+        const dateRange =
+            item.startDate || item.endDate
+                ? `meta-text(date-range(start: "${escapeTypstString(item.startDate)}", end: "${escapeTypstString(item.endDate)}"))`
+                : "none"
         return `
-#row(
-    left-content: [
-        #subheading-text("${escapeTypstString(item.name)}")
-        ${linksTypst}
-    ],
-    right-content: meta-text(date-range(start: "${escapeTypstString(item.startDate)}", end: "${escapeTypstString(item.endDate)}")),
-)
+#block(breakable: false, width: 100%)[
+    #row(
+        left-content: [#subheading-text("${escapeTypstString(item.name)}")${linksTypst ? ` ${linksTypst}` : ""}],
+        right-content: ${dateRange},
+    )
+]
 ${keywords.length > 0 ? `#meta-text("${escapeTypstString(keywords.join(", "))}")` : ""}
 ${item.content}
 #v(theme.space.item-gap)
@@ -221,7 +228,7 @@ ${content.sections.skill.items
     .filter((item) => !item.hidden)
     .map(
         (item) =>
-            `#text(weight: theme.weight.subheading)[${escapeTypstMarkup(item.name)}:] #skills(items: (${item.keywords.map((k) => `"${escapeTypstString(k)}"`).join(", ")}))`,
+            `#block(width: 100%)[#text(weight: theme.weight.subheading)[${escapeTypstMarkup(item.name)}:] #skills(items: (${item.keywords.map((k) => `"${escapeTypstString(k)}"`).join(", ")}))]`,
     )
     .join("\n")}
     `
@@ -258,10 +265,12 @@ ${content.sections.certification.items
     .filter((item) => !item.hidden)
     .map(
         (item) => `
-#row(
-    left-content: [#subheading-text("${escapeTypstString(item.title)}")${item.issuer ? ` #text(fill: theme.color.text-muted)[· ${escapeTypstMarkup(item.issuer)}]` : ""}],
-    right-content: meta-text("${escapeTypstString(item.date)}"),
-)
+#block(breakable: false, width: 100%)[
+    #row(
+        left-content: [#subheading-text("${escapeTypstString(item.title)}")${item.issuer ? ` #text(fill: theme.color.text-muted)[· ${escapeTypstMarkup(item.issuer)}]` : ""}],
+        right-content: ${item.date ? `meta-text("${escapeTypstString(item.date)}")` : "none"},
+    )
+]
 ${item.content}
 #v(theme.space.item-gap)
     `,
@@ -275,6 +284,7 @@ ${resume}
 #show: resume.with(title: "${escapeTypstString(content.basics.name)}", author: "${escapeTypstString(content.basics.name)}")
 
 ${basics}
+
 ${content.meta.layout.pages[0].main
     .map((section) => {
         return { summary, experience, project, skill, education, certification }[section]
@@ -607,8 +617,8 @@ function Test({ typst }: { typst: TypstSnippet }) {
                                     subheading: 700,
                                 },
                                 space: {
-                                    sectionGap: 12,
-                                    sectionGapAfter: 2,
+                                    sectionGap: 0,
+                                    sectionGapAfter: 0,
                                     itemGap: 6,
                                 },
                                 border: {
@@ -616,7 +626,7 @@ function Test({ typst }: { typst: TypstSnippet }) {
                                 },
                                 layout: {
                                     paper: "a4",
-                                    margin: { x: 0.5, y: 0.4 },
+                                    margin: { x: 0.45, y: 0.4 },
                                 },
                                 lang: "en",
                                 leading: 1.5,
