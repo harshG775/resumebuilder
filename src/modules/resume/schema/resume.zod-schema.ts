@@ -5,19 +5,8 @@ const TemplateZodSchema = z.enum(["classic", "modern"])
 
 export const RESUME_THEME_VERSION = 1
 
-/**
- * Color values are hex strings (e.g. "#1a1a1a"), coerced via rgb() on the Typst
- * side. Chosen over oklch/oklab/cmyk/hsl as the wire format because rgb() is the
- * only Typst color constructor with an unambiguous single-string form - the others
- * take multiple positional args with mixed units (e.g. oklch mixes % and deg).
- * A UI may author colors in any colorspace; it must convert to hex before storing.
- */
 const ThemeColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/)
 
-/**
- * Length values are plain numbers representing points.
- * merge-theme on the Typst side converts them via multiplication by 1pt.
- */
 const ResumeThemeZodSchema = z.object({
     version: z.literal(RESUME_THEME_VERSION),
     color: z.object({

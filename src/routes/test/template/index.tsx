@@ -515,7 +515,13 @@ function Test({ typst }: { typst: TypstSnippet }) {
                                         hidden: false,
                                         name: "OpenBoard",
                                         type: "open-source",
-                                        links: [],
+                                        links: [
+                                            {
+                                                id: crypto.randomUUID(),
+                                                label: "GitHub",
+                                                value: "https://github.com/alexmorgan/openboard",
+                                            },
+                                        ],
                                         keywords: ["React", "TypeScript", "WebRTC", "Node.js"],
                                         startDate: "",
                                         endDate: "",
@@ -529,7 +535,13 @@ function Test({ typst }: { typst: TypstSnippet }) {
                                         hidden: false,
                                         name: "Recipe Vault",
                                         type: "personal",
-                                        links: [],
+                                        links: [
+                                            {
+                                                id: crypto.randomUUID(),
+                                                label: "Live Demo",
+                                                value: "https://recipevault.alexmorgan.dev",
+                                            },
+                                        ],
                                         keywords: ["Next.js", "PostgreSQL", "Tailwind CSS"],
                                         startDate: "",
                                         endDate: "",
