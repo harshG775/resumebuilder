@@ -57,7 +57,7 @@ const WebsiteSchema = z.object({
     label: z.string(),
 })
 
-const LinkSchema = z.object({
+export const LinkSchema = z.object({
     id: z.string(),
     value: z.url().or(z.literal("")),
     label: z.string(),
@@ -106,7 +106,7 @@ export const SkillsItemSchema = z.object({
     keywords: z.array(z.string()),
 })
 
-const ExperienceItemSchema = z.object({
+export const ExperienceItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     company: z.string(),
@@ -118,7 +118,7 @@ const ExperienceItemSchema = z.object({
     content: z.string(),
 })
 
-const ProjectsItemSchema = z.object({
+export const ProjectsItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     name: z.string(),
@@ -130,7 +130,7 @@ const ProjectsItemSchema = z.object({
     content: z.string(),
 })
 
-const EducationItemSchema = z.object({
+export const EducationItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     school: z.string(),
@@ -144,7 +144,7 @@ const EducationItemSchema = z.object({
     content: z.string(),
 })
 
-const CertificationsItemSchema = z.object({
+export const CertificationsItemSchema = z.object({
     id: z.string(),
     hidden: z.boolean(),
     title: z.string(),
