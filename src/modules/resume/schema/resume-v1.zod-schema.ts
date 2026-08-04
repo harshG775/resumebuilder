@@ -1,4 +1,4 @@
-// version 2
+// version 1
 import { z } from "zod"
 
 export const CustomFieldVariantSchema = z.enum(["linkedin", "github", "twitter", "website", "portfolio", "text"])
@@ -379,4 +379,3 @@ function getDefaults(schema: z.ZodType): unknown {
 export function getResumeDefaults(): ResumeValues {
     return getDefaults(ResumeZodSchema) as ResumeValues
 }
-console.log(JSON.stringify(getResumeDefaults(), null, 2))
