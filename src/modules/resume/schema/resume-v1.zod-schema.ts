@@ -12,6 +12,13 @@ export const CustomFieldSchema = z.object({
     value: z.string().default(""),
 })
 
+// Reused wherever a section renders a list of independently-toggleable typst content blocks (bullet points, summary paragraphs, etc.)
+export const ContentItemSchema = z.object({
+    id: z.string().default(""),
+    isActive: z.boolean().default(true),
+    value: z.string().default(""), // string literal typst
+})
+
 // ── Sections ──────────────────────────────────────
 
 const ContactInfoSchema = z.object({
@@ -60,13 +67,7 @@ const ProfessionalSummarySchema = z.object({
     title: z.string().default("Professional Summary"),
     icon: z.string().default(""),
     isActive: z.boolean().default(true),
-    attributes: z
-        .array(
-            z.object({
-                content: z.string().default(""), // string literal typst
-            }),
-        )
-        .default([]),
+    attributes: z.array(ContentItemSchema).default([]),
 })
 
 const WorkExperienceSchema = z.object({
@@ -95,7 +96,7 @@ const WorkExperienceSchema = z.object({
                     label: "Website",
                     value: "",
                 }),
-                content: z.string().default(""), // string literal typst
+                content: z.array(ContentItemSchema).default([]),
             }),
         )
         .default([]),
@@ -119,7 +120,7 @@ const EducationSchema = z.object({
                 startDate: z.string().default(""),
                 endDate: z.string().default(""),
                 dateLabel: z.enum(["", "Expected", "Anticipated", "Exp."]).default(""),
-                content: z.string().default(""),
+                content: z.array(ContentItemSchema).default([]),
             }),
         )
         .default([]),
@@ -140,6 +141,7 @@ const SkillsSchema = z.object({
                 skill: z
                     .array(
                         z.object({
+                            id: z.string().default(""),
                             isActive: z.boolean().default(true),
                             name: z.string().default(""),
                         }),
@@ -203,7 +205,7 @@ const ProjectsSchema = z.object({
                 startDate: z.string().default(""),
                 endDate: z.string().default(""),
                 links: z.array(CustomFieldSchema).default([]),
-                content: z.string().default(""), // string literal typst
+                content: z.array(ContentItemSchema).default([]),
             }),
         )
         .default([]),
@@ -224,7 +226,7 @@ const VolunteeringLeadershipSchema = z.object({
                 location: z.string().default(""), // in the frontend location will be split in address-city-state
                 startDate: z.string().default(""),
                 endDate: z.string().default(""),
-                content: z.string().default(""), // string literal typst
+                content: z.array(ContentItemSchema).default([]),
             }),
         )
         .default([]),
@@ -243,7 +245,7 @@ const PublicationsSchema = z.object({
                 title: z.string().default(""),
                 publisher: z.string().default(""),
                 date: z.string().default(""),
-                content: z.string().default(""), // string literal typst
+                content: z.array(ContentItemSchema).default([]),
             }),
         )
         .default([]),
@@ -271,44 +273,44 @@ const ThemeColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/)
 
 const ResumeThemeZodSchema = z.object({
     color: z.object({
-        text: ThemeColorSchema.default("#111111"),
-        textMuted: ThemeColorSchema.default("#6b7280"),
-        primary: ThemeColorSchema.default("#2563eb"),
+        text: ThemeColorSchema.default("#1a1a1a"),
+        textMuted: ThemeColorSchema.default("#595959"),
+        primary: ThemeColorSchema.default("#1e3a5f"),
         background: ThemeColorSchema.default("#ffffff"),
-        border: ThemeColorSchema.default("#e5e7eb"),
+        border: ThemeColorSchema.default("#595959"),
     }),
     font: z.object({
-        body: z.string().default("Inter"),
-        heading: z.string().default("Inter"),
+        body: z.string().default("Libertinus Serif"),
+        heading: z.string().default("Libertinus Serif"),
     }),
     size: z.object({
         name: z.number().default(20),
         heading: z.number().default(14),
         subheading: z.number().default(12),
         body: z.number().default(10),
-        meta: z.number().default(9),
+        meta: z.number().default(10),
     }),
     weight: z.object({
-        heading: z.number().default(700),
-        subheading: z.number().default(600),
+        heading: z.number().default(800),
+        subheading: z.number().default(700),
     }),
     space: z.object({
-        sectionGap: z.number().nonnegative().default(12),
-        sectionGapAfter: z.number().nonnegative().default(6),
-        itemGap: z.number().default(4),
+        sectionGap: z.number().default(-2.5),
+        sectionGapAfter: z.number().default(-5),
+        itemGap: z.number().default(0),
     }),
     border: z.object({
-        thickness: z.number().default(1),
+        thickness: z.number().default(0.5),
     }),
     layout: z.object({
-        paper: z.enum(["us-letter", "a4", "us-legal"]).default("us-letter"),
+        paper: z.enum(["us-letter", "a4", "us-legal"]).default("a4"),
         margin: z.object({
-            x: z.number().default(36),
-            y: z.number().default(36),
+            x: z.number().default(0.5),
+            y: z.number().default(0.5),
         }),
     }),
     lang: z.string().default("en"),
-    leading: z.number().default(1.4),
+    leading: z.number().default(1),
 })
 
 export const ResumeZodSchema = z.object({
