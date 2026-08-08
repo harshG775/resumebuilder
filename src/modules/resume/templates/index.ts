@@ -8,7 +8,12 @@ export const templateRegistry: Record<TemplateId, ResumeTemplate> = {
     modern: classicTemplate,
 }
 
-export const templateList: ResumeTemplate[] = Object.values(templateRegistry)
+// `templateRegistry` maps every `TemplateId` to a template, but distinct ids can currently
+// point at the same underlying template (e.g. "modern" is an alias for "classic" until it
+// gets its own implementation) — dedupe by the template's own id so the picker doesn't show it twice.
+export const templateList: ResumeTemplate[] = Array.from(
+    new Map(Object.values(templateRegistry).map((template) => [template.meta.id, template])).values(),
+)
 
 export function getTemplate(id: TemplateId): ResumeTemplate {
     return templateRegistry[id]
