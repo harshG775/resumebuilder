@@ -7,6 +7,8 @@ import compilerWasmUrl from "@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_w
 import { useQuery } from "@tanstack/react-query"
 import { getResumeDefaults, ResumeZodSchema } from "#/modules/resume/schema/resume-v1.zod-schema"
 import type { ResumeValues } from "#/modules/resume/schema/resume-v1.zod-schema"
+import { formOptions } from "@tanstack/react-form"
+import type { z } from "zod"
 
 export const Route = createFileRoute("/test/template/")({
     component: RouteComponent,
@@ -826,8 +828,8 @@ function Test({ typst }: { typst: TypstSnippet }) {
     const [isRendered, setIsRendered] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    console.log(JSON.stringify(getResumeDefaults(),null,4));
-    
+    console.log(JSON.stringify(getResumeDefaults(), null, 4))
+
     const render = async () => {
         const container = containerRef.current
         if (!container) return
@@ -879,7 +881,8 @@ const customFieldDict = (f: CustomField) => `(
                 value: "${escapeTypstString(f.value)}",
             )`
 
-const customFieldListTypst = (fields: CustomField[]) => fields.map((f) => `\n            ${customFieldDict(f)},`).join("")
+const customFieldListTypst = (fields: CustomField[]) =>
+    fields.map((f) => `\n            ${customFieldDict(f)},`).join("")
 
 type ContentItem = ResumeValues["data"]["sections"]["workExperience"]["attributes"][number]["content"][number]
 
@@ -1155,3 +1158,12 @@ const convertJSObjectToTypst = ({ content }: { content: ResumeValues }) => {
 
 const buildTypstSource = ({ content }: { content: ResumeValues }) =>
     `${convertJSObjectToTypst({ content })}\n${TYPST_TEMPLATE}`
+
+const resumeDefaultValues: z.input<typeof ResumeZodSchema> = getResumeDefaults()
+
+export const resumeFormOptions = formOptions({
+    defaultValues: resumeDefaultValues,
+    validators: {
+        onChange: ResumeZodSchema,
+    },
+})

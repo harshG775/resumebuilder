@@ -357,10 +357,7 @@ export const ResumeZodSchema = z.object({
 
 export type ResumeValues = z.infer<typeof ResumeZodSchema>
 
-// ── Default value generation ──────────────────────────────────────
-// Walks the schema tree directly (rather than relying on `.parse({})` cascading,
-// which would require every nested z.object() to also be wrapped in `.default({})`)
-// so only leaf fields need a `.default(...)` above.
+
 function getDefaults(schema: z.ZodType): unknown {
     if (schema instanceof z.ZodDefault) {
         return schema.parse(undefined)
