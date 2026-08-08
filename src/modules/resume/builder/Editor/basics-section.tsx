@@ -2,8 +2,16 @@ import { Button } from "#/components/ui/button"
 import { Field, FieldLabel } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
 import { withForm } from "#/hooks/form"
-import { PlusIcon } from "@phosphor-icons/react"
-import { DotsSixVerticalIcon } from "@phosphor-icons/react"
+import {
+    PlusIcon,
+    DotsSixVerticalIcon,
+    LinkedinLogoIcon,
+    GithubLogoIcon,
+    TwitterLogoIcon,
+    GlobeIcon,
+    IdentificationBadgeIcon,
+    LinkIcon,
+} from "@phosphor-icons/react"
 import { SectionFieldSet } from "../components/section-field-set"
 import { SortableDragItem, SortableDragProvider } from "../components/sortable-item"
 import { WebsiteField } from "./components/website-field"
@@ -11,6 +19,37 @@ import { LinkField } from "./components/link-field"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { Separator } from "#/components/ui/separator"
 import { cn } from "#/lib/utils"
+import type { CustomFieldVariantSchema } from "../../schema/resume.zod-schema"
+import type { z } from "zod"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "#/components/ui/dropdown-menu"
+
+const CUSTOM_FIELD_PLACEHOLDER: Record<z.infer<typeof CustomFieldVariantSchema>, string> = {
+    linkedin: "linkedin.com/in/username",
+    github: "github.com/username",
+    twitter: "twitter.com/username",
+    website: "yourwebsite.com",
+    portfolio: "yourportfolio.com",
+    text: "e.g. github.com/username",
+}
+
+const CUSTOM_FIELD_TYPES: {
+    variant: z.infer<typeof CustomFieldVariantSchema>
+    label: string
+    icon: typeof PlusIcon
+}[] = [
+    { variant: "linkedin", label: "LinkedIn", icon: LinkedinLogoIcon },
+    { variant: "github", label: "GitHub", icon: GithubLogoIcon },
+    { variant: "twitter", label: "Twitter / X", icon: TwitterLogoIcon },
+    { variant: "website", label: "Website", icon: GlobeIcon },
+    { variant: "portfolio", label: "Portfolio", icon: IdentificationBadgeIcon },
+    { variant: "text", label: "Other", icon: LinkIcon },
+]
 
 export const BasicsSection = withForm({
     ...resumeFormOptions,
@@ -26,6 +65,7 @@ export const BasicsSection = withForm({
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder="e.g. Alex Morgan"
                             autoComplete="off"
                         />
                     </Field>
@@ -73,6 +113,7 @@ export const BasicsSection = withForm({
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
+                            placeholder="e.g. San Francisco, CA"
                             autoComplete="off"
                         />
                     </Field>
@@ -110,8 +151,9 @@ export const BasicsSection = withForm({
                                                 </div>
                                                 <Separator orientation="vertical" />
 
-                                                <form.AppField name={`data.contactInfo.attributes.customFields[${realIndex}].value`}>
-                                                    {(valueField) => (
+                                                <form.AppField
+                                                    name={`data.contactInfo.attributes.customFields[${realIndex}].value`}
+                                                    children={(valueField) => (
                                                         <form.AppField
                                                             name={`data.contactInfo.attributes.customFields[${realIndex}].label`}
                                                         >
@@ -123,36 +165,47 @@ export const BasicsSection = withForm({
                                                                     linkLabel={labelField.state.value}
                                                                     onLinkLabelChange={labelField.handleChange}
                                                                     onRemove={() => field.removeValue(realIndex)}
-                                                                    placeholder="e.g. github.com/username"
+                                                                    placeholder={CUSTOM_FIELD_PLACEHOLDER[item.variant]}
                                                                     className="flex-1 p-1.5"
                                                                 />
                                                             )}
                                                         </form.AppField>
                                                     )}
-                                                </form.AppField>
+                                                />
                                             </SortableDragItem>
                                         )
                                     })
                                 }}
                             />
                         </div>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() =>
-                                field.pushValue({
-                                    id: crypto.randomUUID(),
-                                    isActive: true,
-                                    variant: "text",
-                                    icon: "",
-                                    label: "",
-                                    value: "",
-                                })
-                            }
-                        >
-                            <PlusIcon />
-                            Add Link
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger render={<Button type="button" variant="outline" />}>
+                                <PlusIcon />
+                                Add Link
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                                <DropdownMenuGroup>
+                                    {CUSTOM_FIELD_TYPES.map(({ variant, label, icon: Icon }) => (
+                                        <DropdownMenuItem
+                                            key={variant}
+                                            onClick={() =>
+                                                field.pushValue({
+                                                    id: crypto.randomUUID(),
+                                                    isActive: true,
+                                                    variant,
+                                                    icon: variant,
+                                                    label,
+                                                    value: "",
+                                                })
+                                            }
+                                        >
+                                            <Icon />
+                                            {label}
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </Field>
                 )}
             />
