@@ -6,8 +6,9 @@ import { ListIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
 import { SortableDragProvider, SortableItemRow } from "../components/sortable-item"
-import { WebsiteField } from "./components/website-field"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "#/components/ui/input-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "#/components/ui/select"
+import { contentItemsToText, textToContentItems } from "../components/content-items"
 
 import { useForm } from "@tanstack/react-form"
 import { Input } from "#/components/ui/input"
@@ -25,11 +26,13 @@ import {
     DialogTrigger,
 } from "#/components/ui/dialog"
 
-type EducationItem = ResumeValues["sections"]["education"]["items"][0]
+type EducationItem = ResumeValues["data"]["sections"]["education"]["attributes"][number]
+
+const DATE_LABELS = ["", "Expected", "Anticipated", "Exp."] as const
 
 const getEmptyEducation = (): EducationItem => ({
     id: "",
-    hidden: false,
+    isActive: true,
     school: "",
     degree: "",
     area: "",
@@ -37,12 +40,8 @@ const getEmptyEducation = (): EducationItem => ({
     location: "",
     startDate: "",
     endDate: "",
-    website: {
-        hidden: false,
-        value: "",
-        label: "",
-    },
-    content: "",
+    dateLabel: "",
+    content: [],
 })
 
 function EducationDialog({
@@ -196,7 +195,7 @@ function EducationDialog({
                             }}
                         />
                     </FieldSet>
-                    <FieldSet>
+                    <FieldSet className="grid grid-cols-1 md:grid-cols-2">
                         <form.Field name="startDate">
                             {(startField) => (
                                 <form.Field name="endDate">
@@ -231,6 +230,33 @@ function EducationDialog({
                                 </form.Field>
                             )}
                         </form.Field>
+                        <form.Field
+                            name="dateLabel"
+                            children={(dialogField) => {
+                                return (
+                                    <Field>
+                                        <FieldLabel htmlFor="dateLabel">Date Label</FieldLabel>
+                                        <Select
+                                            value={dialogField.state.value}
+                                            onValueChange={(value) =>
+                                                dialogField.handleChange(value as EducationItem["dateLabel"])
+                                            }
+                                        >
+                                            <SelectTrigger id="dateLabel" className="w-full">
+                                                <SelectValue placeholder="None" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {DATE_LABELS.map((label) => (
+                                                    <SelectItem key={label} value={label}>
+                                                        {label || "None"}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </Field>
+                                )
+                            }}
+                        />
                     </FieldSet>
                     <FieldSet>
                         <form.Field
@@ -251,23 +277,6 @@ function EducationDialog({
                         />
                     </FieldSet>
                     <FieldSet>
-                        <form.Field name="website.value">
-                            {(valueField) => (
-                                <form.Field name="website.label">
-                                    {(labelField) => (
-                                        <WebsiteField
-                                            id="website"
-                                            value={valueField.state.value}
-                                            onValueChange={valueField.handleChange}
-                                            linkLabel={labelField.state.value}
-                                            onLinkLabelChange={labelField.handleChange}
-                                        />
-                                    )}
-                                </form.Field>
-                            )}
-                        </form.Field>
-                    </FieldSet>
-                    <FieldSet>
                         <form.Field
                             name="content"
                             children={(dialogField) => {
@@ -276,8 +285,12 @@ function EducationDialog({
                                         <FieldLabel htmlFor="content">Description</FieldLabel>
                                         <Textarea
                                             id="content"
-                                            value={dialogField.state.value}
-                                            onChange={(e) => dialogField.handleChange(e.target.value)}
+                                            value={contentItemsToText(dialogField.state.value)}
+                                            onChange={(e) =>
+                                                dialogField.handleChange(
+                                                    textToContentItems(e.target.value, dialogField.state.value),
+                                                )
+                                            }
                                             placeholder="Describe your coursework and achievements..."
                                         />
                                     </Field>
@@ -311,12 +324,12 @@ export const EducationSection = withForm({
 
         return (
             <form.AppField
-                name="sections.education.items"
+                name="data.sections.education.attributes"
                 mode="array"
                 children={(field) => {
                     return (
                         <SectionFieldSet
-                            title={form.state.values.sections.education.title}
+                            title={form.state.values.data.sections.education.title}
                             actions={
                                 <Button variant={"ghost"}>
                                     <ListIcon />
@@ -335,12 +348,12 @@ export const EducationSection = withForm({
                                                 }}
                                                 title={item.degree}
                                                 subtitle={item.school}
-                                                hidden={item.hidden}
+                                                hidden={!item.isActive}
                                                 actions={{
                                                     onToggleVisibility: (nextHidden) => {
                                                         field.handleChange((prev) =>
                                                             prev.map((i) =>
-                                                                i.id === item.id ? { ...i, hidden: nextHidden } : i,
+                                                                i.id === item.id ? { ...i, isActive: !nextHidden } : i,
                                                             ),
                                                         )
                                                     },

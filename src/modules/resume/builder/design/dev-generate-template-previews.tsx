@@ -23,11 +23,10 @@ export function DevGenerateTemplatePreviews({ onSeed }: { onSeed: () => void }) 
             for (const template of templateList) {
                 const values = {
                     ...resumeShowcaseValues,
-                    meta: { ...resumeShowcaseValues.meta, template: template.meta.id },
+                    meta: { ...resumeShowcaseValues.meta, templateId: template.meta.id },
                 }
                 const svg = await $typst.svg({
-                    mainFilePath: template.mainFilePath,
-                    inputs: template.buildInputs(values),
+                    mainContent: template.buildSource(values),
                     data_selection: { body: true, defs: true, css: true, js: false },
                 })
                 await saveTemplatePreviewFn({ data: { id: template.meta.id, svg } })

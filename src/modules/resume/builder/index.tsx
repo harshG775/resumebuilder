@@ -5,17 +5,22 @@ import { useHost } from "#/hooks/use-host"
 import { authClient } from "#/lib/auth/auth-client"
 import { ResumeZodSchema } from "../schema/resume.zod-schema"
 import type { ResumeValues } from "../schema/resume.zod-schema"
+import type { StandardSchemaV1 } from "@tanstack/react-form"
 import BuilderLayout from "./components/builder-layout"
 import { DownloadDialog } from "./components/download-dialog"
 import { EditResumeDialog } from "./components/edit-resume-dialog"
 import {
+    AwardsScholarshipsSection,
     BasicsSection,
     CertificationsSection,
     EducationSection,
     ExperienceSection,
     ProjectsSection,
+    PublicationsSection,
     SkillsSection,
     SummarySection,
+    TargetTitleSection,
+    VolunteeringLeadershipSection,
 } from "./Editor"
 import { FileCodeIcon, FileTextIcon, ShareNetworkIcon } from "@phosphor-icons/react"
 import { toast } from "sonner"
@@ -33,10 +38,9 @@ import { DevGenerateTemplatePreviews } from "./design/dev-generate-template-prev
 
 async function generateResumeThumbnail(values: ResumeValues) {
     const $typst = await getTypst()
-    const template = getTemplate(values.meta.template)
+    const template = getTemplate(values.meta.templateId)
     return $typst.svg({
-        mainFilePath: template.mainFilePath,
-        inputs: template.buildInputs(values),
+        mainContent: template.buildSource(values),
     })
 }
 
@@ -79,7 +83,7 @@ export default function Builder({ resume }: BuilderProps) {
 
     const form = useAppForm({
         defaultValues: resume.content,
-        validators: { onChange: ResumeZodSchema },
+        validators: { onChange: ResumeZodSchema as unknown as StandardSchemaV1<ResumeValues, unknown> },
         listeners: {
             onChange: async ({ formApi }) => {
                 if (!formApi.state.isDirty) return
@@ -112,10 +116,9 @@ export default function Builder({ resume }: BuilderProps) {
         setIsDownloadingPdf(true)
         try {
             const $typst = await getTypst()
-            const template = getTemplate(form.state.values.meta.template)
+            const template = getTemplate(form.state.values.meta.templateId)
             const pdfBytes = await $typst.pdf({
-                mainFilePath: template.mainFilePath,
-                inputs: template.buildInputs(form.state.values),
+                mainContent: template.buildSource(form.state.values),
             })
             if (pdfBytes) {
                 downloadBlob(pdfBytes, `${resume.slug || "resume"}.pdf`, "application/pdf")
@@ -177,17 +180,25 @@ export default function Builder({ resume }: BuilderProps) {
                     <FieldGroup className="h-full overflow-y-auto scrollbar-thin p-4">
                         <BasicsSection form={form} />
                         <FieldSeparator />
-                        <SummarySection form={form} />
+                        <TargetTitleSection form={form} />
                         <FieldSeparator />
-                        <SkillsSection form={form} />
+                        <SummarySection form={form} />
                         <FieldSeparator />
                         <ExperienceSection form={form} />
                         <FieldSeparator />
-                        <ProjectsSection form={form} />
-                        <FieldSeparator />
                         <EducationSection form={form} />
                         <FieldSeparator />
+                        <SkillsSection form={form} />
+                        <FieldSeparator />
                         <CertificationsSection form={form} />
+                        <FieldSeparator />
+                        <AwardsScholarshipsSection form={form} />
+                        <FieldSeparator />
+                        <ProjectsSection form={form} />
+                        <FieldSeparator />
+                        <VolunteeringLeadershipSection form={form} />
+                        <FieldSeparator />
+                        <PublicationsSection form={form} />
                     </FieldGroup>
                 }
                 design={

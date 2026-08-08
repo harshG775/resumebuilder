@@ -15,9 +15,9 @@ import { cn } from "#/lib/utils"
 export const BasicsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
-        <SectionFieldSet title="Basics">
+        <SectionFieldSet title="Contact">
             <form.AppField
-                name={`basics.name`}
+                name={`data.contactInfo.attributes.name.value`}
                 children={(field) => (
                     <Field>
                         <FieldLabel htmlFor={field.name}>Name</FieldLabel>
@@ -33,66 +33,38 @@ export const BasicsSection = withForm({
             />
 
             <form.AppField
-                name={`basics.headline`}
+                name={`data.contactInfo.attributes.email.value`}
                 children={(field) => (
-                    <Field>
-                        <FieldLabel htmlFor={field.name}>Headline</FieldLabel>
-                        <Input
-                            id={field.name}
-                            value={field.state.value}
-                            onBlur={field.handleBlur}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            autoComplete="off"
-                        />
-                    </Field>
+                    <WebsiteField
+                        id={field.name}
+                        label="Email"
+                        type="email"
+                        prefix="mailto:"
+                        value={field.state.value}
+                        onValueChange={field.handleChange}
+                        onBlur={field.handleBlur}
+                        placeholder="you@example.com"
+                    />
+                )}
+            />
+            <form.AppField
+                name={`data.contactInfo.attributes.phone.value`}
+                children={(field) => (
+                    <WebsiteField
+                        id={field.name}
+                        label="Phone"
+                        type="tel"
+                        prefix="tel:"
+                        value={field.state.value}
+                        onValueChange={field.handleChange}
+                        onBlur={field.handleBlur}
+                        placeholder="+1 (555) 000-0000"
+                    />
                 )}
             />
 
-            <form.AppField name={`basics.email.value`}>
-                {(valueField) => (
-                    <form.AppField name={`basics.email.label`}>
-                        {(labelField) => (
-                            <WebsiteField
-                                id={valueField.name}
-                                label="Email"
-                                type="email"
-                                prefix="mailto:"
-                                value={valueField.state.value}
-                                onValueChange={valueField.handleChange}
-                                onBlur={valueField.handleBlur}
-                                linkLabel={labelField.state.value}
-                                onLinkLabelChange={labelField.handleChange}
-                                placeholder="you@example.com"
-                                labelPlaceholder="e.g. Work Email"
-                            />
-                        )}
-                    </form.AppField>
-                )}
-            </form.AppField>
-            <form.AppField name={`basics.phone.value`}>
-                {(valueField) => (
-                    <form.AppField name={`basics.phone.label`}>
-                        {(labelField) => (
-                            <WebsiteField
-                                id={valueField.name}
-                                label="Phone"
-                                type="tel"
-                                prefix="tel:"
-                                value={valueField.state.value}
-                                onValueChange={valueField.handleChange}
-                                onBlur={valueField.handleBlur}
-                                linkLabel={labelField.state.value}
-                                onLinkLabelChange={labelField.handleChange}
-                                placeholder="+1 (555) 000-0000"
-                                labelPlaceholder="e.g. Mobile"
-                            />
-                        )}
-                    </form.AppField>
-                )}
-            </form.AppField>
-
             <form.AppField
-                name={`basics.location`}
+                name={`data.contactInfo.attributes.location.value`}
                 children={(field) => (
                     <Field>
                         <FieldLabel htmlFor={field.name}>Location</FieldLabel>
@@ -106,30 +78,12 @@ export const BasicsSection = withForm({
                     </Field>
                 )}
             />
-            <form.AppField name={`basics.website.value`}>
-                {(valueField) => (
-                    <form.AppField name={`basics.website.label`}>
-                        {(labelField) => (
-                            <WebsiteField
-                                id={valueField.name}
-                                prefix="https://"
-                                value={valueField.state.value}
-                                onValueChange={valueField.handleChange}
-                                onBlur={valueField.handleBlur}
-                                linkLabel={labelField.state.value}
-                                onLinkLabelChange={labelField.handleChange}
-                                placeholder="harshgaur.in"
-                            />
-                        )}
-                    </form.AppField>
-                )}
-            </form.AppField>
             <form.AppField
-                name={`basics.customFields`}
+                name={`data.contactInfo.attributes.customFields`}
                 mode="array"
                 children={(field) => (
                     <Field>
-                        <FieldLabel>Custom Fields</FieldLabel>
+                        <FieldLabel>Links</FieldLabel>
                         <div className="divide-y">
                             <SortableDragProvider
                                 value={field.state.value}
@@ -156,9 +110,11 @@ export const BasicsSection = withForm({
                                                 </div>
                                                 <Separator orientation="vertical" />
 
-                                                <form.AppField name={`basics.customFields[${realIndex}].value`}>
+                                                <form.AppField name={`data.contactInfo.attributes.customFields[${realIndex}].value`}>
                                                     {(valueField) => (
-                                                        <form.AppField name={`basics.customFields[${realIndex}].label`}>
+                                                        <form.AppField
+                                                            name={`data.contactInfo.attributes.customFields[${realIndex}].label`}
+                                                        >
                                                             {(labelField) => (
                                                                 <LinkField
                                                                     id={valueField.name}
@@ -186,13 +142,16 @@ export const BasicsSection = withForm({
                             onClick={() =>
                                 field.pushValue({
                                     id: crypto.randomUUID(),
+                                    isActive: true,
+                                    variant: "text",
+                                    icon: "",
                                     label: "",
                                     value: "",
                                 })
                             }
                         >
                             <PlusIcon />
-                            Add Custom Field
+                            Add Link
                         </Button>
                     </Field>
                 )}

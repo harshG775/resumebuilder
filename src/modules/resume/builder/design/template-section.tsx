@@ -55,7 +55,7 @@ export const TemplatesSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => (
         <SectionFieldSet title="Templates">
-            <form.AppField name="meta.template">
+            <form.AppField name="meta.templateId">
                 {(field) => {
                     const selectedTemplate = getTemplate(field.state.value)
 

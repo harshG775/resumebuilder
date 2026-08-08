@@ -92,10 +92,9 @@ export function ResumePreview({ resumeData }: { resumeData: ResumeValues | null 
         isRenderingRef.current = true
         try {
             const typst = await getTypst()
-            const template = getTemplate(data.meta.template)
+            const template = getTemplate(data.meta.templateId)
             await typst.canvas(container, {
-                mainFilePath: template.mainFilePath,
-                inputs: template.buildInputs(data),
+                mainContent: template.buildSource(data),
                 pixelPerPt: 4,
             })
         } catch (error) {

@@ -1,177 +1,354 @@
 import { z } from "zod"
 
-//
-const TemplateZodSchema = z.enum(["classic", "modern"])
+export const CustomFieldVariantSchema = z.enum(["linkedin", "github", "twitter", "website", "portfolio", "text"])
 
-export const RESUME_THEME_VERSION = 1
+export const CustomFieldSchema = z.object({
+    id: z.string().default(""),
+    isActive: z.boolean().default(true),
+    variant: CustomFieldVariantSchema.default("text"),
+    icon: z.string().default(""),
+    label: z.string().default(""),
+    value: z.string().default(""),
+})
+
+export const ContentItemSchema = z.object({
+    id: z.string().default(""),
+    isActive: z.boolean().default(true),
+    value: z.string().default(""), // string literal typst
+})
+
+// ── Sections ──────────────────────────────────────
+
+const ContactInfoSchema = z.object({
+    type: z.literal("contactInfo").default("contactInfo"),
+    title: z.string().default("Contact"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z.object({
+        name: z.object({
+            isActive: z.boolean().default(true),
+            value: z.string().default(""),
+        }),
+        email: z.object({
+            isActive: z.boolean().default(true),
+            value: z.string().default(""),
+        }),
+        phone: z.object({
+            isActive: z.boolean().default(true),
+            value: z.string().default(""),
+        }),
+        location: z.object({
+            isActive: z.boolean().default(true),
+            value: z.string().default(""),
+        }), // in the frontend location will be split in address-city-state
+        customFields: z.array(CustomFieldSchema).default([
+            { id: "linkedin", isActive: true, variant: "linkedin", icon: "linkedin", label: "LinkedIn", value: "" },
+            { id: "website", isActive: true, variant: "website", icon: "website", label: "Website", value: "" },
+        ]),
+    }),
+})
+
+const TargetTitleSchema = z.object({
+    type: z.literal("targetTitle").default("targetTitle"),
+    title: z.string().default("Target Title"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z.object({
+        isActive: z.boolean().default(true),
+        name: z.string().default(""),
+    }),
+})
+
+const ProfessionalSummarySchema = z.object({
+    type: z.literal("professionalSummary").default("professionalSummary"),
+    title: z.string().default("Professional Summary"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z.array(ContentItemSchema).default([]),
+})
+
+const WorkExperienceSchema = z.object({
+    type: z.literal("workExperience").default("workExperience"),
+    title: z.string().default("Work Experience"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z
+        .array(
+            z.object({
+                id: z.string().default(""),
+                isActive: z.boolean().default(true),
+                company: z.string().default(""),
+                position: z.string().default(""),
+                location: z.string().default(""),
+                type: z
+                    .enum(["Full-time", "Part-time", "Internship", "Teaching", "Board", "Contractor", "Freelancer"])
+                    .default("Full-time"),
+                startDate: z.string().default(""),
+                endDate: z.string().default(""),
+                website: CustomFieldSchema.default({
+                    id: "",
+                    isActive: true,
+                    variant: "website",
+                    icon: "website",
+                    label: "Website",
+                    value: "",
+                }),
+                content: z.array(ContentItemSchema).default([]),
+            }),
+        )
+        .default([]),
+})
+
+const EducationSchema = z.object({
+    type: z.literal("education").default("education"),
+    title: z.string().default("Education"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z
+        .array(
+            z.object({
+                id: z.string().default(""),
+                isActive: z.boolean().default(true),
+                school: z.string().default(""),
+                degree: z.string().default(""),
+                area: z.string().default(""),
+                grade: z.string().default(""),
+                location: z.string().default(""),
+                startDate: z.string().default(""),
+                endDate: z.string().default(""),
+                dateLabel: z.enum(["", "Expected", "Anticipated", "Exp."]).default(""),
+                content: z.array(ContentItemSchema).default([]),
+            }),
+        )
+        .default([]),
+})
+
+const SkillsSchema = z.object({
+    type: z.literal("skills").default("skills"),
+    title: z.string().default("Skills"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    columns: z.number().int().min(1).max(5).default(2),
+    attributes: z
+        .array(
+            z.object({
+                isActive: z.boolean().default(true),
+                id: z.string().default(""),
+                category: z.string().default(""), // Languages
+                skill: z
+                    .array(
+                        z.object({
+                            id: z.string().default(""),
+                            isActive: z.boolean().default(true),
+                            name: z.string().default(""),
+                        }),
+                    )
+                    .default([]), // javascript, typescript, python
+            }),
+        )
+        .default([]),
+})
+
+const CertificationsSchema = z.object({
+    type: z.literal("certifications").default("certifications"),
+    title: z.string().default("Certifications"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z
+        .array(
+            z.object({
+                isActive: z.boolean().default(true),
+                id: z.string().default(""),
+                name: z.string().default(""),
+                provider: z.string().default(""),
+                startDate: z.string().default(""),
+                endDate: z.string().default(""),
+            }),
+        )
+        .default([]),
+})
+
+const AwardsScholarshipsSchema = z.object({
+    type: z.literal("awardsScholarships").default("awardsScholarships"),
+    title: z.string().default("Awards & Scholarships"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z
+        .array(
+            z.object({
+                isActive: z.boolean().default(true),
+                id: z.string().default(""),
+                title: z.string().default(""),
+                organization: z.string().default(""),
+                date: z.string().default(""),
+            }),
+        )
+        .default([]),
+})
+
+const ProjectsSchema = z.object({
+    type: z.literal("projects").default("projects"),
+    title: z.string().default("Projects"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z
+        .array(
+            z.object({
+                isActive: z.boolean().default(true),
+                id: z.string().default(""),
+                name: z.string().default(""),
+                organization: z.string().default(""),
+                keywords: z.array(z.string()).default([]),
+                startDate: z.string().default(""),
+                endDate: z.string().default(""),
+                links: z.array(CustomFieldSchema).default([]),
+                content: z.array(ContentItemSchema).default([]),
+            }),
+        )
+        .default([]),
+})
+
+const VolunteeringLeadershipSchema = z.object({
+    type: z.literal("volunteeringLeadership").default("volunteeringLeadership"),
+    title: z.string().default("Volunteering & Leadership"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z
+        .array(
+            z.object({
+                isActive: z.boolean().default(true),
+                id: z.string().default(""),
+                organization: z.string().default(""),
+                involvement: z.string().default(""),
+                location: z.string().default(""), // in the frontend location will be split in address-city-state
+                startDate: z.string().default(""),
+                endDate: z.string().default(""),
+                content: z.array(ContentItemSchema).default([]),
+            }),
+        )
+        .default([]),
+})
+
+const PublicationsSchema = z.object({
+    type: z.literal("publications").default("publications"),
+    title: z.string().default("Publications"),
+    icon: z.string().default(""),
+    isActive: z.boolean().default(true),
+    attributes: z
+        .array(
+            z.object({
+                isActive: z.boolean().default(true),
+                id: z.string().default(""),
+                title: z.string().default(""),
+                publisher: z.string().default(""),
+                date: z.string().default(""),
+                content: z.array(ContentItemSchema).default([]),
+            }),
+        )
+        .default([]),
+})
+
+// ── Section key enum ────────────────────────────────────────
+const SectionKeySchema = z.enum([
+    "contactInfo",
+    "targetTitle",
+    "professionalSummary",
+    "workExperience",
+    "education",
+    "skills",
+    "certifications",
+    "awardsScholarships",
+    "projects",
+    "volunteeringLeadership",
+    "publications",
+])
+
+// ── Meta schema ──────────────────────────────────────
+const TemplateZodSchema = z.enum(["classic", "modern"])
 
 const ThemeColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/)
 
 const ResumeThemeZodSchema = z.object({
-    version: z.literal(RESUME_THEME_VERSION),
     color: z.object({
-        text: ThemeColorSchema,
-        textMuted: ThemeColorSchema,
-        primary: ThemeColorSchema,
-        background: ThemeColorSchema,
-        border: ThemeColorSchema,
+        text: ThemeColorSchema.default("#1a1a1a"),
+        textMuted: ThemeColorSchema.default("#595959"),
+        primary: ThemeColorSchema.default("#1e3a5f"),
+        background: ThemeColorSchema.default("#ffffff"),
+        border: ThemeColorSchema.default("#595959"),
     }),
     font: z.object({
-        body: z.string(),
-        heading: z.string(),
+        body: z.string().default("Libertinus Serif"),
+        heading: z.string().default("Libertinus Serif"),
     }),
     size: z.object({
-        name: z.number(),
-        heading: z.number(),
-        subheading: z.number(),
-        body: z.number(),
-        meta: z.number(),
+        name: z.number().default(20),
+        heading: z.number().default(14),
+        subheading: z.number().default(12),
+        body: z.number().default(10),
+        meta: z.number().default(10),
     }),
     weight: z.object({
-        heading: z.number(),
-        subheading: z.number(),
+        heading: z.number().default(800),
+        subheading: z.number().default(700),
     }),
     space: z.object({
-        sectionGap: z.number().nonnegative(),
-        sectionGapAfter: z.number().nonnegative(),
-        itemGap: z.number(),
+        sectionGap: z.number().default(-2.5),
+        sectionGapAfter: z.number().default(-5),
+        itemGap: z.number().default(0),
     }),
     border: z.object({
-        thickness: z.number(),
+        thickness: z.number().default(0.5),
     }),
     layout: z.object({
-        paper: z.enum(["us-letter", "a4", "us-legal"]),
+        paper: z.enum(["us-letter", "a4", "us-legal"]).default("a4"),
         margin: z.object({
-            x: z.number(),
-            y: z.number(),
+            x: z.number().default(0.5),
+            y: z.number().default(0.5),
         }),
     }),
-    lang: z.string(),
-    leading: z.number(),
-})
-
-//
-const WebsiteSchema = z.object({
-    hidden: z.boolean(),
-    value: z.string(),
-    label: z.string(),
-})
-
-export const LinkSchema = z.object({
-    id: z.string(),
-    value: z.url().or(z.literal("")),
-    label: z.string(),
-})
-
-const DisplaySchema = z.object({
-    hideLinkUnderline: z.boolean(),
-    hideIcons: z.boolean(),
-    hideSectionIcons: z.boolean(),
-})
-
-const SectionBaseSchema = z.object({
-    title: z.string(),
-    hidden: z.boolean(),
-    icon: z.string(),
-    columns: z.number().int().min(1).max(5),
-})
-const SectionKeySchema = z.enum(["summary", "skill", "experience", "project", "education", "certification"])
-
-//
-const BasicsSchema = z.object({
-    name: z.string(),
-    headline: z.string(),
-    email: z.object({
-        label: z.string(),
-        hidden: z.boolean(),
-        value: z.email().or(z.literal("")),
-    }),
-    phone: z.object({
-        label: z.string(),
-        hidden: z.boolean(),
-        value: z.string(),
-    }),
-    location: z.string(),
-    website: WebsiteSchema,
-    customFields: z.array(LinkSchema),
-})
-
-export const SkillsItemSchema = z.object({
-    id: z.string(),
-    hidden: z.boolean(),
-    icon: z.string(),
-    name: z.string(),
-    proficiency: z.string(),
-    level: z.number().int().min(1).max(5),
-    keywords: z.array(z.string()),
-})
-
-export const ExperienceItemSchema = z.object({
-    id: z.string(),
-    hidden: z.boolean(),
-    company: z.string(),
-    position: z.string(),
-    location: z.string(),
-    startDate: z.string(),
-    endDate: z.string(),
-    website: WebsiteSchema,
-    content: z.string(),
-})
-
-export const ProjectsItemSchema = z.object({
-    id: z.string(),
-    hidden: z.boolean(),
-    name: z.string(),
-    type: z.enum(["personal", "professional", "open-source", "freelance"]),
-    links: z.array(LinkSchema),
-    keywords: z.array(z.string()),
-    startDate: z.string(),
-    endDate: z.string(),
-    content: z.string(),
-})
-
-export const EducationItemSchema = z.object({
-    id: z.string(),
-    hidden: z.boolean(),
-    school: z.string(),
-    degree: z.string(),
-    area: z.string(),
-    grade: z.string(),
-    location: z.string(),
-    startDate: z.string(),
-    endDate: z.string(),
-    website: WebsiteSchema,
-    content: z.string(),
-})
-
-export const CertificationsItemSchema = z.object({
-    id: z.string(),
-    hidden: z.boolean(),
-    title: z.string(),
-    issuer: z.string(),
-    date: z.string(),
-    website: WebsiteSchema,
-    content: z.string(),
+    lang: z.string().default("en"),
+    leading: z.number().default(1),
 })
 
 export const ResumeZodSchema = z.object({
-    basics: BasicsSchema,
-    sections: z.object({
-        summary: SectionBaseSchema.extend({ content: z.string() }),
-        skill: SectionBaseSchema.extend({ items: z.array(SkillsItemSchema) }),
-        experience: SectionBaseSchema.extend({ items: z.array(ExperienceItemSchema) }),
-        project: SectionBaseSchema.extend({ items: z.array(ProjectsItemSchema) }),
-        education: SectionBaseSchema.extend({ items: z.array(EducationItemSchema) }),
-        certification: SectionBaseSchema.extend({ items: z.array(CertificationsItemSchema) }),
-    }),
-    //
-    meta: z.object({
-        template: TemplateZodSchema,
-        theme: ResumeThemeZodSchema,
-        display: DisplaySchema,
-        layout: z.object({
-            pages: z.array(z.object({ main: z.array(SectionKeySchema) })),
+    data: z.object({
+        contactInfo: ContactInfoSchema,
+        sections: z.object({
+            targetTitle: TargetTitleSchema,
+            professionalSummary: ProfessionalSummarySchema,
+            workExperience: WorkExperienceSchema,
+            education: EducationSchema,
+            skills: SkillsSchema,
+            certifications: CertificationsSchema,
+            awardsScholarships: AwardsScholarshipsSchema,
+            projects: ProjectsSchema,
+            volunteeringLeadership: VolunteeringLeadershipSchema,
+            publications: PublicationsSchema,
         }),
+    }),
+    meta: z.object({
+        templateId: TemplateZodSchema.default("classic"),
+        theme: ResumeThemeZodSchema,
+        display: z.object({
+            hideLinkUnderline: z.boolean().default(false),
+            hideIcons: z.boolean().default(false),
+            hideSectionIcons: z.boolean().default(false),
+        }),
+        sectionOrder: z
+            .array(SectionKeySchema)
+            .default([
+                "contactInfo",
+                "targetTitle",
+                "professionalSummary",
+                "workExperience",
+                "education",
+                "skills",
+                "certifications",
+                "awardsScholarships",
+                "projects",
+                "volunteeringLeadership",
+                "publications",
+            ]),
     }),
 })
 

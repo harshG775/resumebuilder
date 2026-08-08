@@ -2,13 +2,11 @@ import { Button } from "#/components/ui/button"
 import { Field, FieldLabel, FieldSet } from "#/components/ui/field"
 import { withForm } from "#/hooks/form"
 import { CalendarIcon, PlusIcon } from "@phosphor-icons/react"
-import { DotsSixVerticalIcon, ListIcon } from "@phosphor-icons/react"
+import { ListIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
-import { SortableDragItem, SortableDragProvider, SortableItemRow } from "../components/sortable-item"
-import { TagsInput } from "#/components/ui/tags-input"
+import { SortableDragProvider, SortableItemRow } from "../components/sortable-item"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "#/components/ui/input-group"
-import { LinkField } from "./components/link-field"
 import { contentItemsToText, textToContentItems } from "../components/content-items"
 
 import { useForm } from "@tanstack/react-form"
@@ -27,21 +25,20 @@ import {
     DialogTrigger,
 } from "#/components/ui/dialog"
 
-type ProjectItem = ResumeValues["data"]["sections"]["projects"]["attributes"][number]
+type VolunteeringItem = ResumeValues["data"]["sections"]["volunteeringLeadership"]["attributes"][number]
 
-const getEmptyProject = (): ProjectItem => ({
+const getEmptyVolunteering = (): VolunteeringItem => ({
     id: "",
     isActive: true,
-    name: "",
     organization: "",
-    links: [],
-    keywords: [],
+    involvement: "",
+    location: "",
     startDate: "",
     endDate: "",
     content: [],
 })
 
-function ProjectDialog({
+function VolunteeringDialog({
     defaultValues,
     onSubmit,
     trigger,
@@ -49,8 +46,8 @@ function ProjectDialog({
     onClosed,
     mode = "create",
 }: {
-    defaultValues: ProjectItem
-    onSubmit: (value: ProjectItem) => void
+    defaultValues: VolunteeringItem
+    onSubmit: (value: VolunteeringItem) => void
     trigger?: ReactNode | null
     initialOpen?: boolean
     onClosed?: () => void
@@ -70,8 +67,8 @@ function ProjectDialog({
     const attemptClose = () => {
         const message =
             mode === "edit"
-                ? "Discard changes to this project? Unsaved changes will be lost."
-                : "Discard this new project? Unsaved changes will be lost."
+                ? "Discard changes to this entry? Unsaved changes will be lost."
+                : "Discard this new entry? Unsaved changes will be lost."
         if (!form.state.isDirty || window.confirm(message)) {
             setIsOpen(false)
         }
@@ -98,7 +95,7 @@ function ProjectDialog({
                 ? null
                 : (trigger ?? (
                       <DialogTrigger render={<Button variant="outline" />}>
-                          <PlusIcon /> Add a new {"Project"}
+                          <PlusIcon /> Add a new {"Entry"}
                       </DialogTrigger>
                   ))}
 
@@ -116,29 +113,13 @@ function ProjectDialog({
             >
                 <DialogHeader>
                     <DialogTitle>
-                        {mode === "edit" ? "Edit" : "Add"} {"Project"}
+                        {mode === "edit" ? "Edit" : "Add"} {"Volunteering / Leadership"}
                     </DialogTitle>
-                    <DialogDescription>Fill out the {"Project"} information details below.</DialogDescription>
+                    <DialogDescription>Fill out the details below.</DialogDescription>
                 </DialogHeader>
 
                 <FieldSet>
                     <FieldSet className="grid grid-cols-1 md:grid-cols-2">
-                        <form.Field
-                            name="name"
-                            children={(dialogField) => {
-                                return (
-                                    <Field>
-                                        <FieldLabel htmlFor="name">Name</FieldLabel>
-                                        <Input
-                                            id="name"
-                                            value={dialogField.state.value}
-                                            onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="e.g. Resume Builder"
-                                        />
-                                    </Field>
-                                )
-                            }}
-                        />
                         <form.Field
                             name="organization"
                             children={(dialogField) => {
@@ -149,7 +130,23 @@ function ProjectDialog({
                                             id="organization"
                                             value={dialogField.state.value}
                                             onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="e.g. Personal, Acme Inc."
+                                            placeholder="e.g. Red Cross"
+                                        />
+                                    </Field>
+                                )
+                            }}
+                        />
+                        <form.Field
+                            name="involvement"
+                            children={(dialogField) => {
+                                return (
+                                    <Field>
+                                        <FieldLabel htmlFor="involvement">Involvement</FieldLabel>
+                                        <Input
+                                            id="involvement"
+                                            value={dialogField.state.value}
+                                            onChange={(e) => dialogField.handleChange(e.target.value)}
+                                            placeholder="e.g. Volunteer Coordinator"
                                         />
                                     </Field>
                                 )
@@ -194,100 +191,17 @@ function ProjectDialog({
                     </FieldSet>
                     <FieldSet>
                         <form.Field
-                            name="keywords"
+                            name="location"
                             children={(dialogField) => {
                                 return (
                                     <Field>
-                                        <FieldLabel htmlFor="keywords">Keywords</FieldLabel>
-                                        <TagsInput
+                                        <FieldLabel htmlFor="location">Location</FieldLabel>
+                                        <Input
+                                            id="location"
                                             value={dialogField.state.value}
-                                            onValueChange={(val) => dialogField.handleChange(val)}
-                                            placeholder="React, TypeScript, UI"
+                                            onChange={(e) => dialogField.handleChange(e.target.value)}
+                                            placeholder="e.g. Remote / New York, NY"
                                         />
-                                    </Field>
-                                )
-                            }}
-                        />
-                    </FieldSet>
-                    <FieldSet>
-                        <form.Field
-                            name="links"
-                            mode="array"
-                            children={(linksField) => {
-                                return (
-                                    <Field>
-                                        <FieldLabel>Links</FieldLabel>
-                                        <div className="flex flex-col gap-2">
-                                            <SortableDragProvider
-                                                value={linksField.state.value}
-                                                onChange={linksField.handleChange}
-                                            >
-                                                {(items) =>
-                                                    items.map((link, idx) => {
-                                                        const realIndex = linksField.state.value.findIndex(
-                                                            (l) => l.id === link.id,
-                                                        )
-                                                        return (
-                                                            <SortableDragItem
-                                                                key={link.id}
-                                                                sortableProps={{ index: idx, id: link.id }}
-                                                                className="flex items-center gap-2"
-                                                            >
-                                                                <div
-                                                                    role="button"
-                                                                    tabIndex={0}
-                                                                    aria-label="Drag to reorder link"
-                                                                    className="flex size-8 shrink-0 items-center justify-center text-muted-foreground cursor-grab hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                                                >
-                                                                    <DotsSixVerticalIcon aria-hidden="true" />
-                                                                </div>
-                                                                <form.Field name={`links[${realIndex}].value`}>
-                                                                    {(valueField) => (
-                                                                        <form.Field name={`links[${realIndex}].label`}>
-                                                                            {(labelField) => (
-                                                                                <LinkField
-                                                                                    id={valueField.name}
-                                                                                    value={valueField.state.value}
-                                                                                    onValueChange={
-                                                                                        valueField.handleChange
-                                                                                    }
-                                                                                    linkLabel={labelField.state.value}
-                                                                                    onLinkLabelChange={
-                                                                                        labelField.handleChange
-                                                                                    }
-                                                                                    onRemove={() =>
-                                                                                        linksField.removeValue(
-                                                                                            realIndex,
-                                                                                        )
-                                                                                    }
-                                                                                    className="flex-1"
-                                                                                />
-                                                                            )}
-                                                                        </form.Field>
-                                                                    )}
-                                                                </form.Field>
-                                                            </SortableDragItem>
-                                                        )
-                                                    })
-                                                }
-                                            </SortableDragProvider>
-                                        </div>
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            onClick={() =>
-                                                linksField.pushValue({
-                                                    id: crypto.randomUUID(),
-                                                    isActive: true,
-                                                    variant: "text",
-                                                    icon: "",
-                                                    label: "",
-                                                    value: "",
-                                                })
-                                            }
-                                        >
-                                            <PlusIcon /> Add Link
-                                        </Button>
                                     </Field>
                                 )
                             }}
@@ -308,7 +222,7 @@ function ProjectDialog({
                                                     textToContentItems(e.target.value, dialogField.state.value),
                                                 )
                                             }
-                                            placeholder="Describe the project and your contributions..."
+                                            placeholder="Describe your involvement and impact..."
                                         />
                                     </Field>
                                 )
@@ -334,19 +248,19 @@ function ProjectDialog({
     )
 }
 
-export const ProjectsSection = withForm({
+export const VolunteeringLeadershipSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
-        const [editingItem, setEditingItem] = useState<ProjectItem | null>(null)
+        const [editingItem, setEditingItem] = useState<VolunteeringItem | null>(null)
 
         return (
             <form.AppField
-                name="data.sections.projects.attributes"
+                name="data.sections.volunteeringLeadership.attributes"
                 mode="array"
                 children={(field) => {
                     return (
                         <SectionFieldSet
-                            title={form.state.values.data.sections.projects.title}
+                            title={form.state.values.data.sections.volunteeringLeadership.title}
                             actions={
                                 <Button variant={"ghost"}>
                                     <ListIcon />
@@ -363,8 +277,8 @@ export const ProjectsSection = withForm({
                                                     index: idx,
                                                     id: item.id,
                                                 }}
-                                                title={item.name}
-                                                subtitle={`${item.startDate} - ${item.endDate}`}
+                                                title={item.organization}
+                                                subtitle={item.involvement}
                                                 hidden={!item.isActive}
                                                 actions={{
                                                     onToggleVisibility: (nextHidden) => {
@@ -390,8 +304,8 @@ export const ProjectsSection = withForm({
                                     }
                                 </SortableDragProvider>
                             </div>
-                            <ProjectDialog
-                                defaultValues={getEmptyProject()}
+                            <VolunteeringDialog
+                                defaultValues={getEmptyVolunteering()}
                                 onSubmit={(value) =>
                                     field.pushValue({
                                         ...value,
@@ -400,7 +314,7 @@ export const ProjectsSection = withForm({
                                 }
                             />
                             {editingItem && (
-                                <ProjectDialog
+                                <VolunteeringDialog
                                     key={editingItem.id}
                                     mode="edit"
                                     trigger={null}

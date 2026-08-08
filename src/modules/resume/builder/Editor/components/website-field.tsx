@@ -25,8 +25,9 @@ export function WebsiteField({
     value: string
     onValueChange: (value: string) => void
     onBlur?: () => void
-    linkLabel: string
-    onLinkLabelChange: (value: string) => void
+    /** Omit when the field has no separate label to edit (e.g. contact email/phone). */
+    linkLabel?: string
+    onLinkLabelChange?: (value: string) => void
     placeholder?: string
     labelPlaceholder?: string
 }) {
@@ -34,6 +35,8 @@ export function WebsiteField({
     // the editable text — strip it whenever it's typed, pasted, or already stored.
     const stripPrefix = (raw: string) =>
         prefix && raw.toLowerCase().startsWith(prefix.toLowerCase()) ? raw.slice(prefix.length) : raw
+
+    const handleLinkLabelChange = onLinkLabelChange
 
     return (
         <Field>
@@ -49,31 +52,33 @@ export function WebsiteField({
                     placeholder={placeholder}
                     autoComplete="off"
                 />
-                <InputGroupAddon align="inline-end">
-                    <Popover>
-                        <PopoverTrigger
-                            render={
-                                <button
-                                    type="button"
-                                    aria-label="Edit link label"
-                                    className="flex items-center text-muted-foreground outline-none hover:text-foreground"
+                {handleLinkLabelChange && (
+                    <InputGroupAddon align="inline-end">
+                        <Popover>
+                            <PopoverTrigger
+                                render={
+                                    <button
+                                        type="button"
+                                        aria-label="Edit link label"
+                                        className="flex items-center text-muted-foreground outline-none hover:text-foreground"
+                                    />
+                                }
+                            >
+                                <TagIcon className="size-3.5" />
+                            </PopoverTrigger>
+                            <PopoverContent className="w-56" align="end">
+                                <FieldLabel htmlFor={id ? `${id}-label` : undefined}>Label</FieldLabel>
+                                <Input
+                                    id={id ? `${id}-label` : undefined}
+                                    value={linkLabel ?? ""}
+                                    onChange={(e) => handleLinkLabelChange(e.target.value)}
+                                    placeholder={labelPlaceholder}
+                                    autoComplete="off"
                                 />
-                            }
-                        >
-                            <TagIcon className="size-3.5" />
-                        </PopoverTrigger>
-                        <PopoverContent className="w-56" align="end">
-                            <FieldLabel htmlFor={id ? `${id}-label` : undefined}>Label</FieldLabel>
-                            <Input
-                                id={id ? `${id}-label` : undefined}
-                                value={linkLabel}
-                                onChange={(e) => onLinkLabelChange(e.target.value)}
-                                placeholder={labelPlaceholder}
-                                autoComplete="off"
-                            />
-                        </PopoverContent>
-                    </Popover>
-                </InputGroupAddon>
+                            </PopoverContent>
+                        </Popover>
+                    </InputGroupAddon>
+                )}
             </InputGroup>
         </Field>
     )

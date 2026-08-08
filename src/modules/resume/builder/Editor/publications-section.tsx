@@ -6,9 +6,7 @@ import { ListIcon } from "@phosphor-icons/react"
 import { resumeFormOptions } from "../../data/resume-default-values"
 import { SectionFieldSet } from "../components/section-field-set"
 import { SortableDragProvider, SortableItemRow } from "../components/sortable-item"
-import { WebsiteField } from "./components/website-field"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "#/components/ui/input-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "#/components/ui/select"
 import { contentItemsToText, textToContentItems } from "../components/content-items"
 
 import { useForm } from "@tanstack/react-form"
@@ -27,39 +25,18 @@ import {
     DialogTrigger,
 } from "#/components/ui/dialog"
 
-type ExperienceItem = ResumeValues["data"]["sections"]["workExperience"]["attributes"][number]
+type PublicationItem = ResumeValues["data"]["sections"]["publications"]["attributes"][number]
 
-const EMPLOYMENT_TYPES = [
-    "Full-time",
-    "Part-time",
-    "Internship",
-    "Teaching",
-    "Board",
-    "Contractor",
-    "Freelancer",
-] as const
-
-const getEmptyExperience = (): ExperienceItem => ({
+const getEmptyPublication = (): PublicationItem => ({
     id: "",
     isActive: true,
-    company: "",
-    position: "",
-    location: "",
-    type: "Full-time",
-    startDate: "",
-    endDate: "",
-    website: {
-        id: "",
-        isActive: true,
-        variant: "website",
-        icon: "website",
-        label: "Website",
-        value: "",
-    },
+    title: "",
+    publisher: "",
+    date: "",
     content: [],
 })
 
-function ExperienceDialog({
+function PublicationDialog({
     defaultValues,
     onSubmit,
     trigger,
@@ -67,8 +44,8 @@ function ExperienceDialog({
     onClosed,
     mode = "create",
 }: {
-    defaultValues: ExperienceItem
-    onSubmit: (value: ExperienceItem) => void
+    defaultValues: PublicationItem
+    onSubmit: (value: PublicationItem) => void
     trigger?: ReactNode | null
     initialOpen?: boolean
     onClosed?: () => void
@@ -77,18 +54,19 @@ function ExperienceDialog({
     const [isOpen, setIsOpen] = useState(initialOpen)
     const form = useForm({
         defaultValues,
-        onSubmit: async ({ value }) => {
+        onSubmit: async ({ value, formApi }) => {
             onSubmit(value)
 
             setIsOpen(false)
+            formApi.reset()
         },
     })
 
     const attemptClose = () => {
         const message =
             mode === "edit"
-                ? "Discard changes to this experience? Unsaved changes will be lost."
-                : "Discard this new experience? Unsaved changes will be lost."
+                ? "Discard changes to this publication? Unsaved changes will be lost."
+                : "Discard this new publication? Unsaved changes will be lost."
         if (!form.state.isDirty || window.confirm(message)) {
             setIsOpen(false)
         }
@@ -115,7 +93,7 @@ function ExperienceDialog({
                 ? null
                 : (trigger ?? (
                       <DialogTrigger render={<Button variant="outline" />}>
-                          <PlusIcon /> Add a new {"Experience"}
+                          <PlusIcon /> Add a new {"Publication"}
                       </DialogTrigger>
                   ))}
 
@@ -133,144 +111,68 @@ function ExperienceDialog({
             >
                 <DialogHeader>
                     <DialogTitle>
-                        {mode === "edit" ? "Edit" : "Add"} {"Experience"}
+                        {mode === "edit" ? "Edit" : "Add"} {"Publication"}
                     </DialogTitle>
-                    <DialogDescription>Fill out the {"Experience"} information details below.</DialogDescription>
+                    <DialogDescription>Fill out the {"Publication"} information details below.</DialogDescription>
                 </DialogHeader>
 
                 <FieldSet>
+                    <FieldSet>
+                        <form.Field
+                            name="title"
+                            children={(dialogField) => {
+                                return (
+                                    <Field>
+                                        <FieldLabel htmlFor="title">Title</FieldLabel>
+                                        <Input
+                                            id="title"
+                                            value={dialogField.state.value}
+                                            onChange={(e) => dialogField.handleChange(e.target.value)}
+                                            placeholder="e.g. Scaling Real-Time Collaboration"
+                                        />
+                                    </Field>
+                                )
+                            }}
+                        />
+                    </FieldSet>
                     <FieldSet className="grid grid-cols-1 md:grid-cols-2">
                         <form.Field
-                            name="company"
+                            name="publisher"
                             children={(dialogField) => {
                                 return (
                                     <Field>
-                                        <FieldLabel>Company</FieldLabel>
+                                        <FieldLabel htmlFor="publisher">Publisher</FieldLabel>
                                         <Input
+                                            id="publisher"
                                             value={dialogField.state.value}
                                             onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="xyz Pvt. Ltd."
+                                            placeholder="e.g. IEEE"
                                         />
                                     </Field>
                                 )
                             }}
                         />
                         <form.Field
-                            name="type"
+                            name="date"
                             children={(dialogField) => {
                                 return (
                                     <Field>
-                                        <FieldLabel htmlFor="type">Employment Type</FieldLabel>
-                                        <Select
-                                            value={dialogField.state.value}
-                                            onValueChange={(value) =>
-                                                dialogField.handleChange(value as ExperienceItem["type"])
-                                            }
-                                        >
-                                            <SelectTrigger id="type" className="w-full">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {EMPLOYMENT_TYPES.map((type) => (
-                                                    <SelectItem key={type} value={type}>
-                                                        {type}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <FieldLabel htmlFor="date">Date</FieldLabel>
+                                        <InputGroup>
+                                            <InputGroupAddon>
+                                                <CalendarIcon />
+                                            </InputGroupAddon>
+                                            <InputGroupInput
+                                                id="date"
+                                                value={dialogField.state.value}
+                                                onChange={(e) => dialogField.handleChange(e.target.value)}
+                                                placeholder="e.g. Jun 2023"
+                                            />
+                                        </InputGroup>
                                     </Field>
                                 )
                             }}
                         />
-                    </FieldSet>
-                    <FieldSet>
-                        <form.Field
-                            name="position"
-                            children={(dialogField) => {
-                                return (
-                                    <Field>
-                                        <FieldLabel htmlFor="position">Position</FieldLabel>
-                                        <Input
-                                            id="position"
-                                            value={dialogField.state.value}
-                                            onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="e.g. Software Engineer"
-                                        />
-                                    </Field>
-                                )
-                            }}
-                        />
-                    </FieldSet>
-                    <FieldSet>
-                        <form.Field name="startDate">
-                            {(startField) => (
-                                <form.Field name="endDate">
-                                    {(endField) => (
-                                        <Field>
-                                            <FieldLabel>Period</FieldLabel>
-                                            <div className="flex items-center gap-2">
-                                                <InputGroup className="flex-1">
-                                                    <InputGroupAddon>
-                                                        <CalendarIcon />
-                                                    </InputGroupAddon>
-                                                    <InputGroupInput
-                                                        value={startField.state.value}
-                                                        onChange={(e) => startField.handleChange(e.target.value)}
-                                                        placeholder="e.g. Sept 2020"
-                                                    />
-                                                </InputGroup>
-                                                <span className="text-muted-foreground">–</span>
-                                                <InputGroup className="flex-1">
-                                                    <InputGroupAddon>
-                                                        <CalendarIcon />
-                                                    </InputGroupAddon>
-                                                    <InputGroupInput
-                                                        value={endField.state.value}
-                                                        onChange={(e) => endField.handleChange(e.target.value)}
-                                                        placeholder="Present"
-                                                    />
-                                                </InputGroup>
-                                            </div>
-                                        </Field>
-                                    )}
-                                </form.Field>
-                            )}
-                        </form.Field>
-                    </FieldSet>
-                    <FieldSet>
-                        <form.Field
-                            name="location"
-                            children={(dialogField) => {
-                                return (
-                                    <Field>
-                                        <FieldLabel htmlFor="location">Location</FieldLabel>
-                                        <Input
-                                            id="location"
-                                            value={dialogField.state.value}
-                                            onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="e.g. Remote / New York, NY"
-                                        />
-                                    </Field>
-                                )
-                            }}
-                        />
-                    </FieldSet>
-                    <FieldSet>
-                        <form.Field name="website.value">
-                            {(valueField) => (
-                                <form.Field name="website.label">
-                                    {(labelField) => (
-                                        <WebsiteField
-                                            id="website"
-                                            value={valueField.state.value}
-                                            onValueChange={valueField.handleChange}
-                                            linkLabel={labelField.state.value}
-                                            onLinkLabelChange={labelField.handleChange}
-                                        />
-                                    )}
-                                </form.Field>
-                            )}
-                        </form.Field>
                     </FieldSet>
                     <FieldSet>
                         <form.Field
@@ -287,7 +189,7 @@ function ExperienceDialog({
                                                     textToContentItems(e.target.value, dialogField.state.value),
                                                 )
                                             }
-                                            placeholder="Describe your responsibilities and achievements..."
+                                            placeholder="Describe what this publication covers..."
                                         />
                                     </Field>
                                 )
@@ -313,19 +215,19 @@ function ExperienceDialog({
     )
 }
 
-export const ExperienceSection = withForm({
+export const PublicationsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
-        const [editingItem, setEditingItem] = useState<ExperienceItem | null>(null)
+        const [editingItem, setEditingItem] = useState<PublicationItem | null>(null)
 
         return (
             <form.AppField
-                name="data.sections.workExperience.attributes"
+                name="data.sections.publications.attributes"
                 mode="array"
                 children={(field) => {
                     return (
                         <SectionFieldSet
-                            title={form.state.values.data.sections.workExperience.title}
+                            title={form.state.values.data.sections.publications.title}
                             actions={
                                 <Button variant={"ghost"}>
                                     <ListIcon />
@@ -342,8 +244,8 @@ export const ExperienceSection = withForm({
                                                     index: idx,
                                                     id: item.id,
                                                 }}
-                                                title={item.company}
-                                                subtitle={item.position}
+                                                title={item.title}
+                                                subtitle={item.publisher}
                                                 hidden={!item.isActive}
                                                 actions={{
                                                     onToggleVisibility: (nextHidden) => {
@@ -369,8 +271,8 @@ export const ExperienceSection = withForm({
                                     }
                                 </SortableDragProvider>
                             </div>
-                            <ExperienceDialog
-                                defaultValues={getEmptyExperience()}
+                            <PublicationDialog
+                                defaultValues={getEmptyPublication()}
                                 onSubmit={(value) =>
                                     field.pushValue({
                                         ...value,
@@ -379,7 +281,7 @@ export const ExperienceSection = withForm({
                                 }
                             />
                             {editingItem && (
-                                <ExperienceDialog
+                                <PublicationDialog
                                     key={editingItem.id}
                                     mode="edit"
                                     trigger={null}

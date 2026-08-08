@@ -56,10 +56,9 @@ function RouteComponent() {
         if (!container) return
         const run = async () => {
             const typst = await getTypst()
-            const template = getTemplate(resume.data.content.meta.template)
+            const template = getTemplate(resume.data.content.meta.templateId)
             const result = await typst.svg({
-                mainFilePath: template.mainFilePath,
-                inputs: template.buildInputs(resume.data.content),
+                mainContent: template.buildSource(resume.data.content),
             })
             container.innerHTML = result
             setIsRendered(true)
@@ -71,10 +70,9 @@ function RouteComponent() {
         setIsDownloading(true)
         try {
             const typst = await getTypst()
-            const template = getTemplate(resume.data.content.meta.template)
+            const template = getTemplate(resume.data.content.meta.templateId)
             const pdfBytes = await typst.pdf({
-                mainFilePath: template.mainFilePath,
-                inputs: template.buildInputs(resume.data.content),
+                mainContent: template.buildSource(resume.data.content),
             })
             if (pdfBytes) {
                 downloadBlob(pdfBytes, `${resume.data.slug || "resume"}.pdf`, "application/pdf")

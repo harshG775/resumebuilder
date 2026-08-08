@@ -23,18 +23,17 @@ import {
     DialogTrigger,
 } from "#/components/ui/dialog"
 
-type CertificationItem = ResumeValues["data"]["sections"]["certifications"]["attributes"][number]
+type AwardItem = ResumeValues["data"]["sections"]["awardsScholarships"]["attributes"][number]
 
-const getEmptyCertification = (): CertificationItem => ({
+const getEmptyAward = (): AwardItem => ({
     id: "",
     isActive: true,
-    name: "",
-    provider: "",
-    startDate: "",
-    endDate: "",
+    title: "",
+    organization: "",
+    date: "",
 })
 
-function CertificationDialog({
+function AwardDialog({
     defaultValues,
     onSubmit,
     trigger,
@@ -42,8 +41,8 @@ function CertificationDialog({
     onClosed,
     mode = "create",
 }: {
-    defaultValues: CertificationItem
-    onSubmit: (value: CertificationItem) => void
+    defaultValues: AwardItem
+    onSubmit: (value: AwardItem) => void
     trigger?: ReactNode | null
     initialOpen?: boolean
     onClosed?: () => void
@@ -63,8 +62,8 @@ function CertificationDialog({
     const attemptClose = () => {
         const message =
             mode === "edit"
-                ? "Discard changes to this certification? Unsaved changes will be lost."
-                : "Discard this new certification? Unsaved changes will be lost."
+                ? "Discard changes to this award? Unsaved changes will be lost."
+                : "Discard this new award? Unsaved changes will be lost."
         if (!form.state.isDirty || window.confirm(message)) {
             setIsOpen(false)
         }
@@ -91,7 +90,7 @@ function CertificationDialog({
                 ? null
                 : (trigger ?? (
                       <DialogTrigger render={<Button variant="outline" />}>
-                          <PlusIcon /> Add a new {"Certification"}
+                          <PlusIcon /> Add a new {"Award"}
                       </DialogTrigger>
                   ))}
 
@@ -109,24 +108,24 @@ function CertificationDialog({
             >
                 <DialogHeader>
                     <DialogTitle>
-                        {mode === "edit" ? "Edit" : "Add"} {"Certification"}
+                        {mode === "edit" ? "Edit" : "Add"} {"Award"}
                     </DialogTitle>
-                    <DialogDescription>Fill out the {"Certification"} information details below.</DialogDescription>
+                    <DialogDescription>Fill out the {"Award"} information details below.</DialogDescription>
                 </DialogHeader>
 
                 <FieldSet>
                     <FieldSet>
                         <form.Field
-                            name="name"
+                            name="title"
                             children={(dialogField) => {
                                 return (
                                     <Field>
-                                        <FieldLabel htmlFor="name">Name</FieldLabel>
+                                        <FieldLabel htmlFor="title">Title</FieldLabel>
                                         <Input
-                                            id="name"
+                                            id="title"
                                             value={dialogField.state.value}
                                             onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="e.g. AWS Certified Solutions Architect"
+                                            placeholder="e.g. Dean's List"
                                         />
                                     </Field>
                                 )
@@ -135,55 +134,42 @@ function CertificationDialog({
                     </FieldSet>
                     <FieldSet className="grid grid-cols-1 md:grid-cols-2">
                         <form.Field
-                            name="provider"
+                            name="organization"
                             children={(dialogField) => {
                                 return (
                                     <Field>
-                                        <FieldLabel htmlFor="provider">Provider</FieldLabel>
+                                        <FieldLabel htmlFor="organization">Organization</FieldLabel>
                                         <Input
-                                            id="provider"
+                                            id="organization"
                                             value={dialogField.state.value}
                                             onChange={(e) => dialogField.handleChange(e.target.value)}
-                                            placeholder="e.g. Amazon Web Services"
+                                            placeholder="e.g. University of Texas"
                                         />
                                     </Field>
                                 )
                             }}
                         />
-                        <form.Field name="startDate">
-                            {(startField) => (
-                                <form.Field name="endDate">
-                                    {(endField) => (
-                                        <Field>
-                                            <FieldLabel>Period</FieldLabel>
-                                            <div className="flex items-center gap-2">
-                                                <InputGroup className="flex-1">
-                                                    <InputGroupAddon>
-                                                        <CalendarIcon />
-                                                    </InputGroupAddon>
-                                                    <InputGroupInput
-                                                        value={startField.state.value}
-                                                        onChange={(e) => startField.handleChange(e.target.value)}
-                                                        placeholder="e.g. Jan 2023"
-                                                    />
-                                                </InputGroup>
-                                                <span className="text-muted-foreground">–</span>
-                                                <InputGroup className="flex-1">
-                                                    <InputGroupAddon>
-                                                        <CalendarIcon />
-                                                    </InputGroupAddon>
-                                                    <InputGroupInput
-                                                        value={endField.state.value}
-                                                        onChange={(e) => endField.handleChange(e.target.value)}
-                                                        placeholder="No expiry"
-                                                    />
-                                                </InputGroup>
-                                            </div>
-                                        </Field>
-                                    )}
-                                </form.Field>
-                            )}
-                        </form.Field>
+                        <form.Field
+                            name="date"
+                            children={(dialogField) => {
+                                return (
+                                    <Field>
+                                        <FieldLabel htmlFor="date">Date</FieldLabel>
+                                        <InputGroup>
+                                            <InputGroupAddon>
+                                                <CalendarIcon />
+                                            </InputGroupAddon>
+                                            <InputGroupInput
+                                                id="date"
+                                                value={dialogField.state.value}
+                                                onChange={(e) => dialogField.handleChange(e.target.value)}
+                                                placeholder="e.g. May 2022"
+                                            />
+                                        </InputGroup>
+                                    </Field>
+                                )
+                            }}
+                        />
                     </FieldSet>
                 </FieldSet>
                 <DialogFooter>
@@ -204,19 +190,19 @@ function CertificationDialog({
     )
 }
 
-export const CertificationsSection = withForm({
+export const AwardsScholarshipsSection = withForm({
     ...resumeFormOptions,
     render: ({ form }) => {
-        const [editingItem, setEditingItem] = useState<CertificationItem | null>(null)
+        const [editingItem, setEditingItem] = useState<AwardItem | null>(null)
 
         return (
             <form.AppField
-                name="data.sections.certifications.attributes"
+                name="data.sections.awardsScholarships.attributes"
                 mode="array"
                 children={(field) => {
                     return (
                         <SectionFieldSet
-                            title={form.state.values.data.sections.certifications.title}
+                            title={form.state.values.data.sections.awardsScholarships.title}
                             actions={
                                 <Button variant={"ghost"}>
                                     <ListIcon />
@@ -233,8 +219,8 @@ export const CertificationsSection = withForm({
                                                     index: idx,
                                                     id: item.id,
                                                 }}
-                                                title={item.name}
-                                                subtitle={item.provider}
+                                                title={item.title}
+                                                subtitle={item.organization}
                                                 hidden={!item.isActive}
                                                 actions={{
                                                     onToggleVisibility: (nextHidden) => {
@@ -260,8 +246,8 @@ export const CertificationsSection = withForm({
                                     }
                                 </SortableDragProvider>
                             </div>
-                            <CertificationDialog
-                                defaultValues={getEmptyCertification()}
+                            <AwardDialog
+                                defaultValues={getEmptyAward()}
                                 onSubmit={(value) =>
                                     field.pushValue({
                                         ...value,
@@ -270,7 +256,7 @@ export const CertificationsSection = withForm({
                                 }
                             />
                             {editingItem && (
-                                <CertificationDialog
+                                <AwardDialog
                                     key={editingItem.id}
                                     mode="edit"
                                     trigger={null}
