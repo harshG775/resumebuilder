@@ -548,4 +548,3 @@ function Test({ typst }: { typst: TypstSnippet }) {
         </div>
     )
 }
-

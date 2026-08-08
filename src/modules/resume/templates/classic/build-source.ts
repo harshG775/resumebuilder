@@ -30,7 +30,8 @@ const customFieldDict = (f: CustomField) => `(
                 value: "${escapeTypstString(f.value)}",
             )`
 
-const customFieldListTypst = (fields: CustomField[]) => fields.map((f) => `\n            ${customFieldDict(f)},`).join("")
+const customFieldListTypst = (fields: CustomField[]) =>
+    fields.map((f) => `\n            ${customFieldDict(f)},`).join("")
 
 type ContentItem = ResumeValues["data"]["sections"]["workExperience"]["attributes"][number]["content"][number]
 
